@@ -12,12 +12,22 @@ from gerrychain.accept import always_accept
 from gerrychain.updaters import Tally
 from pipeline.utils.helpers import load_json
 
-# required for reproducibility (gerrychain internals depend on hash ordering)
+# required for gerrychain reproducibility
 os.environ.setdefault("PYTHONHASHSEED", "0")
 
 
 def generate_districts(config_path):
+    """
+    Run a recom markov chain for each district count and write sampled plans to jsonl.
 
+    args:
+        config_path: path to the json config file.
+
+    outputs:
+        one jsonl file per district count at
+        outputs/districts/<run_name>_chain_out/<run_name>_<n>_districts.jsonl,
+        where each line is {"assignment": [...], "sample:": n}.
+    """
     config = load_json(config_path)
 
     run_name = config["run_name"]
@@ -37,6 +47,7 @@ def generate_districts(config_path):
     # relabel nodes as 0-indexed integers so list-based assignment serialization works correctly
     graph = Graph.from_networkx(nx.convert_node_labels_to_integers(graph, first_label=0))
 
+    # one output file per district count
     output_dir = Path(f"outputs/districts/{run_name}_chain_out")
     output_dir.mkdir(parents=True, exist_ok=True)
 

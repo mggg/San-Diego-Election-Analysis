@@ -18,9 +18,19 @@ class DistrictConfig:
 
 def parse_district_configs(raw: Any) -> List[DistrictConfig]:
     """
-    Accepts either:
-      - newer schema: [{"num_districts": 5, "winners": 2}, ...]
-      - older schema: [{80: 1}, {20: 4}, ...]
+    Parse the district_configs field from the config file into DistrictConfig objects.
+    accepts two schemas:
+      - newer: [{"num_districts": 5, "winners": 2}, ...]
+      - older: [{80: 1}, {20: 4}, ...]
+
+    args:
+        raw: the raw district_configs value from the config (expected to be a list).
+
+    returns:
+        list of DistrictConfig(num_districts, winners).
+
+    raises:
+        ValueError: if raw is not a list or entries don't match either schema.
     """
     if not isinstance(raw, list):
         raise ValueError("district_configs must be a list")
@@ -42,8 +52,13 @@ def parse_district_configs(raw: Any) -> List[DistrictConfig]:
 
 def candidate_list_from_elected(elected: Iterable[set]) -> List[str]:
     """
-    VoteKit elections return an iterable of singleton sets.
-    Convert them into a list of candidate IDs/strings.
+    Flatten votekit election output (iterable of singleton sets) into a list of strings.
+
+    args:
+        elected: iterable of singleton sets, as returned by votekit election methods.
+
+    returns:
+        list of candidate id strings in election order.
     """
     winners: List[str] = []
     for s in elected:
@@ -54,7 +69,15 @@ def candidate_list_from_elected(elected: Iterable[set]) -> List[str]:
 
 def process_profile(profile_file: str | Path, n_seats: int) -> List[str]:
     """
-    Process one voter profile CSV file: load RankProfile, run election, return winner list.
+    Load a voter profile csv and run an election to determine winners.
+    uses stv for multi-seat races and plurality for single-seat races.
+
+    args:
+        profile_file: path to the voter profile csv.
+        n_seats: number of seats to fill in this election.
+
+    returns:
+        list of winning candidate id strings.
     """
     profile_path = Path(profile_file)
     profile: RankProfile = RankProfile.from_csv(profile_path)
@@ -67,6 +90,16 @@ def process_profile(profile_file: str | Path, n_seats: int) -> List[str]:
     return candidate_list_from_elected(elected)
 
 def parse_plan_district_rep_from_path(p: str | Path):
+    """
+    Parse the plan index, district id, and replicate number from a profile file path.
+
+    args:
+        p: path to a profile csv file, expected to contain substrings like
+           "district_plan_000", "district_02", and "v1".
+
+    returns:
+        tuple (plan, district, rep) where each is an int or None if not found.
+    """
     s = str(p)
 
     # plan: match "district_plan_000" OR "plan_000"
@@ -77,7 +110,7 @@ def parse_plan_district_rep_from_path(p: str | Path):
     districts = re.findall(r"district[_-]?(\d+)", s, flags=re.IGNORECASE)
     district = int(districts[-1]) if districts else None
 
-    # replicate/version: your files use v0, v1... so parse "v0"
+    # replicate/version: files use v0, v1... so parse "v0"
     m_v = re.search(r"(?:^|[_-])v(\d+)(?:\D|$)", s, flags=re.IGNORECASE)
     rep = int(m_v.group(1)) if m_v else None
 
@@ -85,7 +118,19 @@ def parse_plan_district_rep_from_path(p: str | Path):
 
 
 def is_focal_candidate(candidate: str, focal_group: str, slate_to_candidates: Dict[str, List[str]]) -> bool:
-    """Candidate is focal if in slate list OR matches prefix (e.g., 'A1' starts with 'A')."""
+    """
+    Check whether a candidate belongs to the focal group.
+    a candidate matches if they appear in the explicit slate list, or if the focal
+    group is a single character and the candidate id starts with that character.
+
+    args:
+        candidate: candidate id string.
+        focal_group: name of the focal group (e.g., "A").
+        slate_to_candidates: mapping from group name to list of candidate ids.
+
+    returns:
+        true if the candidate is focal, false otherwise.
+    """
     focal_list = set(map(str, slate_to_candidates.get(focal_group, [])))
     c = str(candidate)
 
@@ -101,11 +146,30 @@ def count_focal_winners(
     focal_group: str,
     slate_to_candidates: Dict[str, List[str]],
 ) -> int:
-    """Count how many winners in this election are from the focal group."""
+    """
+    Count the number of election winners belonging to the focal group.
+
+    args:
+        winners: iterable of winning candidate id strings.
+        focal_group: name of the focal group.
+        slate_to_candidates: mapping from group name to list of candidate ids.
+
+    returns:
+        integer count of focal-group winners.
+    """
     return sum(1 for w in winners if is_focal_candidate(str(w), focal_group, slate_to_candidates))
 
 
 def load_json(path: Path) -> Dict[str, Any]:
+    """
+    Load and return the contents of a json file.
+
+    args:
+        path: path to the json file.
+
+    returns:
+        parsed json contents as a dict.
+    """
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
@@ -117,12 +181,17 @@ def find_settings_file(
     district: Optional[int],
 ) -> Optional[Path]:
     """
-    Locate the settings file for (plan, district) matching the generator naming:
+    Locate the settings json file for a given (plan, district) pair.
+    tries an exact filename match first, then falls back to glob patterns,
+    then returns the only file in the directory if exactly one exists.
 
-        sample_vk_sample_settings_district_plan_{sample_idx:03d}_district_{district:02d}.json
+    args:
+        settings_dir: directory containing settings json files.
+        plan: plan index (zero-based sample index from the chain).
+        district: district id within the plan.
 
-    We first try the exact expected filename when both plan and district are known.
-    If not found, we fall back to glob-based best-effort matching.
+    returns:
+        path to the matching settings file, or none if not found.
     """
     if not settings_dir.exists():
         return None

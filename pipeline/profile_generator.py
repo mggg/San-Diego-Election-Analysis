@@ -13,13 +13,27 @@ import time
 from pipeline.utils.helpers import load_json
 
 
+# maps mode name to votekit profile generator function
 generator_name_to_function = {
     "slate_pl": slate_pl_profile_generator,
     "slate_bt": slate_bt_profile_generator,
     "cambridge": cambridge_profile_generator,
 }
 
+
 def process_settings_file(settings_file, profile_folder, mode, duplicate_indx):
+    """
+    Generate a voter profile csv for a single district using the given voter model.
+
+    args:
+        settings_file: path to a votekit settings json file for one district.
+        profile_folder: directory where the output csv will be written.
+        mode: voter model name; one of "slate_pl", "slate_bt", or "cambridge".
+        duplicate_indx: replicate index, appended as _v<n> in the output filename.
+
+    outputs:
+        a csv file in profile_folder named after the settings file stem.
+    """
     settings = load_json(settings_file)
 
     config = BlocSlateConfig(
@@ -39,10 +53,21 @@ def process_settings_file(settings_file, profile_folder, mode, duplicate_indx):
     profile = generator_name_to_function[mode](config)
     profile.to_csv(output_file)
 
+
 def generate_profiles(config_path):
+    """
+    Generate voter profile csvs for all districts, modes, and replicates in the config.
+
+    args:
+        config_path: path to the json config file.
+
+    outputs:
+        csv files at outputs/profiles/<run_name>/<mode>/<district_num>/*.csv.
+    """
     config = load_json(config_path)
 
     num_reps = config['num_reps']
+    # repeat for each replicate
     for duplicate_indx in range(num_reps):
         rep_start = time.perf_counter()
         print(f"[rep {duplicate_indx + 1}/{num_reps}] Start at {time.strftime('%Y-%m-%d %H:%M:%S')}")

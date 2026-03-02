@@ -22,7 +22,21 @@ from pipeline.utils.helpers import parse_district_configs, parse_plan_district_r
 
 def summarize_results(config_path) -> Path:
     """
-    Produce a CSV + histogram PNGs. Returns path to the summary folder.
+    Aggregate election results into a summary csv and produce histogram figures.
+
+    args:
+        config_path: path to the json config file.
+
+    outputs:
+        - outputs/summaries/<run_name>_summary/<run_name>_summary.csv: one row per
+          simulation per district, with columns for plan, mode, district_id, rep,
+          focal_seats, population, and combined_support.
+        - outputs/summaries/<run_name>_summary/figures/*.png: one histogram per
+          (district_count, seats_per_district, election_method) showing the
+          distribution of focal-group seats across modes.
+
+    returns:
+        path to the summary directory.
     """
     config = load_json(config_path)
 
@@ -33,6 +47,7 @@ def summarize_results(config_path) -> Path:
 
     geodata_path = Path(config["geodata_path"])
     gdf = gpd.read_file(geodata_path)
+    # compute statewide focal group proportion from geodata
     vap = sum(gdf[config["population_column"]])
     ivap = sum(gdf[config["pop_of_interest_column"]])
     iprop = ivap/vap
@@ -42,9 +57,10 @@ def summarize_results(config_path) -> Path:
     if len(turnout) != 2:
         raise ValueError("Turnout does not have exactly two keys")
     non_focal_group = next(iter(turnout.keys() - {focal_group})) 
+    # adjust proportion by differential turnout
     iprop_turnout = iprop*turnout[focal_group] / (iprop*turnout[focal_group] + (1-iprop)*turnout[non_focal_group])
 
-    # Compute combined support
+    # compute combined support: share of votes going to focal candidates
     focal_group_cohesion = cohesion_parameters[focal_group]
     non_focal_group_cohesion = cohesion_parameters[non_focal_group]
     i_cs_turnout = iprop_turnout*focal_group_cohesion[focal_group] + (1-iprop_turnout)*non_focal_group_cohesion[focal_group]
@@ -62,6 +78,7 @@ def summarize_results(config_path) -> Path:
     figs_dir = summary_dir / "figures"
     figs_dir.mkdir(parents=True, exist_ok=True)
 
+    # collect one row per simulation per district
     rows: List[Dict[str, Any]] = []
 
     for dc in district_configs:
@@ -124,7 +141,7 @@ def summarize_results(config_path) -> Path:
     csv_path = summary_dir / f"{run_name}_summary.csv"
     df.to_csv(csv_path, index=False)
 
-   # Plan-level totals across districts
+    # aggregate focal seats to the plan level (sum across districts)
     df_plan = (
         df.groupby(
             ["plan", "num_districts", "seats_per_district", "mode", "election_method", "rep"],
@@ -146,6 +163,7 @@ def summarize_results(config_path) -> Path:
     }
     desired_order = ["slate_pl", "slate_bt", "cambridge"]
 
+    # one histogram per (district count, seats, election method) combo
     for (num_dist, seats_per_district, elm), group_distn in df_plan.groupby(["num_districts", "seats_per_district", "election_method"]):
         fig, ax = plt.subplots(figsize=(6, 4))
 
@@ -192,7 +210,7 @@ def summarize_results(config_path) -> Path:
 
         ax.legend(ordered_handles, ordered_labels, title="Mode", fontsize=8)
 
-        # ---- vertical lines ----
+        # add reference lines for proportional representation benchmarks
         color_cs = "xkcd:brownish grey"
         color_iprop = "xkcd:purplish brown"
 

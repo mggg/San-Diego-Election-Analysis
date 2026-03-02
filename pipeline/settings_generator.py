@@ -5,12 +5,23 @@ import jsonlines as jl
 from tqdm import tqdm
 from pipeline.utils.helpers import load_json
 
-def generate_settings(config_path):
 
+def generate_settings(config_path):
+    """
+    For each sampled district plan, compute per-district bloc proportions and write
+    votekit settings json files.
+
+    args:
+        config_path: path to the json config file.
+
+    outputs:
+        json settings files at
+        outputs/settings/<run_name>_settings/<district_num>/<run_name>_<n>_sample_settings_district_plan_<p>_district_<d>.json.
+        bloc_proportions in each file are adjusted for differential turnout between groups.
+    """
     config = load_json(config_path)
 
-    # Load in population data
-
+    # load in population data
     path_to_data = Path(f'{config['geodata_path']}')
 
     if 'geo_layer' in config.keys():
@@ -21,11 +32,12 @@ def generate_settings(config_path):
 
     population_data = population_data[[config['pop_of_interest_column'],config['population_column']]]
 
-    # Subsampling parameters
+    # subsample evenly spaced plans from the chain
     chain_length = config['chain_length']
     num_subamples = config['num_subsamples']
     subsample_interval = chain_length // num_subamples   
 
+    # pull only the relevant keys from config to pass downstream
     district_params = ['num_voters', 'slate_to_candidates', 'cohesion_parameters', 'alphas']
     output_settings = {k:config[k] for k in config if k in district_params}
     turnout = config['turnout']
@@ -57,6 +69,7 @@ def generate_settings(config_path):
                 for _, row in data_by_district.iterrows():
                     district = row.name
                     prop = float(row[config['pop_of_interest_column']] / row[config['population_column']])
+                    # adjust bloc proportions by turnout rates
                     adjusted_prop = prop*turnout[focal_group] / (prop*turnout[focal_group] + (1-prop)*turnout[other_group])
 
                     output_settings['bloc_proportions'] = {focal_group: adjusted_prop, other_group: 1 - adjusted_prop}
