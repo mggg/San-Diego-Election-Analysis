@@ -119,9 +119,9 @@ def setup_config():
     Returns:
         Parsed config dict ready to pass to the pipeline.
     """
-    name = input("Use sample config file? (y/n): ")
+    sample = input("Use sample config file? (y/n): ")
 
-    if name == "y":  # skip setup, load sample file
+    if sample == "y":  # skip setup, load sample file
         print("Loading sample file...")
         config = load_json("configs/sample.json")
     else:
