@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable, List, Dict, Optional
 from votekit import RankProfile
-from votekit.elections import STV, Plurality
+from votekit.elections import FastSTV as STV, Plurality
 import re
 import json
 
