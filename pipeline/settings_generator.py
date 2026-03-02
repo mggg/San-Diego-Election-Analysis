@@ -3,23 +3,21 @@ import geopandas as gpd
 from pathlib import Path
 import jsonlines as jl
 from tqdm import tqdm
-from pipeline.utils.helpers import load_json
 
 
-def generate_settings(config_path):
+def generate_settings(config):
     """
     For each sampled district plan, compute per-district bloc proportions and write
     votekit settings json files.
 
     args:
-        config_path: path to the json config file.
+        config: parsed config dict.
 
     outputs:
         json settings files at
         outputs/settings/<run_name>_settings/<district_num>/<run_name>_<n>_sample_settings_district_plan_<p>_district_<d>.json.
         bloc_proportions in each file are adjusted for differential turnout between groups.
     """
-    config = load_json(config_path)
 
     # load in population data
     path_to_data = Path(f'{config['geodata_path']}')

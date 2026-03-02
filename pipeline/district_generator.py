@@ -16,19 +16,18 @@ from pipeline.utils.helpers import load_json
 os.environ.setdefault("PYTHONHASHSEED", "0")
 
 
-def generate_districts(config_path):
+def generate_districts(config):
     """
     Run a recom markov chain for each district count and write sampled plans to jsonl.
 
     args:
-        config_path: path to the json config file.
+        config: parsed config dict.
 
     outputs:
         one jsonl file per district count at
         outputs/districts/<run_name>_chain_out/<run_name>_<n>_districts.jsonl,
         where each line is {"assignment": [...], "sample:": n}.
     """
-    config = load_json(config_path)
 
     run_name = config["run_name"]
     geodata_path = Path(config["geodata_path"])
@@ -90,4 +89,4 @@ def generate_districts(config_path):
 
 
 if __name__ == "__main__":
-    generate_districts("configs/sample.json")
+    generate_districts(load_json("configs/sample.json"))

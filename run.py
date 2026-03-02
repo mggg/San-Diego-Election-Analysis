@@ -1,17 +1,21 @@
+import json
 from pipeline.district_generator import generate_districts
 from pipeline.settings_generator import generate_settings
 from pipeline.profile_generator import generate_profiles
 from pipeline.simulate_elections import simulate_elections
 from pipeline.summarize_results import summarize_results
+from setup import setup_config
 
-config_path = "configs/sample.json"
 
-generate_districts(config_path)
+def run_pipeline(config):
+    generate_districts(config)
+    generate_settings(config)
+    generate_profiles(config)
+    simulate_elections(config)
+    summarize_results(config)
 
-generate_settings(config_path)
 
-generate_profiles(config_path)
+if __name__ == "__main__":
+    run_pipeline(setup_config())
 
-simulate_elections(config_path)
-
-summarize_results(config_path)
+    

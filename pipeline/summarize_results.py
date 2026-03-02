@@ -20,12 +20,12 @@ import matplotlib.pyplot as plt
 from pipeline.utils.helpers import parse_district_configs, parse_plan_district_rep_from_path, count_focal_winners, load_json, find_settings_file
 
 
-def summarize_results(config_path) -> Path:
+def summarize_results(config) -> Path:
     """
     Aggregate election results into a summary csv and produce histogram figures.
 
     args:
-        config_path: path to the json config file.
+        config: parsed config dict.
 
     outputs:
         - outputs/summaries/<run_name>_summary/<run_name>_summary.csv: one row per
@@ -38,7 +38,6 @@ def summarize_results(config_path) -> Path:
     returns:
         path to the summary directory.
     """
-    config = load_json(config_path)
 
     run_name = str(config["run_name"])
     district_configs = parse_district_configs(config["district_configs"])

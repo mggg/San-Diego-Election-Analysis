@@ -1,8 +1,9 @@
 import argparse
 import json
 import os
+from pipeline.utils.helpers import load_json
 
-# setting these as constant for now
+# default values for numeric pipeline parameters
 DEFAULTS = {
     "chain_length": 1000,
     "num_subsamples": 5,
@@ -10,11 +11,25 @@ DEFAULTS = {
     "num_reps": 2,
 }
 
-#helpers
 def prompt(label):
+    """
+    Prompt the user for a single string value.
+    Args: label: the prompt label shown to the user.
+    Returns: Stripped string input from the user.
+    """
     return input(f"{label}: ").strip()
 
 def prompt_dict_of_floats(label, keys):
+    """
+    Prompt the user for a float value for each key and return as a dict.
+
+    Args:
+        label: header label printed before prompting.
+        keys: list of keys to prompt for.
+
+    Returns:
+        Dict mapping each key to a float entered by the user.
+    """
     result = {}
     print(f"{label}")
     for k in keys:
@@ -22,15 +37,22 @@ def prompt_dict_of_floats(label, keys):
     return result
 
 
-## can decide how much we really want to prompt user
 def build_config():
+    """
+    Interactively collect pipeline configuration from the user and return it as a dict.
 
+    Prompts for geodata path, column names, district configuration, group names,
+    candidates, cohesion parameters, alphas, and turnout rates.
+
+    Returns:
+        Dict containing all fields required by the pipeline config schema.
+    """
     # dict inits
     slate_to_candidates = {}
     cohesion_parameters = {}
     alphas = {}
 
-    # get defaults
+    # load defaults for numeric parameters
     chain_length = DEFAULTS["chain_length"]
     num_subsamples = DEFAULTS["num_subsamples"]
     num_voters = DEFAULTS["num_voters"]
@@ -63,9 +85,9 @@ def build_config():
 
     turnout = prompt_dict_of_floats("Turnout per group:", groups)
 
-    focal_group = groups[0] # could also prompt this
+    focal_group = groups[0]  # first group is focal by default
 
-    # can more of these be derived
+    # assemble and return the full config dict
     return {
         "run_name":                run_name,
         "geodata_path":            geodata_path,
@@ -73,7 +95,7 @@ def build_config():
         "population_column":       population_column,
         "pop_of_interest_column":  pop_of_interest_col,
         "total_seats":             total_seats,
-        "district_configs":        [{"num_districts": num_districts, "winners": winners}], # may need to build this out more
+        "district_configs":        [{"num_districts": num_districts, "winners": winners}],
         "chain_length":            chain_length,
         "num_subsamples":          num_subsamples,
         "num_reps":                num_reps,
@@ -86,20 +108,29 @@ def build_config():
       
     }
 
-if __name__ == "__main__":
+def setup_config():
+    """
+    Prompt the user to either load the sample config or build a new one interactively.
 
-    name = input("Use existing config file? (y/n): ")
+    If the user chooses the sample config, loads and returns it from configs/sample.json.
+    Otherwise, calls build_config(), saves the result to configs/<run_name>.json,
+    and returns the config dict.
 
-    if name == "y": # make more robust later
-        print("Setup complete!")
-    
+    Returns:
+        Parsed config dict ready to pass to the pipeline.
+    """
+    name = input("Use sample config file? (y/n): ")
+
+    if name == "y":  # skip setup, load sample file
+        print("Loading sample file...")
+        config = load_json("configs/sample.json")
     else:
-
-        
-        result = build_config()
-        out = f"configs/{result["run_name"]}.json"
+        config = build_config()
+        out = f"configs/{config['run_name']}.json"
 
         with open(out, "w") as f:
-            json.dump(result, f, indent=2)
+            json.dump(config, f, indent=2)
 
         print(f"\nConfig saved to {out}")
+
+    return config

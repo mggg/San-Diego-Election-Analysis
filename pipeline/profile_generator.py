@@ -54,17 +54,16 @@ def process_settings_file(settings_file, profile_folder, mode, duplicate_indx):
     profile.to_csv(output_file)
 
 
-def generate_profiles(config_path):
+def generate_profiles(config):
     """
     Generate voter profile csvs for all districts, modes, and replicates in the config.
 
     args:
-        config_path: path to the json config file.
+        config: parsed config dict.
 
     outputs:
         csv files at outputs/profiles/<run_name>/<mode>/<district_num>/*.csv.
     """
-    config = load_json(config_path)
 
     num_reps = config['num_reps']
     # repeat for each replicate

@@ -22,12 +22,12 @@ except Exception:
 from pipeline.utils.helpers import parse_district_configs, process_profile
 
 
-def simulate_elections(config_path) -> None:
+def simulate_elections(config) -> None:
     """
     run stv/plurality elections in parallel over all voter profiles.
 
     args:
-        config_path: path to the json config file.
+        config: parsed config dict.
 
     outputs:
         one json file per (mode, district_count, winners) combination at
@@ -38,9 +38,6 @@ def simulate_elections(config_path) -> None:
     returns:
         none.
     """
-    with open(config_path, "r", encoding="utf-8") as f:
-        config = json.load(f)
-
     run_name = str(config["run_name"])
     district_configs = parse_district_configs(config["district_configs"])
 
