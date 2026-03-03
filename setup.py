@@ -64,7 +64,7 @@ def build_config():
     population_column = prompt("population_column")
     pop_of_interest_col = prompt("pop_of_interest_column")
 
-    seed = int(prompt('seed'))
+    seed          = int(prompt('seed'))
     num_districts = int(prompt("num_districts"))
     winners       = int(prompt("winners"))
     total_seats   = num_districts * winners
