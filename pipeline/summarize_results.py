@@ -108,11 +108,10 @@ def summarize_results(config) -> Path:
                     plan = district = rep = None
                     plan, district, rep = parse_plan_district_rep_from_path(profile_files[idx])
 
-                    settings_path = find_settings_file(settings_dir, plan=plan, district=district)
+                    settings_path = find_settings_file(settings_dir, config['run_name'], plan=plan, district=district)
                     settings_data = load_json(settings_path) if settings_path else {}
-                    # FIX names -- should be column names specified in config
-                    total_vap = settings_data.get("total_vap", None)
-                    total_ivap = settings_data.get("total_hvap", None)
+                    total_vap = settings_data.get(config["population_column"], None)
+                    total_ivap = settings_data.get(config["pop_of_interest_column"], None)
                     # partisan has p_prop_census -- add?
 
                     focal_seats = count_focal_winners(winners, focal_group, slate_to_candidates)
@@ -135,6 +134,7 @@ def summarize_results(config) -> Path:
                     })
 
     df = pd.DataFrame(rows)
+    df = df.sort_values(['mode','rep','num_districts','plan','district_id'])
 
     # Save dataframe
     csv_path = summary_dir / f"{run_name}_summary.csv"

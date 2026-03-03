@@ -176,6 +176,7 @@ def load_json(path: Path) -> Dict[str, Any]:
 
 def find_settings_file(
     settings_dir: Path,
+    run_name: str,
     *,
     plan: Optional[int],
     district: Optional[int],
@@ -187,6 +188,7 @@ def find_settings_file(
 
     args:
         settings_dir: directory containing settings json files.
+        run_name: prefix used at the start of the settings filename.
         plan: plan index (zero-based sample index from the chain).
         district: district id within the plan.
 
