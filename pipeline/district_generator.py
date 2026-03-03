@@ -5,6 +5,7 @@ from functools import partial
 
 import networkx as nx
 import jsonlines as jl
+import random
 from tqdm import tqdm
 from gerrychain import Graph, Partition, MarkovChain
 from gerrychain.proposals import recom
@@ -28,6 +29,7 @@ def generate_districts(config):
         outputs/districts/<run_name>_chain_out/<run_name>_<n>_districts.jsonl,
         where each line is {"assignment": [...], "sample:": n}.
     """
+    random.seed(config['seed'])
 
     run_name = config["run_name"]
     geodata_path = Path(config["geodata_path"])

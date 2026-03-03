@@ -64,6 +64,7 @@ def build_config():
     population_column = prompt("population_column")
     pop_of_interest_col = prompt("pop_of_interest_column")
 
+    seed = int(prompt('seed'))
     num_districts = int(prompt("num_districts"))
     winners       = int(prompt("winners"))
     total_seats   = num_districts * winners
@@ -94,6 +95,7 @@ def build_config():
         "gerrychain_output_dir":   f"outputs/districts/{run_name}",
         "population_column":       population_column,
         "pop_of_interest_column":  pop_of_interest_col,
+        "seed":                    seed,
         "total_seats":             total_seats,
         "district_configs":        [{"num_districts": num_districts, "winners": winners}],
         "chain_length":            chain_length,
