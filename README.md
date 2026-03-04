@@ -21,8 +21,8 @@ The pipeline will execute the following stages in order:
 
 | Stage | Script | Summary |
 |-------|--------|---------|
-| 1 | `Districts_generator.py` | Generates district plans using GerryChain by converting geographical data into a graph |
-| 2 | `Settings_generator.py` | Creates VoteKit settings JSONs by aggregating population data and computing turnout-adjusted bloc proportions for subsampled district plans |
-| 3 | `Profile_generator.py` | Generates voter preference profiles (simulated ballots) for each settings file under three voting behavior models (impulsive, deliberate, and Cambridge) |
-| 4 | `Simulate_elections.py` | Runs the election simulation (FastSTV) on the generated voter profiles to determine and record the winners |
-| 5 | `Summarize_results.py` | Post-processes the election results into a dataframe and generates histograms of seat counts for comparative analysis |
+| 1 | `districts_generator.py` | Generates district plans using GerryChain by converting geographical data into a graph |
+| 2 | `settings_generator.py` | Creates VoteKit settings JSONs by aggregating population data and computing turnout-adjusted bloc proportions for subsampled district plans |
+| 3 | `profile_generator.py` | Generates voter preference profiles (simulated ballots) for each settings file under three voting behavior models (impulsive, deliberate, and Cambridge) |
+| 4 | `simulate_elections.py` | Runs the election simulation (FastSTV) on the generated voter profiles to determine and record the winners |
+| 5 | `summarize_results.py` | Post-processes the election results into a dataframe and generates histograms of seat counts for comparative analysis |
