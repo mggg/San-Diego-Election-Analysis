@@ -8,7 +8,6 @@ DEFAULTS = {
     "chain_length": 1000,
     "num_subsamples": 5,
     "num_voters": 10000,
-    "num_reps": 2,
 }
 
 def prompt(label):
@@ -56,7 +55,6 @@ def build_config():
     chain_length = DEFAULTS["chain_length"]
     num_subsamples = DEFAULTS["num_subsamples"]
     num_voters = DEFAULTS["num_voters"]
-    num_reps = DEFAULTS["num_reps"]
 
     # collect basic user input
     run_name = prompt("run_name")
@@ -67,6 +65,7 @@ def build_config():
     seed          = int(prompt('seed'))
     num_districts = int(prompt("num_districts"))
     winners       = int(prompt("winners"))
+    num_reps      = int(prompt('num_reps'))
     total_seats   = num_districts * winners
 
     # collect group names
@@ -121,11 +120,12 @@ def setup_config():
     Returns:
         Parsed config dict ready to pass to the pipeline.
     """
-    sample = input("Use sample config file? (y/n): ")
+    sample = input("Use exisiting config file? (y/n): ")
 
     if sample == "y":  # skip setup, load sample file
-        print("Loading sample file...")
-        config = load_json("configs/sample.json")
+        config_path = input("Path to config file: ")
+        print("Loading config file...")
+        config = load_json(config_path)
     else:
         config = build_config()
         out = f"configs/{config['run_name']}.json"

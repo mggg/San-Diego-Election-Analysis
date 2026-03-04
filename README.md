@@ -4,18 +4,18 @@
 
 Follow the instructions for setting up the necessary software [here](https://github.com/hanelee/CA_STV/tree/peter-workflow-updates?tab=readme-ov-file#software-setup).
 
-## 2. Configure the Pipeline (`setup.py`)
+## 2. Run the Full Pipeline (`run.py`)
 
-- **Interactive Mode:** Run `setup.py` to be prompted for each required field.
-  - Example: `python setup.py --config-out configs/run_name.json`
-- **Default Mode:** Use an existing JSON file to pre-fill default values.
-  - Example: `python setup.py --defaults-from configs/default.json`
+Run the pipeline using:
 
-## 3. Run the Full Pipeline (`run.py`)
+`uv run --env-file py_env run.py`
 
-Once you have the configuration JSON file, run `run.py` to execute the entire simulation workflow sequentially. You only need to specify the path to the config file.
+When the script starts, you will be prompted to choose whether you want to **use an existing configuration file** or **create a new one**.
 
-Example: `python run.py --config-path configs/your_run_name.json`
+- If you choose **yes**, the script will prompt you to provide the path to an existing config JSON file (e.g., `configs/your_run_name.json`).
+- If you choose **no**, the script will guide you through an interactive setup to create a new configuration file.
+
+Once the configuration is loaded or created, the pipeline will execute the entire simulation workflow sequentially.
 
 The pipeline will execute the following stages in order:
 
