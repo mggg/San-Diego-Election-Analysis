@@ -1,13 +1,6 @@
-"""
-simulate_elections.py
-- Inputs: run_name, district_configs, and voter profile CSVs in outputs/profiles/<run_name>/<mode>/<district_num>/
-- Outputs: winner JSONs in outputs/election_results/<run_name>_election_results/<mode>/
-"""
-
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass
 from glob import glob
 from pathlib import Path
 

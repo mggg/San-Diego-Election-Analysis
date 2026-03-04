@@ -7,7 +7,6 @@ from votekit.ballot_generator import (
 )
 from joblib import Parallel, delayed
 from joblib_progress import joblib_progress
-import json
 from pathlib import Path
 import time
 from pipeline.utils.helpers import load_json
