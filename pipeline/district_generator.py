@@ -20,13 +20,14 @@ def generate_districts(config):
     """
     Run a recom markov chain for each district count and write sampled plans to jsonl.
 
-    args:
-        config: parsed config dict.
+    Args:
+        config: Parsed config dict.
 
-    outputs:
-        one jsonl file per district count at
+    Outputs:
+        One jsonl file per district count at
         outputs/districts/<run_name>_chain_out/<run_name>_<n>_districts.jsonl,
-        where each line is {"assignment": [...], "sample:": n}.
+        where each line is {"assignment": [<district_label>, ...], "sample": n},
+        with assignment being a list of integer district labels sorted by precinct index (0-based).
     """
     random.seed(config['seed'])
 
@@ -81,12 +82,12 @@ def generate_districts(config):
             total_steps=chain_length,
         )
 
-        # write each step as a jsonl record: {"assignment": [...], "sample:": n}
+        # write each step as a jsonl record: {"assignment": [...], "sample": n}
         output_path = output_dir / f"{run_name}_{num_districts}_districts.jsonl"
         with jl.open(str(output_path), mode="w") as writer:
             for sample_num, step in enumerate(tqdm(chain, total=chain_length, desc=f"Generating {num_districts}-district plans"), start=1):
                 assignment = list(step.assignment.to_series().sort_index())
-                writer.write({"assignment": assignment, "sample:": sample_num})
+                writer.write({"assignment": assignment, "sample": sample_num})
 
 
 if __name__ == "__main__":

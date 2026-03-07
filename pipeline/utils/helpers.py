@@ -10,15 +10,19 @@ import json
 
 @dataclass(frozen=True)
 class DistrictConfig:
-    """One district configuration: number of districts and winners per district."""
+    """One district configuration: number of districts and seats won per district."""
     num_districts: int
     winners: int
 
 def load_json(path: Path) -> Dict[str, Any]:
     """
     Load and return the contents of a json file.
-    args: path: path to the json file.
-    returns: parsed json contents as a dict.
+
+    Args:
+        path: Path to the json file.
+
+    Returns:
+        Parsed json contents as a dict.
     """
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
@@ -29,16 +33,16 @@ def parse_district_configs(raw: Any) -> List[DistrictConfig]:
     Parse the district_configs field from the config file into DistrictConfig objects.
     accepts two schemas:
       - newer: [{"num_districts": 5, "winners": 2}, ...]
-      - older: [{80: 1}, {20: 4}, ...]
+      - older: [{<num_districts>: <winners>}, ...] e.g. [{80: 1}, {20: 4}]
 
-    args:
-        raw: the raw district_configs value from the config (expected to be a list).
+    Args:
+        raw: The raw district_configs value from the config (expected to be a list).
 
-    returns:
-        list of DistrictConfig(num_districts, winners).
+    Returns:
+        List of DistrictConfig(num_districts, winners).
 
-    raises:
-        ValueError: if raw is not a list or entries don't match either schema.
+    Raises:
+        ValueError: If raw is not a list or entries don't match either schema.
     """
     if not isinstance(raw, list):
         raise ValueError("district_configs must be a list")
@@ -62,11 +66,11 @@ def candidate_list_from_elected(elected: Iterable[set]) -> List[str]:
     """
     Flatten votekit election output (iterable of singleton sets) into a list of strings.
 
-    args:
-        elected: iterable of singleton sets, as returned by votekit election methods.
+    Args:
+        elected: Iterable of singleton sets, as returned by votekit election methods.
 
-    returns:
-        list of candidate id strings in election order.
+    Returns:
+        List of candidate id strings in election order. Empty sets are skipped silently.
     """
     winners: List[str] = []
     for s in elected:
@@ -80,12 +84,12 @@ def process_profile(profile_file: str | Path, n_seats: int) -> List[str]:
     Load a voter profile csv and run an election to determine winners.
     uses stv for multi-seat races and plurality for single-seat races.
 
-    args:
-        profile_file: path to the voter profile csv.
-        n_seats: number of seats to fill in this election.
+    Args:
+        profile_file: Path to the voter profile csv.
+        n_seats: Number of seats to fill in this election.
 
-    returns:
-        list of winning candidate id strings.
+    Returns:
+        List of winning candidate id strings.
     """
     profile_path = Path(profile_file)
     profile: RankProfile = RankProfile.from_csv(profile_path)
@@ -101,12 +105,13 @@ def parse_plan_district_rep_from_path(p: str | Path):
     """
     Parse the plan index, district id, and replicate number from a profile file path.
 
-    args:
-        p: path to a profile csv file, expected to contain substrings like
-           "district_plan_000", "district_02", and "v1".
+    Args:
+        p: Path to a profile csv file, expected to contain substrings like
+           "district_plan_000", "district_02", and "v0" (replicate index is 0-based).
 
-    returns:
-        tuple (plan, district, rep) where each is an int or None if not found.
+    Returns:
+        Tuple (plan, district, rep) where each is an int parsed directly from the
+        path (not normalized to any index base), or None if the pattern is not found.
     """
     s = str(p)
 
@@ -131,13 +136,13 @@ def is_focal_candidate(candidate: str, focal_group: str, slate_to_candidates: Di
     a candidate matches if they appear in the explicit slate list, or if the focal
     group is a single character and the candidate id starts with that character.
 
-    args:
-        candidate: candidate id string.
-        focal_group: name of the focal group (e.g., "A").
-        slate_to_candidates: mapping from group name to list of candidate ids.
+    Args:
+        candidate: Candidate id string.
+        focal_group: Name of the focal group (e.g., "A").
+        slate_to_candidates: Mapping from group name to list of candidate ids.
 
-    returns:
-        true if the candidate is focal, false otherwise.
+    Returns:
+        True if the candidate is focal, false otherwise.
     """
     focal_list = set(map(str, slate_to_candidates.get(focal_group, [])))
     c = str(candidate)
@@ -157,13 +162,13 @@ def count_focal_winners(
     """
     Count the number of election winners belonging to the focal group.
 
-    args:
-        winners: iterable of winning candidate id strings.
-        focal_group: name of the focal group.
-        slate_to_candidates: mapping from group name to list of candidate ids.
+    Args:
+        winners: Iterable of winning candidate id strings.
+        focal_group: Name of the focal group.
+        slate_to_candidates: Mapping from group name to list of candidate ids.
 
-    returns:
-        integer count of focal-group winners.
+    Returns:
+        Integer count of focal-group winners.
     """
     return sum(1 for w in winners if is_focal_candidate(str(w), focal_group, slate_to_candidates))
 
@@ -180,14 +185,14 @@ def find_settings_file(
     tries an exact filename match first, then falls back to glob patterns,
     then returns the only file in the directory if exactly one exists.
 
-    args:
-        settings_dir: directory containing settings json files.
-        run_name: prefix used at the start of the settings filename.
-        plan: plan index (zero-based sample index from the chain).
-        district: district id within the plan.
+    Args:
+        settings_dir: Directory containing settings json files.
+        run_name: Unused; reserved for future use in filename matching.
+        plan: Plan index (zero-based sample index from the chain).
+        district: District id within the plan.
 
-    returns:
-        path to the matching settings file, or none if not found.
+    Returns:
+        Path to the matching settings file, or None if not found.
     """
     if not settings_dir.exists():
         return None

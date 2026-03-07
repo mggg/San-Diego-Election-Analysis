@@ -19,17 +19,18 @@ def simulate_elections(config) -> None:
     """
     run stv/plurality elections in parallel over all voter profiles.
 
-    args:
-        config: parsed config dict.
+    Args:
+        config: Parsed config dict.
 
-    outputs:
-        one json file per (mode, district_count, winners) combination at
+    Outputs:
+        One json file per (mode, district_count, winners) combination at
         outputs/election_results/<run_name>_election_results/<mode>/
         <run_name>_<n>_districts_<w>_winners_for_voter_mode_<mode>.json.
-        each file contains a "winners" list with one entry per profile file.
+        Each file contains a "winners" list where each entry is a list of winning
+        candidate id strings for the corresponding profile file's election.
 
-    returns:
-        none.
+    Returns:
+        None.
     """
     run_name = str(config["run_name"])
     district_configs = parse_district_configs(config["district_configs"])

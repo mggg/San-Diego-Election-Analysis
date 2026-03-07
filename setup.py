@@ -12,8 +12,12 @@ DEFAULTS = {
 def prompt(label):
     """
     Prompt the user for a single string value.
-    Args: label: the prompt label shown to the user.
-    Returns: Stripped string input from the user.
+
+    Args:
+        label: the prompt label shown to the user.
+
+    Returns:
+        Stripped string input from the user.
     """
     return input(f"\n{label}\n\t> ").strip()
 
@@ -29,8 +33,8 @@ def prompt_dict_of_floats(label, keys):
     Prompt the user for a float value for each key and return as a dict.
 
     Args:
-        label: header label printed before prompting.
-        keys: list of keys to prompt for.
+        label: Header label printed before prompting.
+        keys: List of keys to prompt for.
 
     Returns:
         Dict mapping each key to a float entered by the user.
@@ -52,7 +56,8 @@ def build_config():
     Interactively collect pipeline configuration from the user and return it as a dict.
 
     Prompts for geodata path, column names, district configuration, group names,
-    candidates, cohesion parameters, alphas, and turnout rates.
+    candidates, cohesion parameters, alphas, and turnout rates. Seed is generated randomly.
+    chain_length, num_subsamples, and num_voters are set from DEFAULTS and not prompted.
 
     Returns:
         Dict containing all fields required by the pipeline config schema.
@@ -124,12 +129,15 @@ def setup_config():
     """
     Prompt the user to either load the sample config or build a new one interactively.
 
-    If the user chooses the sample config, loads and returns it from configs/sample.json.
+    If the user chooses an existing config, prompts for a path and loads it.
     Otherwise, calls build_config(), saves the result to configs/<run_name>.json,
     and returns the config dict.
 
     Returns:
         Parsed config dict ready to pass to the pipeline.
+
+    Outputs:
+        configs/<run_name>.json written when building a new config.
     """
     while True:
         sample = input("\nUse existing config file? (y/n)\n\t> ").strip().lower()

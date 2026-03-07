@@ -24,14 +24,15 @@ def process_settings_file(settings_file, profile_folder, mode, duplicate_indx):
     """
     Generate a voter profile csv for a single district using the given voter model.
 
-    args:
-        settings_file: path to a votekit settings json file for one district.
-        profile_folder: directory where the output csv will be written.
-        mode: voter model name; one of "slate_pl", "slate_bt", or "cambridge".
-        duplicate_indx: replicate index, appended as _v<n> in the output filename.
+    Args:
+        settings_file: Path to a votekit settings json file for one district.
+        profile_folder: Directory where the output csv will be written.
+        mode: Voter model name; one of "slate_pl", "slate_bt", or "cambridge".
+        duplicate_indx: Replicate index, appended as _v<n> in the output filename.
 
-    outputs:
-        a csv file in profile_folder named after the settings file stem.
+    Outputs:
+        A csv file in profile_folder with "sample_settings" replaced by "profile" in the
+        settings file stem, suffixed with _v<duplicate_indx>.
     """
     settings = load_json(settings_file)
 
@@ -57,10 +58,10 @@ def generate_profiles(config):
     """
     Generate voter profile csvs for all districts, modes, and replicates in the config.
 
-    args:
-        config: parsed config dict.
+    Args:
+        config: Parsed config dict.
 
-    outputs:
+    Outputs:
         csv files at outputs/profiles/<run_name>/<mode>/<district_num>/*.csv.
     """
 

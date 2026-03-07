@@ -24,19 +24,19 @@ def summarize_results(config) -> Path:
     """
     Aggregate election results into a summary csv and produce histogram figures.
 
-    args:
-        config: parsed config dict.
+    Args:
+        config: Parsed config dict.
 
-    outputs:
+    Outputs:
         - outputs/summaries/<run_name>_summary/<run_name>_summary.csv: one row per
-          simulation per district, with columns for plan, mode, district_id, rep,
-          focal_seats, population, and combined_support.
+          (replicate, plan, district) triple, with columns for plan, mode, district_id,
+          rep, focal_seats, dynamic population columns from config, and combined_support.
         - outputs/summaries/<run_name>_summary/figures/*.png: one histogram per
           (district_count, seats_per_district, election_method) showing the
           distribution of focal-group seats across modes.
 
-    returns:
-        path to the summary directory.
+    Returns:
+        Path to the summary directory.
     """
 
     run_name = str(config["run_name"])

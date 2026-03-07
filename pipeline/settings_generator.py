@@ -10,13 +10,14 @@ def generate_settings(config):
     For each sampled district plan, compute per-district bloc proportions and write
     votekit settings json files.
 
-    args:
-        config: parsed config dict.
+    Args:
+        config: Parsed config dict.
 
-    outputs:
-        json settings files at
-        outputs/settings/<run_name>_settings/<district_num>/<run_name>_<n>_sample_settings_district_plan_<p>_district_<d>.json.
-        bloc_proportions in each file are adjusted for differential turnout between groups.
+    Outputs:
+        One json settings file per (district count, sampled plan, district) triple at
+        outputs/settings/<run_name>_settings/<district_count>/<run_name>_<district_count>_sample_settings_district_plan_<plan_idx>_district_<district_id>.json.
+        where <plan_idx> is the zero-based chain sample index and <district_id> is the district label.
+        bloc_proportions in each file are turnout-adjusted focal group proportions.
     """
 
     # load in population data
