@@ -1,6 +1,5 @@
-import argparse
 import json
-import os
+import random
 from pipeline.utils.helpers import load_json
 
 # default values for numeric pipeline parameters
@@ -16,7 +15,7 @@ def prompt(label):
     Args: label: the prompt label shown to the user.
     Returns: Stripped string input from the user.
     """
-    return input(f"{label}: ").strip()
+    return input(f"\n{label}\n\t> ").strip()
 
 def prompt_int(label):
     while True:
@@ -69,15 +68,15 @@ def build_config():
     num_voters = DEFAULTS["num_voters"]
 
     # collect basic user input
-    run_name = prompt("run_name")
-    geodata_path = prompt("geodata_path")
-    population_column = prompt("population_column")
-    pop_of_interest_col = prompt("pop_of_interest_column")
+    run_name = prompt("Run name")
+    geodata_path = prompt("Path to geodata file")
+    population_column = prompt("Population column name")
+    pop_of_interest_col = prompt("Population of interest column name")
 
-    seed          = prompt_int('seed')
-    num_districts = prompt_int("num_districts")
-    winners       = prompt_int("winners")
-    num_reps      = prompt_int('num_reps')
+    seed          = random.randint(0, 2**32 - 1)
+    num_districts = prompt_int("Number of districts")
+    winners       = prompt_int("Number of winners per district")
+    num_reps      = prompt_int('Number of profiles per district plan')
     total_seats   = num_districts * winners
 
     # collect group names
@@ -86,7 +85,7 @@ def build_config():
 
     # collect per-group info
     for g in groups:
-        cands_raw = prompt(f"  Candidate names for group {g} (comma-separated)")
+        cands_raw = prompt(f"Candidate names for group '{g}' (comma-separated)")
         slate_to_candidates[g] = [c.strip() for c in cands_raw.split(",")]
 
     for g in groups:
@@ -133,13 +132,13 @@ def setup_config():
         Parsed config dict ready to pass to the pipeline.
     """
     while True:
-        sample = input("Use exisiting config file? (y/n): ").strip().lower()
+        sample = input("\nUse existing config file? (y/n)\n\t> ").strip().lower()
         if sample in ("y", "n"):
             break
         print("Invalid input, please enter 'y' or 'n'.")
 
     if sample == "y":  # skip setup, load sample file
-        config_path = input("Path to config file: ")
+        config_path = input("\nPath to config file\n\t> ")
         print("Loading config file...")
         config = load_json(config_path)
     else:
