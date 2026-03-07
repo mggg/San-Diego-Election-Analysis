@@ -97,7 +97,7 @@ def process_profile(profile_file: str | Path, n_seats: int) -> List[str]:
     if n_seats > 1:
         elected = STV(profile, m=n_seats, simultaneous=False, tiebreak='random').get_elected()
     else:
-        elected = Plurality(profile, m=1).get_elected()
+        elected = Plurality(profile, m=1, tiebreak='random').get_elected()
 
     return candidate_list_from_elected(elected)
 
