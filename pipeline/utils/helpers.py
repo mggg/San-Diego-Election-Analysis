@@ -8,12 +8,20 @@ from votekit.elections import FastSTV as STV, Plurality
 import re
 import json
 
-
 @dataclass(frozen=True)
 class DistrictConfig:
     """One district configuration: number of districts and winners per district."""
     num_districts: int
     winners: int
+
+def load_json(path: Path) -> Dict[str, Any]:
+    """
+    Load and return the contents of a json file.
+    args: path: path to the json file.
+    returns: parsed json contents as a dict.
+    """
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
 
 
 def parse_district_configs(raw: Any) -> List[DistrictConfig]:
@@ -158,20 +166,6 @@ def count_focal_winners(
         integer count of focal-group winners.
     """
     return sum(1 for w in winners if is_focal_candidate(str(w), focal_group, slate_to_candidates))
-
-
-def load_json(path: Path) -> Dict[str, Any]:
-    """
-    Load and return the contents of a json file.
-
-    args:
-        path: path to the json file.
-
-    returns:
-        parsed json contents as a dict.
-    """
-    with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
 
 
 def find_settings_file(

@@ -1,5 +1,7 @@
+import glob
 import json
 import random
+import readline
 from pipeline.utils.helpers import load_json
 
 # default values for numeric pipeline parameters
@@ -16,6 +18,13 @@ def prompt(label):
     Returns: Stripped string input from the user.
     """
     return input(f"\n{label}\n\t> ").strip()
+
+def prompt_path(label):
+    readline.set_completer(lambda text, state: (glob.glob(text + '*') + [None])[state])
+    readline.parse_and_bind("tab: complete")
+    result = prompt(f"{label} (tab to autocomplete)")
+    readline.set_completer(None)
+    return result
 
 def prompt_int(label):
     while True:
@@ -69,14 +78,14 @@ def build_config():
 
     # collect basic user input
     run_name = prompt("Run name")
-    geodata_path = prompt("Path to geodata file")
+    geodata_path = prompt_path("Path to geodata file")
     population_column = prompt("Population column name")
     pop_of_interest_col = prompt("Population of interest column name")
 
     seed          = random.randint(0, 2**32 - 1)
     num_districts = prompt_int("Number of districts")
     winners       = prompt_int("Number of winners per district")
-    num_reps      = prompt_int('Number of profiles per district plan')
+    num_reps      = prompt_int('Number of elections per district plan')
     total_seats   = num_districts * winners
 
     # collect group names
@@ -138,7 +147,7 @@ def setup_config():
         print("Invalid input, please enter 'y' or 'n'.")
 
     if sample == "y":  # skip setup, load sample file
-        config_path = input("\nPath to config file\n\t> ")
+        config_path = prompt_path("Path to config file")
         print("Loading config file...")
         config = load_json(config_path)
     else:
