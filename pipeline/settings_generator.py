@@ -42,7 +42,7 @@ def generate_settings(config):
     focal_group = config['focal_group']
     other_group =  (set(turnout) - set(focal_group)).pop()
     run_name = config['run_name']
-    
+
 
 
     for district_num in [d_config['num_districts'] for d_config in config['district_configs']]:

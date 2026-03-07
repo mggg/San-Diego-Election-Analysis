@@ -18,6 +18,13 @@ def prompt(label):
     """
     return input(f"{label}: ").strip()
 
+def prompt_int(label):
+    while True:
+        try:
+            return int(prompt(label))
+        except ValueError:
+            print("Invalid input, please enter an integer.")
+
 def prompt_dict_of_floats(label, keys):
     """
     Prompt the user for a float value for each key and return as a dict.
@@ -32,7 +39,12 @@ def prompt_dict_of_floats(label, keys):
     result = {}
     print(f"{label}")
     for k in keys:
-        result[k] = float(prompt(f"  {k}"))
+        while True:
+            try:
+                result[k] = float(prompt(f"  {k}"))
+                break
+            except ValueError:
+                print("  Invalid input, please enter a number.")
     return result
 
 
@@ -62,10 +74,10 @@ def build_config():
     population_column = prompt("population_column")
     pop_of_interest_col = prompt("pop_of_interest_column")
 
-    seed          = int(prompt('seed'))
-    num_districts = int(prompt("num_districts"))
-    winners       = int(prompt("winners"))
-    num_reps      = int(prompt('num_reps'))
+    seed          = prompt_int('seed')
+    num_districts = prompt_int("num_districts")
+    winners       = prompt_int("winners")
+    num_reps      = prompt_int('num_reps')
     total_seats   = num_districts * winners
 
     # collect group names
@@ -120,7 +132,11 @@ def setup_config():
     Returns:
         Parsed config dict ready to pass to the pipeline.
     """
-    sample = input("Use exisiting config file? (y/n): ")
+    while True:
+        sample = input("Use exisiting config file? (y/n): ").strip().lower()
+        if sample in ("y", "n"):
+            break
+        print("Invalid input, please enter 'y' or 'n'.")
 
     if sample == "y":  # skip setup, load sample file
         config_path = input("Path to config file: ")
