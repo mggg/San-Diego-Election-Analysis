@@ -48,8 +48,6 @@ Each stage reads outputs from the previous stage.
 
 All simulation parameters are defined in a JSON configuration file. You will be prompted for the following parameters:
 
-### Parameter Reference
-
 | Prompt                    | Type         | Description                                                                              |
 | --------------------------| -------------| ----------------------------------------------------------------------------------------|
 | Run name                                          | string       | Identifier used for output directories and logs                                         |
