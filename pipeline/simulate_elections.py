@@ -1,10 +1,11 @@
 from __future__ import annotations
-
 import json
 from glob import glob
 from pathlib import Path
-
 from joblib import Parallel, delayed
+from votekit import RankProfile
+from votekit.elections import FastSTV as STV, Plurality
+from typing import List, Iterable
 
 # Optional progress bar for joblib.
 try:
@@ -12,8 +13,47 @@ try:
 except Exception: 
     joblib_progress = None 
 
-from pipeline.utils.helpers import parse_district_configs, process_profile
+from pipeline.utils.helpers import parse_district_configs
 
+def _candidate_list_from_elected(elected: Iterable[set]) -> List[str]:
+    """
+    Flatten votekit election output (iterable of singleton sets) into a list of strings.
+
+    Args:
+        elected: Iterable of singleton sets, as returned by votekit election methods.
+
+    Returns:
+        List of candidate id strings in election order. Empty sets are skipped silently.
+    """
+    winners: List[str] = []
+    for s in elected:
+        if s:
+            winners.append(str(next(iter(s))))
+    return winners
+
+def _process_profile(profile_file: str | Path, n_seats: int) -> List[str]:
+    """
+    Load a voter profile csv and run an election to determine winners.
+    uses stv for multi-seat races and plurality for single-seat races.
+
+    Args:
+        profile_file: Path to the voter profile csv.
+        n_seats: Number of seats to fill in this election.
+
+    Returns:
+        For n_seats > 1: {"stv": [winner ids]}
+        For n_seats == 1: {"plurality": [winner ids], "irv": [winner ids]}
+    """
+    profile_path = Path(profile_file)
+    profile: RankProfile = RankProfile.from_csv(profile_path)
+
+    if n_seats > 1:
+        elected_stv = STV(profile, m=n_seats, simultaneous=False, tiebreak='random').get_elected()
+        return {"stv": _candidate_list_from_elected(elected_stv)}
+    else:
+        elected_plurality = Plurality(profile, m=1, tiebreak='random').get_elected()
+        elected_irv = STV(profile, m=n_seats, simultaneous=False, tiebreak='random').get_elected()
+        return {"stv": _candidate_list_from_elected(elected_plurality), "irv": _candidate_list_from_elected(elected_irv)}
 
 def simulate_elections(config) -> None:
     """
@@ -26,8 +66,10 @@ def simulate_elections(config) -> None:
         One json file per (mode, district_count, winners) combination at
         outputs/election_results/<run_name>_election_results/<mode>/
         <run_name>_<n>_districts_<w>_winners_for_voter_mode_<mode>.json.
-        Each file contains a "winners" list where each entry is a list of winning
-        candidate id strings for the corresponding profile file's election.
+        Each file contains a "election_results" list where each entry corresponds
+        to one profile file:
+          - multi-seat: {"stv": [...]}
+          - single-seat: {"plurality": [...], "irv": [...]}
 
     Returns:
         None.
@@ -60,13 +102,13 @@ def simulate_elections(config) -> None:
 
             if ctx is not None:
                 with ctx:
-                    winners_list = Parallel(n_jobs=n_jobs)(
-                        delayed(process_profile)(pf, dc.winners) for pf in all_profile_files
+                    results_list = Parallel(n_jobs=n_jobs)(
+                        delayed(_process_profile)(pf, dc.winners) for pf in all_profile_files
                     )
             else:
                 print(f"[simulate_elections] {desc} (no joblib_progress installed)")
-                winners_list = Parallel(n_jobs=n_jobs)(
-                    delayed(process_profile)(pf, dc.winners) for pf in all_profile_files
+                results_list = Parallel(n_jobs=n_jobs)(
+                    delayed(_process_profile)(pf, dc.winners) for pf in all_profile_files
                 )
 
             # write all winners for this district/mode combo to one json file
@@ -81,7 +123,7 @@ def simulate_elections(config) -> None:
                         "district_num": dc.num_districts,
                         "winners_per_district": dc.winners,
                         "profile_files": all_profile_files,
-                        "winners": winners_list,
+                        "election_results": results_list,
                     },
                     f,
                     indent=2,

@@ -80,6 +80,12 @@ def summarize_results(config) -> Path:
     # collect one row per simulation per district
     rows: List[Dict[str, Any]] = []
 
+    method_name_map = {
+        "stv": "STV",
+        "plurality": "Plurality",
+        "irv": "IRV",
+    }   
+
     for dc in district_configs:
         # Settings directory is grouped by district_num per design doc
         settings_dir = Path("outputs") / "settings" / f"{run_name}_settings" / str(dc.num_districts) 
@@ -92,7 +98,6 @@ def summarize_results(config) -> Path:
 
             for rf in sorted(mode_dir.glob("*.json")):
                 data = load_json(rf)
-                
                
                 district_num = int(data.get("district_num", dc.num_districts))
                 winners_per_district = int(data.get("winners_per_district", dc.winners))
@@ -100,11 +105,20 @@ def summarize_results(config) -> Path:
                 if district_num != dc.num_districts or winners_per_district != dc.winners or voter_mode != mode:
                     continue
 
-                winners_all: List[List[str]] = data.get("winners", [])
-                profile_files: Optional[List[str]] = data.get("profile_files")  
+                election_results: List[Dict[str, List[str]]] = data.get("election_results", [])
+                profile_files: Optional[List[str]] = data.get("profile_files")
+
+                if profile_files is None:
+                    raise ValueError(f"Missing profile_files in results file: {rf}")
+
+                if len(election_results) != len(profile_files):
+                    raise ValueError(
+                        f"Length mismatch in {rf}: "
+                        f"{len(election_results)=} vs {len(profile_files)=}"
+                    ) 
 
                 # Build per-simulation rows
-                for idx, winners in enumerate(winners_all):
+                for idx, result in enumerate(election_results):
                     plan = district = rep = None
                     plan, district, rep = parse_plan_district_rep_from_path(profile_files[idx])
 
@@ -114,24 +128,28 @@ def summarize_results(config) -> Path:
                     total_ivap = settings_data.get(config["pop_of_interest_column"], None)
                     # partisan has p_prop_census -- add?
 
-                    focal_seats = count_focal_winners(winners, focal_group, slate_to_candidates)
-
-                    rows.append({
-                        "run_name": run_name,
-                        "plan": plan,
-                        "num_districts": district_num,
-                        "seats_per_district": winners_per_district,
-                        "election_method": "STV", # FIX
-                        "mode": mode,
-                        "district_id": district,
-                        "rep": rep,
-                        "simulation_index": idx,
-                        "focal_group": focal_group,
-                        "focal_seats": focal_seats,
-                        config["population_column"]: total_vap,
-                        config["pop_of_interest_column"]: total_ivap,
-                        "combined_support": i_cs_turnout,
-                    })
+                    for method_key, winners in result.items():
+                        focal_seats = count_focal_winners(
+                            winners,
+                            focal_group,
+                            slate_to_candidates,
+                        )             
+                        rows.append({
+                            "run_name": run_name,
+                            "plan": plan,
+                            "num_districts": district_num,
+                            "seats_per_district": winners_per_district,
+                            "election_method": method_name_map.get(method_key, method_key.upper()),
+                            "mode": mode,
+                            "district_id": district,
+                            "rep": rep,
+                            "simulation_index": idx,
+                            "focal_group": focal_group,
+                            "focal_seats": focal_seats,
+                            config["population_column"]: total_vap,
+                            config["pop_of_interest_column"]: total_ivap,
+                            "combined_support": i_cs_turnout,
+                        })
 
     df = pd.DataFrame(rows)
     df = df.sort_values(['mode','rep','num_districts','plan','district_id'])
@@ -187,7 +205,7 @@ def summarize_results(config) -> Path:
 
         total_seats = config["total_seats"]
         #FIX
-        ylim = 12
+        ylim = config["num_reps"] * config["num_subsamples"] + 2
 
         ax.set_xlim(-1, total_seats + 1)
         ax.set_ylim(0, ylim)

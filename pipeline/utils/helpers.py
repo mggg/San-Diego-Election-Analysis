@@ -3,8 +3,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable, List, Dict, Optional
-from votekit import RankProfile
-from votekit.elections import FastSTV as STV, Plurality
 import re
 import json
 
@@ -61,45 +59,6 @@ def parse_district_configs(raw: Any) -> List[DistrictConfig]:
             )
     return parsed
 
-
-def candidate_list_from_elected(elected: Iterable[set]) -> List[str]:
-    """
-    Flatten votekit election output (iterable of singleton sets) into a list of strings.
-
-    Args:
-        elected: Iterable of singleton sets, as returned by votekit election methods.
-
-    Returns:
-        List of candidate id strings in election order. Empty sets are skipped silently.
-    """
-    winners: List[str] = []
-    for s in elected:
-        if s:
-            winners.append(str(next(iter(s))))
-    return winners
-
-
-def process_profile(profile_file: str | Path, n_seats: int) -> List[str]:
-    """
-    Load a voter profile csv and run an election to determine winners.
-    uses stv for multi-seat races and plurality for single-seat races.
-
-    Args:
-        profile_file: Path to the voter profile csv.
-        n_seats: Number of seats to fill in this election.
-
-    Returns:
-        List of winning candidate id strings.
-    """
-    profile_path = Path(profile_file)
-    profile: RankProfile = RankProfile.from_csv(profile_path)
-
-    if n_seats > 1:
-        elected = STV(profile, m=n_seats, simultaneous=False, tiebreak='random').get_elected()
-    else:
-        elected = Plurality(profile, m=1, tiebreak='random').get_elected()
-
-    return candidate_list_from_elected(elected)
 
 def parse_plan_district_rep_from_path(p: str | Path):
     """
