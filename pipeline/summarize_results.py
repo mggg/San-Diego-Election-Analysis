@@ -17,7 +17,7 @@ import geopandas as gpd
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from pipeline.utils.helpers import parse_district_configs, parse_plan_district_rep_from_path, count_focal_winners, load_json, find_settings_file
+from pipeline.utils.helpers import parse_district_configs, parse_plan_district_rep_from_path, count_focal_winners, load_json, find_settings_file, get_non_focal_group
 
 
 def summarize_results(config) -> Path:
@@ -55,7 +55,7 @@ def summarize_results(config) -> Path:
     cohesion_parameters = config["cohesion_parameters"]
     if len(turnout) != 2:
         raise ValueError("Turnout does not have exactly two keys")
-    non_focal_group = next(iter(turnout.keys() - {focal_group})) 
+    non_focal_group = get_non_focal_group(config)
     # adjust proportion by differential turnout
     iprop_turnout = iprop*turnout[focal_group] / (iprop*turnout[focal_group] + (1-iprop)*turnout[non_focal_group])
 

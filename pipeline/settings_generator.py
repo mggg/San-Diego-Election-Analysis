@@ -3,6 +3,7 @@ import geopandas as gpd
 from pathlib import Path
 import jsonlines as jl
 from tqdm import tqdm
+from pipeline.utils.helpers import get_non_focal_group
 
 
 def generate_settings(config):
@@ -41,7 +42,7 @@ def generate_settings(config):
     output_settings = {k:config[k] for k in config if k in district_params}
     turnout = config['turnout']
     focal_group = config['focal_group']
-    other_group =  (set(turnout) - set(focal_group)).pop()
+    other_group =  get_non_focal_group(config)
     run_name = config['run_name']
 
 

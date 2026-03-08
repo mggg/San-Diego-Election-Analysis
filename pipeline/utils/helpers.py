@@ -25,6 +25,18 @@ def load_json(path: Path) -> Dict[str, Any]:
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
+def get_non_focal_group(config):
+    """
+    Determine the non focal group using the turnout parameter and focal group parameter specified in the configuration file.
+
+    Args:
+        config: Parsed config dict.
+
+    Returns:
+        Name of the non-focal group as a string.
+    """
+    non_focal_group = next(iter(config["turnout"].keys() - {config["focal_group"]}))
+    return non_focal_group
 
 def parse_district_configs(raw: Any) -> List[DistrictConfig]:
     """
