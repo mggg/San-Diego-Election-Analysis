@@ -85,7 +85,7 @@ def build_config():
     total_seats   = num_districts * winners
 
     # collect group names
-    groups_raw = prompt("Group names (comma-separated, e.g. A,B)")
+    groups_raw = prompt("Group names (comma-separated, e.g. A,B), specify focal group first")
     groups = [g.strip() for g in groups_raw.split(",")]
 
     # collect per-group info
@@ -93,8 +93,32 @@ def build_config():
         cands_raw = prompt(f"Candidate names for group '{g}' (comma-separated)")
         slate_to_candidates[g] = [c.strip() for c in cands_raw.split(",")]
 
-    for g in groups:
-        cohesion_parameters[g] = prompt_dict_of_floats(f"Cohesion parameters for group {g}:", groups)
+    print(f"Cohesion parameters for group {groups[0]}:")
+    while True:
+            try:
+                g0_cohesion = float(prompt(f"  {groups[0]}"))
+                if not (0 <= g0_cohesion <= 1):
+                    print("  Value must be between 0 and 1.")
+                    continue
+                cohesion_parameters[groups[0]] = {groups[0]: g0_cohesion, groups[1]: 1-g0_cohesion}
+                print(f"        Cohesion parameters for group '{groups[0]}': {cohesion_parameters[groups[0]]}")
+                break
+            except ValueError:
+                print("  Invalid input, please enter a number.")
+    print(f"Cohesion parameters for group {groups[1]}:")
+    while True:
+            try:
+                g1_cohesion = float(prompt(f"  {groups[1]}"))
+                if not (0 <= g1_cohesion <= 1):
+                    print("  Value must be between 0 and 1.")
+                    continue
+                cohesion_parameters[groups[1]] = {groups[0]: 1-g1_cohesion, groups[1]: g1_cohesion}
+                print(f"        Cohesion parameters for group '{groups[1]}': {cohesion_parameters[groups[1]]}")
+                break
+            except ValueError:
+                print("  Invalid input, please enter a number.")
+            
+            
 
     for g in groups:
         alphas[g] = prompt_dict_of_floats(f"Alpha parameters for group {g}:", groups)
