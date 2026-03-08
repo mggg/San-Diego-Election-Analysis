@@ -184,13 +184,19 @@ def summarize_results(config) -> Path:
     for (num_dist, seats_per_district, elm), group_distn in df_plan.groupby(["num_districts", "seats_per_district", "election_method"]):
         fig, ax = plt.subplots(figsize=(6, 4))
 
-        # Plot histogram for each mode
+        # Plot histogram for each mode and track tallest bin
+        max_bin_height = 0
+
         for mode, group_mode in group_distn.groupby("mode"):
             if group_mode["focal_seats"].empty:
                 continue
-            ax.hist(
+
+            counts, bins, patches = ax.hist(
                 group_mode["focal_seats"],
-                bins=range(int(group_mode["focal_seats"].min()), int(group_mode["focal_seats"].max()) + 2),
+                bins=range(
+                    int(group_mode["focal_seats"].min()),
+                    int(group_mode["focal_seats"].max()) + 2
+                ),
                 align="left",
                 edgecolor="gray",
                 linewidth=0.5,
@@ -199,13 +205,15 @@ def summarize_results(config) -> Path:
                 label=mode,
             )
 
+            if len(counts) > 0:
+                max_bin_height = max(max_bin_height, counts.max())
+
         # styling
         for spine in ax.spines.values():
             spine.set_linewidth(0.5)
 
         total_seats = config["total_seats"]
-        #FIX
-        ylim = config["num_reps"] * config["num_subsamples"] + 2
+        ylim = max_bin_height * 1.2 if max_bin_height > 0 else 1
 
         ax.set_xlim(-1, total_seats + 1)
         ax.set_ylim(0, ylim)
@@ -235,13 +243,13 @@ def summarize_results(config) -> Path:
         i_share = iprop * total_seats
 
         if i_cs_share < i_share:
-            i_cs_alignment = -0.5
-            i_share_alignment = 0.5
+            i_cs_alignment = -0.3
+            i_share_alignment = 0.3
             i_cs_ha = "right"
             i_share_ha = "left"
         else:
-            i_cs_alignment = 0.5
-            i_share_alignment = -0.5
+            i_cs_alignment = 0.3
+            i_share_alignment = -0.3
             i_cs_ha = "left"
             i_share_ha = "right"            
 
