@@ -21,6 +21,13 @@ def prompt(label):
     """
     return input(f"\n{label}\n\t> ").strip()
 
+def prompt_yes_no(label):
+    while True:
+        response = prompt(label).lower()
+        if response in ("y", "n"):
+            return response
+        print("Invalid input, please enter 'y' or 'n'.")
+
 def prompt_int(label):
     while True:
         try:
@@ -49,6 +56,52 @@ def prompt_dict_of_floats(label, keys):
             except ValueError:
                 print("  Invalid input, please enter a number.")
     return result
+
+def collect_district_configs(total_seats):
+    """
+    Prompt the user for one or more district configurations.
+
+    For each configuration:
+      - ask for number of districts
+      - compute winners = total_seats / num_districts
+      - accept only if winners is an integer
+
+    Args:
+        total_seats: Total number of seats available.
+
+    Returns:
+        List of valid district configuration dicts.
+    """
+    district_configs = []
+
+    while True:
+        num_districts = prompt_int("Number of districts")
+
+        if num_districts <= 0:
+            print("Invalid input, number of districts must be greater than 0.")
+            continue
+
+        if total_seats % num_districts != 0:
+            print(
+                f"Invalid district configuration: {total_seats} total seats cannot be evenly "
+                f"divided into {num_districts} districts. Please provide a valid number of districts."
+            )
+            add_another = prompt_yes_no("Add another district configuration? (y/n)")
+            if add_another == "n":
+                break
+            continue
+
+        winners = total_seats // num_districts
+        config = {"num_districts": num_districts, "winners": winners}
+        district_configs.append(config)
+
+        print(f"Confirmed district configuration: {config}")
+
+        add_another = prompt_yes_no("Add another district configuration? (y/n)")
+        if add_another == "n":
+            break
+
+    return district_configs
 
 
 def build_config():
@@ -79,10 +132,9 @@ def build_config():
     pop_of_interest_col = prompt("Population of interest column name")
 
     seed          = random.randint(0, 2**32 - 1)
-    num_districts = prompt_int("Number of districts")
-    winners       = prompt_int("Number of winners per district")
-    num_reps      = prompt_int('Number of elections per district plan')
-    total_seats   = num_districts * winners
+    total_seats = prompt_int("Total number of seats")
+    district_configs = collect_district_configs(total_seats)
+    num_reps      = prompt_int('Number of simulated elections per district plan')
 
     # collect group names
     groups_raw = prompt("Group names (comma-separated, e.g. A,B), specify focal group first")
@@ -90,9 +142,10 @@ def build_config():
 
     # collect per-group info
     for g in groups:
-        cands_raw = prompt(f"Candidate names for group '{g}' (comma-separated)")
+        cands_raw = prompt(f"Candidate names for group '{g}' (comma-separated, e.g. X1, X2, X3)")
         slate_to_candidates[g] = [c.strip() for c in cands_raw.split(",")]
 
+    print()
     print(f"Cohesion parameters for group {groups[0]}:")
     while True:
             try:
@@ -105,6 +158,7 @@ def build_config():
                 break
             except ValueError:
                 print("  Invalid input, please enter a number.")
+    print()
     print(f"Cohesion parameters for group {groups[1]}:")
     while True:
             try:
@@ -121,7 +175,8 @@ def build_config():
             
 
     for g in groups:
-        alphas[g] = prompt_dict_of_floats(f"Alpha parameters for group {g}:", groups)
+        print()
+        alphas[g] = prompt_dict_of_floats(f"Candidate strength parameters for group {g}:", groups)
 
     turnout = prompt_dict_of_floats("Turnout per group:", groups)
 
@@ -136,7 +191,7 @@ def build_config():
         "pop_of_interest_column":  pop_of_interest_col,
         "seed":                    seed,
         "total_seats":             total_seats,
-        "district_configs":        [{"num_districts": num_districts, "winners": winners}],
+        "district_configs":        district_configs,
         "chain_length":            chain_length,
         "num_subsamples":          num_subsamples,
         "num_reps":                num_reps,
