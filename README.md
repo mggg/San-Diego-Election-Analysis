@@ -52,7 +52,6 @@ All simulation parameters are defined in a JSON configuration file. You will be 
 | --------------------------| -------------| ----------------------------------------------------------------------------------------|
 | Run name                                          | string       | Identifier used for output directories and logs                                         |
 | Path to geodata fil                               | string       | Path to the geographic dataset (.geojson or .gpkg)                                      |
-| `geopackage_layer`                                | string       | Layer name if using a geopackage                                                        |
 | Population column name                            | string       | Column in the geographic dataset containing total population                            |
 | Population of interest column name                | string       | Column containing the population of the focal demographic group                         |
 | Total number of seats                             | integer      | Total number of representatives elected                                                 |
