@@ -5,6 +5,56 @@ import jsonlines as jl
 from tqdm import tqdm
 from pipeline.utils.helpers import get_non_focal_group
 
+def _get_geodata(config):
+    """
+    Load the geospatial dataset specified in the config and return the columns
+    needed for population calculations.
+
+    Args:
+        config: Parsed config dict containing geodata_path, population_column,
+        pop_of_interest_column, and optionally geo_layer.
+
+    Returns:
+        GeoDataFrame with only the population_column and pop_of_interest_column.
+    """
+    # load in population data
+    path_to_data = Path(f'{config['geodata_path']}')
+
+    if 'geo_layer' in config.keys():
+        layer = config['geo_layer']
+        population_data = gpd.read_file(path_to_data, layer = layer)
+    else: 
+        population_data = gpd.read_file(path_to_data)
+
+    return population_data[[config['pop_of_interest_column'],config['population_column']]]
+
+def _build_district_settings(row, turnout, focal_group, other_group, config):
+    """
+    Compute turnout-adjusted bloc proportions and population values for a district.
+
+    Args:
+        row: Row from the district population dataframe.
+        turnout: Dict mapping group -> turnout rate.
+        focal_group: Group of interest.
+        other_group: Non-focal comparison group.
+        config: Parsed config dict.
+
+    Returns:
+        Dict containing bloc_proportions and population counts for the district.
+    """
+    prop = float(row[config['pop_of_interest_column']] / row[config['population_column']])
+    adjusted_prop = (
+        prop * turnout[focal_group]
+        / (prop * turnout[focal_group] + (1 - prop) * turnout[other_group])
+    )
+    return {
+        "bloc_proportions": {
+            focal_group: adjusted_prop,
+            other_group: 1 - adjusted_prop,
+        },
+        config["pop_of_interest_column"]: row[config["pop_of_interest_column"]],
+        config["population_column"]: row[config["population_column"]],
+    }
 
 def generate_settings(config):
     """
@@ -20,17 +70,7 @@ def generate_settings(config):
         where <plan_idx> is the zero-based chain sample index and <district_id> is the district label.
         bloc_proportions in each file are turnout-adjusted focal group proportions.
     """
-
-    # load in population data
-    path_to_data = Path(f'{config['geodata_path']}')
-
-    if 'geo_layer' in config.keys():
-        layer = config['geo_layer']
-        population_data = gpd.read_file(path_to_data, layer = layer)
-    else: 
-        population_data = gpd.read_file(path_to_data)
-
-    population_data = population_data[[config['pop_of_interest_column'],config['population_column']]]
+    population_data = _get_geodata(config)
 
     # subsample evenly spaced plans from the chain
     chain_length = config['chain_length']
@@ -44,8 +84,6 @@ def generate_settings(config):
     focal_group = config['focal_group']
     other_group =  get_non_focal_group(config)
     run_name = config['run_name']
-
-
 
     for district_num in [d_config['num_districts'] for d_config in config['district_configs']]:
         settings_folder = Path(f'outputs/settings/{run_name}_settings/{district_num}')
@@ -68,17 +106,11 @@ def generate_settings(config):
 
                 for _, row in data_by_district.iterrows():
                     district = row.name
-                    prop = float(row[config['pop_of_interest_column']] / row[config['population_column']])
-                    # adjust bloc proportions by turnout rates
-                    adjusted_prop = prop*turnout[focal_group] / (prop*turnout[focal_group] + (1-prop)*turnout[other_group])
-
-                    output_settings['bloc_proportions'] = {focal_group: adjusted_prop, other_group: 1 - adjusted_prop}
-                    output_settings[config['pop_of_interest_column']] = row[config['pop_of_interest_column']]
-                    output_settings[config['population_column']] = row[config['population_column']]
+                    district_settings = _build_district_settings(row, turnout, focal_group, other_group, config)
+                    settings = output_settings | district_settings
                     
                     with open(
                         f"{settings_folder}/{run_name}_{district_num}_sample_settings_district_plan_{sample_idx:03d}_district_{district:02d}.json",
                         "w",
                     ) as out_file:
-                        json.dump(output_settings, out_file, indent=2)
-
+                        json.dump(settings, out_file, indent=2)
