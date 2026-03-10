@@ -1,11 +1,13 @@
 """
-summarize_results.py
+Summarize election simulation outputs and generate visualization figures.
 
-Expected inputs:
-- Election results:
-    outputs/election_results/<run_name>_election_results/<mode>/*.json
-- Settings:
-    outputs/settings/<run_name>_settings/<district_num>/*.json
+Aggregates district-level election results produced by the
+pipeline into a single summary dataset and generates histogram
+visualizations of representation outcomes. Joins election results
+with district-level population data from the corresponding settings
+files, computes focal-group representation statistics, and writes a
+summary CSV along with figures showing the distribution of seats won
+across voter models and election methods.
 """
 
 from __future__ import annotations

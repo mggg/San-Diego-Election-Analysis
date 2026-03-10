@@ -1,3 +1,11 @@
+"""
+Run elections on generated voter profiles and record the winners.
+
+Reads voter profile CSV files and runs the appropriate election 
+rule (STV for multi-seat districts, plurality and IRV for single-seat districts), 
+and writes aggregated election results to JSON files.
+"""
+
 from __future__ import annotations
 import json
 from glob import glob

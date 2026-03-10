@@ -1,3 +1,11 @@
+"""
+Generate voter preference profiles from district-level settings files.
+
+Reads VoteKit settings JSON files, generates synthetic voter profiles for
+each district, voter model, and replicate, and writes the resulting profiles
+to CSV files for downstream election simulations.
+"""
+
 from glob import glob
 from votekit.ballot_generator import (
     BlocSlateConfig,

@@ -1,7 +1,14 @@
+"""
+District plan generation using GerryChain.
+
+Constructs or loads a graph from the configured geodata, runs a recombination
+Markov chain for each requested district count, and writes sampled district
+assignments to jsonl files used by later stages of the pipeline.
+"""
+
 import os
 from pathlib import Path
 from functools import partial
-
 import networkx as nx
 import jsonlines as jl
 import random

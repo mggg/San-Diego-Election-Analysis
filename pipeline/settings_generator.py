@@ -1,3 +1,12 @@
+"""
+Generate VoteKit settings files from sampled district plans.
+
+Reads district assignments produced by the district-generation step,
+aggregates population counts by district, computes turnout-adjusted
+bloc proportions, and writes one settings JSON file per sampled plan
+and district.
+"""
+
 import json
 import geopandas as gpd
 from pathlib import Path
