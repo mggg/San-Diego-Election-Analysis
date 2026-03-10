@@ -5,30 +5,7 @@ import jsonlines as jl
 from tqdm import tqdm
 from pipeline.utils.helpers import get_non_focal_group
 
-def _get_geodata(config):
-    """
-    Load the geospatial dataset specified in the config and return the columns
-    needed for population calculations.
-
-    Args:
-        config: Parsed config dict containing geodata_path, population_column,
-        pop_of_interest_column, and optionally geo_layer.
-
-    Returns:
-        GeoDataFrame with only the population_column and pop_of_interest_column.
-    """
-    # load in population data
-    path_to_data = Path(f'{config['geodata_path']}')
-
-    if 'geo_layer' in config.keys():
-        layer = config['geo_layer']
-        population_data = gpd.read_file(path_to_data, layer = layer)
-    else: 
-        population_data = gpd.read_file(path_to_data)
-
-    return population_data[[config['pop_of_interest_column'],config['population_column']]]
-
-def _build_district_settings(row, turnout, focal_group, other_group, config):
+def _build_district_settings(row, config):
     """
     Compute turnout-adjusted bloc proportions and population values for a district.
 
@@ -42,6 +19,10 @@ def _build_district_settings(row, turnout, focal_group, other_group, config):
     Returns:
         Dict containing bloc_proportions and population counts for the district.
     """
+    turnout = config['turnout']
+    focal_group = config['focal_group']
+    other_group = get_non_focal_group(config)
+
     prop = float(row[config['pop_of_interest_column']] / row[config['population_column']])
     adjusted_prop = (
         prop * turnout[focal_group]
@@ -70,7 +51,8 @@ def generate_settings(config):
         where <plan_idx> is the zero-based chain sample index and <district_id> is the district label.
         bloc_proportions in each file are turnout-adjusted focal group proportions.
     """
-    population_data = _get_geodata(config)
+    population_data = gpd.read_file(config['geodata_path'])
+    population_data[[config['pop_of_interest_column'],config['population_column']]]
 
     # subsample evenly spaced plans from the chain
     chain_length = config['chain_length']
@@ -80,9 +62,6 @@ def generate_settings(config):
     # pull only the relevant keys from config to pass downstream
     district_params = ['num_voters', 'slate_to_candidates', 'cohesion_parameters', 'alphas']
     output_settings = {k:config[k] for k in config if k in district_params}
-    turnout = config['turnout']
-    focal_group = config['focal_group']
-    other_group =  get_non_focal_group(config)
     run_name = config['run_name']
 
     for district_num in [d_config['num_districts'] for d_config in config['district_configs']]:
@@ -106,9 +85,8 @@ def generate_settings(config):
 
                 for _, row in data_by_district.iterrows():
                     district = row.name
-                    district_settings = _build_district_settings(row, turnout, focal_group, other_group, config)
+                    district_settings = _build_district_settings(row, config)
                     settings = output_settings | district_settings
-                    
                     with open(
                         f"{settings_folder}/{run_name}_{district_num}_sample_settings_district_plan_{sample_idx:03d}_district_{district:02d}.json",
                         "w",
