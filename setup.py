@@ -141,9 +141,28 @@ def build_config():
     groups = [g.strip() for g in groups_raw.split(",")]
 
     # collect per-group info
+    all_candidates = set()
+
     for g in groups:
-        cands_raw = prompt(f"Candidate names for group '{g}' (comma-separated, e.g. X1, X2, X3)")
-        slate_to_candidates[g] = [c.strip() for c in cands_raw.split(",")]
+        while True:
+            cands_raw = prompt(f"Candidate names for group '{g}' (comma-separated)")
+            candidates = [c.strip() for c in cands_raw.split(",")]
+
+            if any(c == "" for c in candidates):
+                print("Candidate names cannot be empty.")
+                continue
+
+            if len(candidates) != len(set(candidates)):
+                print("Duplicate candidate names are not allowed within a group.")
+                continue
+
+            if any(c in all_candidates for c in candidates):
+                print("Candidate names must be unique across all groups.")
+                continue
+
+            slate_to_candidates[g] = candidates
+            all_candidates.update(candidates)
+            break
 
     print()
     print(f"Cohesion parameters for group {groups[0]}:")
