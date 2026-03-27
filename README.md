@@ -66,4 +66,10 @@ All simulation parameters are defined in a JSON configuration file. You will be 
 | Turnout                                           | float (0-1)  | Turnout rate for each voter bloc                                                        |
 
 
+Three parameters are currently being set to a default value:
 
+| Parameter                 | Value        | Description                                                                            |
+| --------------------------| -------------| ---------------------------------------------------------------------------------------|
+| Chain length | 1000 | Total number of steps in the Markov chain used to generate district plans. |
+| Number of subsamples | 5 | Number of district plans to retain for election simulation. |
+| Number of voters | 10,000 | Number of voters for each simulation. |
