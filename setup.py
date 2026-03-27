@@ -137,8 +137,23 @@ def build_config():
     num_reps      = prompt_int('Number of simulated elections per district plan')
 
     # collect group names
-    groups_raw = prompt("Group names (comma-separated, e.g. A,B), specify focal group first")
-    groups = [g.strip() for g in groups_raw.split(",")]
+    while True:
+        groups_raw = prompt("Group names (comma-separated, e.g. A,B), specify focal group first")
+        groups = [g.strip() for g in groups_raw.split(",")]
+
+        if len(groups) < 2:
+            print("You must provide at least two groups.")
+            continue
+
+        if any(g == "" for g in groups):
+            print("Group names cannot be empty.")
+            continue
+
+        if len(groups) != len(set(groups)):
+            print("Group names must be unique.")
+            continue
+
+        break
 
     # collect per-group info
     all_candidates = set()
