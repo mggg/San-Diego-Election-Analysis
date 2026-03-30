@@ -1,6 +1,35 @@
 import json
 import random
-from pipeline.utils.helpers import load_json
+import glob
+import os
+import readline
+
+
+def _path_completer(text, state):
+    expanded = os.path.expanduser(text)
+    matches = glob.glob(expanded + '*')
+    matches = [m + '/' if os.path.isdir(m) else m for m in matches]
+    try:
+        return matches[state]
+    except IndexError:
+        return None
+
+
+def prompt_path(label):
+    old_completer = readline.get_completer()
+    old_delims = readline.get_completer_delims()
+    readline.set_completer(_path_completer)
+    readline.set_completer_delims('')
+    if 'libedit' in readline.__doc__:
+        readline.parse_and_bind('bind ^I rl_complete')
+    else:
+        readline.parse_and_bind('tab: complete')
+    try:
+        result = input(f"\n{label}\n\t> ").strip()
+    finally:
+        readline.set_completer(old_completer)
+        readline.set_completer_delims(old_delims)
+    return result
 
 # default values for numeric pipeline parameters
 DEFAULTS = {
@@ -127,7 +156,7 @@ def build_config():
 
     # collect basic user input
     run_name = prompt("Run name")
-    geodata_path = prompt("Path to geodata file")
+    geodata_path = prompt_path("Path to geodata file")
     population_column = prompt("Population column name")
     pop_of_interest_col = prompt("Population of interest column name")
 
@@ -259,9 +288,18 @@ def setup_config():
         print("Invalid input, please enter 'y' or 'n'.")
 
     if sample == "y":  # skip setup, load sample file
-        config_path = input("\nPath to config file\n\t> ")
+        while True:
+            config_path = prompt_path("Path to config file")
+            if not os.path.exists(config_path):
+                print("File not found. Please enter a valid path.")
+                continue
+            if os.path.getsize(config_path) == 0:
+                print("File is empty. Please enter a valid config file.")
+                continue
+            break
         print("Loading config file...")
-        config = load_json(config_path)
+        with open(config_path, "r", encoding="utf-8") as f:
+            config = json.load(f)
     else:
         config = build_config()
         out = f"configs/{config['run_name']}.json"
@@ -272,3 +310,6 @@ def setup_config():
         print(f"\nConfig saved to {out}")
 
     return config
+
+if __name__ == "__main__":
+    setup_config()
