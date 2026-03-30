@@ -2,7 +2,11 @@ import json
 import random
 import glob
 import os
-import readline
+try:
+    import readline
+except ImportError:
+    import pyreadline3 as readline
+
 
 
 def _path_completer(text, state):
