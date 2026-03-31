@@ -74,6 +74,7 @@ def generate_profiles(config):
     """
 
     num_reps = config['num_reps']
+    run_name = config['run_name']
     # repeat for each replicate
     for duplicate_indx in range(num_reps):
         rep_start = time.perf_counter()
@@ -81,8 +82,8 @@ def generate_profiles(config):
         district_nums =  [d_config['num_districts'] for d_config in config['district_configs']]
         for district_num in district_nums:
             for mode in ["slate_pl", "slate_bt", "cambridge"]:
-                settings_folder = Path(f"outputs/settings/{config['run_name']}_settings/{district_num}")
-                profile_folder = Path(f"outputs/profiles/{config['run_name']}/{mode}/{district_num}")
+                settings_folder = Path(f"outputs/{run_name}/settings/{district_num}")
+                profile_folder = Path(f"outputs/{run_name}/profiles/{mode}/{district_num}")
                 profile_folder.mkdir(exist_ok=True, parents=True)
 
                 all_settings_files = glob(f"{settings_folder}/*.json")

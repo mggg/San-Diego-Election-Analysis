@@ -56,7 +56,7 @@ def generate_districts(config):
     graph = Graph.from_networkx(nx.convert_node_labels_to_integers(graph, first_label=0))
 
     # one output file per district count
-    output_dir = Path(f"outputs/districts/{run_name}_chain_out")
+    output_dir = Path(f"outputs/{run_name}/districts")
     output_dir.mkdir(parents=True, exist_ok=True)
 
     updaters = {"population": Tally(population_column, alias="population")}

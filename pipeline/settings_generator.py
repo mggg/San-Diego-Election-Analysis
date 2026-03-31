@@ -61,7 +61,7 @@ def generate_settings(config):
         bloc_proportions in each file are turnout-adjusted focal group proportions.
     """
     population_data = gpd.read_file(config['geodata_path'])
-    population_data[[config['pop_of_interest_column'],config['population_column']]]
+    population_data = population_data[[config['pop_of_interest_column'],config['population_column']]]
 
     # subsample evenly spaced plans from the chain
     chain_length = config['chain_length']
@@ -74,10 +74,10 @@ def generate_settings(config):
     run_name = config['run_name']
 
     for district_num in [d_config['num_districts'] for d_config in config['district_configs']]:
-        settings_folder = Path(f'outputs/settings/{run_name}_settings/{district_num}')
+        settings_folder = Path(f'outputs/{run_name}/settings/{district_num}')
         settings_folder.mkdir(exist_ok=True, parents=True)
 
-        path_to_districting = Path(f'outputs/districts/{run_name}_chain_out/{run_name}_{district_num}_districts.jsonl')
+        path_to_districting = Path(f'outputs/{run_name}/districts/{run_name}_{district_num}_districts.jsonl')
         
         with jl.open(path_to_districting) as file:
             for sample_idx, sample in tqdm(

@@ -88,13 +88,13 @@ def simulate_elections(config) -> None:
     modes = ["slate_pl", "slate_bt", "cambridge"]
     n_jobs = -1  # use all available cores
 
-    out_root = Path("outputs") / "election_results" / f"{run_name}_election_results"
+    out_root = Path("outputs") / f'{run_name}' / "election_results" 
     out_root.mkdir(parents=True, exist_ok=True)
 
     # run elections for each voter model
     for mode in modes:
         # profile path
-        profile_folder = Path(f"./outputs/profiles/{config['run_name']}/{mode}/")
+        profile_folder = Path(f"./outputs/{run_name}/profiles/{mode}/")
 
         output_dir = out_root / mode
         output_dir.mkdir(parents=True, exist_ok=True)

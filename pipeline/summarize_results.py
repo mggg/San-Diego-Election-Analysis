@@ -69,12 +69,12 @@ def summarize_results(config) -> Path:
     modes = ["slate_pl", "slate_bt", "cambridge"]
 
     # Input roots
-    results_dir = Path("outputs") / "election_results" / f"{run_name}_election_results"
+    results_dir = Path("outputs") /f'{run_name}' / "election_results"
     if not results_dir.exists():
         raise FileNotFoundError(f"Could not find election results directory: {results_dir}")
 
     # Output roots
-    summary_dir = Path("outputs") / "summaries" / f"{run_name}_summary"
+    summary_dir = Path("outputs") / f'{run_name}' / "summaries"
     summary_dir.mkdir(parents=True, exist_ok=True)
     figs_dir = summary_dir / "figures"
     figs_dir.mkdir(parents=True, exist_ok=True)
@@ -90,7 +90,7 @@ def summarize_results(config) -> Path:
 
     for dc in district_configs:
         # Settings directory is grouped by district_num per design doc
-        settings_dir = Path("outputs") / "settings" / f"{run_name}_settings" / str(dc.num_districts) 
+        settings_dir = Path("outputs") / f'{run_name}' /"settings" / str(dc.num_districts) 
 
         for mode in modes:
             # Find results files for this mode & district config.
