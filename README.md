@@ -34,7 +34,7 @@ Run the pipeline using:
 When the script starts, you will be prompted to choose whether you want to **use an existing configuration file** or **create a new one**.
 
 - If you choose **yes**, the script will prompt you to provide the path to an existing config JSON file (e.g., `configs/your_run_name.json`).
-- If you choose **no**, the script will guide you through an interactive setup to create a new configuration file. A description of the configuration file parameters can be found (below)[https://github.com/sarsong/ElectoralRedistricting/blob/main/README.md#configuration-file].
+- If you choose **no**, the script will guide you through an interactive setup to create a new configuration file. A description of the configuration file parameters can be found [below](https://github.com/sarsong/ElectoralRedistricting/blob/main/README.md#configuration-file).
 
 **Note**: The first time you run this command, it may take a moment before the prompt appears. This is because some imports take time to load. Subsequent runs will start much faster.
 
