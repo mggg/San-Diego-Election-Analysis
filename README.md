@@ -19,7 +19,9 @@ This repository was developed using the UV build system. This build system is ge
 
 After installing UV, you can build the necessary virtual environment for this repository by invoking the command
 
-`uv sync`
+```
+uv sync
+```
 
 from the terminal while in the base directory.
 
