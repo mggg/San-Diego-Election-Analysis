@@ -253,7 +253,7 @@ def build_config():
     return {
         "run_name":                run_name,
         "geodata_path":            geodata_path,
-        "gerrychain_output_dir":   f"outputs/districts/{run_name}",
+        "gerrychain_output_dir":   f"outputs/{run_name}/districts/",
         "population_column":       population_column,
         "pop_of_interest_column":  pop_of_interest_col,
         "seed":                    seed,
