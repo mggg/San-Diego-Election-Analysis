@@ -3,10 +3,11 @@ District plan generation using GerryChain.
 
 Constructs or loads a graph from the configured geodata, runs a recombination
 Markov chain for each requested district count, and writes sampled district
-assignments to jsonl files used by later stages of the pipeline.
+assignments to gzip files used by later stages of the pipeline.
 """
 
 import os
+import gzip
 from pathlib import Path
 from functools import partial
 import networkx as nx
@@ -90,12 +91,10 @@ def generate_districts(config):
         )
 
         # write each step as a jsonl record: {"assignment": [...], "sample": n}
-        output_path = output_dir / f"{run_name}_{num_districts}_districts.jsonl"
-        with jl.open(str(output_path), mode="w") as writer:
+        output_path = output_dir / f"{run_name}_{num_districts}_districts.jsonl.gz"
+        with gzip.open(output_path, mode="wt", encoding="utf-8") as gz_file:
+            writer = jl.Writer(gz_file)
             for sample_num, step in enumerate(tqdm(chain, total=chain_length, desc=f"Generating {num_districts}-district plans"), start=1):
                 assignment = list(step.assignment.to_series().sort_index())
                 writer.write({"assignment": assignment, "sample": sample_num})
-
-
-if __name__ == "__main__":
-    generate_districts(load_json("configs/sample.json"))
+            writer.close()

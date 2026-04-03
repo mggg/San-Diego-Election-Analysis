@@ -8,6 +8,7 @@ and district.
 """
 
 import json
+import gzip
 import geopandas as gpd
 from pathlib import Path
 import jsonlines as jl
@@ -65,8 +66,8 @@ def generate_settings(config):
 
     # subsample evenly spaced plans from the chain
     chain_length = config['chain_length']
-    num_subamples = config['num_subsamples']
-    subsample_interval = chain_length // num_subamples   
+    num_subsamples = config['num_subsamples']
+    subsample_interval = chain_length // num_subsamples   
 
     # pull only the relevant keys from config to pass downstream
     district_params = ['num_voters', 'slate_to_candidates', 'cohesion_parameters', 'alphas']
@@ -77,9 +78,10 @@ def generate_settings(config):
         settings_folder = Path(f'outputs/{run_name}/settings/{district_num}')
         settings_folder.mkdir(exist_ok=True, parents=True)
 
-        path_to_districting = Path(f'outputs/{run_name}/districts/{run_name}_{district_num}_districts.jsonl')
+        path_to_districting = Path(f'outputs/{run_name}/districts/{run_name}_{district_num}_districts.jsonl.gz')
         
-        with jl.open(path_to_districting) as file:
+        with gzip.open(path_to_districting, mode="rt", encoding="utf-8") as gz_file:
+            file = jl.Reader(gz_file)
             for sample_idx, sample in tqdm(
                 enumerate(file),
                 total=chain_length,
