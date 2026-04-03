@@ -15,8 +15,13 @@ It enables researchers and practitioners to compare how **district magnitude, vo
 ## Quick Start
 
 ### 1. Setup Software
+This repository was developed using the UV build system. This build system is generally available through chocolatey on Windows (`choco install uv`), homebrew on MacOS `brew install uv`, and through direct installation on Linux (e.g. `apt install uv`). You can also install directly from source using the instructions at UV's homepage or you can install the system into a conda environment (`conda install conda-forge::uv`).
 
-Follow the instructions for setting up the necessary software [here](https://github.com/hanelee/CA_STV/tree/peter-workflow-updates?tab=readme-ov-file#software-setup).
+After installing UV, you can build the necessary virtual environment for this repository by invoking the command
+
+`uv sync`
+
+from the terminal while in the base directory.
 
 ### 2. Run the Full Pipeline (`run.py`)
 
