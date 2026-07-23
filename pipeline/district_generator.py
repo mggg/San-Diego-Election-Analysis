@@ -69,6 +69,7 @@ def generate_districts(config):
 
         # With a single district there is only one possible map, so skip the
         # Markov chain and write the trivial assignment for every sample.
+        
         if num_districts == 1:
             trivial_assignment = [1] * len(graph.nodes)
             with gzip.open(output_path, mode="wt", encoding="utf-8") as gz_file:
