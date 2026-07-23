@@ -15,7 +15,7 @@
   "total_seats": 10,
 
 "district_configs": [
-  { "num_districts": 5, "winners": 2 }
+  { "num_districts": 1, "winners": 10 }
 ],
 
   "turnout": { "A": 0.7, "B": 0.90},

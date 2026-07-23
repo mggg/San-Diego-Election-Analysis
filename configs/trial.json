@@ -1,0 +1,50 @@
+{
+  "run_name": "trial",
+  "geodata_path": "./data/sample.geojson",
+  "gerrychain_output_dir": "outputs/trial/districts/chain_out",
+  "population_column": "total_vap_20",
+  "pop_of_interest_column": "hvap_20",
+  "seed": 952763741,
+  "total_seats": 3,
+  "district_configs": [{ "num_districts": 3, "winners": 1 },{ "num_districts": 5, "winners": 1 }],
+  "chain_length": 1000,
+  "num_subsamples": 5,
+  "num_reps": 10,
+  "num_voters": 100,
+  "slate_to_candidates": {
+    "A": [
+      "A1",
+      "A2",
+      "A3"
+    ],
+    "B": [
+      "B1",
+      "B2"
+    ]
+  },
+  "turnout": {
+    "A": 1.0,
+    "B": 1.0
+  },
+  "focal_group": "A",
+  "cohesion_parameters": {
+    "A": {
+      "A": 0.9,
+      "B": 0.09999999999999998
+    },
+    "B": {
+      "A": 0.9,
+      "B": 0.1
+    }
+  },
+  "alphas": {
+    "A": {
+      "A": 1.0,
+      "B": 1.0
+    },
+    "B": {
+      "A": 1.0,
+      "B": 1.0
+    }
+  }
+}
