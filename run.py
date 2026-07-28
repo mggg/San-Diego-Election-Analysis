@@ -3,7 +3,7 @@ from pipeline.district_generator import generate_districts
 from pipeline.settings_generator import generate_settings
 from pipeline.profile_generator import generate_profiles
 from pipeline.simulate_elections import simulate_elections
-from pipeline.summarize_results import summarize_results
+from pipeline.summarize_results import summarize_results, plot_combined_bubbles_all_runs
 from pipeline.utils.helpers import get_voter_models, profiles_signature, election_results_signature
 from pathlib import Path
 from glob import glob
@@ -237,5 +237,17 @@ def pipeline(config):
     summarize_results(config)
 
 
+def main(config_dir="configs"):
+    """Run the pipeline for every config in config_dir, then draw cross-run summaries."""
+    configs = load_all_configs(config_dir)
+    for config in configs:
+        print("=" * 100, f"\n Running {config['run_name']}\n", "=" * 20)
+        run_pipeline(config)
+    # One cross-run bubble figure over every run's summary CSV. Any config
+    # supplies the shared seat-axis range and population reference line.
+    if configs:
+        plot_combined_bubbles_all_runs(configs[-1])
+
+
 if __name__ == "__main__":
-    run_pipeline(setup_config())
+    main()
