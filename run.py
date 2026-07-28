@@ -4,6 +4,7 @@ from pipeline.settings_generator import generate_settings
 from pipeline.profile_generator import generate_profiles
 from pipeline.simulate_elections import simulate_elections
 from pipeline.summarize_results import summarize_results
+from setup import setup_config
 from pathlib import Path
 from glob import glob
 import gzip
@@ -194,12 +195,5 @@ def pipeline(config):
     summarize_results(config)
 
 
-def main(config_dir="configs"):
-    """Run the pipeline for every config in config_dir, no CLI prompts."""
-    for config in load_all_configs(config_dir):
-        print("=" * 100, f"\n Running {config['run_name']}\n", "=" * 20)
-        run_pipeline(config)
-
-
 if __name__ == "__main__":
-    main()
+    run_pipeline(setup_config())
