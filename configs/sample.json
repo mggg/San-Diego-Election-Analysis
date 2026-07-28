@@ -1,11 +1,26 @@
 {
   "run_name": "kansas_dev_run",
 
-  "geodata_path": "data/sample.geojson",
+  "geodata_path": "data/kansas_city.geojson",
+
+  "geometry_data": {
+    "state_fips": "29",
+    "state_name": "Missouri",
+    "place_fips": "38000",
+    "place_name": "Kansas City",
+    "counties": ["095",
+               "047",
+               "165",
+               "037"],
+    "crs_tiger": "EPSG:4269",
+    "crs_equal": "EPSG:26915",
+    "crs_webmap": "EPSG:4326"
+  },
 
   "gerrychain_output_dir": "outputs/districts/chain_out",
 
-  "population_column": "total_vap_20",
+  "population_column": "total_pop_20",
+  "population_vap_column": "total_vap_20",
   "pop_of_interest_column": "hvap_20",
 
   "chain_length": 1000,
@@ -15,7 +30,7 @@
   "total_seats": 10,
 
 "district_configs": [
-  { "num_districts": 5, "winners": 2 }
+  { "num_districts": 1, "winners": 10 }
 ],
 
   "voting_configs": {

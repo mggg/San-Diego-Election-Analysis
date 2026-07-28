@@ -1,3 +1,4 @@
+from pipeline.data_generator import generate_data
 from pipeline.district_generator import generate_districts
 from pipeline.settings_generator import generate_settings
 from pipeline.profile_generator import generate_profiles
@@ -8,6 +9,38 @@ from pathlib import Path
 import sys
 import gzip
 import json
+
+def has_valid_geodata(config) -> bool:
+    path = Path(config["geodata_path"])
+    if not path.exists() or path.stat().st_size == 0:
+        print("Geodata file not found. Running data generation step.")
+        return False
+
+    # If this config generated the geodata, verify the sidecar matches.
+    if "geometry_data" in config:
+        meta_path = path.parent / (path.stem + "_meta.json")
+        if meta_path.exists():
+            with open(meta_path) as f:
+                saved = json.load(f).get("geometry_data", {})
+            current = config["geometry_data"]
+            conflicts = {
+                k: (saved.get(k), current.get(k))
+                for k in ("state_fips", "place_fips", "place_name")
+                if saved.get(k) != current.get(k)
+            }
+            if conflicts:
+                lines = "\n".join(
+                    f"  {k}: saved={v[0]!r}  config={v[1]!r}"
+                    for k, v in conflicts.items()
+                )
+                raise ValueError(
+                    f"Geodata at '{path}' was generated for a different city.\n"
+                    f"Conflicts:\n{lines}\n"
+                    "Delete the file or change 'geodata_path' in your config."
+                )
+
+    return True
+
 
 def has_valid_district_outputs(config) -> bool:
     run = config["run_name"]
@@ -137,6 +170,13 @@ def run_pipeline(config):
         pipeline(config)
 
 def pipeline(config):
+    if not has_valid_geodata(config):
+        if "geometry_data" not in config:
+            raise ValueError(
+                f"Geodata file '{config['geodata_path']}' not found and no "
+                "'geometry_data' in config to generate it."
+            )
+        generate_data(config)
     generate_districts(config)
     generate_settings(config)
     generate_profiles(config)

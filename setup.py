@@ -211,6 +211,7 @@ def build_config():
     run_name = prompt("Run name")
     geodata_path = prompt_path("Path to geodata file")
     population_column = prompt("Population column name")
+    population_vap_column = prompt("VAP column name")
     pop_of_interest_col = prompt("Population of interest column name")
 
     seed          = random.randint(0, 2**32 - 1)
@@ -305,6 +306,7 @@ def build_config():
         "geodata_path":            geodata_path,
         "gerrychain_output_dir":   f"outputs/{run_name}/districts/",
         "population_column":       population_column,
+        "population_vap_column":   population_vap_column,
         "pop_of_interest_column":  pop_of_interest_col,
         "seed":                    seed,
         "total_seats":             total_seats,
