@@ -38,6 +38,8 @@
     "Plurality": { "n_seats": 2, "tiebreak": "random" }
   },
 
+  "voter_models": ["slate_pl", "slate_bt"],
+
   "turnout": { "A": 0.7, "B": 0.90},
 
   "num_voters": 10000,

@@ -3,12 +3,14 @@ from pipeline.district_generator import generate_districts
 from pipeline.settings_generator import generate_settings
 from pipeline.profile_generator import generate_profiles
 from pipeline.simulate_elections import simulate_elections
-from pipeline.summarize_results import summarize_results
-from setup import setup_config
+from pipeline.summarize_results import summarize_results, plot_combined_bubbles_all_runs
+from pipeline.utils.helpers import get_voter_models, profiles_signature, election_results_signature
 from pathlib import Path
 from glob import glob
 import gzip
 import json
+import zipfile
+import zlib
 
 
 def load_config(config_path: str) -> dict:
@@ -91,20 +93,54 @@ def has_valid_settings(config):
 
 def has_valid_profiles(config):
     run = config["run_name"]
-    base = Path("outputs") / run / "profiles"
-    if not base.is_dir():
+    zip_path = Path("outputs") / run / "profiles.zip"
+    if not zip_path.is_file():
         print("Profiles do not exist. Running pipeline from profiles stage.")
         return False
-    expected_per_mode = (
-        config["num_subsamples"]
-        * sum(d["num_districts"] for d in config["district_configs"])
-        * config["num_reps"]
-    )
-    for mode in ["slate_pl", "slate_bt", "cambridge"]:
-        count = sum(1 for f in (base / mode).rglob("*.csv") if f.stat().st_size > 0)
-        if count != expected_per_mode:
-            print(f"Missing valid settings for {mode} mode. Running pipeline from profiles stage.")
-            return False
+
+    # A signature mismatch means a content-determining parameter changed, so the
+    # existing profiles are stale; generate_profiles will rebuild them.
+    meta_path = Path("outputs") / run / "profiles_metadata.json"
+    if not meta_path.is_file():
+        print("Profiles metadata missing. Running pipeline from profiles stage.")
+        return False
+    try:
+        with open(meta_path, encoding="utf-8") as f:
+            prior_signature = json.load(f).get("signature")
+    except (json.JSONDecodeError, OSError):
+        prior_signature = None
+    if prior_signature != profiles_signature(config):
+        print("Profiles signature changed. Running pipeline from profiles stage.")
+        return False
+
+    try:
+        with zipfile.ZipFile(zip_path) as archive:
+            # testzip() decompresses every member to verify its CRC, so a
+            # truncated/corrupted entry (e.g. a process killed mid-write) is
+            # caught here, not just a structurally broken archive.
+            if archive.testzip() is not None:
+                print("Profiles archive has a corrupted entry. Running pipeline from profiles stage.")
+                return False
+            members = archive.namelist()
+    except (zipfile.BadZipFile, OSError, zlib.error, EOFError) as e:
+        print(f"Profiles archive is unreadable ({e}). Running pipeline from profiles stage.")
+        return False
+
+    # Checked per (mode, district count) rather than summed, so a complete
+    # district count can't mask an incomplete one when a config has more than
+    # one district configuration.
+    for mode in get_voter_models(config):
+        for d in config["district_configs"]:
+            n = d["num_districts"]
+            expected = config["num_subsamples"] * n * config["num_reps"]
+            prefix = f"{mode}/{n}/"
+            count = sum(1 for m in members if m.startswith(prefix) and m.endswith(".csv"))
+            if count != expected:
+                print(
+                    f"Missing valid profiles for mode={mode}, district_count={n} "
+                    f"(found {count}, expected {expected}). Running pipeline from profiles stage."
+                )
+                return False
     return True
 
 def has_valid_election_results(config):
@@ -113,7 +149,8 @@ def has_valid_election_results(config):
     if not base.is_dir():
         print("Election results do not exist. Running pipeline from election simulation stage.")
         return False
-    for mode in ["slate_pl", "slate_bt", "cambridge"]:
+    signature = election_results_signature(config)
+    for mode in get_voter_models(config):
         mode_dir = base / mode
         if not mode_dir.is_dir():
             print(f"Election results for {mode} mode do not exist. Running pipeline from election simulation stage.")
@@ -127,6 +164,11 @@ def has_valid_election_results(config):
             try:
                 with open(files[0], "r", encoding="utf-8") as f:
                     data = json.load(f)
+                # A signature mismatch means the profiles or voting rules changed,
+                # so these results are stale and must be re-simulated.
+                if data.get("signature") != signature:
+                    print(f"Election results for {mode} mode and {d} number of districts are stale (signature changed). Running pipeline from election simulation stage.")
+                    return False
                 expected_len = config["num_subsamples"] * n * config["num_reps"]
                 if len(data.get("profile_files", [])) != expected_len:
                     print(f"Election results for {mode} mode and {d} number of districts have incorrect length. Running pipeline from election simulation stage.")
@@ -195,5 +237,17 @@ def pipeline(config):
     summarize_results(config)
 
 
+def main(config_dir="configs"):
+    """Run the pipeline for every config in config_dir, then draw cross-run summaries."""
+    configs = load_all_configs(config_dir)
+    for config in configs:
+        print("=" * 100, f"\n Running {config['run_name']}\n", "=" * 20)
+        run_pipeline(config)
+    # One cross-run bubble figure over every run's summary CSV. Any config
+    # supplies the shared seat-axis range and population reference line.
+    if configs:
+        plot_combined_bubbles_all_runs(configs[-1])
+
+
 if __name__ == "__main__":
-    run_pipeline(setup_config())
+    main()
