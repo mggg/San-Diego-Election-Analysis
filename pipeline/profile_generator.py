@@ -17,7 +17,7 @@ from joblib import Parallel, delayed
 from joblib_progress import joblib_progress
 from pathlib import Path
 import time
-from pipeline.utils.helpers import load_json
+from pipeline.utils.helpers import load_json, get_voter_models
 
 
 # maps mode name to votekit profile generator function
@@ -75,13 +75,14 @@ def generate_profiles(config):
 
     num_reps = config['num_reps']
     run_name = config['run_name']
+    voter_models = get_voter_models(config)
     # repeat for each replicate
     for duplicate_indx in range(num_reps):
         rep_start = time.perf_counter()
         print(f"[rep {duplicate_indx + 1}/{num_reps}] Start at {time.strftime('%Y-%m-%d %H:%M:%S')}")
         district_nums =  [d_config['num_districts'] for d_config in config['district_configs']]
         for district_num in district_nums:
-            for mode in ["slate_pl", "slate_bt", "cambridge"]:
+            for mode in voter_models:
                 settings_folder = Path(f"outputs/{run_name}/settings/{district_num}")
                 profile_folder = Path(f"outputs/{run_name}/profiles/{mode}/{district_num}")
                 profile_folder.mkdir(exist_ok=True, parents=True)

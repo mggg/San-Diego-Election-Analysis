@@ -4,6 +4,7 @@ from pipeline.settings_generator import generate_settings
 from pipeline.profile_generator import generate_profiles
 from pipeline.simulate_elections import simulate_elections
 from pipeline.summarize_results import summarize_results
+from pipeline.utils.helpers import get_voter_models
 from pathlib import Path
 from glob import glob
 import gzip
@@ -99,7 +100,7 @@ def has_valid_profiles(config):
         * sum(d["num_districts"] for d in config["district_configs"])
         * config["num_reps"]
     )
-    for mode in ["slate_pl", "slate_bt", "cambridge"]:
+    for mode in get_voter_models(config):
         count = sum(1 for f in (base / mode).rglob("*.csv") if f.stat().st_size > 0)
         if count != expected_per_mode:
             print(f"Missing valid settings for {mode} mode. Running pipeline from profiles stage.")
@@ -112,7 +113,7 @@ def has_valid_election_results(config):
     if not base.is_dir():
         print("Election results do not exist. Running pipeline from election simulation stage.")
         return False
-    for mode in ["slate_pl", "slate_bt", "cambridge"]:
+    for mode in get_voter_models(config):
         mode_dir = base / mode
         if not mode_dir.is_dir():
             print(f"Election results for {mode} mode do not exist. Running pipeline from election simulation stage.")

@@ -19,7 +19,7 @@ import geopandas as gpd
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from pipeline.utils.helpers import parse_district_configs, parse_plan_district_rep_from_path, count_focal_winners, load_json, find_settings_file, get_non_focal_group
+from pipeline.utils.helpers import parse_district_configs, parse_plan_district_rep_from_path, count_focal_winners, load_json, find_settings_file, get_non_focal_group, get_voter_models
 
 
 def summarize_results(config) -> Path:
@@ -55,18 +55,25 @@ def summarize_results(config) -> Path:
 
     turnout = config["turnout"]
     cohesion_parameters = config["cohesion_parameters"]
-    if len(turnout) != 2:
-        raise ValueError("Turnout does not have exactly two keys")
-    non_focal_group = get_non_focal_group(config)
-    # adjust proportion by differential turnout
-    iprop_turnout = iprop*turnout[focal_group] / (iprop*turnout[focal_group] + (1-iprop)*turnout[non_focal_group])
 
-    # compute combined support: share of votes going to focal candidates
-    focal_group_cohesion = cohesion_parameters[focal_group]
-    non_focal_group_cohesion = cohesion_parameters[non_focal_group]
-    i_cs_turnout = iprop_turnout*focal_group_cohesion[focal_group] + (1-iprop_turnout)*non_focal_group_cohesion[focal_group]
+    # "Combined support" (the share of votes going to focal candidates once
+    # differential turnout and cross-bloc cohesion are folded in) is only defined
+    # for the two-group focal-vs-non-focal model. Under the coalition / multi-bloc
+    # model (turnout keyed by more than two blocs) there is no single non-focal
+    # group, so we skip it and leave combined_support unset.
+    if len(turnout) == 2:
+        non_focal_group = get_non_focal_group(config)
+        # adjust proportion by differential turnout
+        iprop_turnout = iprop*turnout[focal_group] / (iprop*turnout[focal_group] + (1-iprop)*turnout[non_focal_group])
+        # compute combined support: share of votes going to focal candidates
+        focal_group_cohesion = cohesion_parameters[focal_group]
+        non_focal_group_cohesion = cohesion_parameters[non_focal_group]
+        i_cs_turnout = iprop_turnout*focal_group_cohesion[focal_group] + (1-iprop_turnout)*non_focal_group_cohesion[focal_group]
+    else:
+        iprop_turnout = None
+        i_cs_turnout = None
 
-    modes = ["slate_pl", "slate_bt", "cambridge"]
+    modes = get_voter_models(config)
 
     # Input roots
     results_dir = Path("outputs") /f'{run_name}' / "election_results"
@@ -180,7 +187,9 @@ def summarize_results(config) -> Path:
         "slate_pl": "Impulsive",
         "cambridge": "Cambridge",
     }
-    desired_order = ["slate_pl", "slate_bt", "cambridge"]
+    # Order legends by the config's voter_models; unknown models fall back to
+    # their raw name (see handle_map / ordered_labels below).
+    desired_order = get_voter_models(config)
 
     # one histogram per (district count, seats, election method) combo
     for (num_dist, seats_per_district, elm), group_distn in df_plan.groupby(["num_districts", "seats_per_district", "election_method"]):
@@ -227,13 +236,13 @@ def summarize_results(config) -> Path:
 
         # legend (modes only, renamed + ordered)
         handles, labels = ax.get_legend_handles_labels()
-        handle_map = {label: handle for handle, label in zip(handles, labels) if label in legend_mapping}
+        handle_map = {label: handle for handle, label in zip(handles, labels)}
 
         ordered_handles, ordered_labels = [], []
         for mode_key in desired_order:
             if mode_key in handle_map:
                 ordered_handles.append(handle_map[mode_key])
-                ordered_labels.append(legend_mapping[mode_key])
+                ordered_labels.append(legend_mapping.get(mode_key, mode_key))
 
         ax.legend(ordered_handles, ordered_labels, title="Mode", fontsize=8)
 
@@ -241,33 +250,40 @@ def summarize_results(config) -> Path:
         color_cs = "xkcd:brownish grey"
         color_iprop = "xkcd:purplish brown"
 
-        i_cs_share = i_cs_turnout * total_seats
         i_share = iprop * total_seats
 
-        if i_cs_share < i_share:
-            i_cs_alignment = -0.3
-            i_share_alignment = 0.3
-            i_cs_ha = "right"
-            i_share_ha = "left"
+        # The combined-support benchmark only exists for the two-group model
+        # (see i_cs_turnout above); under the multi-bloc model just draw the
+        # focal-group VAP line.
+        if i_cs_turnout is not None:
+            i_cs_share = i_cs_turnout * total_seats
+
+            if i_cs_share < i_share:
+                i_cs_alignment = -0.3
+                i_share_alignment = 0.3
+                i_cs_ha = "right"
+                i_share_ha = "left"
+            else:
+                i_cs_alignment = 0.3
+                i_share_alignment = -0.3
+                i_cs_ha = "left"
+                i_share_ha = "right"
+
+            ax.axvline(i_cs_share, color=color_cs, linewidth=1)
+
+            ax.text(
+                i_cs_share + i_cs_alignment,
+                ylim * 0.90,
+                f"Combined support\n{i_cs_turnout*100:.2f}%\n({i_cs_share:.2f} seats)",
+                va="center",
+                ha=i_cs_ha,
+                fontsize=8,
+                color=color_cs,
+            )
         else:
-            i_cs_alignment = 0.3
-            i_share_alignment = -0.3
-            i_cs_ha = "left"
-            i_share_ha = "right"            
+            i_share_alignment = 0.3
+            i_share_ha = "left"
 
-        ax.axvline(i_cs_share, color=color_cs, linewidth=1)
-
-        ax.text(
-            i_cs_share + i_cs_alignment,
-            ylim * 0.90,
-            f"Combined support\n{i_cs_turnout*100:.2f}%\n({i_cs_share:.2f} seats)",
-            va="center",
-            ha=i_cs_ha,
-            fontsize=8,
-            color=color_cs,
-        )
-
-        
         ax.axvline(i_share, color=color_iprop, linestyle=":", linewidth=1)
 
         ax.text(
