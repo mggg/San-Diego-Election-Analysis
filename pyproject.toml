@@ -13,5 +13,5 @@ dependencies = [
     "jsonlines>=4.0.0",
     "pandas>=2.3.3",
     "tqdm>=4.67.1",
-    "votekit>=3.3.0",
+    "votekit>=3.4.0",
 ]
