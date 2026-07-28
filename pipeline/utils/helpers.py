@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any, Iterable, List, Dict, Optional
 import re
 import json
+import hashlib
 
 @dataclass(frozen=True)
 class DistrictConfig:
@@ -52,6 +53,67 @@ def get_voter_models(config) -> List[str]:
     if not isinstance(models, list) or not all(isinstance(m, str) for m in models):
         raise ValueError('config["voter_models"] must be a list of strings.')
     return list(models)
+
+
+# Config keys that determine the *content* of a generated profile. If any of
+# these changes, existing profiles are stale and must be regenerated. Keys
+# outside this set only add new profiles rather than changing existing ones --
+# num_reps (more replicates), voter_models (more models), and district_configs
+# (more magnitudes) all namespace their outputs, so existing files stay valid
+# and only the missing ones are filled in (see generate_profiles).
+PROFILE_SIGNATURE_KEYS = [
+    "geodata_path",
+    "population_column",
+    "population_vap_column",
+    "pop_of_interest_column",
+    "group_vap_columns",
+    "blocs",
+    "turnout",
+    "slate_to_candidates",
+    "cohesion_parameters",
+    "alphas",
+    "num_voters",
+    "seed",
+    "chain_length",
+    "num_subsamples",
+]
+
+
+def config_signature(config, keys) -> str:
+    """
+    A stable short hash of the given config keys.
+
+    Two configs that agree on all of ``keys`` (a missing key is treated as null)
+    produce the same signature, so it can be stored alongside generated outputs
+    to detect whether those outputs are still compatible with the current config
+    (reuse them) or stale (regenerate them).
+
+    Args:
+        config: Parsed config dict.
+        keys: The config keys whose values define the signature.
+
+    Returns:
+        A 16-character hex digest of the selected key/value subset.
+    """
+    subset = {k: config.get(k) for k in keys}
+    blob = json.dumps(subset, sort_keys=True, default=str)
+    return hashlib.sha256(blob.encode()).hexdigest()[:16]
+
+
+def profiles_signature(config) -> str:
+    """Signature of the config parameters that determine profile content."""
+    return config_signature(config, PROFILE_SIGNATURE_KEYS)
+
+
+def election_results_signature(config) -> str:
+    """
+    Signature for election results: profile content plus the voting rules.
+
+    Changing a voting rule (or its parameters) makes existing results stale even
+    when the underlying profiles are unchanged, so voting_configs is folded in on
+    top of the profile signature.
+    """
+    return config_signature(config, PROFILE_SIGNATURE_KEYS + ["voting_configs"])
 
 
 def get_non_focal_group(config):
