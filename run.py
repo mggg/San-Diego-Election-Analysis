@@ -4,11 +4,21 @@ from pipeline.settings_generator import generate_settings
 from pipeline.profile_generator import generate_profiles
 from pipeline.simulate_elections import simulate_elections
 from pipeline.summarize_results import summarize_results
-from setup import setup_config
 from pathlib import Path
-import sys
+from glob import glob
 import gzip
 import json
+
+
+def load_config(config_path: str) -> dict:
+    """Load config from JSON file."""
+    with open(config_path) as f:
+        return json.load(f)
+
+
+def load_all_configs(config_dir="configs"):
+    """Load every config JSON in config_dir, so simulations can run without the CLI."""
+    return [load_config(path) for path in glob(f"{config_dir}/*.json")]
 
 def has_valid_geodata(config) -> bool:
     path = Path(config["geodata_path"])
@@ -148,8 +158,8 @@ def run_pipeline(config):
                 if has_valid_profiles(config):
                     if has_valid_election_results(config):
                         if has_valid_summaries(config):
-                            print(f"Run '{config['run_name']}' has valid outputs. Exiting.")
-                            sys.exit(0)
+                            print(f"Run '{config['run_name']}' has valid outputs. Skipping.")
+                            return
                         else:
                             summarize_results(config)
                     else:
@@ -184,7 +194,12 @@ def pipeline(config):
     summarize_results(config)
 
 
-if __name__ == "__main__":
-    run_pipeline(setup_config())
+def main(config_dir="configs"):
+    """Run the pipeline for every config in config_dir, no CLI prompts."""
+    for config in load_all_configs(config_dir):
+        print("=" * 100, f"\n Running {config['run_name']}\n", "=" * 20)
+        run_pipeline(config)
 
-    
+
+if __name__ == "__main__":
+    main()
