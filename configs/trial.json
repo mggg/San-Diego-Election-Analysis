@@ -18,7 +18,7 @@
   "seed": 952763741,
   "total_seats": 3,
   "district_configs": [{ "num_districts": 3, "winners": 1 },{ "num_districts": 5, "winners": 1 }],
-  "chain_length": 1000,
+  "chain_length": 100,
   "num_subsamples": 5,
   "num_reps": 10,
   "num_voters": 100,
@@ -57,5 +57,9 @@
       "A": 1.0,
       "B": 1.0
     }
+  },
+  "voting_configs": {
+    "FastSTV": { "n_seats": 1, "tiebreak": "random" },
+    "Plurality": { "n_seats": 1, "tiebreak": "random" }
   }
 }

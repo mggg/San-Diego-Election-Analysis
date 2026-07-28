@@ -25,6 +25,33 @@ def load_json(path: Path) -> Dict[str, Any]:
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
+# Voter models generated/simulated/summarized when a config does not specify its
+# own "voter_models" list. Kept for backward compatibility with older configs.
+DEFAULT_VOTER_MODELS = ["slate_pl", "slate_bt", "cambridge"]
+
+
+def get_voter_models(config) -> List[str]:
+    """
+    Return the ordered list of voter models for this run.
+
+    Read from config["voter_models"] when present (a list of model-name strings),
+    otherwise fall back to DEFAULT_VOTER_MODELS. This is the single source of truth
+    for which models the profile, election, and summary stages iterate over.
+
+    Args:
+        config: Parsed config dict.
+
+    Returns:
+        List of voter-model name strings.
+
+    Raises:
+        ValueError: If "voter_models" is present but not a list of strings.
+    """
+    models = config.get("voter_models", DEFAULT_VOTER_MODELS)
+    if not isinstance(models, list) or not all(isinstance(m, str) for m in models):
+        raise ValueError('config["voter_models"] must be a list of strings.')
+    return list(models)
+
 def get_non_focal_group(config):
     """
     Determine the non focal group using the turnout parameter and focal group parameter specified in the configuration file.
