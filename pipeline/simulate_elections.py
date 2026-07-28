@@ -31,7 +31,7 @@ try:
 except Exception:
     joblib_progress = None
 
-from pipeline.utils.helpers import parse_district_configs
+from pipeline.utils.helpers import parse_district_configs, get_voter_models
 
 
 def _required_profile(cls) -> Tuple[type, ...]:
@@ -188,7 +188,7 @@ def simulate_elections(config) -> None:
     # any elections run).
     election_plan = _build_election_plan(voting_configs)
 
-    modes = ["slate_pl", "slate_bt", "cambridge"]
+    modes = get_voter_models(config)
     n_jobs = -1  # use all available cores
 
     out_root = Path("outputs") / f'{run_name}' / "election_results"
