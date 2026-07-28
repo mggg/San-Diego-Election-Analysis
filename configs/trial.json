@@ -1,8 +1,19 @@
 {
   "run_name": "trial",
-  "geodata_path": "./data/sample.geojson",
+  "geodata_path": "./data/san_diego.geojson",
+"geometry_data": {
+"state_fips": "06",
+"state_name": "California",
+"place_fips": "66000",
+"place_name": "San Diego",
+"counties": ["073"],
+"crs_tiger": "EPSG:4269",
+"crs_equal": "EPSG:26910",
+"crs_webmap": "EPSG:4326"
+},
   "gerrychain_output_dir": "outputs/trial/districts/chain_out",
-  "population_column": "total_vap_20",
+  "population_column": "total_pop_20",
+  "population_vap_column": "total_vap_20",
   "pop_of_interest_column": "hvap_20",
   "seed": 952763741,
   "total_seats": 3,
