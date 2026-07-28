@@ -33,6 +33,11 @@
   { "num_districts": 1, "winners": 10 }
 ],
 
+  "voting_configs": {
+    "FastSTV": { "n_seats": 2, "tiebreak": "random" },
+    "Plurality": { "n_seats": 2, "tiebreak": "random" }
+  },
+
   "turnout": { "A": 0.7, "B": 0.90},
 
   "num_voters": 10000,
