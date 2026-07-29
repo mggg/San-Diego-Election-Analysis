@@ -137,6 +137,55 @@ def collect_district_configs(total_seats):
     return district_configs
 
 
+def collect_voting_configs(district_configs):
+    """
+    Prompt the user for the voting rules to simulate.
+
+    Each rule is the name of a VoteKit election class (e.g. FastSTV, Plurality,
+    IRV). Its kwargs are passed straight through to that class at simulation
+    time, so each rule is scaffolded with a seat count (``n_seats``) and a random
+    tiebreak; users who want other VoteKit parameters can edit the saved config
+    JSON.
+
+    Args:
+        district_configs: The collected district configurations, used to seed the
+            seat count (``n_seats``) for each rule.
+
+    Returns:
+        Dict mapping each rule name to its keyword-argument dict.
+    """
+    while True:
+        rules_raw = prompt(
+            "Voting rules to simulate (comma-separated VoteKit election class names, e.g. FastSTV,Plurality)"
+        )
+        rules = [r.strip() for r in rules_raw.split(",") if r.strip()]
+
+        if not rules:
+            print("You must provide at least one voting rule.")
+            continue
+
+        if len(rules) != len(set(rules)):
+            print("Voting rule names must be unique.")
+            continue
+
+        break
+
+    # Seats are passed through from the config (not injected at runtime), so
+    # scaffold each rule with n_seats = winners per district.
+    winners_values = sorted({dc["winners"] for dc in district_configs})
+    seats = winners_values[0]
+
+    voting_configs = {rule: {"n_seats": seats, "tiebreak": "random"} for rule in rules}
+    print(f"Confirmed voting rules: {list(voting_configs)}")
+    if len(winners_values) > 1:
+        print(
+            f"Note: district configs have differing seat counts {winners_values}; scaffolded n_seats={seats} "
+            "for every rule. Edit the config if a rule should use a different seat count."
+        )
+    print("(Scaffolded parameters: {\"n_seats\": <winners>, \"tiebreak\": \"random\"}; edit the saved config JSON to customize.)")
+    return voting_configs
+
+
 def build_config():
     """
     Interactively collect pipeline configuration from the user and return it as a dict.
@@ -162,11 +211,13 @@ def build_config():
     run_name = prompt("Run name")
     geodata_path = prompt_path("Path to geodata file")
     population_column = prompt("Population column name")
+    population_vap_column = prompt("VAP column name")
     pop_of_interest_col = prompt("Population of interest column name")
 
     seed          = random.randint(0, 2**32 - 1)
     total_seats = prompt_int("Total number of seats")
     district_configs = collect_district_configs(total_seats)
+    voting_configs = collect_voting_configs(district_configs)
     num_reps      = prompt_int('Number of simulated elections per district plan')
 
     # collect group names
@@ -255,10 +306,12 @@ def build_config():
         "geodata_path":            geodata_path,
         "gerrychain_output_dir":   f"outputs/{run_name}/districts/",
         "population_column":       population_column,
+        "population_vap_column":   population_vap_column,
         "pop_of_interest_column":  pop_of_interest_col,
         "seed":                    seed,
         "total_seats":             total_seats,
         "district_configs":        district_configs,
+        "voting_configs":          voting_configs,
         "chain_length":            chain_length,
         "num_subsamples":          num_subsamples,
         "num_reps":                num_reps,
