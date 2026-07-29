@@ -5,8 +5,10 @@ from pipeline.profile_generator import generate_profiles
 from pipeline.simulate_elections import simulate_elections
 from pipeline.summarize_results import summarize_results, plot_combined_bubbles_all_runs
 from pipeline.utils.helpers import get_voter_models, profiles_signature, election_results_signature
+from setup import setup_config
 from pathlib import Path
 from glob import glob
+import argparse
 import gzip
 import json
 import zipfile
@@ -22,6 +24,26 @@ def load_config(config_path: str) -> dict:
 def load_all_configs(config_dir="configs"):
     """Load every config JSON in config_dir, so simulations can run without the CLI."""
     return [load_config(path) for path in glob(f"{config_dir}/*.json")]
+
+
+def resolve_config_path(name: str, config_dir="configs") -> Path:
+    """
+    Resolve a single config given by path or bare name.
+
+    Accepts a direct path, or a name looked up in config_dir with or without the
+    .json extension (so "sample", "sample.json", and "configs/sample.json" all
+    resolve to the same file).
+
+    Raises:
+        FileNotFoundError: if none of the candidate paths exist.
+    """
+    candidates = [Path(name), Path(config_dir) / name, Path(config_dir) / f"{name}.json"]
+    for candidate in candidates:
+        if candidate.is_file():
+            return candidate
+    raise FileNotFoundError(
+        f"Config '{name}' not found. Looked for: {', '.join(str(c) for c in candidates)}."
+    )
 
 def has_valid_geodata(config) -> bool:
     path = Path(config["geodata_path"])
@@ -237,7 +259,7 @@ def pipeline(config):
     summarize_results(config)
 
 
-def main(config_dir="configs"):
+def run_all(config_dir="configs"):
     """Run the pipeline for every config in config_dir, then draw cross-run summaries."""
     configs = load_all_configs(config_dir)
     for config in configs:
@@ -247,6 +269,41 @@ def main(config_dir="configs"):
     # supplies the shared seat-axis range and population reference line.
     if configs:
         plot_combined_bubbles_all_runs(configs[-1])
+
+
+def main(argv=None):
+    """
+    Entry point. Three ways to start the pipeline:
+
+      * (default) no arguments -> interactive CLI config setup (setup_config).
+      * --run-all              -> run every config in configs/.
+      * <config>               -> run a single config given by path or name.
+    """
+    parser = argparse.ArgumentParser(
+        description="Run the electoral-redistricting simulation pipeline."
+    )
+    parser.add_argument(
+        "config",
+        nargs="?",
+        help="Path or name of a single config to run (e.g. 'sample', 'sample.json', "
+        "or 'configs/sample.json'). Omit to configure interactively.",
+    )
+    parser.add_argument(
+        "--run-all",
+        action="store_true",
+        help="Run every config in the configs/ directory instead of a single run.",
+    )
+    args = parser.parse_args(argv)
+
+    if args.run_all and args.config:
+        parser.error("Pass either a single config or --run-all, not both.")
+
+    if args.run_all:
+        run_all()
+    elif args.config:
+        run_pipeline(load_config(str(resolve_config_path(args.config))))
+    else:
+        run_pipeline(setup_config())
 
 
 if __name__ == "__main__":
