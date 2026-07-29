@@ -27,7 +27,7 @@ import json
 import zipfile
 import zlib
 from pipeline.utils.helpers import load_json, get_voter_models, profiles_signature
-
+from pipeline.utils.preference_matrix import preference_matrix_arcname, preference_matrix_json
 
 # maps mode name to votekit profile generator function
 generator_name_to_function = {
@@ -105,8 +105,9 @@ def process_settings_file(settings_file, mode, duplicate_indx):
     filename = _expected_profile_filename(settings_file, duplicate_indx)
     profile = generator_name_to_function[mode](config)
     csv_text = profile.to_csv()
+    matrix_json = preference_matrix_json(config)
 
-    return filename, csv_text
+    return filename, csv_text, matrix_json
 
 
 def generate_profiles(config):
@@ -142,11 +143,14 @@ def generate_profiles(config):
     zip_path = Path(f"outputs/{run_name}/profiles.zip")
     zip_path.parent.mkdir(exist_ok=True, parents=True)
 
+    preference_matrix_zip_path = Path(f"outputs/{run_name}/preference_matrices.zip")
+
     signature = profiles_signature(config)
     metadata_path = _profiles_metadata_path(run_name)
 
-    # Resume only when the existing archive is readable AND was generated under
-    # the same signature; otherwise its contents may be stale, so rebuild.
+    # Resume only when both archives are readable AND were generated under the
+    # same signature; otherwise their contents may be stale or inconsistent,
+    # so rebuild both from scratch.
     prior_signature = None
     if metadata_path.is_file():
         try:
@@ -154,16 +158,23 @@ def generate_profiles(config):
         except (json.JSONDecodeError, OSError):
             prior_signature = None
 
-    existing_members = _read_existing_zip_members(zip_path) if prior_signature == signature else None
-    resume = existing_members is not None
+    same_signature = prior_signature == signature
+    existing_members = _read_existing_zip_members(zip_path) if same_signature else None
+    existing_matrix_members = _read_existing_zip_members(preference_matrix_zip_path) if same_signature else None
+
+    # Require both archives to be intact; if either is missing or corrupted,
+    # rebuild everything so the two archives stay in sync.
+    resume = existing_members is not None and existing_matrix_members is not None
     if not resume:
         existing_members = set()
+        existing_matrix_members = set()
 
     archive_mode = "a" if resume else "w"
     if resume:
         print(
-            f"[generate_profiles] Resuming: {len(existing_members)} profile(s) already "
-            "present with a matching signature; generating only what's missing."
+            f"[generate_profiles] Resuming: {len(existing_members)} profile(s) and "
+            f"{len(existing_matrix_members)} matrix(es) already present with a matching "
+            "signature; generating only what's missing."
         )
     else:
         print("[generate_profiles] No compatible prior profiles found; generating from scratch.")
@@ -177,7 +188,8 @@ def generate_profiles(config):
     # it's ready instead of collecting the whole batch into memory before any of
     # it is written, so peak memory is bounded by what's in flight, not the full
     # batch of profiles.
-    with zipfile.ZipFile(zip_path, archive_mode, compression=zipfile.ZIP_DEFLATED) as archive:
+    with zipfile.ZipFile(zip_path, archive_mode, compression=zipfile.ZIP_DEFLATED) as archive,\
+        zipfile.ZipFile(preference_matrix_zip_path, archive_mode, compression=zipfile.ZIP_DEFLATED) as matrix_archive:
         # repeat for each replicate
         for duplicate_indx in range(num_reps):
             rep_start = time.perf_counter()
@@ -188,12 +200,15 @@ def generate_profiles(config):
                     settings_folder = Path(f"outputs/{run_name}/settings/{district_num}")
                     all_settings_files = glob(f"{settings_folder}/*.json")
 
-                    # Skip settings files whose profile is already in the archive
-                    # (from a prior, signature-compatible run); generate the rest.
+                    # Skip settings files whose profile AND matrix are already in
+                    # their respective archives. If either entry is missing,
+                    # regenerate both so the two archives stay in sync.
                     pending_settings_files = [
                         sf for sf in all_settings_files
                         if f"{mode}/{district_num}/{_expected_profile_filename(sf, duplicate_indx)}"
                         not in existing_members
+                        or f"{mode}/{district_num}/{preference_matrix_arcname(_expected_profile_filename(sf, duplicate_indx))}"
+                        not in existing_matrix_members
                     ]
                     if not pending_settings_files:
                         continue
@@ -207,8 +222,17 @@ def generate_profiles(config):
                             for settings_file in pending_settings_files
                         )
 
-                        for filename, csv_text in results:
-                            archive.writestr(f"{mode}/{district_num}/{filename}", csv_text)
+                        for filename, csv_text, matrix_json in results:
+                            profile_arcname = f"{mode}/{district_num}/{filename}"
+                            matrix_arcname = f"{mode}/{district_num}/{preference_matrix_arcname(filename)}"
+                            # Guard against duplicate zip entries when one archive
+                            # had an entry the other lacked.
+                            if profile_arcname not in existing_members:
+                                archive.writestr(profile_arcname, csv_text)
+                                existing_members.add(profile_arcname)
+                            if matrix_arcname not in existing_matrix_members:
+                                matrix_archive.writestr(matrix_arcname, matrix_json)
+                                existing_matrix_members.add(matrix_arcname)
             rep_elapsed = time.perf_counter() - rep_start
             print(f"[rep {duplicate_indx + 1}/{num_reps}] Done in {rep_elapsed:.1f}s")
 
