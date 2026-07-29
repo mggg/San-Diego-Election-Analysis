@@ -1,0 +1,69 @@
+{
+  "run_name": "Preferred Candidate",
+
+  "geodata_path": "./data/san_diego.geojson",
+
+    "geometry_data": {
+    "state_fips": "06",
+    "state_name": "California",
+    "place_fips": "66000",
+    "place_name": "San Diego",
+    "counties": ["073"],
+    "crs_tiger": "EPSG:4269",
+    "crs_equal": "EPSG:26910",
+    "crs_webmap": "EPSG:4326"
+    },
+
+    "population_column": "total_pop_20",
+    "population_vap_column": "total_vap_20",
+    "pop_of_interest_column": "asian_nhpi_vap_20",
+
+  "gerrychain_output_dir": "outputs/districts/chain_out",
+  "chain_length": 10000,
+  "seed": 952763741,
+  "num_subsamples": 100,
+
+  "total_seats": 9,
+  "district_configs": [{ "num_districts": 3, "winners": 3}],
+  
+  "voting_configs": {
+    "FastSTV": { "n_seats": 3, "tiebreak": "random" },
+    "Plurality": { "n_seats": 3, "tiebreak": "random" },
+    "Alaska": { "m_1": 4, "m_2": 3, "tiebreak": "random" },
+    "Cumulative": { "n_seats": 3, "tiebreak": "random" }
+  },
+  "voter_models": ["slate_pl", "slate_bt"],
+  "blocs": {
+    "W": ["W"],
+    "B": ["B"],
+    "H": ["H"],
+    "A": ["A"]
+  },
+  "turnout": { "A": 0.75, "B": 1, "H": 0.75 ,"W":1},
+  "num_voters": 10000,
+
+  "slate_to_candidates": {
+    "W": ["W1", "W2", "W3", "W4"],
+    "B": ["B1", "B2"],
+    "H": ["H1", "H2", "H3"],
+    "A": ["A1","A2"]
+  },
+
+  "focal_group": "A",
+
+  "cohesion_parameters": {
+    "W": { "W": 0.80, "H": 0.05, "A": 0.10, "B": 0.05 },
+    "H":   { "W": 0.10, "H": 0.80, "A": 0.05, "B": 0.05 },
+    "A":   { "W": 0.15, "H": 0.03, "A": 0.80, "B": 0.02 },
+    "B":   { "W": 0.05, "H": 0.10, "A": 0.05, "B": 0.80  }
+  },
+
+  "alphas": {
+    "W": { "W": 0.5, "B": 2, "H": 2, "A": 2 },
+    "H":   { "W": 2, "B": 2, "H": 0.5, "A": 2 },
+    "A":   { "W": 2, "B": 2, "H": 2, "A": 0.5 },
+    "B":   { "W": 2, "B": 0.5, "H": 2, "A": 2 }
+  },
+
+  "num_reps": 100
+}
