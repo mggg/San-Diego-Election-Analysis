@@ -13,6 +13,22 @@ voter bloc to the demographic groups it aggregates (e.g. {"W-A": ["W", "A"],
 proportion is its turnout-weighted summed VAP normalized across blocs. This
 allows more than two blocs and coalitions of groups voting together.
 
+* Legacy two-group model (no "blocs" in the config): the focal group's
+  turnout-adjusted share is computed from pop_of_interest_column vs
+  population_column, and the complement is the single non-focal group.
+* Coalition / multi-bloc model (config has a "blocs" entry): voter blocs and
+  candidate slates are independent axes. "blocs" maps each voter bloc to the
+  demographic groups it aggregates (e.g. {"WHI-AAPI": ["WHI", "AAPI"],
+  "HIS": ["HIS"], "BAIO": ["BAIO"]}), each demographic group resolves to one or
+  more VAP columns via "group_vap_columns" (or DEFAULT_GROUP_VAP_COLUMNS), and
+  each bloc's proportion is its turnout-weighted summed VAP normalized across
+  blocs. This allows more than two blocs and coalitions of groups voting
+  together, while slate_to_candidates / cohesion_parameters / alphas still
+  describe the (independent) candidate slates.
+
+Population is combined at two levels, in this order: a demographic group sums
+its VAP columns (BAIO = Black + American Indian + other races), then a bloc sums
+its groups. Both are recorded in every settings file.
 slate_to_candidates is not passed through statically -- each district gets its
 own randomly-sized slate_to_candidates, apportioned across slates in
 proportion to that district's slate VAP shares (see _build_slate_to_candidates),
@@ -30,14 +46,16 @@ import jsonlines as jl
 from tqdm import tqdm
 
 
-# Default mapping from demographic-group label -> VAP column in the geodata
-# (matches the schema written by data_generator). Override per-run with a
-# "group_vap_columns" entry in the config if your groups or column names differ.
+# Default mapping from demographic-group label -> VAP column(s) in the geodata
+# (matches the schema written by data_generator). A group may map to a single
+# column or to a list of columns that are summed, which is how BAIO combines
+# Black, American Indian, and other-race VAP into one group. Override per-run
+# with a "group_vap_columns" entry if your groups or column names differ.
 DEFAULT_GROUP_VAP_COLUMNS = {
-    "W": "white_vap_20",
-    "B": "bvap_20",
-    "H": "hvap_20",
-    "A": "asian_nhpi_vap_20",
+    "WHI": "white_vap_20",
+    "HIS": "hvap_20",
+    "AAPI": "asian_nhpi_vap_20",
+    "BAIO": ["bvap_20", "amin_vap_20", "other_vap_20"],
 }
 
 
@@ -66,20 +84,25 @@ def get_bloc_definitions(config):
 
 def get_group_vap_columns(config, demographic_groups):
     """
-    Return the {demographic_group: vap_column} mapping for the given groups.
+    Return the {demographic_group: [vap_column, ...]} mapping for the given groups.
 
     Columns come from config["group_vap_columns"] when present, otherwise
-    DEFAULT_GROUP_VAP_COLUMNS.
+    DEFAULT_GROUP_VAP_COLUMNS. A group's entry may be a single column name or a
+    list of columns; either way it is normalized to a list, and a group's VAP is
+    the sum over that list. This is what lets one group span several census
+    categories (BAIO = Black + American Indian + other races).
 
     Args:
         config: Parsed config dict.
         demographic_groups: Iterable of demographic-group labels to resolve.
 
     Returns:
-        Dict mapping each demographic group to its VAP column name.
+        Dict mapping each demographic group to its list of VAP column names.
 
     Raises:
         KeyError: If any group has no VAP column mapping.
+        ValueError: If a group maps to an empty column list, or lists the same
+            column twice (which would double-count it).
     """
     mapping = config.get("group_vap_columns", DEFAULT_GROUP_VAP_COLUMNS)
     missing = [g for g in demographic_groups if g not in mapping]
@@ -88,7 +111,31 @@ def get_group_vap_columns(config, demographic_groups):
             f"No VAP column mapping for demographic group(s) {missing}. Add them "
             "to 'group_vap_columns' in the config or to DEFAULT_GROUP_VAP_COLUMNS."
         )
-    return {g: mapping[g] for g in demographic_groups}
+
+    resolved = {}
+    for group in demographic_groups:
+        entry = mapping[group]
+        columns = [entry] if isinstance(entry, str) else list(entry)
+        if not columns:
+            raise ValueError(f"Demographic group '{group}' maps to no VAP column.")
+        if len(columns) != len(set(columns)):
+            raise ValueError(
+                f"Demographic group '{group}' lists a VAP column more than once: {columns}."
+            )
+        resolved[group] = columns
+
+    # A column feeding two groups would be counted twice in the bloc weights.
+    seen = {}
+    for group, columns in resolved.items():
+        for column in columns:
+            if column in seen:
+                raise ValueError(
+                    f"VAP column '{column}' is claimed by both '{seen[column]}' and "
+                    f"'{group}'; groups must partition the columns they use."
+                )
+            seen[column] = group
+
+    return resolved
 
 
 def _validate_bloc_config(config, bloc_definitions):
@@ -290,20 +337,29 @@ def _build_district_settings(row, config, group_columns, bloc_definitions):
     Args:
         row: Row from the district population dataframe.
         config: Parsed config dict.
-        group_columns: Dict mapping each demographic group to its VAP column name.
+        group_columns: Dict mapping each demographic group to its list of VAP
+            column names, which are summed to give that group's VAP.
         bloc_definitions: Dict mapping each bloc to its demographic groups.
 
     Returns:
-        Dict containing bloc_proportions (one entry per bloc) and per-group plus
-        total VAP counts for the district.
+        Dict containing bloc_proportions (one entry per bloc), the combined VAP
+        behind each demographic group, and the raw column counts those came from.
     """
     turnout = config['turnout']
     blocs = list(bloc_definitions)
 
+    # A group's VAP is the sum over its columns, so a multi-column group like
+    # BAIO (Black + American Indian + other) is combined before anything else
+    # uses it.
+    group_vap = {
+        group: sum(float(row[column]) for column in columns)
+        for group, columns in group_columns.items()
+    }
+
     # Turnout-weighted VAP per bloc (sum over the bloc's demographic groups),
     # then normalize across the blocs.
     weighted = {
-        bloc: turnout[bloc] * sum(float(row[group_columns[g]]) for g in bloc_definitions[bloc])
+        bloc: turnout[bloc] * sum(group_vap[g] for g in bloc_definitions[bloc])
         for bloc in blocs
     }
     denom = sum(weighted.values())
@@ -314,8 +370,10 @@ def _build_district_settings(row, config, group_columns, bloc_definitions):
         bloc_proportions = {bloc: 1.0 / len(blocs) for bloc in blocs}
 
     settings = {"bloc_proportions": bloc_proportions}
-    # Record the raw per-demographic-group VAP counts that fed the proportions.
-    for col in dict.fromkeys(group_columns.values()):
+    # Record what fed the proportions: the combined VAP per group, and the raw
+    # columns behind it so a multi-column group stays auditable.
+    settings["group_vap"] = group_vap
+    for col in dict.fromkeys(c for columns in group_columns.values() for c in columns):
         settings[col] = float(row[col])
     settings[config["population_vap_column"]] = float(row[config["population_vap_column"]])
     # Keep the fields the summary stage reads for both bloc models.

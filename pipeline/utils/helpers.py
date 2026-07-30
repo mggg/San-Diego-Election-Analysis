@@ -27,6 +27,87 @@ def load_json(path: Path) -> Dict[str, Any]:
         return json.load(f)
 
 
+# --------------------------------------------------------------------------- #
+# Project config
+#
+# Settings that describe the project rather than any one simulation: where the
+# geodata comes from and how it is built, which columns carry population, and
+# the two knobs that fix the district-plan ensemble. They live once in
+# project-settings.json at the repo root instead of being copied into every run
+# config. Anchored to the repo root rather than the working directory, so it
+# resolves the same from a notebook or any other subdirectory.
+# --------------------------------------------------------------------------- #
+PROJECT_DIR = Path(__file__).resolve().parents[2]
+PROJECT_CONFIG_PATH = PROJECT_DIR / "project-settings.json"
+
+PROJECT_KEYS = [
+    "geodata_path",
+    "geometry_data",
+    "gerrychain_output_dir",
+    "population_column",
+    "population_vap_column",
+    "pop_of_interest_column",
+    "seed",
+    "chain_length",
+]
+
+
+def load_project_config(path: Path = PROJECT_CONFIG_PATH) -> Dict[str, Any]:
+    """
+    Load the project-wide config, or an empty dict when there isn't one.
+
+    Args:
+        path: Path to the project config json.
+
+    Returns:
+        Parsed project settings; empty if the file is absent, so a run config
+        that still carries its own copies keeps working.
+    """
+    path = Path(path)
+    return load_json(path) if path.is_file() else {}
+
+
+def merge_configs(project: Dict[str, Any], run: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Layer a run config over the project config.
+
+    The run wins on any key it sets, so a single run can override a project
+    default without editing it for everyone. Nested dicts merge key by key --
+    a run tweaking one "geometry_data" entry keeps the rest of the project's.
+
+    Args:
+        project: Project-wide settings.
+        run: One run's settings.
+
+    Returns:
+        The merged config.
+    """
+    merged = dict(project)
+    for key, value in run.items():
+        if isinstance(value, dict) and isinstance(merged.get(key), dict):
+            merged[key] = {**merged[key], **value}
+        else:
+            merged[key] = value
+    return merged
+
+
+def load_run_config(config_path, project_path: Path = PROJECT_CONFIG_PATH) -> Dict[str, Any]:
+    """
+    Load one run config merged over the project config.
+
+    The single entry point for reading a config, so every caller sees the same
+    resolved settings.
+
+    Args:
+        config_path: Path to the run config json.
+        project_path: Path to the project config json.
+
+    Returns:
+        The merged config dict.
+    """
+    return merge_configs(load_project_config(project_path), load_json(Path(config_path)))
+
+
 # Voter models generated/simulated/summarized when a config does not specify its
 # own "voter_models" list. Kept for backward compatibility with older configs.
 DEFAULT_VOTER_MODELS = ["slate_pl", "slate_bt", "cambridge"]

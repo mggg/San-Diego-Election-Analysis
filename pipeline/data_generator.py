@@ -68,6 +68,8 @@ from census import Census
 from dotenv import load_dotenv
 from gerrychain import Graph
 
+from pipeline.utils.helpers import load_run_config
+
 
 # --------------------------------------------------------------------------- #
 # Project paths (fixed)
@@ -1162,10 +1164,9 @@ def main():
     parser.add_argument("--config", required=True, help="Path to pipeline config JSON file")
     args = parser.parse_args()
 
-    with open(args.config) as f:
-        config = json.load(f)
-
-    generate_data(config)
+    # Same layering the pipeline uses, so geometry_data can live in the project
+    # config rather than in every run config.
+    generate_data(load_run_config(args.config))
 
 
 if __name__ == '__main__':

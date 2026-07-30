@@ -27,42 +27,117 @@ from the terminal while in the base directory.
 
 ### 2. Run the Full Pipeline (`run.py`)
 
-Run the pipeline using:
+There are four ways in, all run from the repository root.
 
-`uv run --env-file py_env run.py`
+`run.py` sets `PYTHONHASHSEED=0` for itself, so GerryChain's chains are
+reproducible without passing anything extra on the command line. (Python fixes
+hash randomization at interpreter startup, so this cannot be done from inside a
+running process — `run.py` re-launches itself once with the seed set. The
+`py_env` file is no longer needed, but `uv run --env-file py_env …` still works
+and skips that relaunch.)
 
-When the script starts, you will be prompted to choose whether you want to **use an existing configuration file** or **create a new one**.
+#### Run one config
 
-- If you choose **yes**, the script will prompt you to provide the path to an existing config JSON file (e.g., `configs/your_run_name.json`).
-- If you choose **no**, the script will guide you through an interactive setup to create a new configuration file. A description of the configuration file parameters can be found [below](https://github.com/sarsong/ElectoralRedistricting/blob/main/README.md#configuration-file).
+Pass the config by name. The name resolves with or without the directory and
+extension, so these are equivalent:
+
+```
+uv run run.py basic
+uv run run.py basic.json
+uv run run.py configs/basic.json
+```
+
+Each of those runs the `basic` config end to end: it generates the geodata if
+`data/san_diego.geojson` is missing, then district plans, VoteKit settings,
+ballots, elections, and summaries.
+
+Outputs are keyed by the config's `run_name`, not its filename — `basic.json`
+has `"run_name": "Basic - 3 X 3 STV"`, so its results land in
+`outputs/Basic - 3 X 3 STV/`.
+
+Re-running is cheap. Every stage checks whether its outputs already exist and
+are still valid for the current config, so a second `run.py basic` picks up
+where the first left off instead of redoing finished work.
+
+#### Run every config
+
+```
+uv run run.py --run-all
+```
+
+Runs each config in `configs/` in turn, then draws one cross-run comparison
+figure over all of their summaries. Project-wide settings are not a run, so
+`project-settings.json` at the repo root is not picked up here.
+
+#### Build a new config interactively
+
+```
+uv run run.py
+```
+
+With no arguments you are prompted to **use an existing configuration file** or
+**create a new one**.
+
+- Choose **yes** to give the path to an existing config (e.g. `configs/basic.json`).
+- Choose **no** to be walked through building one. It is saved to
+  `configs/<run_name>.json` and then run. Only run-specific parameters are
+  asked for — see [Configuration](#configuration) for the split.
 
 **Note**: The first time you run this command, it may take a moment before the prompt appears. This is because some imports take time to load. Subsequent runs will start much faster.
 
-Once the configuration is loaded or created, the pipeline will execute the entire simulation workflow sequentially.
+#### Build the geodata on its own
 
-The pipeline will execute the following stages in order:
+The data-generation stage is also its own entry point, which is useful after
+changing anything under `geometry_data` and before committing to a full run:
+
+```
+uv run python -m pipeline.data_generator --config configs/basic.json
+```
+
+This writes `geodata_path` plus its adjacency graph and a metadata sidecar, and
+nothing else. It reads the same layered configuration as `run.py`, so the
+geometry can live in `project-settings.json`.
+
+#### Stages
+
+However it is started, the pipeline executes the whole workflow sequentially,
+each stage reading the previous stage's outputs:
 
 | Stage | Script | Summary |
 |-------|--------|---------|
+| 0 | `data_generator.py` | Builds the block-level geodata for the city — geometry, VAP/CVAP, and district labels — and is skipped when `geodata_path` already holds valid data |
 | 1 | `districts_generator.py` | Generates district plans using GerryChain by converting geographical data into a graph |
 | 2 | `settings_generator.py` | Creates VoteKit settings JSONs by aggregating population data and computing turnout-adjusted bloc proportions for subsampled district plans |
 | 3 | `profile_generator.py` | Generates voter preference profiles (simulated ballots) for each settings file under three voting behavior models (impulsive, deliberate, and Cambridge) |
 | 4 | `simulate_elections.py` | Runs the election simulation (FastSTV) on the generated voter profiles to determine and record the winners |
 | 5 | `summarize_results.py` | Post-processes the election results into a dataframe and generates histograms of seat counts for comparative analysis |
 
-Each stage reads outputs from the previous stage.
 
+## Configuration
 
-## Configuration File
+Configuration is split in two. **`project-settings.json`** holds the settings that
+describe the project rather than any one simulation, so they are written once
+instead of being copied into every run:
 
-All simulation parameters are defined in a JSON configuration file. You will be prompted for the following parameters:
+| Key | Description |
+| --- | --- |
+| `geodata_path` | Path to the geographic dataset every run reads (`.geojson` or `.gpkg`) |
+| `geometry_data` | How that dataset is built: state/county, CRSs, block source, Districtr plan, council district layer |
+| `gerrychain_output_dir` | Chain output location |
+| `population_column`, `population_vap_column`, `pop_of_interest_column` | Columns carrying total population, VAP, and the focal group |
+| `seed` | Random seed |
+| `chain_length` | Total steps in the Markov chain |
+
+It lives at the repo root, alongside `run.py`. Every file in `configs/` is one
+**run**. A run config is layered over the project settings at load time, and any
+key it sets wins — nested objects such as `geometry_data` merge key by key, so a
+run can override a single geometry setting without restating the rest.
+
+The interactive setup prompts only for run-specific parameters:
 
 | Prompt                    | Type         | Description                                                                              |
 | --------------------------| -------------| ----------------------------------------------------------------------------------------|
 | Run name                                          | string       | Identifier used for output directories and logs                                         |
-| Path to geodata file                              | string       | Path to the geographic dataset (.geojson or .gpkg)                                      |
-| Population column name                            | string       | Column in the geographic dataset containing total population                            |
-| Population of interest column name                | string       | Column containing the population of the focal demographic group                         |
 | Total number of seats                             | integer      | Total number of representatives elected                                                 |
 | Number of districts                               | integer      | Number of districts in a district configuration. This value must evenly divide the total number of seats so that the number of winners per district is an integer. Users may specify multiple district configurations. |
 | Number of simulated elections per district plan   | integer      | Number of simulated elections per district plan                                         |
@@ -73,10 +148,12 @@ All simulation parameters are defined in a JSON configuration file. You will be 
 | Turnout                                           | float (0-1)  | Turnout rate for each voter bloc                                                        |
 
 
-Three parameters are currently being set to a default value:
+Two parameters are currently being set to a default value:
 
 | Parameter                 | Value        | Description                                                                            |
 | --------------------------| -------------| ---------------------------------------------------------------------------------------|
-| Chain length | 1000 | Total number of steps in the Markov chain used to generate district plans. |
 | Number of subsamples | 5 | Number of district plans to retain for election simulation. |
 | Number of voters | 10,000 | Number of voters for each simulation. |
+
+Chain length was previously defaulted here; it is now a project-wide setting in
+`project-settings.json`.
