@@ -9,6 +9,7 @@
 
   "chain_length": 200,
   "num_subsamples": 2,
+  "candidate_geometric_p": 0.2,
 
   "total_seats": 6,
 

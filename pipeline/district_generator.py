@@ -6,7 +6,7 @@ Markov chain for each requested district count, and writes sampled district
 assignments to gzip files used by later stages of the pipeline.
 """
 
-import os
+import os, json
 import gzip
 from pathlib import Path
 from functools import partial
@@ -18,7 +18,7 @@ from gerrychain import Graph, Partition, MarkovChain
 from gerrychain.proposals import recom
 from gerrychain.accept import always_accept
 from gerrychain.updaters import Tally
-from pipeline.utils.helpers import load_json
+# from pipeline.utils.helpers import load_json
 
 # required for gerrychain reproducibility
 os.environ.setdefault("PYTHONHASHSEED", "0")
@@ -110,3 +110,9 @@ def generate_districts(config):
                 assignment = list(step.assignment.to_series().sort_index())
                 writer.write({"assignment": assignment, "sample": sample_num})
             writer.close()
+
+
+if __name__ == '__main__':
+    with open("configs/basic.json", "r") as f:
+        config = json.load(f)
+    generate_districts(config)

@@ -19,9 +19,10 @@
     "pop_of_interest_column": "asian_nhpi_vap_20",
 
   "gerrychain_output_dir": "outputs/districts/chain_out",
-  "chain_length": 10000,
+  "chain_length": 100,
   "seed": 952763741,
   "num_subsamples": 100,
+  "candidate_geometric_p": 0.2,
 
   "total_seats": 9,
   "district_configs": [{ "num_districts": 3, "winners": 3}],

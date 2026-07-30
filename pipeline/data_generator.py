@@ -668,5 +668,7 @@ def main():
     generate_data(config)
 
 
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    with open("configs/basic.json", "r") as f:
+        config = json.load(f)
+    generate_data(config)
