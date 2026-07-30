@@ -1,3 +1,17 @@
+import os
+import subprocess
+import sys
+
+# Python fixes hash randomization when the interpreter starts, so PYTHONHASHSEED
+# cannot be set from inside a running process -- assigning it to os.environ here
+# would have no effect on this process at all. Re-exec once with a fixed seed so
+# GerryChain's chains are reproducible without every caller having to remember
+# `--env-file py_env`. Done before the heavy imports below so the discarded
+# process costs almost nothing.
+if os.environ.get("PYTHONHASHSEED") != "0" and __name__ == "__main__":
+    os.environ["PYTHONHASHSEED"] = "0"
+    sys.exit(subprocess.run([sys.executable, *sys.argv], env=os.environ).returncode)
+
 from pipeline.data_generator import generate_data
 from pipeline.district_generator import generate_districts
 from pipeline.settings_generator import generate_settings

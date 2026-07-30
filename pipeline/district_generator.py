@@ -8,6 +8,7 @@ assignments to gzip files used by later stages of the pipeline.
 
 import os
 import gzip
+import warnings
 from pathlib import Path
 from functools import partial
 import networkx as nx
@@ -20,8 +21,18 @@ from gerrychain.accept import always_accept
 from gerrychain.updaters import Tally
 from pipeline.utils.helpers import load_json
 
-# required for gerrychain reproducibility
-os.environ.setdefault("PYTHONHASHSEED", "0")
+# GerryChain reproducibility needs PYTHONHASHSEED fixed, but hash randomization
+# is set at interpreter startup -- it cannot be changed from here. run.py re-execs
+# with PYTHONHASHSEED=0 before importing this module; warn if something else
+# imported it without that.
+if os.environ.get("PYTHONHASHSEED") != "0":
+    warnings.warn(
+        "PYTHONHASHSEED is not 0, so district plans will not be reproducible "
+        "across runs. Start the pipeline via run.py, or set PYTHONHASHSEED=0 in "
+        "the environment before launching Python.",
+        RuntimeWarning,
+        stacklevel=2,
+    )
 
 
 def generate_districts(config):

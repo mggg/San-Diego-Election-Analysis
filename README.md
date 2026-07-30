@@ -27,30 +27,90 @@ from the terminal while in the base directory.
 
 ### 2. Run the Full Pipeline (`run.py`)
 
-Run the pipeline using:
+There are four ways in, all run from the repository root.
 
-`uv run --env-file py_env run.py`
+`run.py` sets `PYTHONHASHSEED=0` for itself, so GerryChain's chains are
+reproducible without passing anything extra on the command line. (Python fixes
+hash randomization at interpreter startup, so this cannot be done from inside a
+running process — `run.py` re-launches itself once with the seed set. The
+`py_env` file is no longer needed, but `uv run --env-file py_env …` still works
+and skips that relaunch.)
 
-When the script starts, you will be prompted to choose whether you want to **use an existing configuration file** or **create a new one**.
+#### Run one config
 
-- If you choose **yes**, the script will prompt you to provide the path to an existing config JSON file (e.g., `configs/your_run_name.json`).
-- If you choose **no**, the script will guide you through an interactive setup to create a new configuration file. A description of the configuration file parameters can be found [below](https://github.com/sarsong/ElectoralRedistricting/blob/main/README.md#configuration-file).
+Pass the config by name. The name resolves with or without the directory and
+extension, so these are equivalent:
+
+```
+uv run run.py basic
+uv run run.py basic.json
+uv run run.py configs/basic.json
+```
+
+Each of those runs the `basic` config end to end: it generates the geodata if
+`data/san_diego.geojson` is missing, then district plans, VoteKit settings,
+ballots, elections, and summaries.
+
+Outputs are keyed by the config's `run_name`, not its filename — `basic.json`
+has `"run_name": "Basic - 3 X 3 STV"`, so its results land in
+`outputs/Basic - 3 X 3 STV/`.
+
+Re-running is cheap. Every stage checks whether its outputs already exist and
+are still valid for the current config, so a second `run.py basic` picks up
+where the first left off instead of redoing finished work.
+
+#### Run every config
+
+```
+uv run run.py --run-all
+```
+
+Runs each config in `configs/` in turn, then draws one cross-run comparison
+figure over all of their summaries. Project-wide settings are not a run, so
+`project-settings.json` at the repo root is not picked up here.
+
+#### Build a new config interactively
+
+```
+uv run run.py
+```
+
+With no arguments you are prompted to **use an existing configuration file** or
+**create a new one**.
+
+- Choose **yes** to give the path to an existing config (e.g. `configs/basic.json`).
+- Choose **no** to be walked through building one. It is saved to
+  `configs/<run_name>.json` and then run. Only run-specific parameters are
+  asked for — see [Configuration](#configuration) for the split.
 
 **Note**: The first time you run this command, it may take a moment before the prompt appears. This is because some imports take time to load. Subsequent runs will start much faster.
 
-Once the configuration is loaded or created, the pipeline will execute the entire simulation workflow sequentially.
+#### Build the geodata on its own
 
-The pipeline will execute the following stages in order:
+The data-generation stage is also its own entry point, which is useful after
+changing anything under `geometry_data` and before committing to a full run:
+
+```
+uv run python -m pipeline.data_generator --config configs/basic.json
+```
+
+This writes `geodata_path` plus its adjacency graph and a metadata sidecar, and
+nothing else. It reads the same layered configuration as `run.py`, so the
+geometry can live in `project-settings.json`.
+
+#### Stages
+
+However it is started, the pipeline executes the whole workflow sequentially,
+each stage reading the previous stage's outputs:
 
 | Stage | Script | Summary |
 |-------|--------|---------|
+| 0 | `data_generator.py` | Builds the block-level geodata for the city — geometry, VAP/CVAP, and district labels — and is skipped when `geodata_path` already holds valid data |
 | 1 | `districts_generator.py` | Generates district plans using GerryChain by converting geographical data into a graph |
 | 2 | `settings_generator.py` | Creates VoteKit settings JSONs by aggregating population data and computing turnout-adjusted bloc proportions for subsampled district plans |
 | 3 | `profile_generator.py` | Generates voter preference profiles (simulated ballots) for each settings file under three voting behavior models (impulsive, deliberate, and Cambridge) |
 | 4 | `simulate_elections.py` | Runs the election simulation (FastSTV) on the generated voter profiles to determine and record the winners |
 | 5 | `summarize_results.py` | Post-processes the election results into a dataframe and generates histograms of seat counts for comparative analysis |
-
-Each stage reads outputs from the previous stage.
 
 
 ## Configuration
