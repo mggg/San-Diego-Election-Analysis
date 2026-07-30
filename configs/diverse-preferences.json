@@ -1,5 +1,5 @@
 {
-  "run_name": "Low Turnout",
+  "run_name": "Diverse AAPI Coalition Preferences",
   "num_subsamples": 100,
   "candidate_geometric_p": 0.2,
 
@@ -12,6 +12,19 @@
   ],
   "voting_configs": {
     "FastSTV": {
+      "n_seats": 3,
+      "tiebreak": "random"
+    },
+    "Plurality": {
+      "n_seats": 3,
+      "tiebreak": "random"
+    },
+    "Alaska": {
+      "m_1": 4,
+      "m_2": 3,
+      "tiebreak": "random"
+    },
+    "Cumulative": {
       "n_seats": 3,
       "tiebreak": "random"
     }
@@ -35,7 +48,7 @@
     ]
   },
   "turnout": {
-    "AAPI": 0.5,
+    "AAPI": 0.75,
     "BAIO": 1,
     "HIS": 0.75,
     "WHI": 1
@@ -106,7 +119,7 @@
       "WHI": 1,
       "BAIO": 1,
       "HIS": 1,
-      "AAPI": 1
+      "AAPI": 2
     },
     "BAIO": {
       "WHI": 1,

@@ -171,27 +171,39 @@ def _validate_bloc_config(config, bloc_definitions):
                 )
 
 
-def _exaggerate_by_squares(proportions):
-    """
-    Exaggerate a share distribution by the "proportional to the square" method:
-    square each share, then renormalize so the squares sum to 1.
+DEFAULT_AVAILABILITY_EXP = 2
 
-    Squaring inflates larger shares and shrinks smaller ones relative to each
-    other (e.g. [0.5, 0.3, 0.15, 0.05] -> squares [0.25, 0.09, 0.0225, 0.0025]
-    -> renormalized [0.685, 0.246, 0.062, 0.007]), so the resulting slate sizes
-    are more concentrated on the dominant slate(s) than the underlying VAP shares.
+
+def _exaggerate(proportions, availability_exps=None):
+    """
+    Exaggerate a share distribution by the "proportional to the exponent" method:
+    exponentiate each share, then renormalize so the powers sum to 1.
+
+    Exponents above 1 inflate larger shares and shrink smaller ones relative to
+    each other (e.g. [0.5, 0.3, 0.15, 0.05] -> squares [0.25, 0.09, 0.0225,
+    0.0025] -> renormalized [0.685, 0.247, 0.062, 0.007]), so the resulting slate
+    sizes are more concentrated on the dominant slate(s) than the underlying VAP
+    shares. An exponent of 1 leaves shares untouched, and below 1 flattens them
+    toward uniform.
 
     Args:
         proportions: Dict mapping key -> share of the total (sums to ~1).
+        availability_exps: Optional dict mapping key -> exponent. Keys absent
+            from it (or a missing/empty dict) fall back to
+            DEFAULT_AVAILABILITY_EXP, so a config may set an exponent for only
+            the slates it wants to treat differently.
 
     Returns:
-        Dict mapping each key to its squared-and-renormalized share (sums to 1).
+        Dict mapping each key to its exponentiated-and-renormalized share (sums to 1).
     """
-    squared = {k: v ** 2 for k, v in proportions.items()}
-    total = sum(squared.values())
+    exps = availability_exps or {}
+    power = {
+        k: v ** exps.get(k, DEFAULT_AVAILABILITY_EXP) for k, v in proportions.items()
+    }
+    total = sum(power.values())
     if total <= 0:
         return {k: 1.0 / len(proportions) for k in proportions}
-    return {k: v / total for k, v in squared.items()}
+    return {k: v / total for k, v in power.items()}
 
 
 def _sample_slate_counts(proportions, candidate_count):
@@ -226,13 +238,13 @@ def _sample_slate_counts(proportions, candidate_count):
     return counts
 
 
-def _build_slate_to_candidates(row, slate_columns, candidate_count):
+def _build_slate_to_candidates(row, slate_columns, candidate_count, config):
     """
     Build a district-specific slate_to_candidates mapping sized proportionally
     to each slate's share of modeled VAP in this district.
 
     Each slate's linear VAP share is exaggerated by squaring-and-renormalizing
-    (see _exaggerate_by_squares), then candidate_count candidate slots are
+    (see _exaggerate), then candidate_count candidate slots are
     filled by sampling from that exaggerated distribution (see
     _sample_slate_counts) rather than a deterministic apportionment — so the
     resulting slate sizes both skew toward the district's dominant slate(s)
@@ -244,22 +256,30 @@ def _build_slate_to_candidates(row, slate_columns, candidate_count):
 
     Args:
         row: Row from the district population dataframe.
-        slate_columns: Dict mapping each slate to its VAP column name.
+        slate_columns: Dict mapping each slate to its list of VAP column names,
+            summed to give that slate's VAP (BAIO spans three columns).
         candidate_count: Total number of candidate slots to fill.
+        config: Parsed config dict; read for the optional "availability_exps".
 
     Returns:
         Dict mapping each slate with a nonzero count to a list of candidate ids,
-        e.g. {"W": ["W1", "W2"]}.
+        e.g. {"WHI": ["WHI1", "WHI2"]}.
     """
     slates = list(slate_columns)
+<<<<<<< HEAD
     weighted = {s: sum(float(row[column]) for column in slate_columns[s]) for s in slates}
+=======
+    weighted = {
+        s: sum(float(row[column]) for column in slate_columns[s]) for s in slates
+    }
+>>>>>>> b0b5ce9740469ef9433e26de34d9253ecacfe777
     denom = sum(weighted.values())
     if denom > 0:
         proportions = {s: weighted[s] / denom for s in slates}
     else:
         proportions = {s: 1.0 / len(slates) for s in slates}
 
-    exaggerated = _exaggerate_by_squares(proportions)
+    exaggerated = _exaggerate(proportions, config.get("availability_exps"))
     counts = _sample_slate_counts(exaggerated, candidate_count)
     return {
         s: [f"{s}{i}" for i in range(1, counts[s] + 1)]
@@ -423,6 +443,8 @@ def generate_settings(config):
     slate_columns = get_group_vap_columns(config, config["slate_to_candidates"].keys())
 
     population_data = gpd.read_file(config['geodata_path'])
+    # group_columns / slate_columns map each label to a *list* of columns (a group
+    # like BAIO spans several), so flatten before de-duplicating.
     needed_columns = list(dict.fromkeys(
         [c for columns in group_columns.values() for c in columns]
         + [c for columns in slate_columns.values() for c in columns]
@@ -487,7 +509,7 @@ def generate_settings(config):
                     candidate_count = max(candidate_count, winners)
 
                     slate_to_candidates = _build_slate_to_candidates(
-                        row, slate_columns, candidate_count
+                        row, slate_columns, candidate_count, config
                     )
                     active_slates = list(slate_to_candidates)
                     cohesion_parameters = _filter_cohesion_to_slates(config["cohesion_parameters"], active_slates)

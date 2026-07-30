@@ -1,8 +1,13 @@
 {
-  "run_name": "Preferred Candidate",
+  "run_name": "Basic - 3 X 3 STV",
   "num_subsamples": 100,
   "candidate_geometric_p": 0.2,
-
+  "availability_exps": {
+    "WHI": 2,
+    "BAIO": 2,
+    "HIS": 2,
+    "AAPI": 3
+  },
   "total_seats": 9,
   "district_configs": [
     {
@@ -12,19 +17,6 @@
   ],
   "voting_configs": {
     "FastSTV": {
-      "n_seats": 3,
-      "tiebreak": "random"
-    },
-    "Plurality": {
-      "n_seats": 3,
-      "tiebreak": "random"
-    },
-    "Alaska": {
-      "m_1": 4,
-      "m_2": 3,
-      "tiebreak": "random"
-    },
-    "Cumulative": {
       "n_seats": 3,
       "tiebreak": "random"
     }
@@ -104,28 +96,28 @@
   },
   "alphas": {
     "WHI": {
-      "WHI": 0.5,
-      "BAIO": 2,
-      "HIS": 2,
-      "AAPI": 2
+      "WHI": 1,
+      "BAIO": 1,
+      "HIS": 1,
+      "AAPI": 1
     },
     "HIS": {
-      "WHI": 2,
-      "BAIO": 2,
-      "HIS": 0.5,
-      "AAPI": 2
+      "WHI": 1,
+      "BAIO": 1,
+      "HIS": 1,
+      "AAPI": 1
     },
     "AAPI": {
-      "WHI": 2,
-      "BAIO": 2,
-      "HIS": 2,
-      "AAPI": 0.5
+      "WHI": 1,
+      "BAIO": 1,
+      "HIS": 1,
+      "AAPI": 1
     },
     "BAIO": {
-      "WHI": 2,
-      "BAIO": 0.5,
-      "HIS": 2,
-      "AAPI": 2
+      "WHI": 1,
+      "BAIO": 1,
+      "HIS": 1,
+      "AAPI": 1
     }
   },
   "num_reps": 100
