@@ -266,13 +266,7 @@ def _build_slate_to_candidates(row, slate_columns, candidate_count, config):
         e.g. {"WHI": ["WHI1", "WHI2"]}.
     """
     slates = list(slate_columns)
-<<<<<<< HEAD
     weighted = {s: sum(float(row[column]) for column in slate_columns[s]) for s in slates}
-=======
-    weighted = {
-        s: sum(float(row[column]) for column in slate_columns[s]) for s in slates
-    }
->>>>>>> b0b5ce9740469ef9433e26de34d9253ecacfe777
     denom = sum(weighted.values())
     if denom > 0:
         proportions = {s: weighted[s] / denom for s in slates}

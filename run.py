@@ -264,8 +264,11 @@ def run_pipeline(config):
                 summarize_results(config)
         else:
             pipeline(config)
-    else:      
+    else:
         pipeline(config)
+    # Refresh the cross-run bubble figure over every completed run's summary
+    # CSV, not just when --run-all is used.
+    plot_combined_bubbles_all_runs(config)
 
 def pipeline(config):
     if not has_valid_geodata(config):
@@ -283,15 +286,11 @@ def pipeline(config):
 
 
 def run_all(config_dir="configs"):
-    """Run the pipeline for every config in config_dir, then draw cross-run summaries."""
+    """Run the pipeline for every config in config_dir."""
     configs = load_all_configs(config_dir)
     for config in configs:
         print("=" * 100, f"\n Running {config['run_name']}\n", "=" * 20)
         run_pipeline(config)
-    # One cross-run bubble figure over every run's summary CSV. Any config
-    # supplies the shared seat-axis range and population reference line.
-    if configs:
-        plot_combined_bubbles_all_runs(configs[-1])
 
 
 def main(argv=None):
