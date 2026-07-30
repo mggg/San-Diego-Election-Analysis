@@ -105,7 +105,7 @@ each stage reading the previous stage's outputs:
 
 | Stage | Script | Summary |
 |-------|--------|---------|
-| 0 | `data_generator.py` | Builds the block-level geodata for the city — geometry, VAP/CVAP, and district labels — and is skipped when `geodata_path` already holds valid data |
+| 0 | `data_generator.py` | Builds the block-level geodata for the city — geometry, VAP by race, elections, and district labels — and is skipped when `geodata_path` already holds valid data |
 | 1 | `districts_generator.py` | Generates district plans using GerryChain by converting geographical data into a graph |
 | 2 | `settings_generator.py` | Creates VoteKit settings JSONs by aggregating population data and computing turnout-adjusted bloc proportions for subsampled district plans |
 | 3 | `profile_generator.py` | Generates voter preference profiles (simulated ballots) for each settings file under three voting behavior models (impulsive, deliberate, and Cambridge) |

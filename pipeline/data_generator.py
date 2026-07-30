@@ -2,11 +2,15 @@
 Block-level VAP/CVAP Data Generator
 =============================================
 
-Builds a block-level GeoPackage for a given city with both Voting Age
-Population (VAP) and Citizen Voting Age Population (CVAP) broken down into six
-mutually-exclusive race/ethnicity categories:
+Builds a block-level GeoPackage for a given city with Voting Age Population
+(VAP) broken down into six mutually-exclusive race/ethnicity categories:
 
-    BVAP / HVAP / AVAP / AMINVAP / OVAP / WVAP  (and their *CVAP equivalents)
+    BVAP / HVAP / AVAP / AMINVAP / OVAP / WVAP
+
+Citizen Voting Age Population (CVAP) can also be estimated, but is off by
+default: it is a modelled quantity (VAP discounted by ACS citizenship rates)
+rather than a published count, and no pipeline stage consumes it. Set
+geometry_data.include_cvap to true to compute and export the *CVAP columns.
 
 Blocks and their VAP come from one of two interchangeable sources:
 
@@ -15,7 +19,7 @@ Blocks and their VAP come from one of two interchangeable sources:
       precinct-level election results, plus a published dual graph; or
     * TIGER/Line geometries joined to PL 94-171 tables pulled from the Census API.
 
-Either way CVAP is estimated the same way, and the output schema is identical.
+Either way the output schema is identical.
 
 Which of those blocks count as "in the city" is decided either by a spatial rule
 against the city boundary (`selection_predicate`) or, when `districtr_plan_path`
@@ -464,7 +468,8 @@ def select_blocks_by_plan(sc_blocks, assignment, place_name, crs_webmap):
           f"{place_name} (from the Districtr plan).")
     print(f"  {place_name} population = {selected['total_pop_20'].sum():,.0f}")
     print(f"  {place_name} VAP  = {selected['VAP'].sum():,.0f}")
-    print(f"  {place_name} CVAP = {selected['CVAP'].sum():,.0f}")
+    if "CVAP" in selected.columns:
+        print(f"  {place_name} CVAP = {selected['CVAP'].sum():,.0f}")
     return selected
 
 
@@ -944,7 +949,8 @@ def select_blocks_in_city(sc_blocks, sc_boundary, place_name, crs_equal, crs_web
               f"dropped, along with the {dropped['total_pop_20'].sum():,.0f} people in them.")
     print(f"  {place_name} population = {selected['total_pop_20'].sum():,.0f}")
     print(f"  {place_name} VAP  = {selected['VAP'].sum():,.0f}")
-    print(f"  {place_name} CVAP = {selected['CVAP'].sum():,.0f}")
+    if "CVAP" in selected.columns:
+        print(f"  {place_name} CVAP = {selected['CVAP'].sum():,.0f}")
     return selected
 
 
@@ -977,8 +983,9 @@ def export_to_gpkg(sc_blocks, output_path, place_name, crs_tiger,
     for column in ("plan_district", "council_district"):
         if column in sc_blocks.columns:
             export_cols.append(column)
-    export_cols += (["total_pop_20", "VAP", "CVAP"]
-                    + CATEGORIES + CVAP_CATEGORIES
+    # CVAP columns are only present when geometry_data.include_cvap is set.
+    cvap_cols = [c for c in ("CVAP", *CVAP_CATEGORIES) if c in sc_blocks.columns]
+    export_cols += (["total_pop_20", "VAP"] + CATEGORIES + cvap_cols
                     + [c for c in extra_columns if c in sc_blocks.columns]
                     + ["geometry"])
 
@@ -1106,13 +1113,19 @@ def generate_data(config):
         vap = build_vap_categories(vap_raw)
         block_gdf = block_gdf.join(vap)
 
-    # 4, 6-7. CVAP is estimated the same way from either source.
-    acs_tract, acs_state = download_acs_citizenship(state_fips, client, paths["acs_cache_dir"])
-    cvap = estimate_cvap_by_block(vap, acs_tract, acs_state)
-
-    sc_blocks = block_gdf.join(cvap)
+    # 4, 6-7. CVAP is a modelled estimate (VAP discounted by ACS citizenship
+    # rates), not a published count, and nothing downstream consumes it. It is
+    # off by default so it cannot be picked up by accident; set
+    # "include_cvap": true in geometry_data to estimate and export it.
+    include_cvap = bool(geo.get("include_cvap", False))
+    if include_cvap:
+        acs_tract, acs_state = download_acs_citizenship(state_fips, client, paths["acs_cache_dir"])
+        sc_blocks = block_gdf.join(estimate_cvap_by_block(vap, acs_tract, acs_state))
+        print(f"  Total CVAP (county) = {sc_blocks['CVAP'].sum():,.0f}")
+    else:
+        sc_blocks = block_gdf
+        print("  CVAP not estimated (set geometry_data.include_cvap to enable).")
     print(f"  Total VAP  (county) = {sc_blocks['VAP'].sum():,.0f}")
-    print(f"  Total CVAP (county) = {sc_blocks['CVAP'].sum():,.0f}")
 
     # 8. Restrict to the city's blocks. Blocks are kept whole, never clipped.
     # A Districtr plan defines its own block set, which takes precedence over
@@ -1161,7 +1174,11 @@ def generate_data(config):
 
 def main():
     parser = argparse.ArgumentParser(description="Generate block-level VAP/CVAP geodata")
-    parser.add_argument("--config", required=True, help="Path to pipeline config JSON file")
+    parser.add_argument(
+        "--config",
+        default="configs/basic.json",
+        help="Path to a run config JSON file (default: configs/basic.json)",
+    )
     args = parser.parse_args()
 
     # Same layering the pipeline uses, so geometry_data can live in the project
@@ -1170,6 +1187,6 @@ def main():
 
 
 if __name__ == '__main__':
-    with open("configs/basic.json", "r") as f:
-        config = json.load(f)
-    generate_data(config)
+    # Goes through main() so the run config is layered over project-settings.json;
+    # loading the run config alone would miss geometry_data and the shared columns.
+    main()

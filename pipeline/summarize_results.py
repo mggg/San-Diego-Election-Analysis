@@ -20,7 +20,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
-from pipeline.utils.helpers import parse_district_configs, parse_plan_district_rep_from_path, count_focal_winners, load_json, find_settings_file, get_non_focal_group, get_voter_models
+from pipeline.utils.helpers import parse_district_configs, parse_plan_district_rep_from_path, count_focal_winners, load_json, find_settings_file, get_voter_models
 
 
 # --- Shared figure styling ---------------------------------------------------
@@ -74,8 +74,15 @@ def _group_label(group: str) -> str:
 
 
 def _focal_population_share(config, gdf) -> float:
-    """Focal group's share of population: pop_of_interest_column / population_column."""
-    vap = gdf[config["population_column"]].sum()
+    """
+    Focal group's share of the voting-age population.
+
+    Both sides of this ratio must be VAP: pop_of_interest_column is a VAP column,
+    so the denominator is population_vap_column, not the total-population column.
+    No turnout adjustment is applied -- this is the plain demographic share the
+    reference lines are drawn against.
+    """
+    vap = gdf[config["population_vap_column"]].sum()
     ivap = gdf[config["pop_of_interest_column"]].sum()
     return float(ivap / vap) if vap else 0.0
 
@@ -106,7 +113,8 @@ def summarize_results(config) -> Path:
     Outputs:
         - outputs/summaries/<run_name>_summary/<run_name>_summary.csv: one row per
           (replicate, plan, district) triple, with columns for plan, mode, district_id,
-          rep, focal_seats, dynamic population columns from config, and combined_support.
+          rep, focal_seats, the population columns named in the config, and
+          focal_vap_share (the district's focal share of VAP, turnout-free).
         - outputs/summaries/<run_name>_summary/figures/*.png: one histogram per
           (district_count, seats_per_district, election_method) showing the
           distribution of focal-group seats across modes.
@@ -122,30 +130,10 @@ def summarize_results(config) -> Path:
 
     geodata_path = Path(config["geodata_path"])
     gdf = gpd.read_file(geodata_path)
-    # compute statewide focal group proportion from geodata
-    vap = sum(gdf[config["population_column"]])
-    ivap = sum(gdf[config["pop_of_interest_column"]])
-    iprop = ivap/vap
-
-    turnout = config["turnout"]
-    cohesion_parameters = config["cohesion_parameters"]
-
-    # "Combined support" (the share of votes going to focal candidates once
-    # differential turnout and cross-bloc cohesion are folded in) is only defined
-    # for the two-group focal-vs-non-focal model. Under the coalition / multi-bloc
-    # model (turnout keyed by more than two blocs) there is no single non-focal
-    # group, so we skip it and leave combined_support unset.
-    if len(turnout) == 2:
-        non_focal_group = get_non_focal_group(config)
-        # adjust proportion by differential turnout
-        iprop_turnout = iprop*turnout[focal_group] / (iprop*turnout[focal_group] + (1-iprop)*turnout[non_focal_group])
-        # compute combined support: share of votes going to focal candidates
-        focal_group_cohesion = cohesion_parameters[focal_group]
-        non_focal_group_cohesion = cohesion_parameters[non_focal_group]
-        i_cs_turnout = iprop_turnout*focal_group_cohesion[focal_group] + (1-iprop_turnout)*non_focal_group_cohesion[focal_group]
-    else:
-        iprop_turnout = None
-        i_cs_turnout = None
+    # Citywide focal-group share of the voting-age population. Deliberately not
+    # turnout-adjusted: the benchmark the plots compare seats against is the
+    # group's demographic share of VAP, not its modelled share of the electorate.
+    iprop = _focal_population_share(config, gdf)
 
     modes = get_voter_models(config)
 
@@ -207,7 +195,8 @@ def summarize_results(config) -> Path:
 
                     settings_path = find_settings_file(settings_dir, config['run_name'], plan=plan, district=district)
                     settings_data = load_json(settings_path) if settings_path else {}
-                    total_vap = settings_data.get(config["population_column"], None)
+                    total_pop = settings_data.get(config["population_column"], None)
+                    total_vap = settings_data.get(config["population_vap_column"], None)
                     total_ivap = settings_data.get(config["pop_of_interest_column"], None)
                     # partisan has p_prop_census -- add?
 
@@ -229,9 +218,15 @@ def summarize_results(config) -> Path:
                             "simulation_index": idx,
                             "focal_group": focal_group,
                             "focal_seats": focal_seats,
-                            config["population_column"]: total_vap,
+                            config["population_column"]: total_pop,
+                            config["population_vap_column"]: total_vap,
                             config["pop_of_interest_column"]: total_ivap,
-                            "combined_support": i_cs_turnout,
+                            # Focal share of VAP for this district, the same
+                            # (turnout-free) basis the reference lines use.
+                            "focal_vap_share": (
+                                total_ivap / total_vap
+                                if total_ivap is not None and total_vap else None
+                            ),
                         })
 
     df = pd.DataFrame(rows)
@@ -306,43 +301,14 @@ def summarize_results(config) -> Path:
 
         ax.legend(ordered_handles, ordered_labels, title="Mode", fontsize=8)
 
-        # add reference lines for proportional representation benchmarks
-        color_cs = "xkcd:brownish grey"
+        # Proportional-representation benchmark: the focal group's share of VAP,
+        # with no turnout adjustment, so the line reads as "seats proportional to
+        # the group's share of voting-age people".
         color_iprop = "xkcd:purplish brown"
 
         i_share = iprop * total_seats
-
-        # The combined-support benchmark only exists for the two-group model
-        # (see i_cs_turnout above); under the multi-bloc model just draw the
-        # focal-group VAP line.
-        if i_cs_turnout is not None:
-            i_cs_share = i_cs_turnout * total_seats
-
-            if i_cs_share < i_share:
-                i_cs_alignment = -0.3
-                i_share_alignment = 0.3
-                i_cs_ha = "right"
-                i_share_ha = "left"
-            else:
-                i_cs_alignment = 0.3
-                i_share_alignment = -0.3
-                i_cs_ha = "left"
-                i_share_ha = "right"
-
-            ax.axvline(i_cs_share, color=color_cs, linewidth=1)
-
-            ax.text(
-                i_cs_share + i_cs_alignment,
-                ylim * 0.90,
-                f"Combined support\n{i_cs_turnout*100:.2f}%\n({i_cs_share:.2f} seats)",
-                va="center",
-                ha=i_cs_ha,
-                fontsize=8,
-                color=color_cs,
-            )
-        else:
-            i_share_alignment = 0.3
-            i_share_ha = "left"
+        i_share_alignment = 0.3
+        i_share_ha = "left"
 
         ax.axvline(i_share, color=color_iprop, linestyle=":", linewidth=1)
 
