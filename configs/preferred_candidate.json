@@ -22,6 +22,7 @@
   "chain_length": 10000,
   "seed": 952763741,
   "num_subsamples": 100,
+  "candidate_geometric_p": 0.2,
 
   "total_seats": 9,
   "district_configs": [{ "num_districts": 3, "winners": 3}],
