@@ -8,7 +8,7 @@
     {
       "num_districts": 3,
       "winners": 3
-    }
+   }
   ],
   "voting_configs": {
     "FastSTV": {
@@ -115,5 +115,5 @@
       "AAPI": 1
     }
   },
-  "num_reps": 100
+  "num_reps": 10
 }

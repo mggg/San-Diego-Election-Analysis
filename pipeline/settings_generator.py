@@ -44,6 +44,7 @@ import geopandas as gpd
 from pathlib import Path
 import jsonlines as jl
 from tqdm import tqdm
+from pipeline.utils.helpers import load_run_config
 
 
 # Default mapping from demographic-group label -> VAP column(s) in the geodata
@@ -251,7 +252,7 @@ def _build_slate_to_candidates(row, slate_columns, candidate_count):
         e.g. {"W": ["W1", "W2"]}.
     """
     slates = list(slate_columns)
-    weighted = {s: float(row[slate_columns[s]]) for s in slates}
+    weighted = {s: sum(float(row[column]) for column in slate_columns[s]) for s in slates}
     denom = sum(weighted.values())
     if denom > 0:
         proportions = {s: weighted[s] / denom for s in slates}
@@ -423,8 +424,8 @@ def generate_settings(config):
 
     population_data = gpd.read_file(config['geodata_path'])
     needed_columns = list(dict.fromkeys(
-        list(group_columns.values())
-        + list(slate_columns.values())
+        [c for columns in group_columns.values() for c in columns]
+        + [c for columns in slate_columns.values() for c in columns]
         + [config['population_vap_column'], config['population_column'], config['pop_of_interest_column']]
     ))
     population_data = population_data[needed_columns]
@@ -502,8 +503,6 @@ def generate_settings(config):
                     ) as out_file:
                         json.dump(settings, out_file, indent=2)
 
-
 if __name__ == '__main__':
-    with open("configs/basic.json", "r") as f:
-        config = json.load(f)
+    config = load_run_config("configs/basic.json")
     generate_settings(config)

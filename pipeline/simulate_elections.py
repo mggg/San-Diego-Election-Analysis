@@ -34,7 +34,7 @@ try:
 except Exception:
     joblib_progress = None
 
-from pipeline.utils.helpers import parse_district_configs, get_voter_models, election_results_signature
+from pipeline.utils.helpers import parse_district_configs, get_voter_models, election_results_signature, load_json
 
 
 def _required_profile(cls) -> Tuple[type, ...]:
@@ -324,3 +324,7 @@ def simulate_elections(config) -> None:
                 )
 
             print(f"[simulate_elections] Wrote: {out_path}")
+
+if __name__ == '__main__':
+    config = load_json("configs/basic.json")
+    simulate_elections(config)

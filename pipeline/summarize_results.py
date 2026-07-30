@@ -20,7 +20,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
-from pipeline.utils.helpers import parse_district_configs, parse_plan_district_rep_from_path, count_focal_winners, load_json, find_settings_file, get_voter_models
+from pipeline.utils.helpers import parse_district_configs, parse_plan_district_rep_from_path, count_focal_winners, load_run_config, load_json, find_settings_file, get_voter_models
 
 
 # --- Shared figure styling ---------------------------------------------------
@@ -600,3 +600,8 @@ def plot_combined_bubbles_all_runs(config, output_dir=None, exclude_runs=None) -
 
     print(f"[summarize_results] Wrote cross-run figure: {fig_path}")
     return fig_path
+
+if __name__ == '__main__':
+    config = load_run_config("configs/basic.json")
+    summarize_results(config)
+    plot_combined_bubbles_all_runs(config)

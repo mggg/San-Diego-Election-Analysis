@@ -238,3 +238,7 @@ def generate_profiles(config):
 
     with open(metadata_path, "w", encoding="utf-8") as f:
         json.dump({"signature": signature}, f)
+
+if __name__ == '__main__':
+    config = load_json("configs/basic.json")
+    generate_profiles(config)
