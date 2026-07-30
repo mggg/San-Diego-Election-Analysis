@@ -3,10 +3,16 @@
 .DS_Store
 __pycache__/
 *.pyc
+.ipynb_checkpoints/
 
 
 # =============================================================================
 # Folders
 # =============================================================================
 outputs/
-data/
+# data/* rather than data/ so the tracked source layer below can be re-included;
+# git never descends into a wholly excluded directory.
+data/*
+
+# Source boundary layers are inputs, not generated data, so they are tracked.
+!data/council_districts.geojson
