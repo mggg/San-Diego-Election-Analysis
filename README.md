@@ -53,16 +53,31 @@ The pipeline will execute the following stages in order:
 Each stage reads outputs from the previous stage.
 
 
-## Configuration File
+## Configuration
 
-All simulation parameters are defined in a JSON configuration file. You will be prompted for the following parameters:
+Configuration is split in two. **`project-settings.json`** holds the settings that
+describe the project rather than any one simulation, so they are written once
+instead of being copied into every run:
+
+| Key | Description |
+| --- | --- |
+| `geodata_path` | Path to the geographic dataset every run reads (`.geojson` or `.gpkg`) |
+| `geometry_data` | How that dataset is built: state/county, CRSs, block source, Districtr plan, council district layer |
+| `gerrychain_output_dir` | Chain output location |
+| `population_column`, `population_vap_column`, `pop_of_interest_column` | Columns carrying total population, VAP, and the focal group |
+| `seed` | Random seed |
+| `chain_length` | Total steps in the Markov chain |
+
+It lives at the repo root, alongside `run.py`. Every file in `configs/` is one
+**run**. A run config is layered over the project settings at load time, and any
+key it sets wins — nested objects such as `geometry_data` merge key by key, so a
+run can override a single geometry setting without restating the rest.
+
+The interactive setup prompts only for run-specific parameters:
 
 | Prompt                    | Type         | Description                                                                              |
 | --------------------------| -------------| ----------------------------------------------------------------------------------------|
 | Run name                                          | string       | Identifier used for output directories and logs                                         |
-| Path to geodata file                              | string       | Path to the geographic dataset (.geojson or .gpkg)                                      |
-| Population column name                            | string       | Column in the geographic dataset containing total population                            |
-| Population of interest column name                | string       | Column containing the population of the focal demographic group                         |
 | Total number of seats                             | integer      | Total number of representatives elected                                                 |
 | Number of districts                               | integer      | Number of districts in a district configuration. This value must evenly divide the total number of seats so that the number of winners per district is an integer. Users may specify multiple district configurations. |
 | Number of simulated elections per district plan   | integer      | Number of simulated elections per district plan                                         |
@@ -73,10 +88,12 @@ All simulation parameters are defined in a JSON configuration file. You will be 
 | Turnout                                           | float (0-1)  | Turnout rate for each voter bloc                                                        |
 
 
-Three parameters are currently being set to a default value:
+Two parameters are currently being set to a default value:
 
 | Parameter                 | Value        | Description                                                                            |
 | --------------------------| -------------| ---------------------------------------------------------------------------------------|
-| Chain length | 1000 | Total number of steps in the Markov chain used to generate district plans. |
 | Number of subsamples | 5 | Number of district plans to retain for election simulation. |
 | Number of voters | 10,000 | Number of voters for each simulation. |
+
+Chain length was previously defaulted here; it is now a project-wide setting in
+`project-settings.json`.

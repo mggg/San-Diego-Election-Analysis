@@ -1,7 +1,14 @@
 import json
-import random
 import glob
 import os
+
+from pipeline.utils.helpers import (
+    PROJECT_CONFIG_PATH,
+    load_project_config,
+    load_run_config,
+    merge_configs,
+)
+
 try:
     import readline
 except ImportError:
@@ -35,9 +42,9 @@ def prompt_path(label):
         readline.set_completer_delims(old_delims)
     return result
 
-# default values for numeric pipeline parameters
+# default values for numeric run parameters. chain_length is project-wide and
+# lives in project-settings.json instead.
 DEFAULTS = {
-    "chain_length": 1000,
     "num_subsamples": 5,
     "num_voters": 10000,
 }
@@ -188,14 +195,16 @@ def collect_voting_configs(district_configs):
 
 def build_config():
     """
-    Interactively collect pipeline configuration from the user and return it as a dict.
+    Interactively collect one run's configuration and return it as a dict.
 
-    Prompts for geodata path, column names, district configuration, group names,
-    candidates, cohesion parameters, alphas, and turnout rates. Seed is generated randomly.
-    chain_length, num_subsamples, and num_voters are set from DEFAULTS and not prompted.
+    Prompts for district configuration, group names, candidates, cohesion
+    parameters, alphas, and turnout rates. num_subsamples and num_voters are set
+    from DEFAULTS and not prompted. Geodata, population columns, seed, and chain
+    length are project-wide and come from project-settings.json (see
+    helpers.PROJECT_KEYS), so they are neither prompted for nor written here.
 
     Returns:
-        Dict containing all fields required by the pipeline config schema.
+        Dict containing the run-specific fields of the pipeline config schema.
     """
     # dict inits
     slate_to_candidates = {}
@@ -203,18 +212,12 @@ def build_config():
     alphas = {}
 
     # load defaults for numeric parameters
-    chain_length = DEFAULTS["chain_length"]
     num_subsamples = DEFAULTS["num_subsamples"]
     num_voters = DEFAULTS["num_voters"]
 
-    # collect basic user input
+    # collect basic user input. Geodata, population columns, seed, and chain
+    # length come from project-settings.json and are not asked for here.
     run_name = prompt("Run name")
-    geodata_path = prompt_path("Path to geodata file")
-    population_column = prompt("Population column name")
-    population_vap_column = prompt("VAP column name")
-    pop_of_interest_col = prompt("Population of interest column name")
-
-    seed          = random.randint(0, 2**32 - 1)
     total_seats = prompt_int("Total number of seats")
     district_configs = collect_district_configs(total_seats)
     voting_configs = collect_voting_configs(district_configs)
@@ -300,19 +303,13 @@ def build_config():
 
     focal_group = groups[0]  # first group is focal by default
 
-    # assemble and return the full config dict
+    # assemble and return the run-specific config dict. Project-wide settings are
+    # layered in at load time from project-settings.json.
     return {
         "run_name":                run_name,
-        "geodata_path":            geodata_path,
-        "gerrychain_output_dir":   f"outputs/{run_name}/districts/",
-        "population_column":       population_column,
-        "population_vap_column":   population_vap_column,
-        "pop_of_interest_column":  pop_of_interest_col,
-        "seed":                    seed,
         "total_seats":             total_seats,
         "district_configs":        district_configs,
         "voting_configs":          voting_configs,
-        "chain_length":            chain_length,
         "num_subsamples":          num_subsamples,
         "num_reps":                num_reps,
         "num_voters":              num_voters,
@@ -329,8 +326,9 @@ def setup_config():
     Prompt the user to either load the sample config or build a new one interactively.
 
     If the user chooses an existing config, prompts for a path and loads it.
-    Otherwise, calls build_config(), saves the result to configs/<run_name>.json,
-    and returns the config dict.
+    Otherwise, calls build_config(), saves the result to configs/<run_name>.json.
+    Either way the project config is layered underneath, so the returned config
+    is fully resolved while only run-specific keys are written to disk.
 
     Returns:
         Parsed config dict ready to pass to the pipeline.
@@ -355,18 +353,18 @@ def setup_config():
                 continue
             break
         print("Loading config file...")
-        with open(config_path, "r", encoding="utf-8") as f:
-            config = json.load(f)
-    else:
-        config = build_config()
-        out = f"configs/{config['run_name']}.json"
+        return load_run_config(config_path)
 
-        with open(out, "w") as f:
-            json.dump(config, f, indent=2)
+    run_config = build_config()
+    out = f"configs/{run_config['run_name']}.json"
 
-        print(f"\nConfig saved to {out}")
+    with open(out, "w") as f:
+        json.dump(run_config, f, indent=2)
 
-    return config
+    print(f"\nConfig saved to {out}")
+    print(f"Project-wide settings come from {PROJECT_CONFIG_PATH}.")
+
+    return merge_configs(load_project_config(), run_config)
 
 if __name__ == "__main__":
     setup_config()

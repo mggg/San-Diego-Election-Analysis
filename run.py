@@ -4,7 +4,12 @@ from pipeline.settings_generator import generate_settings
 from pipeline.profile_generator import generate_profiles
 from pipeline.simulate_elections import simulate_elections
 from pipeline.summarize_results import summarize_results, plot_combined_bubbles_all_runs
-from pipeline.utils.helpers import get_voter_models, profiles_signature, election_results_signature
+from pipeline.utils.helpers import (
+    election_results_signature,
+    get_voter_models,
+    load_run_config,
+    profiles_signature,
+)
 from setup import setup_config
 from pathlib import Path
 from glob import glob
@@ -16,14 +21,18 @@ import zlib
 
 
 def load_config(config_path: str) -> dict:
-    """Load config from JSON file."""
-    with open(config_path) as f:
-        return json.load(f)
+    """Load a run config, layered over the shared project config."""
+    return load_run_config(config_path)
 
 
 def load_all_configs(config_dir="configs"):
-    """Load every config JSON in config_dir, so simulations can run without the CLI."""
-    return [load_config(path) for path in glob(f"{config_dir}/*.json")]
+    """
+    Load every run config in config_dir, so simulations can run without the CLI.
+
+    Project-wide settings live in project-settings.json at the repo root, so
+    everything in config_dir is a run.
+    """
+    return [load_config(path) for path in sorted(glob(f"{config_dir}/*.json"))]
 
 
 def resolve_config_path(name: str, config_dir="configs") -> Path:
