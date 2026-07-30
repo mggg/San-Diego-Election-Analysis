@@ -170,7 +170,7 @@ def _validate_bloc_config(config, bloc_definitions):
                 )
 
 
-def _exaggerate_by_cubic(proportions):
+def _exaggerate_by_squares(proportions):
     """
     Exaggerate a share distribution by the "proportional to the square" method:
     square each share, then renormalize so the squares sum to 1.
@@ -186,11 +186,11 @@ def _exaggerate_by_cubic(proportions):
     Returns:
         Dict mapping each key to its squared-and-renormalized share (sums to 1).
     """
-    cubic = {k: v ** 3 for k, v in proportions.items()}
-    total = sum(cubic.values())
+    squared = {k: v ** 2 for k, v in proportions.items()}
+    total = sum(squared.values())
     if total <= 0:
         return {k: 1.0 / len(proportions) for k in proportions}
-    return {k: v / total for k, v in cubic.items()}
+    return {k: v / total for k, v in squared.items()}
 
 
 def _sample_slate_counts(proportions, candidate_count):
@@ -258,7 +258,7 @@ def _build_slate_to_candidates(row, slate_columns, candidate_count):
     else:
         proportions = {s: 1.0 / len(slates) for s in slates}
 
-    exaggerated = _exaggerate_by_cubic(proportions)
+    exaggerated = _exaggerate_by_squares(proportions)
     counts = _sample_slate_counts(exaggerated, candidate_count)
     return {
         s: [f"{s}{i}" for i in range(1, counts[s] + 1)]
