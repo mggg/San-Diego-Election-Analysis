@@ -12,14 +12,8 @@ default: it is a modelled quantity (VAP discounted by ACS citizenship rates)
 rather than a published count, and no pipeline stage consumes it. Set
 geometry_data.include_cvap to true to compute and export the *CVAP columns.
 
-Blocks and their VAP come from one of two interchangeable sources:
-
-    * a local GerryDB block view GeoPackage (`block_source_path` in the config),
-      which already carries the six VAP categories, total population by race, and
-      precinct-level election results, plus a published dual graph; or
-    * TIGER/Line geometries joined to PL 94-171 tables pulled from the Census API.
-
-Either way the output schema is identical.
+Blocks come from TIGER/Line geometries joined to PL 94-171 tables pulled from
+the Census API.
 
 Which of those blocks count as "in the city" is decided either by a spatial rule
 against the city boundary (`selection_predicate`) or, when `districtr_plan_path`
@@ -28,7 +22,6 @@ each block's plan district carried through to the output.
 
 Pipeline:
     1. download_blocks()          TIGER/Line 2020 block geometries (county-filtered)
-       load_gerrydb_blocks()      ... or blocks read from a GerryDB view
     2. download_boundary()        City "place" polygon from TIGER, or, when the
                                   config names a council district layer,
                                   load_city_districts() dissolved into one polygon
@@ -46,7 +39,6 @@ Every download step uses lazy caching: if the cache file already exists it is
 loaded from disk instead of being re-downloaded.
 
 Sources:
-    - GerryDB block view: geometries, VAP, race, elections, dual graph (local file)
     - TIGER/Line 2020: block & place geometries (census.gov)
     - Census API PL 94-171 (Tables P1, P3, P4): total population + VAP at block level
     - Census API ACS 5-year (Table B05003): citizenship rates at tract level
@@ -59,10 +51,8 @@ back to the statewide rate where the tract denominator is too small).
 import argparse
 import os
 import json
-import sqlite3
 from pathlib import Path
 
-import networkx as nx
 import numpy as np
 import pandas as pd
 import geopandas as gpd
@@ -169,25 +159,6 @@ DISCOUNT_MAP = {
 
 VAP_FLOOR = 20
 
-# --------------------------------------------------------------------------- #
-# GerryDB block view
-#
-# A GerryDB view already publishes the same six-category VAP partition this
-# module builds from PL 94-171, under the snake_case names used downstream, so
-# loading one just means renaming into the internal schema. `path` is the
-# 15-digit block GEOID.
-# --------------------------------------------------------------------------- #
-GERRYDB_ID_COLUMN = "path"
-GERRYDB_GRAPH_TABLE = "gerrydb_graph_edge"
-GERRYDB_VAP_COLUMNS = {
-    "total_vap_20": "VAP",
-    "bvap_20": "BVAP",
-    "hvap_20": "HVAP",
-    "asian_nhpi_vap_20": "AVAP",
-    "amin_vap_20": "AMINVAP",
-    "other_vap_20": "OVAP",
-    "white_vap_20": "WVAP",
-}
 
 
 # --------------------------------------------------------------------------- #
@@ -250,118 +221,6 @@ def download_blocks(state_fips, counties, cache_path):
     block_gdf.to_file(cache_path, driver="GPKG")
     print(f"✓ Saved {len(block_gdf):,} blocks to {cache_path}")
     return block_gdf
-
-
-# --------------------------------------------------------------------------- #
-# 1b. Blocks from a GerryDB view
-# --------------------------------------------------------------------------- #
-def load_gerrydb_blocks(geo):
-    """Load blocks for the configured counties from a local GerryDB block view.
-
-    Replaces steps 1, 3, and 5 of the TIGER route in one read: the view already
-    carries geometries, the six-category VAP partition, population by race, and
-    election results. Columns are renamed into this module's internal schema so
-    everything downstream (CVAP estimation, export) is unchanged.
-
-    Args:
-        geo: The config["geometry_data"] block. Reads "block_source_path",
-            optional "block_source_layer" (defaults to the file stem),
-            "state_fips", and "counties".
-
-    Returns:
-        (blocks, extra_columns) where blocks is a GeoDataFrame indexed by the
-        15-digit block GEOID carrying geometry, total_pop_20, VAP and the six
-        VAP categories, plus any pass-through columns; extra_columns lists those
-        pass-through column names (race population, elections).
-
-    Raises:
-        FileNotFoundError: If the view file is missing.
-        ValueError: If expected columns are absent, the county filter is empty,
-            or the six categories do not partition VAP.
-    """
-    source = Path(geo["block_source_path"])
-    if not source.exists():
-        raise FileNotFoundError(f"GerryDB block view not found at {source}.")
-
-    layer = geo.get("block_source_layer", source.stem)
-    state_fips = geo["state_fips"]
-    counties = geo["counties"]
-
-    # `path` is state+county+tract+block, so a prefix match is the county filter;
-    # pushing it into the driver avoids reading a statewide view into memory.
-    where = " OR ".join(
-        f"{GERRYDB_ID_COLUMN} LIKE '{state_fips}{county}%'" for county in counties
-    )
-    blocks = gpd.read_file(source, layer=layer, where=where)
-    if blocks.empty:
-        raise ValueError(
-            f"No blocks in {source} matched counties {counties} in state {state_fips}."
-        )
-
-    missing = [c for c in (*GERRYDB_VAP_COLUMNS, "total_pop_20") if c not in blocks.columns]
-    if missing:
-        raise ValueError(f"GerryDB view {source} is missing expected columns: {missing}")
-
-    blocks = blocks.rename(columns={GERRYDB_ID_COLUMN: "GEOID"}).set_index("GEOID")
-    blocks = blocks.rename(columns=GERRYDB_VAP_COLUMNS)
-
-    # Same invariant build_vap_categories() asserts on the PL route.
-    max_error = (blocks[CATEGORIES].sum(axis=1) - blocks["VAP"]).abs().max()
-    if max_error > 1e-6:
-        raise ValueError(
-            f"Categories do NOT partition VAP in {source} (max error {max_error})."
-        )
-
-    known = {"geometry", "total_pop_20", "VAP", *CATEGORIES}
-    extra_columns = [c for c in blocks.columns if c not in known]
-
-    print(f"Loaded {len(blocks):,} blocks from {source.name} (layer '{layer}')")
-    print(f"  carrying {len(extra_columns)} extra columns (race population, elections)")
-    print(f"  total population = {blocks['total_pop_20'].sum():,.0f}, VAP = {blocks['VAP'].sum():,.0f}")
-    return blocks, extra_columns
-
-
-def load_gerrydb_graph(geo, geoids):
-    """Build the dual graph published with a GerryDB view, restricted to `geoids`.
-
-    Preferred over deriving adjacency from the exported geometries: it is the
-    graph the view was built with, and it carries shared-perimeter weights.
-    Nodes are positional (node i is row i of `geoids`) because the district and
-    settings stages line assignments up against geodata rows.
-
-    Args:
-        geo: The config["geometry_data"] block.
-        geoids: Block GEOIDs, in the row order of the exported geodata.
-
-    Returns:
-        A networkx Graph over range(len(geoids)), or None when the view ships no
-        graph table.
-    """
-    source = Path(geo["block_source_path"])
-    with sqlite3.connect(source) as connection:
-        tables = pd.read_sql(
-            "SELECT name FROM sqlite_master WHERE type='table' AND name=?",
-            connection,
-            params=(GERRYDB_GRAPH_TABLE,),
-        )
-        if tables.empty:
-            print(f"  {source.name} ships no '{GERRYDB_GRAPH_TABLE}' table; "
-                  "falling back to geometry-derived adjacency.")
-            return None
-        edges = pd.read_sql(f"SELECT path_1, path_2, weights FROM {GERRYDB_GRAPH_TABLE}", connection)
-
-    position = {geoid: i for i, geoid in enumerate(geoids)}
-    inside = edges["path_1"].isin(position) & edges["path_2"].isin(position)
-    edges = edges[inside]
-
-    graph = nx.Graph()
-    graph.add_nodes_from(range(len(geoids)))
-    for path_1, path_2, weights in edges.itertuples(index=False):
-        attrs = json.loads(weights) if isinstance(weights, str) else {}
-        graph.add_edge(position[path_1], position[path_2], **attrs)
-
-    print(f"  published dual graph: {graph.number_of_edges():,} edges among the selected blocks")
-    return graph
 
 
 # --------------------------------------------------------------------------- #
@@ -957,8 +816,7 @@ def select_blocks_in_city(sc_blocks, sc_boundary, place_name, crs_equal, crs_web
 # --------------------------------------------------------------------------- #
 # 9. Export
 # --------------------------------------------------------------------------- #
-def export_to_gpkg(sc_blocks, output_path, place_name, crs_tiger,
-                   extra_columns=(), graph=None):
+def export_to_gpkg(sc_blocks, output_path, place_name, crs_tiger):
     """Write the final block-level VAP/CVAP table to a GeoPackage.
 
     Columns are renamed to the snake_case schema used by the pipeline so the
@@ -969,11 +827,6 @@ def export_to_gpkg(sc_blocks, output_path, place_name, crs_tiger,
         output_path: Destination file path (GeoPackage or GeoJSON).
         place_name: City name used as the GeoPackage layer name.
         crs_tiger: CRS string matching the TIGER/Line source (e.g. "EPSG:4269").
-        extra_columns: Source columns to carry through unchanged (race
-            population, election results from a GerryDB view).
-        graph: Pre-built dual graph over range(len(sc_blocks)). When given, its
-            edges replace the geometry-derived adjacency; node attributes still
-            come from the exported columns.
 
     Returns:
         (exported GeoDataFrame, GerryChain Graph).
@@ -985,9 +838,7 @@ def export_to_gpkg(sc_blocks, output_path, place_name, crs_tiger,
             export_cols.append(column)
     # CVAP columns are only present when geometry_data.include_cvap is set.
     cvap_cols = [c for c in ("CVAP", *CVAP_CATEGORIES) if c in sc_blocks.columns]
-    export_cols += (["total_pop_20", "VAP"] + CATEGORIES + cvap_cols
-                    + [c for c in extra_columns if c in sc_blocks.columns]
-                    + ["geometry"])
+    export_cols += ["total_pop_20", "VAP"] + CATEGORIES + cvap_cols + ["geometry"]
 
     sc_export = sc_blocks.to_crs(crs_tiger)[export_cols].copy()
 
@@ -1023,25 +874,23 @@ def export_to_gpkg(sc_blocks, output_path, place_name, crs_tiger,
 
     # Build and save the GerryChain graph so district_generator can load it from cache.
     graph_path = output_path.parent / (output_path.stem + "_graph.json")
-    derived = Graph.from_file(str(output_path))
-    derived = Graph.from_networkx(nx.convert_node_labels_to_integers(derived, first_label=0))
+    graph = Graph.from_file(str(output_path))
 
-    if graph is None:
-        final = derived
-    else:
-        # Keep the node attributes the exported columns give us, but take
-        # adjacency from the published graph.
-        shared = len(set(map(frozenset, derived.edges)) & set(map(frozenset, graph.edges)))
-        print(f"  published graph vs geometry-derived: {graph.number_of_edges():,} vs "
-              f"{derived.number_of_edges():,} edges, {shared:,} shared")
-        derived.remove_edges_from(list(derived.edges))
-        derived.add_edges_from(graph.edges(data=True))
-        final = derived
+    # The settings stage assigns district plans positionally, so node i must be
+    # row i of the file just written. Graph.from_file labels nodes from the
+    # GeoDataFrame index, which is a RangeIndex -- assert it rather than assume,
+    # because a mismatch would silently attach every district's demographics to
+    # the wrong blocks.
+    if list(graph.nodes) != list(range(len(sc_export))):
+        raise ValueError(
+            f"Graph nodes are not row-aligned with {output_path}: expected labels "
+            f"0..{len(sc_export) - 1} in order."
+        )
 
-    final.to_json(str(graph_path))
-    print(f"Wrote graph ({len(final.nodes):,} nodes, {final.number_of_edges():,} edges) -> {graph_path}")
+    graph.to_json(str(graph_path))
+    print(f"Wrote graph ({len(graph.nodes):,} nodes, {graph.number_of_edges():,} edges) -> {graph_path}")
 
-    return sc_export, final
+    return sc_export, graph
 
 
 # --------------------------------------------------------------------------- #
@@ -1071,7 +920,6 @@ def generate_data(config):
 
     output_path = Path(config["geodata_path"])
     paths = _place_paths(place_name)
-    block_source = geo.get("block_source_path")
 
     load_dotenv(".env")
     api_key = os.getenv("CENSUS_API_KEY")
@@ -1090,13 +938,7 @@ def generate_data(config):
     # 1-2. Geometries. When council districts are configured they define the
     # city boundary (their union) as well as the per-block district labels;
     # otherwise the TIGER place polygon is the boundary.
-    extra_columns = ()
-    if block_source:
-        block_gdf, extra_columns = load_gerrydb_blocks(geo)
-        vap = block_gdf[["total_pop_20", "VAP", *CATEGORIES]]
-    else:
-        block_gdf = download_blocks(state_fips, counties, paths["blocks_cache"])
-        vap = None
+    block_gdf = download_blocks(state_fips, counties, paths["blocks_cache"])
 
     plan_assignment = load_districtr_plan(geo)
 
@@ -1106,12 +948,10 @@ def generate_data(config):
     else:
         sc_boundary = download_boundary(state_fips, place_geoid, paths["boundary_cache"], crs_equal)
 
-    # 3-5. VAP. A GerryDB view publishes the six categories directly; otherwise
-    # they are assembled from the PL 94-171 tables.
-    if vap is None:
-        vap_raw = download_pl_blocks(state_fips, counties, client, paths["pl_cache"])
-        vap = build_vap_categories(vap_raw)
-        block_gdf = block_gdf.join(vap)
+    # 3-5. VAP, assembled from the PL 94-171 tables.
+    vap_raw = download_pl_blocks(state_fips, counties, client, paths["pl_cache"])
+    vap = build_vap_categories(vap_raw)
+    block_gdf = block_gdf.join(vap)
 
     # 4, 6-7. CVAP is a modelled estimate (VAP discounted by ACS citizenship
     # rates), not a published count, and nothing downstream consumes it. It is
@@ -1153,13 +993,8 @@ def generate_data(config):
             districts.to_crs(crs_tiger).to_file(districts_output)
             print(f"Wrote {len(districts)} council districts -> {districts_output}")
 
-    # 9. Export GeoPackage and GerryChain graph. A GerryDB view ships the dual
-    # graph it was built with, so prefer that over deriving adjacency here.
-    published_graph = load_gerrydb_graph(geo, list(sc_blocks.index)) if block_source else None
-    sc_blocks, graph = export_to_gpkg(
-        sc_blocks, output_path, place_name, crs_tiger,
-        extra_columns=extra_columns, graph=published_graph,
-    )
+    # 9. Export GeoPackage and GerryChain graph.
+    sc_blocks, graph = export_to_gpkg(sc_blocks, output_path, place_name, crs_tiger)
 
     # Write a metadata sidecar so future runs can detect geodata/config mismatches.
     meta_path = output_path.parent / (output_path.stem + "_meta.json")
