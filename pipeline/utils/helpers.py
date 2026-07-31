@@ -157,6 +157,14 @@ PROFILE_SIGNATURE_KEYS = [
     "seed",
     "chain_length",
     "num_subsamples",
+    # slate_to_candidates is no longer passed through as configured -- each
+    # district's slate sizes are drawn from these two (see
+    # settings_generator._build_slate_to_candidates), so they determine profile
+    # content just as directly. Two runs differing only in an availability
+    # exponent must not share a signature, or the second silently reuses the
+    # first's profiles.
+    "availability_exps",
+    "candidate_geometric_p",
 ]
 
 

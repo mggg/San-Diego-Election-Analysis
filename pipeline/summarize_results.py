@@ -27,11 +27,24 @@ from pipeline.utils.helpers import parse_district_configs, parse_plan_district_r
 
 # Fixed colors / labels so every figure (histograms, bubbles, cross-run) reads
 # the same way. Unknown modes fall back to their raw name / a muted "other" ink.
+# City of San Diego colors. The pair separates strongly (worst-case
+# colour-vision-deficiency dE 40.4, normal-vision 44.3), but the gold sits at
+# 1.47:1 against a white page, so bars carry a dark edge (BAR_EDGE_COLOR) and
+# every series is named in the legend rather than relying on fill alone.
 MODE_COLORS = {
-    "slate_pl": "#41B6E6",
-    "slate_bt": "#E4002B",
-    "cambridge": "#96690a",
+    "slate_pl": "#FFCC00",
+    "slate_bt": "#AA0000",
+    "cambridge": "#2a78d6",
 }
+
+# Dark ink outline: the only thing holding the gold bars against the page.
+BAR_EDGE_COLOR = "#52514e"
+
+# Bar fill opacity. Transparency reads nicely where the dodged bars overlap, but
+# it composites the fill toward white: at 0.7 the city gold renders around
+# 1.3:1 against the page, so the dark edge below does much of the work of
+# defining those bars. Raise this if the gold ever looks like empty space.
+BAR_ALPHA = 0.7
 
 LEGEND_MAPPING = {
     "slate_pl": "Impulsive",
@@ -53,7 +66,11 @@ BUBBLE_MIN_AREA = 10
 BUBBLE_COLOR = "#898781"  # fallback fill for a mode not in MODE_COLORS
 PROP_LINE_COLOR = "#52514e"  # focal-group proportional-representation reference line
 
-X_TICK_STEP = 5   # seat-axis tick spacing
+# Seat-axis tick spacing. Seats are integers and these plans are small, so every
+# seat count gets its own labelled tick and a bar can be read straight off the
+# axis. Raise this for plans with many more seats, where a label per seat would
+# crowd (Chicago's 50-seat runs use 5).
+X_TICK_STEP = 1
 X_AXIS_PAD = 3    # seats of headroom past the largest relevant value
 
 
@@ -85,6 +102,138 @@ def _focal_population_share(config, gdf) -> float:
     vap = gdf[config["population_vap_column"]].sum()
     ivap = gdf[config["pop_of_interest_column"]].sum()
     return float(ivap / vap) if vap else 0.0
+
+
+def _draw_mode_histograms(ax, group_distn: pd.DataFrame, seat_col: str = "focal_seats") -> float:
+    """
+    Draw a grouped (dodged) bar histogram with one series per voter model.
+
+    For each integer focal-seat count, each mode gets its own bar placed
+    side-by-side, so the series are read by comparison rather than overlapping
+    translucently. Modes are ordered by DESIRED_ORDER (with any unexpected modes
+    appended) so colors line up left-to-right with the legend.
+
+    Returns:
+        The tallest bar height across all modes, so the caller can scale the
+        y-axis consistently.
+    """
+    present_modes = set(group_distn["mode"].unique())
+    modes_in_order = [m for m in DESIRED_ORDER if m in present_modes]
+    modes_in_order += [m for m in present_modes if m not in DESIRED_ORDER]
+
+    n_modes = len(modes_in_order)
+    if n_modes == 0:
+        return 0
+
+    # Bars overlap each other by 50%: centres are spaced half a bar width apart,
+    # so a group spans 0.84 of a tick and leaves a visible gap to the next seat.
+    bar_width = 0.42
+    step = bar_width / 2
+    max_bin_height = 0
+
+    for i, mode in enumerate(modes_in_order):
+        seats = group_distn.loc[group_distn["mode"] == mode, seat_col]
+        if seats.empty:
+            continue
+
+        counts = seats.value_counts().sort_index()
+        offset = (i - (n_modes - 1) / 2) * step
+
+        # Bars overlap by half their width, so some transparency lets the
+        # occluded series show through. Kept high (and paired with the dark
+        # edge) because the city gold loses contrast fast as alpha drops.
+        ax.bar(
+            counts.index + offset,
+            counts.values,
+            width=bar_width,
+            edgecolor=BAR_EDGE_COLOR,
+            linewidth=0.9,
+            color=MODE_COLORS.get(mode, "xkcd:light gray"),
+            alpha=BAR_ALPHA,
+            label=mode,
+        )
+
+        if len(counts) > 0:
+            max_bin_height = max(max_bin_height, counts.values.max())
+
+    return max_bin_height
+
+
+def _style_axes(ax, config, focal_group: str, ylim: float, x_upper: int) -> None:
+    """Apply spines, limits, ticks, labels, and title for one histogram figure."""
+    for spine in ax.spines.values():
+        spine.set_linewidth(0.5)
+
+    # x-axis spans 0..x_upper (capped near the data); 20% y headroom.
+    ax.set_xlim(-1, x_upper + 1)
+    ax.set_ylim(0, ylim)
+    ax.set_xticks(range(0, x_upper + 1, X_TICK_STEP))
+    ax.set_xticklabels([str(x) for x in range(0, x_upper + 1, X_TICK_STEP)])
+    ax.set_xlabel("Citywide Seats Won")
+    ax.set_title(
+        f"Election Outcomes for {_group_label(focal_group)}-Preferred Candidates",
+        fontsize=11, fontweight="bold", pad=18,
+    )
+    # Run name as an italic grey subtitle just under the title.
+    ax.text(
+        0.5, 1.01, str(config["run_name"]), transform=ax.transAxes,
+        fontsize=8, ha="center", va="bottom", color="gray", style="italic",
+    )
+    ax.tick_params(axis="both", which="major", labelsize=8)
+
+
+def _ordered_mode_handles(ax):
+    """Return (handles, labels) for the mode legend in DESIRED_ORDER, renamed via LEGEND_MAPPING."""
+    handles, labels = ax.get_legend_handles_labels()
+    handle_map = {label: handle for handle, label in zip(handles, labels) if label in LEGEND_MAPPING}
+
+    ordered_handles, ordered_labels = [], []
+    for mode_key in DESIRED_ORDER:
+        if mode_key in handle_map:
+            ordered_handles.append(handle_map[mode_key])
+            ordered_labels.append(LEGEND_MAPPING[mode_key])
+    return ordered_handles, ordered_labels
+
+
+def _build_mode_legend(ax, ref_handles=None, ref_labels=None) -> None:
+    """
+    Draw a legend of modes (renamed via LEGEND_MAPPING, in DESIRED_ORDER),
+    followed by the reference-line entries so their descriptions live in the
+    legend instead of as free text overlapping the bars. Placed below the axes.
+    """
+    ordered_handles, ordered_labels = _ordered_mode_handles(ax)
+    handles = ordered_handles + list(ref_handles or [])
+    labels = ordered_labels + list(ref_labels or [])
+    ax.legend(
+        handles, labels, fontsize=8,
+        loc="upper center", bbox_to_anchor=(0.5, -0.18),
+        ncol=2, frameon=False,
+    )
+
+
+def _draw_reference_lines(ax, config, iprop, label=None):
+    """
+    Draw the proportional-representation reference line: the seats implied by the
+    focal group's share of VAP (no turnout adjustment).
+
+    The description rides on the line's label so it appears in the legend rather
+    than as free text over the histogram. Returns (handles, labels) for it.
+    """
+    group_label = label if label is not None else _group_label(config["focal_group"])
+    # Reference lines are annotations, not series identity, so they stay off hue
+    # entirely (ink tones, distinguished by linestyle) rather than risking a
+    # CVD-ambiguous pair with the mode bars.
+    color_iprop = "#52514e"
+
+    if iprop is None:
+        return [], []
+
+    i_share = iprop * config["total_seats"]
+    iprop_label = f"{group_label} share of VAP: {iprop * 100:.2f}% ({i_share:.2f} seats)"
+    iprop_line = ax.axvline(
+        i_share, color=color_iprop, linestyle=":", linewidth=1, label=iprop_label
+    )
+    return [iprop_line], [iprop_label]
 
 
 def aggregate_to_plan_level(df: pd.DataFrame) -> pd.DataFrame:
@@ -239,88 +388,24 @@ def summarize_results(config) -> Path:
     # aggregate focal seats to the plan level (sum across districts)
     df_plan = aggregate_to_plan_level(df)
 
-    # Shared styling (histograms + bubbles read the same); unknown modes fall
-    # back to their raw name / a muted fill.
-    mode_colors = MODE_COLORS
-    legend_mapping = LEGEND_MAPPING
-    # Order legends by the config's voter_models.
-    desired_order = get_voter_models(config)
+    total_seats = config["total_seats"]
 
     # one histogram per (district count, seats, election method) combo
     for (num_dist, seats_per_district, elm), group_distn in df_plan.groupby(["num_districts", "seats_per_district", "election_method"]):
         fig, ax = plt.subplots(figsize=(6, 4))
 
-        # Plot histogram for each mode and track tallest bin
-        max_bin_height = 0
-
-        for mode, group_mode in group_distn.groupby("mode"):
-            if group_mode["focal_seats"].empty:
-                continue
-
-            counts, bins, patches = ax.hist(
-                group_mode["focal_seats"],
-                bins=range(
-                    int(group_mode["focal_seats"].min()),
-                    int(group_mode["focal_seats"].max()) + 2
-                ),
-                align="left",
-                edgecolor="gray",
-                linewidth=0.5,
-                color=mode_colors.get(mode, "xkcd:light gray"),
-                alpha=0.5,
-                label=mode,
-            )
-
-            if len(counts) > 0:
-                max_bin_height = max(max_bin_height, counts.max())
-
-        # styling
-        for spine in ax.spines.values():
-            spine.set_linewidth(0.5)
-
-        total_seats = config["total_seats"]
+        max_bin_height = _draw_mode_histograms(ax, group_distn)
         ylim = max_bin_height * 1.2 if max_bin_height > 0 else 1
 
-        ax.set_xlim(-1, total_seats + 1)
-        ax.set_ylim(0, ylim)
-        ax.set_xticks(range(0, total_seats + 1, 1))
-        ax.set_xticklabels([str(x) if x % 5 == 0 else "" for x in range(0, total_seats + 1)])
-        ax.set_xlabel(f"Seats")
-        ax.set_title(f"Representation for {focal_group}-preferred candidates, {num_dist} x {seats_per_district} {elm}")
-        ax.tick_params(axis="both", which="major", labelsize=8)
-
-        # legend (modes only, renamed + ordered)
-        handles, labels = ax.get_legend_handles_labels()
-        handle_map = {label: handle for handle, label in zip(handles, labels)}
-
-        ordered_handles, ordered_labels = [], []
-        for mode_key in desired_order:
-            if mode_key in handle_map:
-                ordered_handles.append(handle_map[mode_key])
-                ordered_labels.append(legend_mapping.get(mode_key, mode_key))
-
-        ax.legend(ordered_handles, ordered_labels, title="Mode", fontsize=8)
-
-        # Proportional-representation benchmark: the focal group's share of VAP,
-        # with no turnout adjustment, so the line reads as "seats proportional to
-        # the group's share of voting-age people".
-        color_iprop = "xkcd:purplish brown"
-
-        i_share = iprop * total_seats
-        i_share_alignment = 0.3
-        i_share_ha = "left"
-
-        ax.axvline(i_share, color=color_iprop, linestyle=":", linewidth=1)
-
-        ax.text(
-            i_share + i_share_alignment,
-            ylim * 0.90,
-            f"Focal group VAP\n{iprop*100:.2f}%\n({i_share:.2f} seats)",
-            va="center",
-            ha=i_share_ha,
-            fontsize=8,
-            color=color_iprop,
+        max_seat = max(
+            group_distn["focal_seats"].max(),
+            iprop * total_seats if iprop is not None else 0,
         )
+        x_upper = _seat_axis_upper(max_seat, total_seats)
+
+        _style_axes(ax, config, focal_group, ylim, x_upper)
+        ref_handles, ref_labels = _draw_reference_lines(ax, config, iprop)
+        _build_mode_legend(ax, ref_handles, ref_labels)
 
         fig_path = figs_dir / f"{run_name}_{num_dist}x{seats_per_district}_{elm}_bymode.png"
         fig.savefig(fig_path, dpi=300, bbox_inches="tight")
