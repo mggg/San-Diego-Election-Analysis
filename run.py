@@ -20,6 +20,7 @@ from pipeline.simulate_elections import simulate_elections
 from pipeline.summarize_results import summarize_results, plot_combined_bubbles_all_runs
 from pipeline.utils.helpers import (
     election_results_signature,
+    find_cached_district_output,
     get_voter_models,
     load_run_config,
     profiles_signature,
@@ -30,6 +31,7 @@ from glob import glob
 import argparse
 import gzip
 import json
+import shutil
 import zipfile
 import zlib
 
@@ -104,14 +106,23 @@ def has_valid_district_outputs(config) -> bool:
     run = config["run_name"]
     n = config["chain_length"]
     base = Path("outputs") / run / "districts"
-    if not base.is_dir():
-        print("Distrct files do not exist. Running entire pipeline.")
-        return False
     for d in config["district_configs"]:
         f = base / f"{run}_{d['num_districts']}_districts.jsonl.gz"
         if not f.is_file():
-            print(f"{d['num_districts']} distrct configuration files do not exist. Running entire pipeline.")
-            return False
+            # Another config may have already run this exact chain (same
+            # geodata/population column/seed/chain length) under a different
+            # run_name -- reuse it instead of rerunning the chain.
+            cached = find_cached_district_output(config, d["num_districts"])
+            if cached is not None:
+                print(
+                    f"Reusing district chain output for {d['num_districts']} districts "
+                    f"from {cached} (same geodata/population column/seed/chain length)."
+                )
+                base.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(cached, f)
+            else:
+                print(f"{d['num_districts']} distrct configuration files do not exist. Running entire pipeline.")
+                return False
         try:
             with gzip.open(f, "rt", encoding="utf-8") as g:
                 if sum(1 for _ in g) != n:
@@ -278,7 +289,12 @@ def pipeline(config):
                 "'geometry_data' in config to generate it."
             )
         generate_data(config)
-    generate_districts(config)
+    # Guarded rather than unconditional: a brand-new run_name reaches this
+    # function directly (run_pipeline only checks has_valid_district_outputs
+    # when the run directory already exists), and this check is also what
+    # reuses a matching chain from another config instead of rerunning it.
+    if not has_valid_district_outputs(config):
+        generate_districts(config)
     generate_settings(config)
     generate_profiles(config)
     simulate_elections(config)
