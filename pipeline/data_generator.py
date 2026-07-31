@@ -57,10 +57,8 @@ import numpy as np
 import pandas as pd
 import geopandas as gpd
 import requests
-import shapely
 from census import Census
 from dotenv import load_dotenv
-from gerrychain import Graph
 
 from pipeline.utils.helpers import load_run_config
 
@@ -426,10 +424,9 @@ def assign_districts(sc_blocks, districts, district_column, crs_equal):
     """Tag each block with a single council district.
 
     A block's representative point decides, which is exact for any block wholly
-    inside the city. Blocks selected by the "intersects" rule can sit mostly
-    outside, putting that point in no district at all; those fall back to the
-    district they overlap most. Every block still gets exactly one district, so
-    district totals stay additive.
+    inside the city. A block whose point falls in no district polygon is left
+    unassigned (NaN) rather than guessed at -- so district totals stay additive,
+    and every assignment is one a point-in-polygon test actually supports.
 
     Args:
         sc_blocks: GeoDataFrame of the blocks inside the city.
@@ -453,32 +450,6 @@ def assign_districts(sc_blocks, districts, district_column, crs_equal):
 
     sc_blocks = sc_blocks.copy()
     sc_blocks["council_district"] = tagged[district_column].reindex(sc_blocks.index).to_numpy()
-
-    stragglers = sc_blocks.index[sc_blocks["council_district"].isna()]
-    if len(stragglers):
-        overlaps = gpd.sjoin(
-            blocks_equal.loc[stragglers, ["geometry"]], districts_equal,
-            predicate="intersects", how="inner",
-        )
-        if not overlaps.empty:
-            areas = shapely.area(shapely.intersection(
-                overlaps.geometry.to_numpy(),
-                districts_equal.geometry.iloc[overlaps["index_right"]].to_numpy(),
-            ))
-            best = (
-                pd.DataFrame({
-                    "block": overlaps.index,
-                    "district": overlaps[district_column].to_numpy(),
-                    "area": areas,
-                })
-                .sort_values("area")
-                .drop_duplicates("block", keep="last")
-                .set_index("block")["district"]
-            )
-            best.index.name = None
-            sc_blocks.loc[best.index, "council_district"] = best
-        print(f"  {len(stragglers):,} block(s) had no interior point in a district; "
-              "assigned by largest overlap.")
 
     unassigned = int(sc_blocks["council_district"].isna().sum())
     if unassigned:
@@ -829,7 +800,7 @@ def export_to_gpkg(sc_blocks, output_path, place_name, crs_tiger):
         crs_tiger: CRS string matching the TIGER/Line source (e.g. "EPSG:4269").
 
     Returns:
-        (exported GeoDataFrame, GerryChain Graph).
+        The exported GeoDataFrame.
     """
     output_path = Path(output_path)
     export_cols = [c for c in ("COUNTYFP20", "TRACTCE20") if c in sc_blocks.columns]
@@ -872,25 +843,7 @@ def export_to_gpkg(sc_blocks, output_path, place_name, crs_tiger):
     n_cols = len([c for c in sc_export.columns if c != "geometry"])
     print(f"Wrote {len(sc_export):,} blocks x {n_cols} columns -> {output_path}")
 
-    # Build and save the GerryChain graph so district_generator can load it from cache.
-    graph_path = output_path.parent / (output_path.stem + "_graph.json")
-    graph = Graph.from_file(str(output_path))
-
-    # The settings stage assigns district plans positionally, so node i must be
-    # row i of the file just written. Graph.from_file labels nodes from the
-    # GeoDataFrame index, which is a RangeIndex -- assert it rather than assume,
-    # because a mismatch would silently attach every district's demographics to
-    # the wrong blocks.
-    if list(graph.nodes) != list(range(len(sc_export))):
-        raise ValueError(
-            f"Graph nodes are not row-aligned with {output_path}: expected labels "
-            f"0..{len(sc_export) - 1} in order."
-        )
-
-    graph.to_json(str(graph_path))
-    print(f"Wrote graph ({len(graph.nodes):,} nodes, {graph.number_of_edges():,} edges) -> {graph_path}")
-
-    return sc_export, graph
+    return sc_export
 
 
 # --------------------------------------------------------------------------- #
@@ -993,8 +946,9 @@ def generate_data(config):
             districts.to_crs(crs_tiger).to_file(districts_output)
             print(f"Wrote {len(districts)} council districts -> {districts_output}")
 
-    # 9. Export GeoPackage and GerryChain graph.
-    sc_blocks, graph = export_to_gpkg(sc_blocks, output_path, place_name, crs_tiger)
+    # 9. Export the GeoPackage. The adjacency graph is built by
+    # district_generator, which is what consumes it.
+    sc_blocks = export_to_gpkg(sc_blocks, output_path, place_name, crs_tiger)
 
     # Write a metadata sidecar so future runs can detect geodata/config mismatches.
     meta_path = output_path.parent / (output_path.stem + "_meta.json")
@@ -1004,7 +958,7 @@ def generate_data(config):
     print("-" * 60)
     print("Done.")
     print("-" * 60)
-    return sc_blocks, graph
+    return sc_blocks
 
 
 def main():

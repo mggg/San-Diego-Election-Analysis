@@ -11,7 +11,6 @@ import gzip
 import warnings
 from pathlib import Path
 from functools import partial
-import networkx as nx
 import jsonlines as jl
 import random
 from tqdm import tqdm
@@ -64,8 +63,17 @@ def generate_districts(config):
         graph = Graph.from_file(str(geodata_path))
         graph.to_json(str(graph_path))
 
-    # relabel nodes as 0-indexed integers so list-based assignment serialization works correctly
-    graph = Graph.from_networkx(nx.convert_node_labels_to_integers(graph, first_label=0))
+    # Assignments are serialized as a list ordered by node label, and the settings
+    # stage lines that list up against geodata rows positionally. So node i must
+    # be row i. Graph.from_file labels nodes from the GeoDataFrame index (a
+    # RangeIndex), which satisfies this -- but check rather than assume, because a
+    # mismatch would silently attach every district's demographics to the wrong
+    # blocks instead of raising.
+    if list(graph.nodes) != list(range(len(graph.nodes))):
+        raise ValueError(
+            f"Graph nodes in {graph_path} are not labelled 0..{len(graph.nodes) - 1} "
+            "in order, so district assignments cannot be matched to geodata rows."
+        )
 
     # one output file per district count
     output_dir = Path(f"outputs/{run_name}/districts")
