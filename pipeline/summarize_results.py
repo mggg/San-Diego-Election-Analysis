@@ -253,6 +253,17 @@ def _draw_reference_lines(ax, config, iprop, label=None):
     return [iprop_line], [iprop_label]
 
 
+def _method_figs_dir(figs_dir: Path, elm: str) -> Path:
+    """
+    Per-election-method figures subfolder (figures/<run_name>/<election_method>/),
+    created on demand. Figures that span every method for a run (e.g. the
+    bubbles-by-method chart) stay at figs_dir's root instead.
+    """
+    method_dir = figs_dir / elm
+    method_dir.mkdir(parents=True, exist_ok=True)
+    return method_dir
+
+
 def _style_slate_axis(ax, config, slate: str, ylim: float, x_upper: int) -> None:
     """Spines, limits, ticks, and a per-slate subplot title for the by-slate panel."""
     for spine in ax.spines.values():
@@ -322,7 +333,7 @@ def _plot_slate_panel(
 
     fig.suptitle(f"Election Outcomes by Slate\n{run_name}", fontsize=12, fontweight="bold")
     fig.tight_layout(rect=(0, 0, 1, 0.96))
-    fig_path = figs_dir / f"{run_name}_{num_dist}x{seats_per_district}_{elm}_byslate.png"
+    fig_path = _method_figs_dir(figs_dir, elm) / f"{run_name}_{num_dist}x{seats_per_district}_byslate.png"
     fig.savefig(fig_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
 
@@ -364,6 +375,22 @@ def aggregate_to_plan_level(df: pd.DataFrame) -> pd.DataFrame:
     )
 
 
+def expected_figure_count(df_plan: pd.DataFrame, config: dict) -> int:
+    """
+    Number of figures summarize_results should produce for this run's df_plan:
+    one bymode histogram, plus (if slate_to_candidates is configured) one
+    byslate panel, per (district count, seats, election method) group -- plus
+    one bubbles-by-method figure per (district count, seats) pair.
+
+    Shared with run.py's has_valid_summaries, so both sides agree on what
+    "complete" means for the figures/<run_name>/ tree.
+    """
+    n_method_groups = df_plan.groupby(["num_districts", "seats_per_district", "election_method"]).ngroups
+    n_district_configs = df_plan.groupby(["num_districts", "seats_per_district"]).ngroups
+    per_method_figs = 2 if config.get("slate_to_candidates") else 1
+    return n_method_groups * per_method_figs + n_district_configs
+
+
 def summarize_results(config) -> Path:
     """
     Aggregate election results into a summary csv and produce histogram figures.
@@ -372,17 +399,21 @@ def summarize_results(config) -> Path:
         config: Parsed config dict.
 
     Outputs:
-        - outputs/summaries/<run_name>_summary/<run_name>_summary.csv: one row per
+        - outputs/<run_name>/summaries/<run_name>_summary.csv: one row per
           (replicate, plan, district) triple, with columns for plan, mode, district_id,
           rep, focal_seats, the population columns named in the config, and
           focal_vap_share (the district's focal share of VAP, turnout-free).
-        - outputs/summaries/<run_name>_summary/figures/*_bymode.png: one histogram per
+        - figures/<run_name>/<election_method>/*_bymode.png: one histogram per
           (district_count, seats_per_district, election_method) showing the
           distribution of focal-group seats across modes.
-        - outputs/summaries/<run_name>_summary/figures/*_byslate.png: one panel per
+        - figures/<run_name>/<election_method>/*_byslate.png: one panel per
           (district_count, seats_per_district, election_method), a grid (2x2 for
           San Diego's four slates) of per-slate seat-distribution histograms with
           each slate's own proportional-representation reference line.
+        - figures/<run_name>/*_bubbles_by_method.png: one bubble-grid figure per
+          (district_count, seats_per_district), spanning every election method,
+          so it lives at the run's figure root rather than under one method's
+          subfolder.
 
     Returns:
         Path to the summary directory.
@@ -407,10 +438,13 @@ def summarize_results(config) -> Path:
     if not results_dir.exists():
         raise FileNotFoundError(f"Could not find election results directory: {results_dir}")
 
-    # Output roots
+    # Output roots. The summary CSV stays under outputs/<run_name>/, but figures
+    # live in a separate top-level figures/<run_name>/ tree (organized by
+    # election method) so every run's figures can be browsed independently of
+    # the (gitignored, disposable) outputs/ working directory.
     summary_dir = Path("outputs") / f'{run_name}' / "summaries"
     summary_dir.mkdir(parents=True, exist_ok=True)
-    figs_dir = summary_dir / "figures"
+    figs_dir = Path("figures") / run_name
     figs_dir.mkdir(parents=True, exist_ok=True)
 
     # collect one row per simulation per district
@@ -527,7 +561,7 @@ def summarize_results(config) -> Path:
         ref_handles, ref_labels = _draw_reference_lines(ax, config, iprop)
         _build_mode_legend(ax, ref_handles, ref_labels)
 
-        fig_path = figs_dir / f"{run_name}_{num_dist}x{seats_per_district}_{elm}_bymode.png"
+        fig_path = _method_figs_dir(figs_dir, elm) / f"{run_name}_{num_dist}x{seats_per_district}_bymode.png"
         fig.savefig(fig_path, dpi=300, bbox_inches="tight")
         plt.close(fig)
 
@@ -715,7 +749,7 @@ def plot_combined_bubbles_all_runs(config, output_dir=None, exclude_runs=None) -
         config: Any run's parsed config; used for the seat-axis range and the
             population-share reference line (shared across runs).
         output_dir: Where to write the figure. Defaults to
-            outputs/cross_run_summaries/figures.
+            figures/cross_run_summaries.
         exclude_runs: Run names (matched case-insensitively as substrings) to omit.
 
     Returns:
@@ -803,7 +837,7 @@ def plot_combined_bubbles_all_runs(config, output_dir=None, exclude_runs=None) -
     fig.legend(handles=[prop_handle], loc="upper right", fontsize=8, frameon=True)
 
     if output_dir is None:
-        output_dir = Path("outputs") / "cross_run_summaries" / "figures"
+        output_dir = Path("figures") / "cross_run_summaries"
     output_dir.mkdir(parents=True, exist_ok=True)
     fig_path = output_dir / "combined_bubbles_all_runs.png"
     fig.savefig(fig_path, dpi=300, bbox_inches="tight")
