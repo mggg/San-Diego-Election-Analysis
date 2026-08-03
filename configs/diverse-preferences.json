@@ -14,19 +14,6 @@
     "FastSTV": {
       "n_seats": 3,
       "tiebreak": "random"
-    },
-    "Plurality": {
-      "n_seats": 3,
-      "tiebreak": "random"
-    },
-    "Alaska": {
-      "m_1": 4,
-      "m_2": 3,
-      "tiebreak": "random"
-    },
-    "Cumulative": {
-      "n_seats": 3,
-      "tiebreak": "random"
     }
   },
   "voter_models": [

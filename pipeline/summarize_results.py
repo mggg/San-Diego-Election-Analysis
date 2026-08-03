@@ -21,6 +21,7 @@ import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
 from pipeline.utils.helpers import parse_district_configs, parse_plan_district_rep_from_path, count_focal_winners, load_run_config, load_json, find_settings_file, get_voter_models
+from pipeline.settings_generator import get_group_vap_columns
 
 
 # --- Shared figure styling ---------------------------------------------------
@@ -102,6 +103,22 @@ def _focal_population_share(config, gdf) -> float:
     vap = gdf[config["population_vap_column"]].sum()
     ivap = gdf[config["pop_of_interest_column"]].sum()
     return float(ivap / vap) if vap else 0.0
+
+
+def _slate_baselines(config, gdf) -> Dict[str, float]:
+    """
+    Each candidate slate's demographic share of citywide VAP, for the by-slate
+    representation panel's reference lines.
+    """
+    total_vap = float(gdf[config["population_vap_column"]].sum())
+    if total_vap <= 0:
+        return {slate: 0.0 for slate in config["slate_to_candidates"]}
+
+    group_columns = get_group_vap_columns(config, config["slate_to_candidates"].keys())
+    return {
+        slate: sum(float(gdf[c].sum()) for c in cols) / total_vap
+        for slate, cols in group_columns.items()
+    }
 
 
 def _draw_mode_histograms(ax, group_distn: pd.DataFrame, seat_col: str = "focal_seats") -> float:
@@ -236,19 +253,114 @@ def _draw_reference_lines(ax, config, iprop, label=None):
     return [iprop_line], [iprop_label]
 
 
+def _style_slate_axis(ax, config, slate: str, ylim: float, x_upper: int) -> None:
+    """Spines, limits, ticks, and a per-slate subplot title for the by-slate panel."""
+    for spine in ax.spines.values():
+        spine.set_linewidth(0.5)
+    ax.set_xlim(-1, x_upper + 1)
+    ax.set_ylim(0, ylim)
+    ax.set_xticks(range(0, x_upper + 1, X_TICK_STEP))
+    ax.set_xticklabels([str(x) for x in range(0, x_upper + 1, X_TICK_STEP)], fontsize=7)
+    ax.set_xlabel("Citywide Seats Won", fontsize=8)
+    ax.set_title(_group_label(slate), fontsize=10, fontweight="bold")
+    ax.tick_params(axis="both", which="major", labelsize=7)
+
+
+def _plot_slate_panel(
+    group_distn: pd.DataFrame,
+    num_dist,
+    seats_per_district,
+    elm,
+    config,
+    slate_baselines: Dict[str, float],
+    figs_dir: Path,
+    run_name: str,
+) -> None:
+    """
+    Create and save one paneled by-slate representation figure: a grid of
+    histograms (2x2 for the four San Diego slates), one per candidate slate,
+    each showing that slate's seat distribution across modes with its own
+    proportional-representation reference line.
+    """
+    slates = list(config["slate_to_candidates"])
+    n = len(slates)
+    ncols = 2 if n > 1 else 1
+    nrows = (n + ncols - 1) // ncols
+
+    fig, axes = plt.subplots(nrows, ncols, figsize=(6 * ncols, 3.2 * nrows), squeeze=False)
+    flat = [ax for row in axes for ax in row]
+
+    # Shared x cap across all slate subplots so they stay comparable: the largest
+    # observed seat count or reference line over every slate, padded and capped.
+    total_seats = config["total_seats"]
+    seat_max = max((group_distn[f"seats_{s}"].max() for s in slates), default=0)
+    ref_max = max((slate_baselines.get(s, 0.0) * total_seats for s in slates), default=0)
+    x_upper = _seat_axis_upper(max(seat_max, ref_max), total_seats)
+
+    for ax, slate in zip(flat, slates):
+        max_bin_height = _draw_mode_histograms(ax, group_distn, seat_col=f"seats_{slate}")
+        ylim = max_bin_height * 1.2 if max_bin_height > 0 else 1
+        _style_slate_axis(ax, config, slate, ylim, x_upper)
+        ref_handles, ref_labels = _draw_reference_lines(
+            ax, config, slate_baselines.get(slate), label=_group_label(slate)
+        )
+        # Per-slate reference values differ, so each subplot carries its own
+        # legend for them; the shared mode legend lives on the figure below.
+        ax.legend(ref_handles, ref_labels, fontsize=6, loc="best")
+
+    # Hide any unused cells in the grid.
+    for ax in flat[n:]:
+        ax.axis("off")
+
+    # One shared mode legend in the figure's top-right corner.
+    handles, labels = _ordered_mode_handles(flat[0])
+    if handles:
+        fig.legend(
+            handles, labels, title="Mode", fontsize=8,
+            loc="upper right", bbox_to_anchor=(0.99, 0.99),
+        )
+
+    fig.suptitle(f"Election Outcomes by Slate\n{run_name}", fontsize=12, fontweight="bold")
+    fig.tight_layout(rect=(0, 0, 1, 0.96))
+    fig_path = figs_dir / f"{run_name}_{num_dist}x{seats_per_district}_{elm}_byslate.png"
+    fig.savefig(fig_path, dpi=300, bbox_inches="tight")
+    plt.close(fig)
+
+
+def plot_slate_representation_panels(
+    df_plan: pd.DataFrame,
+    config,
+    slate_baselines: Dict[str, float],
+    figs_dir: Path,
+    run_name: str,
+) -> None:
+    """Produce one by-slate representation panel per (district count, seats, method)."""
+    for (num_dist, seats_per_district, elm), group_distn in df_plan.groupby(
+        ["num_districts", "seats_per_district", "election_method"]
+    ):
+        _plot_slate_panel(
+            group_distn, num_dist, seats_per_district, elm,
+            config, slate_baselines, figs_dir, run_name,
+        )
+
+
 def aggregate_to_plan_level(df: pd.DataFrame) -> pd.DataFrame:
     """
     Collapse the district-level summary table to one row per
     (plan, district config, mode, method, replicate), summing focal seats across
     the districts of each plan. This plan-level focal-seat total is what the
     histograms and bubble plots are distributions over.
+
+    Also sums each per-slate seat column (seats_<slate>) up to the plan, which
+    feeds the by-slate representation panel.
     """
+    seat_cols = [c for c in df.columns if c == "focal_seats" or c.startswith("seats_")]
     return (
         df.groupby(
             ["plan", "num_districts", "seats_per_district", "mode", "election_method", "rep"],
             as_index=False,
         )
-        .agg({"focal_seats": "sum"})
+        .agg({c: "sum" for c in seat_cols})
     )
 
 
@@ -264,9 +376,13 @@ def summarize_results(config) -> Path:
           (replicate, plan, district) triple, with columns for plan, mode, district_id,
           rep, focal_seats, the population columns named in the config, and
           focal_vap_share (the district's focal share of VAP, turnout-free).
-        - outputs/summaries/<run_name>_summary/figures/*.png: one histogram per
+        - outputs/summaries/<run_name>_summary/figures/*_bymode.png: one histogram per
           (district_count, seats_per_district, election_method) showing the
           distribution of focal-group seats across modes.
+        - outputs/summaries/<run_name>_summary/figures/*_byslate.png: one panel per
+          (district_count, seats_per_district, election_method), a grid (2x2 for
+          San Diego's four slates) of per-slate seat-distribution histograms with
+          each slate's own proportional-representation reference line.
 
     Returns:
         Path to the summary directory.
@@ -354,8 +470,8 @@ def summarize_results(config) -> Path:
                             winners,
                             focal_group,
                             slate_to_candidates,
-                        )             
-                        rows.append({
+                        )
+                        row = {
                             "run_name": run_name,
                             "plan": plan,
                             "num_districts": district_num,
@@ -376,7 +492,11 @@ def summarize_results(config) -> Path:
                                 total_ivap / total_vap
                                 if total_ivap is not None and total_vap else None
                             ),
-                        })
+                        }
+                        # Per-slate seat counts feed the by-slate representation panel.
+                        for slate in slate_to_candidates:
+                            row[f"seats_{slate}"] = count_focal_winners(winners, slate, slate_to_candidates)
+                        rows.append(row)
 
     df = pd.DataFrame(rows)
     df = df.sort_values(['mode','rep','num_districts','plan','district_id'])
@@ -410,6 +530,12 @@ def summarize_results(config) -> Path:
         fig_path = figs_dir / f"{run_name}_{num_dist}x{seats_per_district}_{elm}_bymode.png"
         fig.savefig(fig_path, dpi=300, bbox_inches="tight")
         plt.close(fig)
+
+    # By-slate proportional-representation panel (one histogram per candidate slate).
+    if config.get("slate_to_candidates"):
+        plot_slate_representation_panels(
+            df_plan, config, _slate_baselines(config, gdf), figs_dir, run_name
+        )
 
     # Bubble grid (mode x seats, area = occurrence count) per districting config.
     plot_representation_bubbles(df_plan, config, focal_group, iprop, figs_dir, run_name)
