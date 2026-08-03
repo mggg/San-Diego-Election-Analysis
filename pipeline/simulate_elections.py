@@ -23,6 +23,7 @@ import inspect
 import os
 import tempfile
 import zipfile
+from contextlib import ExitStack
 from dataclasses import dataclass
 from pathlib import Path
 from joblib import Parallel, delayed
@@ -42,6 +43,7 @@ from pipeline.utils.helpers import (
     load_json,
     parse_plan_district_rep_from_path,
     find_settings_file,
+    primary_profiles_zip_path,
     read_existing_zip_members,
 )
 from pipeline.two_round_election import run_two_round_fresh_profile
@@ -187,6 +189,7 @@ def _process_profile(
     voting_configs: dict,
     settings: Optional[dict] = None,
     mode: Optional[str] = None,
+    primary_csv_bytes: Optional[bytes] = None,
 ) -> Tuple[Dict[str, List[str]], Dict[str, str]]:
     """
     Load a voter profile (its csv bytes, read from profiles.zip by the caller) and
@@ -203,6 +206,10 @@ def _process_profile(
             plan includes a two-round rule; see plan_needs_settings).
         mode: Voter model name this profile was generated with (only needed for
             the same reason as settings).
+        primary_csv_bytes: The matching entry from primary_profiles.zip, when the
+            run models a separate primary electorate. Two-round rules narrow on
+            these ballots instead of csv_bytes; every other rule, and round 2
+            itself, is unaffected.
 
     Returns:
         (results, round2_profiles):
@@ -214,8 +221,10 @@ def _process_profile(
     """
     # Parse each distinct profile type from the csv at most once and reuse it
     # across rules that need it (e.g. two rank-based rules), instead of
-    # re-reading the same file per rule.
+    # re-reading the same file per rule. Primary-round ballots are a separate
+    # electorate, so they get their own cache rather than sharing this one.
     profile_cache: dict = {}
+    primary_cache: dict = {}
 
     results: Dict[str, List[str]] = {}
     round2_profiles: Dict[str, str] = {}
@@ -226,8 +235,15 @@ def _process_profile(
             profile_cache[entry.profile_class] = profile
 
         if entry.is_custom:
+            round1_profile = profile
+            if primary_csv_bytes is not None:
+                round1_profile = primary_cache.get(entry.profile_class)
+                if round1_profile is None:
+                    round1_profile = _load_profile_from_bytes(primary_csv_bytes, entry.profile_class)
+                    primary_cache[entry.profile_class] = round1_profile
+
             winners, round2_csv = run_two_round_fresh_profile(
-                profile, settings, mode, voting_configs[entry.rule]
+                round1_profile, settings, mode, voting_configs[entry.rule]
             )
             round2_profiles[entry.rule] = round2_csv
         else:
@@ -324,6 +340,23 @@ def simulate_elections(config) -> None:
     with zipfile.ZipFile(zip_path) as archive:
         all_members = archive.namelist()
 
+    # Two-round rules narrow on the primary electorate when the run models one.
+    # Entry names match profiles.zip, so the same member key reads both.
+    primary_zip_path = primary_profiles_zip_path(run_name) if config.get("primary_turnout") else None
+    if primary_zip_path is not None and not primary_zip_path.is_file():
+        raise FileNotFoundError(
+            f"config sets primary_turnout but {primary_zip_path} is missing; "
+            "re-run the profile stage to generate the primary-round profiles."
+        )
+    if primary_zip_path is not None:
+        builtin_two_round = [r for r in ("Alaska", "TopTwo") if r in voting_configs]
+        if builtin_two_round:
+            print(
+                f"[simulate_elections] WARNING: primary_turnout is set, but {builtin_two_round} "
+                "build round 2 by stripping the round-1 ballots and cannot use a separate "
+                "primary electorate. They will run on the standard profiles."
+            )
+
     # Settings-file lookups are only needed by two-round rules; cached by
     # resolved path (not (plan, district)) so every replicate sharing one
     # settings file triggers just one JSON load, amortized across the whole run.
@@ -402,7 +435,13 @@ def simulate_elections(config) -> None:
                 # joblib's pre_dispatch bounds how many decompressed profiles are held
                 # in memory at once. results_list stays index-aligned with
                 # all_profile_files because the generator yields in that order.
-                with zipfile.ZipFile(zip_path) as archive:
+                with ExitStack() as archives:
+                    archive = archives.enter_context(zipfile.ZipFile(zip_path))
+                    primary_archive = (
+                        archives.enter_context(zipfile.ZipFile(primary_zip_path))
+                        if primary_zip_path is not None and needs_settings
+                        else None
+                    )
                     tasks = (
                         delayed(_process_profile)(
                             archive.read(member),
@@ -410,6 +449,7 @@ def simulate_elections(config) -> None:
                             voting_configs,
                             _settings_for_member(member, dc.num_districts) if needs_settings else None,
                             mode if needs_settings else None,
+                            primary_archive.read(member) if primary_archive is not None else None,
                         )
                         for member in all_profile_files
                     )

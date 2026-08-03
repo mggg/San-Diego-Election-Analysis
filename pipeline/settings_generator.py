@@ -158,6 +158,20 @@ def _validate_bloc_config(config, bloc_definitions):
     if missing_turnout:
         raise KeyError(f"turnout is missing entries for bloc(s) {sorted(missing_turnout)}.")
 
+    # primary_turnout is a partial override of turnout for the narrowing round of
+    # two-round rules, so it may name any subset of the blocs -- but naming a bloc
+    # that doesn't exist is a typo that would otherwise pass silently.
+    primary_turnout = config.get("primary_turnout") or {}
+    unknown_primary = set(primary_turnout) - blocs
+    if unknown_primary:
+        raise KeyError(
+            f"primary_turnout has entries for unknown bloc(s) {sorted(unknown_primary)}; "
+            f"expected a subset of {sorted(blocs)}."
+        )
+    bad_rates = {b: r for b, r in primary_turnout.items() if not 0 <= float(r) <= 1}
+    if bad_rates:
+        raise ValueError(f"primary_turnout rates must be between 0 and 1; got {bad_rates}.")
+
     for name in ("cohesion_parameters", "alphas"):
         matrix = config[name]
         missing_rows = blocs - set(matrix)
@@ -380,6 +394,48 @@ def filter_alphas_to_slates(alphas, active_slates):
     return {bloc: {s: row[s] for s in active_slates} for bloc, row in alphas.items()}
 
 
+def _turnout_weighted_proportions(group_vap, turnout, bloc_definitions):
+    """
+    Normalized bloc shares of the modeled electorate: each bloc's turnout times
+    the summed VAP of the demographic groups it aggregates, divided by the total.
+
+    Split out from _build_district_settings so the same district VAP can be run
+    against two turnout maps -- the configured one, and the lower primary_turnout
+    used for the narrowing round of two-round rules.
+
+    Args:
+        group_vap: Dict mapping each demographic group to its combined VAP.
+        turnout: Dict mapping each bloc to its turnout rate.
+        bloc_definitions: Dict mapping each bloc to its demographic groups.
+
+    Returns:
+        Dict of bloc -> proportion, summing to 1. A district with no modeled VAP
+        falls back to equal shares.
+    """
+    blocs = list(bloc_definitions)
+    weighted = {
+        bloc: turnout[bloc] * sum(group_vap[g] for g in bloc_definitions[bloc])
+        for bloc in blocs
+    }
+    denom = sum(weighted.values())
+    if denom <= 0:
+        return {bloc: 1.0 / len(blocs) for bloc in blocs}
+    return {bloc: weighted[bloc] / denom for bloc in blocs}
+
+
+def primary_turnout_map(config):
+    """
+    The turnout map for the narrowing round: the configured turnout with
+    primary_turnout's entries laid over it, so a config need only name the blocs
+    whose participation drops. None when the run doesn't model a separate
+    primary electorate.
+    """
+    primary = config.get("primary_turnout")
+    if not primary:
+        return None
+    return {**config["turnout"], **primary}
+
+
 def _build_district_settings(row, config, group_columns, bloc_definitions):
     """
     Compute turnout-adjusted bloc proportions and population values for a district.
@@ -403,10 +459,9 @@ def _build_district_settings(row, config, group_columns, bloc_definitions):
     Returns:
         Dict containing bloc_proportions (one entry per bloc), the combined VAP
         behind each demographic group, and the raw column counts those came from.
+        When the config sets primary_turnout, also primary_bloc_proportions --
+        the same districts under the narrowing round's lower turnout.
     """
-    turnout = config['turnout']
-    blocs = list(bloc_definitions)
-
     # A group's VAP is the sum over its columns, so a multi-column group like
     # BAIO (Black + American Indian + other) is combined before anything else
     # uses it.
@@ -415,20 +470,19 @@ def _build_district_settings(row, config, group_columns, bloc_definitions):
         for group, columns in group_columns.items()
     }
 
-    # Turnout-weighted VAP per bloc (sum over the bloc's demographic groups),
-    # then normalize across the blocs.
-    weighted = {
-        bloc: turnout[bloc] * sum(group_vap[g] for g in bloc_definitions[bloc])
-        for bloc in blocs
+    settings = {
+        "bloc_proportions": _turnout_weighted_proportions(
+            group_vap, config["turnout"], bloc_definitions
+        )
     }
-    denom = sum(weighted.values())
-    if denom > 0:
-        bloc_proportions = {bloc: weighted[bloc] / denom for bloc in blocs}
-    else:
-        # District with no modeled VAP: fall back to equal shares.
-        bloc_proportions = {bloc: 1.0 / len(blocs) for bloc in blocs}
 
-    settings = {"bloc_proportions": bloc_proportions}
+    # Second electorate for the narrowing round of two-round rules. Written only
+    # when the run models one; everything downstream keys off its presence.
+    primary_turnout = primary_turnout_map(config)
+    if primary_turnout is not None:
+        settings["primary_bloc_proportions"] = _turnout_weighted_proportions(
+            group_vap, primary_turnout, bloc_definitions
+        )
     # Record what fed the proportions: the combined VAP per group, and the raw
     # columns behind it so a multi-column group stays auditable.
     settings["group_vap"] = group_vap

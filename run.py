@@ -28,6 +28,9 @@ from pipeline.utils.helpers import (
     find_cached_district_output,
     get_voter_models,
     load_run_config,
+    primary_profiles_metadata_path,
+    primary_profiles_signature,
+    primary_profiles_zip_path,
     profiles_signature,
 )
 from setup import setup_config
@@ -203,6 +206,64 @@ def has_valid_profiles(config):
                     f"(found {count}, expected {expected}). Running pipeline from profiles stage."
                 )
                 return False
+
+    # Count csvs, not raw entries, so the two archives are compared on the same
+    # basis (primary_profiles.zip holds profiles only -- no matrices).
+    return has_valid_primary_profiles(
+        config, expected_members=sum(1 for m in members if m.endswith(".csv"))
+    )
+
+
+def has_valid_primary_profiles(config, expected_members=None):
+    """
+    Whether the primary-round profile archive is present and current.
+
+    Trivially true for a run that doesn't set "primary_turnout" -- no archive is
+    generated in that case. Otherwise the archive must exist, carry a matching
+    signature, and hold one entry per standard profile, since two-round rules
+    read it member-for-member alongside profiles.zip.
+    """
+    if not config.get("primary_turnout"):
+        return True
+
+    run = config["run_name"]
+    zip_path = primary_profiles_zip_path(run)
+    if not zip_path.is_file():
+        print("Primary-round profiles do not exist. Running pipeline from profiles stage.")
+        return False
+
+    meta_path = primary_profiles_metadata_path(run)
+    if not meta_path.is_file():
+        print("Primary-round profiles metadata missing. Running pipeline from profiles stage.")
+        return False
+    try:
+        with open(meta_path, encoding="utf-8") as f:
+            prior_signature = json.load(f).get("signature")
+    except (json.JSONDecodeError, OSError):
+        prior_signature = None
+    if prior_signature != primary_profiles_signature(config):
+        print("Primary turnout changed. Running pipeline from profiles stage.")
+        return False
+
+    try:
+        with zipfile.ZipFile(zip_path) as archive:
+            if archive.testzip() is not None:
+                print(
+                    "Primary-round profiles archive has a corrupted entry. "
+                    "Running pipeline from profiles stage."
+                )
+                return False
+            count = sum(1 for m in archive.namelist() if m.endswith(".csv"))
+    except (zipfile.BadZipFile, OSError, zlib.error, EOFError) as e:
+        print(f"Primary-round profiles archive is unreadable ({e}). Running pipeline from profiles stage.")
+        return False
+
+    if expected_members is not None and count != expected_members:
+        print(
+            f"Primary-round profiles are incomplete (found {count}, expected {expected_members}). "
+            "Running pipeline from profiles stage."
+        )
+        return False
     return True
 
 def has_valid_election_results(config):

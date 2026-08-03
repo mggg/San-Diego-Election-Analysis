@@ -220,6 +220,33 @@ def profiles_signature(config) -> str:
     return config_signature(config, PROFILE_SIGNATURE_KEYS)
 
 
+def primary_profiles_zip_path(run_name: str) -> Path:
+    """
+    Archive of primary-round profiles: the same districts, modes, and replicates
+    as profiles.zip, under the same entry names, but sampled from the lower
+    primary_turnout electorate. Kept here so the writer (profile_generator), the
+    reader (simulate_elections), and the stage check (run.py) can't drift.
+    """
+    return Path("outputs") / run_name / "primary_profiles.zip"
+
+
+def primary_profiles_metadata_path(run_name: str) -> Path:
+    """Sidecar recording the signature primary_profiles.zip was generated under."""
+    return Path("outputs") / run_name / "primary_profiles_metadata.json"
+
+
+def primary_profiles_signature(config) -> str:
+    """
+    Signature for the primary-round profile archive: everything that determines
+    profile content, plus the primary_turnout override that sets its electorate.
+
+    Deliberately separate from profiles_signature -- primary_turnout changes only
+    the primary archive, so folding it into the main signature would invalidate
+    every standard profile for no reason.
+    """
+    return config_signature(config, PROFILE_SIGNATURE_KEYS + ["primary_turnout"])
+
+
 # Config keys that determine the *content* of the districting Markov chain.
 # run_name and every other key (num_reps, voting_configs, blocs, ...) only
 # affect downstream stages, so two configs that agree on these keys produce
@@ -293,9 +320,13 @@ def election_results_signature(config) -> str:
 
     Changing a voting rule (or its parameters) makes existing results stale even
     when the underlying profiles are unchanged, so voting_configs is folded in on
-    top of the profile signature.
+    top of the profile signature. primary_turnout joins them: it leaves the
+    standard profiles alone but changes the ballots two-round rules narrow on,
+    and so changes their winners.
     """
-    return config_signature(config, PROFILE_SIGNATURE_KEYS + ["voting_configs"])
+    return config_signature(
+        config, PROFILE_SIGNATURE_KEYS + ["voting_configs", "primary_turnout"]
+    )
 
 
 def get_non_focal_group(config):

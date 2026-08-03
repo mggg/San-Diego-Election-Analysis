@@ -86,6 +86,75 @@ SUBTITLE_SIZE = 8
 # Every seat axis is the same quantity, so it gets the same name everywhere.
 SEAT_AXIS_LABEL = "Seats won"
 
+# Readable names for the election methods. Keys are the uppercased method names
+# the summary table carries (VoteKit class names, so "FASTSTV" for the fast STV
+# implementation); values are how a reader should see them. Anything missing
+# falls back to a title-cased version of the raw name.
+RULE_DISPLAY_NAMES = {
+    "STV": "STV",
+    "FASTSTV": "STV",
+    "IRV": "IRV",
+    "PLURALITY": "Plurality",
+    "ALASKA": "Alaska",
+    "TOPTWO": "Top Two",
+    "ALASKATWOPROFILE": "Alaska (two-profile)",
+    "TOPTWOTWOPROFILE": "Top Two (two-profile)",
+    "PSMD": "PSMD",
+}
+
+
+def _rule_display_name(method: str) -> str:
+    """Readable name for one election method, e.g. FASTSTV -> "STV"."""
+    return RULE_DISPLAY_NAMES.get(str(method).upper(), str(method).title())
+
+
+def _method_label(method: str, num_districts, seats_per_district) -> str:
+    """
+    How an election system is named in every figure: the districting shape it was
+    run under, then the rule -- "3 X 3 STV", "9 X 1 IRV". The shape is part of the
+    name because the same rule under a different magnitude is a different system
+    as far as these results are concerned.
+    """
+    return f"{num_districts} X {seats_per_district} {_rule_display_name(method)}"
+
+
+def _figure_subtitle(run_name: str, system_label: str, n_run_systems: int) -> Optional[str]:
+    """
+    The italic line under a figure's title: the election system it shows, not the
+    run name.
+
+    A run that simulated several systems (the alternative-systems config) names
+    them on the panels instead, so a figure spanning all of them gets no
+    subtitle. The run name comes back only as a scenario tag after a dash, and
+    only when the system alone would not identify the figure -- a single-system
+    run whose name is not just its system ("Low AAPI Turnout" -> "3 X 3 STV -
+    Low AAPI Turnout", while "Basic - 3 X 3 STV" -> "3 X 3 STV").
+    """
+    scenario = ""
+    if n_run_systems == 1 and system_label and system_label.lower() not in run_name.lower():
+        scenario = run_name
+
+    if system_label and scenario:
+        return f"{system_label} - {scenario}"
+    return system_label or scenario or None
+
+
+def _method_labels_from_summary(df: pd.DataFrame) -> Dict[str, str]:
+    """
+    {raw method -> display label} for a summary table, reading each method's
+    districting shape off its own rows. A method that somehow spans several
+    shapes falls back to the bare rule name rather than claiming one of them.
+    """
+    labels = {}
+    for method, sub in df.groupby("election_method"):
+        shapes = sub[["num_districts", "seats_per_district"]].drop_duplicates()
+        if len(shapes) == 1:
+            num_dist, seats = shapes.iloc[0]
+            labels[str(method)] = _method_label(method, num_dist, seats)
+        else:
+            labels[str(method)] = _rule_display_name(method)
+    return labels
+
 # Vertical space reserved at the top for the title block and at the bottom for the
 # shared legend. Held in INCHES rather than axes fractions: a 3.5" bubble row and
 # an 11" cross-run stack then get the same visual gap instead of the tall figure
@@ -250,11 +319,23 @@ def _draw_mode_histograms(ax, group_distn: pd.DataFrame, seat_col: str = "focal_
     return max_bin_height
 
 
-def _style_method_axis(ax, method: str, ylim: float, x_upper: int) -> None:
+def _max_mode_bin_height(group_distn: pd.DataFrame, seat_col: str = "focal_seats") -> float:
+    """
+    Tallest bar the grouped histogram of this slice would draw, without drawing
+    it -- one bar is one (mode, seat count) cell. Lets a caller settle a shared
+    y limit across several figures before any of them is rendered.
+    """
+    if group_distn.empty:
+        return 0
+    return float(group_distn.groupby("mode")[seat_col].value_counts().max())
+
+
+def _style_method_axis(ax, method_label: Optional[str], ylim: float, x_upper: int) -> None:
     """
     Apply spines, limits, ticks, and labels to one election-method panel of the
-    by-mode figure. The panel title is the voting rule; the figure-level title
-    and run name are drawn once by the caller.
+    by-mode figure. The panel title is the readable system name (see
+    _method_label), or nothing when method_label is None -- a single-panel figure
+    names its system in the subtitle instead of labelling it twice.
     """
     for spine in ax.spines.values():
         spine.set_linewidth(0.5)
@@ -265,7 +346,8 @@ def _style_method_axis(ax, method: str, ylim: float, x_upper: int) -> None:
     ax.set_xticks(range(0, x_upper + 1, X_TICK_STEP))
     ax.set_xticklabels([str(x) for x in range(0, x_upper + 1, X_TICK_STEP)])
     ax.set_xlabel(SEAT_AXIS_LABEL, fontsize=AXIS_LABEL_SIZE)
-    ax.set_title(method, fontsize=PANEL_TITLE_SIZE)
+    if method_label:
+        ax.set_title(method_label, fontsize=PANEL_TITLE_SIZE)
     ax.tick_params(axis="both", which="major", labelsize=TICK_SIZE)
 
 
@@ -400,7 +482,13 @@ def _plot_slate_panel(
     # The mode legend is the only figure-level one, and it sits in the reserved
     # bottom band like every other figure's.
     handles, labels = _ordered_mode_handles(flat[0])
-    _layout_title_and_legend_bands(fig, "Election outcomes by slate", run_name)
+    # One file per election method, so the subtitle names the system (plus the
+    # scenario, where the system alone would not identify the run).
+    n_systems = int(group_distn["election_method"].nunique())
+    subtitle = _figure_subtitle(
+        run_name, _method_label(elm, num_dist, seats_per_district), n_systems
+    )
+    _layout_title_and_legend_bands(fig, "Election outcomes by slate", subtitle)
     _bottom_legend(fig, handles, labels, ncol=max(1, len(handles)))
 
     fig_path = _method_figs_dir(figs_dir, elm) / f"{run_name}_{num_dist}x{seats_per_district}_byslate.png"
@@ -425,27 +513,30 @@ def plot_slate_representation_panels(
         )
 
 
-def _plot_method_histogram_panel(
+def _render_method_histograms(
     df_plan: pd.DataFrame,
-    num_dist,
-    seats_per_district,
+    methods: List[str],
     config,
     focal_group: str,
     iprop: Optional[float],
-    figs_dir: Path,
-    run_name: str,
+    subtitle: Optional[str],
+    fig_path: Path,
+    ylim: float,
+    x_upper: int,
+    method_labels: Dict[str, str],
 ) -> None:
     """
-    Create and save one paneled by-mode figure: a grid of seat-distribution
-    histograms, one panel per election method (voting rule), laid out like the
-    bubble figures -- a single row up to MAX_PANEL_COLS rules, wrapped beyond
-    that. Panels share x and y limits so the rules are read by direct comparison,
-    and the figure carries one title, one run-name subtitle, and one legend.
-    """
-    methods = sorted(df_plan["election_method"].unique())
-    if not methods:
-        return
+    Draw and save a by-mode histogram figure covering `methods`: a grid with one
+    panel per voting rule (a single row up to MAX_PANEL_COLS, wrapped beyond
+    that), one title, one subtitle, and one legend. Panels are titled from
+    method_labels, so readers see "9 X 1 IRV" rather than the raw key -- except
+    on a single-panel figure, where the subtitle already names the system.
 
+    ylim and x_upper are passed in rather than derived from `methods`, so a
+    single-rule figure is drawn on exactly the axes its panel has in the combined
+    figure -- the standalone files stay comparable with each other and with the
+    panel instead of each rescaling to its own data.
+    """
     nrows, ncols = _panel_grid(len(methods))
     fig, axes_grid = plt.subplots(
         nrows, ncols, figsize=(PANEL_W_IN * ncols, PANEL_H_IN * nrows),
@@ -453,27 +544,13 @@ def _plot_method_histogram_panel(
     )
     axes = [ax for row in axes_grid for ax in row]
 
-    total_seats = config["total_seats"]
-    max_seat = max(
-        df_plan["focal_seats"].max(),
-        iprop * total_seats if iprop is not None else 0,
-    )
-    x_upper = _seat_axis_upper(max_seat, total_seats)
-
-    # Draw every panel first, then apply the tallest bar across the whole row as a
-    # shared y limit -- with sharey the panels must agree anyway, and a common
-    # scale is what makes the voting rules comparable.
-    bin_heights = [
-        _draw_mode_histograms(ax, df_plan[df_plan["election_method"] == method])
-        for ax, method in zip(axes, methods)
-    ]
-    max_bin_height = max(bin_heights, default=0)
-    ylim = max_bin_height * 1.2 if max_bin_height > 0 else 1
-
     ref_handles: List[Any] = []
     ref_labels: List[str] = []
+    single_panel = len(methods) == 1
     for ax, method in zip(axes, methods):
-        _style_method_axis(ax, method, ylim, x_upper)
+        _draw_mode_histograms(ax, df_plan[df_plan["election_method"] == method])
+        panel_title = None if single_panel else method_labels.get(method, method)
+        _style_method_axis(ax, panel_title, ylim, x_upper)
         ref_handles, ref_labels = _draw_reference_lines(ax, config, iprop)
 
     # Blank out any cells the wrap leaves over in the last row.
@@ -488,13 +565,73 @@ def _plot_method_histogram_panel(
     _layout_title_and_legend_bands(
         fig,
         f"Election outcomes for {_group_label(focal_group)}-preferred candidates",
-        run_name,
+        subtitle,
     )
     _build_mode_legend(fig, axes[0], ref_handles, ref_labels)
 
-    fig_path = figs_dir / f"{run_name}_{num_dist}x{seats_per_district}_bymode.png"
     fig.savefig(fig_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
+
+
+def _plot_method_histogram_panel(
+    df_plan: pd.DataFrame,
+    num_dist,
+    seats_per_district,
+    config,
+    focal_group: str,
+    iprop: Optional[float],
+    figs_dir: Path,
+    run_name: str,
+) -> None:
+    """
+    Write the focal group's by-mode histograms for one districting config: the
+    combined panel spanning every voting rule at the run's figure root, plus a
+    standalone single-rule figure under each rule's folder.
+
+    The per-rule files are skipped when the run only has one rule, since the
+    combined panel is already that figure.
+    """
+    methods = sorted(df_plan["election_method"].unique())
+    if not methods:
+        return
+
+    total_seats = config["total_seats"]
+    max_seat = max(
+        df_plan["focal_seats"].max(),
+        iprop * total_seats if iprop is not None else 0,
+    )
+    x_upper = _seat_axis_upper(max_seat, total_seats)
+
+    # Tallest bar across every rule sets one shared count axis, which is what
+    # makes the rules comparable panel-to-panel and file-to-file.
+    max_bin_height = max(
+        (
+            _max_mode_bin_height(df_plan[df_plan["election_method"] == method])
+            for method in methods
+        ),
+        default=0,
+    )
+    ylim = max_bin_height * 1.2 if max_bin_height > 0 else 1
+
+    method_labels = {m: _method_label(m, num_dist, seats_per_district) for m in methods}
+    # A figure spanning several systems names them on its panels, so it carries
+    # no system in the subtitle; a single-system figure carries it there.
+    combined_system = method_labels[methods[0]] if len(methods) == 1 else ""
+
+    stem = f"{run_name}_{num_dist}x{seats_per_district}_bymode.png"
+    _render_method_histograms(
+        df_plan, methods, config, focal_group, iprop,
+        _figure_subtitle(run_name, combined_system, len(methods)),
+        figs_dir / stem, ylim, x_upper, method_labels,
+    )
+
+    if len(methods) > 1:
+        for method in methods:
+            _render_method_histograms(
+                df_plan, [method], config, focal_group, iprop,
+                _figure_subtitle(run_name, method_labels[method], len(methods)),
+                _method_figs_dir(figs_dir, method) / stem, ylim, x_upper, method_labels,
+            )
 
 
 def aggregate_to_plan_level(df: pd.DataFrame) -> pd.DataFrame:
@@ -785,12 +922,66 @@ def _draw_method_bubbles(ax, method_counts, modes_in_order, size_scale, iprop, c
         spine.set_linewidth(0.5)
 
 
+def _render_method_bubbles_figure(
+    counts, methods, modes_in_order, size_scale, iprop, config, x_upper, subtitle, fig_path,
+    method_labels,
+):
+    """
+    Draw and save a bubble figure covering `methods`: focal seats on x, voter
+    modes on y, bubble area encoding how many plans produced that focal-seat
+    count under that mode, with the proportional-representation line overlaid.
+
+    size_scale and x_upper come from the caller so a standalone single-rule
+    figure keeps the run's bubble scale and seat axis, and can be compared with
+    the other rules' files directly. Panels are titled from method_labels, so
+    readers see "9 X 1 IRV" rather than the raw key -- except on a single-panel
+    figure, where the subtitle already names the system.
+    """
+    nrows, ncols = _panel_grid(len(methods))
+    fig, axes_grid = plt.subplots(
+        nrows, ncols, figsize=(PANEL_W_IN * ncols, PANEL_H_IN * nrows),
+        sharey=True, squeeze=False,
+    )
+    axes = [ax for row in axes_grid for ax in row]
+
+    single_panel = len(methods) == 1
+    for ax, method in zip(axes, methods):
+        _draw_method_bubbles(
+            ax, counts[counts["election_method"] == method], modes_in_order,
+            size_scale, iprop, config, x_upper,
+        )
+        if not single_panel:
+            ax.set_title(method_labels.get(method, method), fontsize=PANEL_TITLE_SIZE)
+        ax.set_xlabel(SEAT_AXIS_LABEL, fontsize=AXIS_LABEL_SIZE)
+
+    # Blank out any cells the wrap leaves over in the last row.
+    for ax in axes[len(methods):]:
+        ax.axis("off")
+
+    _layout_title_and_legend_bands(
+        fig,
+        f"Election outcomes for {_group_label(config['focal_group'])}-preferred candidates",
+        subtitle,
+    )
+    # The modes are named on the y-axis, so the only legend entry is the
+    # reference line -- and it goes in the bottom band with everything else's,
+    # not floating over the panel titles.
+    prop_label = _prop_line_label(_group_label(config["focal_group"]), iprop, config["total_seats"])
+    prop_handle = Line2D([0], [0], color=PROP_LINE_COLOR, linestyle=":", linewidth=1.2, label=prop_label)
+    _bottom_legend(fig, [prop_handle], [prop_label], ncol=1)
+
+    fig.savefig(fig_path, dpi=300, bbox_inches="tight")
+    plt.close(fig)
+
+
 def _plot_bubbles_for_config(df_plan, config, iprop, figs_dir, run_name, num_dist, seats_per_district):
     """
-    Single figure with one bubble subplot per election method. Focal seats on x,
-    voter modes on y; bubble area encodes how many plans produced that focal-seat
-    count under that mode. A dotted line marks the focal group's
-    proportional-representation seat share; subplots share the y-axis.
+    Write the focal group's bubble figures for one districting config: the
+    combined figure spanning every voting rule at the run's figure root, plus a
+    standalone single-rule figure under each rule's folder.
+
+    The per-rule files are skipped when the run only has one rule, since the
+    combined figure is already that figure.
     """
     counts = _occurrence_counts(df_plan)
     if counts.empty:
@@ -805,44 +996,29 @@ def _plot_bubbles_for_config(df_plan, config, iprop, figs_dir, run_name, num_dis
     max_count = int(per_model_counts.max()) if not per_model_counts.empty else 0
     size_scale = (BUBBLE_MAX_AREA - BUBBLE_MIN_AREA) / max_count if max_count > 0 else 0
 
-    nrows, ncols = _panel_grid(len(methods))
-    fig, axes_grid = plt.subplots(
-        nrows, ncols, figsize=(PANEL_W_IN * ncols, PANEL_H_IN * nrows),
-        sharey=True, squeeze=False,
-    )
-    axes = [ax for row in axes_grid for ax in row]
-
     total_seats = config["total_seats"]
     seat_max = max(counts["focal_seats"].max(), iprop * total_seats)
     x_upper = _seat_axis_upper(seat_max, total_seats)
 
-    for ax, method in zip(axes, methods):
-        _draw_method_bubbles(
-            ax, counts[counts["election_method"] == method], modes_in_order,
-            size_scale, iprop, config, x_upper,
-        )
-        ax.set_title(method, fontsize=PANEL_TITLE_SIZE)
-        ax.set_xlabel(SEAT_AXIS_LABEL, fontsize=AXIS_LABEL_SIZE)
+    method_labels = {m: _method_label(m, num_dist, seats_per_district) for m in methods}
+    combined_system = method_labels[methods[0]] if len(methods) == 1 else ""
 
-    # Blank out any cells the wrap leaves over in the last row.
-    for ax in axes[len(methods):]:
-        ax.axis("off")
-
-    _layout_title_and_legend_bands(
-        fig,
-        f"Election outcomes for {_group_label(config['focal_group'])}-preferred candidates",
-        run_name,
+    _render_method_bubbles_figure(
+        counts, methods, modes_in_order, size_scale, iprop, config, x_upper,
+        _figure_subtitle(run_name, combined_system, len(methods)),
+        figs_dir / f"{run_name}_{num_dist}x{seats_per_district}_bubbles_by_method.png",
+        method_labels,
     )
-    # The modes are named on the y-axis, so the only legend entry is the
-    # reference line -- and it goes in the bottom band with everything else's,
-    # not floating over the panel titles.
-    prop_label = _prop_line_label(_group_label(config["focal_group"]), iprop, config["total_seats"])
-    prop_handle = Line2D([0], [0], color=PROP_LINE_COLOR, linestyle=":", linewidth=1.2, label=prop_label)
-    _bottom_legend(fig, [prop_handle], [prop_label], ncol=1)
 
-    fig_path = figs_dir / f"{run_name}_{num_dist}x{seats_per_district}_bubbles_by_method.png"
-    fig.savefig(fig_path, dpi=300, bbox_inches="tight")
-    plt.close(fig)
+    if len(methods) > 1:
+        for method in methods:
+            _render_method_bubbles_figure(
+                counts, [method], modes_in_order, size_scale, iprop, config, x_upper,
+                _figure_subtitle(run_name, method_labels[method], len(methods)),
+                _method_figs_dir(figs_dir, method)
+                / f"{run_name}_{num_dist}x{seats_per_district}_bubbles.png",
+                method_labels,
+            )
 
 
 def plot_representation_bubbles(df_plan, config, focal_group, iprop, figs_dir, run_name):
@@ -861,27 +1037,54 @@ def plot_representation_bubbles(df_plan, config, focal_group, iprop, figs_dir, r
 # --- Cross-run summaries ------------------------------------------------------
 
 
-def _per_mode_distribution_for_run(summary_csv: Path) -> Optional[pd.DataFrame]:
+def _per_mode_distributions_for_run(summary_csv: Path) -> List[Tuple[str, pd.DataFrame]]:
     """
-    Read one run's summary CSV and return its per-mode focal-seat distribution
-    (columns [mode, focal_seats, count], incl. the pooled COMBINED_MODE row),
-    collapsing across election methods and district configs. None if empty.
+    Read one run's summary CSV and return its per-mode focal-seat distributions
+    (each a frame of [mode, focal_seats, count], incl. the pooled COMBINED_MODE
+    row), collapsed across district configs.
+
+    A run that simulated several voting rules yields one entry per rule, each
+    tagged with a " - <RULE>" label suffix, so a multi-rule run like the
+    alternative-systems config is compared rule by rule in the cross-run figure
+    rather than pooled into a single panel that hides the differences between
+    them. A single-rule run yields one entry with an empty suffix.
+
+    Returns an empty list if the CSV has nothing to plot.
     """
     df = pd.read_csv(summary_csv)
     if df.empty:
-        return None
+        return []
     counts = _occurrence_counts(aggregate_to_plan_level(df))
     if counts.empty:
-        return None
-    return counts.groupby(["mode", "focal_seats"], as_index=False)["count"].sum()
+        return []
+
+    methods = sorted(counts["election_method"].unique())
+    if len(methods) <= 1:
+        pooled = counts.groupby(["mode", "focal_seats"], as_index=False)["count"].sum()
+        return [("", pooled)]
+
+    labels = _method_labels_from_summary(df)
+    return [
+        (
+            f" - {labels.get(method, _rule_display_name(method))}",
+            counts[counts["election_method"] == method]
+            .groupby(["mode", "focal_seats"], as_index=False)["count"]
+            .sum(),
+        )
+        for method in methods
+    ]
 
 
 def plot_combined_bubbles_all_runs(config, output_dir=None, exclude_runs=None) -> Optional[Path]:
     """
-    Compare every completed run in one stacked bubble figure: each run is a
-    subplot (one y-row per voter mode plus a pooled "Combined" row), bubble area
-    encodes how many plans produced each focal-seat count, and a dotted line marks
-    the focal group's proportional-representation seat share.
+    Compare every completed run in one stacked bubble figure: each panel is a run
+    (one y-row per voter mode plus a pooled "Combined" row), bubble area encodes
+    how many plans produced each focal-seat count, and a dotted line marks the
+    focal group's proportional-representation seat share.
+
+    Runs that simulated several voting rules contribute one panel per rule,
+    labelled "<run> - <RULE>", so the rules are compared against each other and
+    against the other runs on one shared seat axis.
 
     Scans outputs/*/summaries/*_summary.csv for finished runs.
 
@@ -904,15 +1107,17 @@ def plot_combined_bubbles_all_runs(config, output_dir=None, exclude_runs=None) -
         if any(ex in label.lower() for ex in exclude_lower):
             print(f"[summarize_results] Excluding run from cross-run bubble plot: {label}")
             continue
-        per_mode = _per_mode_distribution_for_run(path)
-        if per_mode is not None:
-            runs.append((label, per_mode))
+        # One panel per voting rule for multi-rule runs, one for the run otherwise.
+        for suffix, per_mode in _per_mode_distributions_for_run(path):
+            runs.append((label + suffix, per_mode))
 
     if not runs:
         print("[summarize_results] No completed runs found for cross-run bubble plot.")
         return None
 
-    # "basic"-prefixed runs first, then alphabetical, for a stable panel order.
+    # "basic"-prefixed runs first, then alphabetical. Because a split run's panels
+    # all share the run name as their label prefix, this also keeps each run's
+    # rules together and in rule order.
     runs.sort(key=lambda r: (not r[0].lower().startswith("basic"), r[0]))
 
     iprop = _focal_population_share(config, gpd.read_file(Path(config["geodata_path"])))
@@ -928,9 +1133,15 @@ def plot_combined_bubbles_all_runs(config, output_dir=None, exclude_runs=None) -
     x_upper = _seat_axis_upper(max(observed_max_seats, i_share), total_seats)
     x_ticks = range(0, x_upper + 1, X_TICK_STEP)
 
+    # One column, always: the whole point of this figure is that every panel's
+    # seat axis lines up vertically. Panels get shorter once a split run pushes
+    # the count up, so the stack stays a readable shape instead of running to two
+    # feet of canvas.
     n_runs = len(runs)
+    panel_h = 2.2 if n_runs <= 6 else 1.7
     fig, axes = plt.subplots(
-        n_runs, 1, figsize=(10, max(2.2 * n_runs, 2.5)), gridspec_kw={"hspace": 0.8}, squeeze=False
+        n_runs, 1, figsize=(10, max(panel_h * n_runs, 2.5)),
+        gridspec_kw={"hspace": 0.8 if n_runs <= 6 else 0.6}, squeeze=False,
     )
     axes = [a[0] for a in axes]
 

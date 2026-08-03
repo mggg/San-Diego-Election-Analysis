@@ -68,6 +68,12 @@
     "HIS": 0.75,
     "WHI": 1
   },
+  "primary_turnout": {
+    "AAPI": 0.5,
+    "BAIO": 0.75,
+    "HIS": 0.5,
+    "WHI": 1
+  },
   "num_voters": 10000,
   "slate_to_candidates": {
     "WHI": [

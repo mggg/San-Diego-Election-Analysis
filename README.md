@@ -147,6 +147,36 @@ The interactive setup prompts only for run-specific parameters:
 | Candidate strength parameters                     | positive float | Shape parameters of the Dirichlet distribution that control how voters within a group distribute their preferences across candidate slates. α = 0 models perfect consensus among voters, α = 1 neutral preferences, and α → ∞ indifference. |
 | Turnout                                           | float (0-1)  | Turnout rate for each voter bloc                                                        |
 
+### Two-round elections and `primary_turnout`
+
+A `voting_configs` entry that names a `round2_class` is a **two-round rule**:
+round 1 narrows the field by Plurality, then a freshly-sampled profile restricted
+to the finalists decides round 2 (see `pipeline/two_round_election.py`).
+
+By default both rounds draw on the same electorate — the one `turnout` describes.
+Add an optional top-level `primary_turnout` block to model a narrowing round with
+lower participation, as a primary typically has:
+
+```json
+"turnout":         { "AAPI": 0.75, "HIS": 0.75, "WHI": 1, "BAIO": 1 },
+"primary_turnout": { "AAPI": 0.4,  "HIS": 0.4 }
+```
+
+It is a **partial override**: blocs left out keep their `turnout` rate, so only
+the ones whose participation drops need naming. It applies to round 1 of every
+two-round rule; round 2 and every single-round rule keep using `turnout`
+unchanged. VoteKit's built-in `Alaska` and `TopTwo` build round 2 by stripping
+their round-1 ballots rather than resampling, so they cannot use a separate
+primary electorate — use `AlaskaTwoProfile` / `TopTwoTwoProfile` instead, and the
+simulation stage warns if the built-ins are configured alongside
+`primary_turnout`.
+
+Setting it makes the profile stage generate a second archive,
+`outputs/<run_name>/primary_profiles.zip`, holding one primary-round profile per
+entry in `profiles.zip`. That roughly doubles profile-generation time for the
+run: a different electorate means different ballots, and ballots cannot be
+reweighted after sampling.
+
 
 Two parameters are currently being set to a default value:
 

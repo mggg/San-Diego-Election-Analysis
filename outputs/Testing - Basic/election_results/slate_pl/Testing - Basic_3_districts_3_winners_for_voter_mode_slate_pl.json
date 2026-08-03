@@ -1,0 +1,1211 @@
+{
+  "run_name": "Testing - Basic",
+  "voter_mode": "slate_pl",
+  "district_num": 3,
+  "winners_per_district": 3,
+  "signature": "1f253c7feddc3e28",
+  "profile_files": [
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_030_district_00_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_090_district_02_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_060_district_01_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_050_district_01_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_060_district_00_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_000_district_00_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_050_district_00_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_020_district_01_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_040_district_01_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_000_district_01_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_040_district_00_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_070_district_00_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_020_district_00_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_030_district_01_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_010_district_00_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_070_district_01_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_080_district_02_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_080_district_01_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_010_district_01_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_010_district_02_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_090_district_00_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_040_district_02_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_090_district_01_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_060_district_02_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_070_district_02_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_030_district_02_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_000_district_02_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_020_district_02_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_080_district_00_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_050_district_02_v0.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_030_district_00_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_020_district_01_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_070_district_01_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_050_district_01_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_050_district_00_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_090_district_02_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_000_district_01_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_060_district_01_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_000_district_00_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_040_district_01_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_070_district_00_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_060_district_00_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_040_district_00_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_030_district_01_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_020_district_00_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_010_district_00_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_080_district_01_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_000_district_02_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_010_district_01_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_080_district_00_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_010_district_02_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_090_district_01_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_040_district_02_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_080_district_02_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_060_district_02_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_050_district_02_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_020_district_02_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_030_district_02_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_070_district_02_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_090_district_00_v1.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_070_district_00_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_020_district_01_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_040_district_00_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_060_district_01_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_070_district_01_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_050_district_01_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_000_district_01_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_030_district_01_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_060_district_00_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_000_district_00_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_050_district_00_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_040_district_01_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_030_district_00_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_090_district_02_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_010_district_00_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_020_district_00_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_080_district_02_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_080_district_01_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_010_district_02_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_010_district_01_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_090_district_00_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_040_district_02_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_000_district_02_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_060_district_02_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_080_district_00_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_050_district_02_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_090_district_01_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_030_district_02_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_020_district_02_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_070_district_02_v2.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_020_district_01_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_050_district_01_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_070_district_01_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_060_district_01_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_040_district_00_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_030_district_01_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_050_district_00_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_000_district_01_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_000_district_00_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_060_district_00_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_090_district_02_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_030_district_00_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_010_district_00_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_070_district_00_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_040_district_01_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_020_district_00_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_080_district_02_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_080_district_01_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_010_district_02_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_090_district_00_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_080_district_00_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_090_district_01_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_010_district_01_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_000_district_02_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_050_district_02_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_040_district_02_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_060_district_02_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_070_district_02_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_030_district_02_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_020_district_02_v3.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_050_district_01_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_060_district_01_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_020_district_01_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_000_district_01_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_050_district_00_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_090_district_02_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_000_district_00_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_030_district_00_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_070_district_00_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_040_district_00_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_040_district_01_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_070_district_01_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_020_district_00_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_030_district_01_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_010_district_00_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_060_district_00_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_080_district_02_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_080_district_01_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_010_district_01_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_090_district_01_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_090_district_00_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_010_district_02_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_040_district_02_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_060_district_02_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_070_district_02_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_020_district_02_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_030_district_02_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_050_district_02_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_000_district_02_v4.csv",
+    "slate_pl/3/Testing - Basic_3_profile_district_plan_080_district_00_v4.csv"
+  ],
+  "election_results": [
+    {
+      "FastSTV": [
+        "WHI2",
+        "AAPI1",
+        "WHI4"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI1",
+        "WHI3",
+        "HIS1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS3",
+        "HIS1",
+        "WHI3"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS3",
+        "WHI1",
+        "HIS2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "WHI2",
+        "WHI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS3",
+        "AAPI2",
+        "WHI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI4",
+        "WHI3",
+        "AAPI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "WHI4",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "HIS3",
+        "WHI3"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "WHI3",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "WHI4",
+        "AAPI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI4",
+        "AAPI2",
+        "WHI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "HIS2",
+        "WHI4"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "HIS2",
+        "AAPI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS2",
+        "WHI2",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI4",
+        "WHI2",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS3",
+        "WHI4",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "AAPI1",
+        "WHI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "HIS3",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "AAPI1",
+        "WHI4"
+      ]
+    },
+    {
+      "FastSTV": [
+        "AAPI1",
+        "WHI3",
+        "WHI4"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "HIS2",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "HIS3",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "AAPI2",
+        "WHI4",
+        "WHI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS1",
+        "WHI4",
+        "HIS2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS1",
+        "WHI4",
+        "WHI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI4",
+        "HIS1",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "AAPI1",
+        "HIS1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "WHI3",
+        "HIS2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "WHI1",
+        "WHI4"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "AAPI1",
+        "WHI3"
+      ]
+    },
+    {
+      "FastSTV": [
+        "AAPI1",
+        "WHI2",
+        "WHI4"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "WHI4",
+        "AAPI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS1",
+        "WHI1",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "WHI4",
+        "AAPI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI1",
+        "WHI3",
+        "HIS3"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "AAPI1",
+        "WHI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "HIS3",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS3",
+        "WHI1",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI4",
+        "HIS3",
+        "AAPI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "AAPI2",
+        "WHI4"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "WHI4",
+        "WHI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI4",
+        "AAPI2",
+        "WHI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "AAPI1",
+        "HIS2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "HIS1",
+        "WHI4"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS2",
+        "WHI1",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "AAPI2",
+        "WHI1",
+        "WHI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "WHI1",
+        "HIS3"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI1",
+        "WHI4",
+        "HIS3"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "HIS1",
+        "WHI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI1",
+        "AAPI1",
+        "WHI3"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "AAPI1",
+        "HIS3"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "AAPI1",
+        "HIS3"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI1",
+        "HIS2",
+        "AAPI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI4",
+        "AAPI1",
+        "WHI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "WHI1",
+        "AAPI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "AAPI2",
+        "HIS2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "WHI2",
+        "HIS3"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS2",
+        "WHI2",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "AAPI1",
+        "WHI2",
+        "WHI3"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "WHI4",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI1",
+        "WHI3",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI1",
+        "WHI2",
+        "AAPI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS3",
+        "WHI2",
+        "HIS1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "WHI4",
+        "HIS3"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS3",
+        "WHI1",
+        "BAIO2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "AAPI2",
+        "WHI4",
+        "WHI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "HIS3",
+        "WHI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "WHI2",
+        "AAPI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS3",
+        "WHI2",
+        "WHI3"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI4",
+        "AAPI2",
+        "WHI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "HIS1",
+        "WHI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI4",
+        "WHI3",
+        "AAPI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI4",
+        "WHI3",
+        "HIS2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI4",
+        "WHI3",
+        "HIS3"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS1",
+        "WHI2",
+        "WHI4"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "HIS2",
+        "BAIO1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI4",
+        "WHI1",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "AAPI1",
+        "WHI3"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI1",
+        "HIS2",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "AAPI1",
+        "WHI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "HIS1",
+        "AAPI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI1",
+        "WHI2",
+        "HIS1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "AAPI1",
+        "WHI4"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "HIS1",
+        "WHI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "WHI4",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "HIS2",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS1",
+        "WHI1",
+        "WHI3"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS1",
+        "WHI4",
+        "WHI3"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS3",
+        "WHI3",
+        "AAPI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "WHI4",
+        "AAPI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "HIS2",
+        "HIS3"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "WHI2",
+        "AAPI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS1",
+        "AAPI1",
+        "HIS3"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "AAPI2",
+        "WHI4"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "HIS1",
+        "WHI4"
+      ]
+    },
+    {
+      "FastSTV": [
+        "AAPI2",
+        "WHI3",
+        "WHI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "AAPI1",
+        "WHI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "HIS2",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI4",
+        "AAPI2",
+        "WHI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI1",
+        "WHI4",
+        "HIS2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "AAPI2",
+        "WHI1",
+        "WHI3"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI1",
+        "HIS2",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "AAPI1",
+        "WHI3",
+        "WHI4"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS1",
+        "WHI4",
+        "WHI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS1",
+        "WHI2",
+        "WHI4"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "HIS2",
+        "BAIO2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "AAPI1",
+        "WHI2",
+        "WHI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI4",
+        "WHI1",
+        "AAPI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI4",
+        "WHI1",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI1",
+        "HIS2",
+        "WHI4"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "HIS3",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "AAPI1",
+        "HIS1",
+        "WHI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI1",
+        "WHI4",
+        "HIS3"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI4",
+        "WHI2",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "HIS2",
+        "AAPI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI1",
+        "WHI2",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS2",
+        "HIS3",
+        "WHI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS3",
+        "WHI3",
+        "WHI4"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "HIS1",
+        "AAPI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS1",
+        "WHI4",
+        "AAPI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS1",
+        "WHI3",
+        "BAIO1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI1",
+        "WHI4",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI4",
+        "AAPI1",
+        "WHI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "AAPI1",
+        "WHI3",
+        "WHI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI1",
+        "WHI4",
+        "HIS2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS2",
+        "WHI3",
+        "WHI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "AAPI2",
+        "WHI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI4",
+        "WHI3",
+        "AAPI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "WHI2",
+        "AAPI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI4",
+        "HIS2",
+        "WHI3"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "WHI1",
+        "AAPI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "WHI3",
+        "HIS2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI4",
+        "WHI2",
+        "HIS3"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS2",
+        "WHI3",
+        "WHI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "WHI3",
+        "WHI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS3",
+        "WHI3",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI4",
+        "AAPI2",
+        "WHI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "HIS1",
+        "AAPI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS1",
+        "WHI4",
+        "WHI3"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "AAPI1",
+        "WHI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "AAPI2",
+        "WHI2",
+        "WHI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI4",
+        "HIS2",
+        "AAPI2"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI1",
+        "WHI2",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "HIS2",
+        "WHI4",
+        "BAIO1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI4",
+        "AAPI2",
+        "HIS3"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "HIS3",
+        "WHI4"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI3",
+        "WHI4",
+        "AAPI1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI2",
+        "WHI1",
+        "HIS1"
+      ]
+    },
+    {
+      "FastSTV": [
+        "WHI1",
+        "WHI3",
+        "HIS1"
+      ]
+    }
+  ]
+}
