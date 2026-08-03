@@ -171,6 +171,50 @@ def _validate_bloc_config(config, bloc_definitions):
                 )
 
 
+# Voting rules that need more candidates on the ballot than their kwargs state.
+# Most rules advertise their requirement through a keyword argument (n_seats for
+# multi-winner rules, m_1 for the number Alaska advances to its second round);
+# these are the ones whose minimum is implicit in the rule itself.
+IMPLICIT_CANDIDATE_MINIMUMS = {
+    "TopTwo": 2,
+}
+
+# Rule kwargs that name a candidate count the ballot must be able to supply.
+CANDIDATE_COUNT_KWARGS = ("n_seats", "m_1")
+
+
+def minimum_candidates(config) -> int:
+    """
+    Smallest ballot every configured election can actually be run on.
+
+    A district's candidate count is drawn at random (see generate_settings), but
+    a rule that cannot seat its winners raises rather than returning a result --
+    votekit's "Not enough candidates received votes to be elected". So the draw
+    is floored here by the most demanding requirement in the run:
+
+    * each district config's `winners` (an election cannot fill more seats than
+      it has candidates), and
+    * each voting rule's own requirement -- `n_seats` for multi-winner rules,
+      `m_1` for the number Alaska advances to round two, and any entry in
+      IMPLICIT_CANDIDATE_MINIMUMS for rules that state it nowhere.
+
+    Args:
+        config: Parsed config dict.
+
+    Returns:
+        The minimum number of candidates every district must put on the ballot.
+    """
+    required = [int(d["winners"]) for d in config["district_configs"]]
+
+    for rule, kwargs in (config.get("voting_configs") or {}).items():
+        required.append(IMPLICIT_CANDIDATE_MINIMUMS.get(rule, 1))
+        for kwarg in CANDIDATE_COUNT_KWARGS:
+            if kwarg in kwargs:
+                required.append(int(kwargs[kwarg]))
+
+    return max(required) if required else 1
+
+
 DEFAULT_AVAILABILITY_EXP = 2
 
 
@@ -451,6 +495,11 @@ def generate_settings(config):
     num_subsamples = config['num_subsamples']
     subsample_interval = chain_length // num_subsamples
 
+    # Every district's ballot must be large enough for every configured rule.
+    candidate_floor = minimum_candidates(config)
+    print(f"[generate_settings] candidate floor for this run: {candidate_floor} "
+          f"(district winners and voting rules: {', '.join(config.get('voting_configs') or ['none'])})")
+
     # pull only the relevant keys from config to pass downstream
     # (slate_to_candidates, cohesion_parameters, and alphas are computed
     # per-district below, not passed through as-is)
@@ -500,7 +549,7 @@ def generate_settings(config):
                     vap = district_settings[config["population_vap_column"]]
                     candidate_max = math.ceil(math.log(vap))
                     candidate_count = min(np.random.geometric(config["candidate_geometric_p"]), candidate_max)
-                    candidate_count = max(candidate_count, winners)
+                    candidate_count = max(candidate_count, candidate_floor)
 
                     slate_to_candidates = _build_slate_to_candidates(
                         row, slate_columns, candidate_count, config

@@ -12,11 +12,9 @@
   ],
   "voting_configs": {
     "IRV": {
-      "n_seats": 1,
       "tiebreak": "random"
     },
     "Plurality": {
-      "n_seats": 1,
       "tiebreak": "random"
     },
     "Alaska": {
