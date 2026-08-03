@@ -74,6 +74,25 @@ PROP_LINE_COLOR = "#52514e"  # focal-group proportional-representation reference
 X_TICK_STEP = 1
 X_AXIS_PAD = 3    # seats of headroom past the largest relevant value
 
+# One type scale for every figure, so histograms, bubble grids, and the cross-run
+# comparison can be read side by side without re-learning what a size means.
+FIG_TITLE_SIZE = 12
+PANEL_TITLE_SIZE = 10
+AXIS_LABEL_SIZE = 9
+TICK_SIZE = 8
+LEGEND_SIZE = 8
+SUBTITLE_SIZE = 8
+
+# Every seat axis is the same quantity, so it gets the same name everywhere.
+SEAT_AXIS_LABEL = "Seats won"
+
+# Vertical space reserved at the top for the title block and at the bottom for the
+# shared legend. Held in INCHES rather than axes fractions: a 3.5" bubble row and
+# an 11" cross-run stack then get the same visual gap instead of the tall figure
+# reserving several empty inches.
+TITLE_BAND_IN = 0.85
+LEGEND_BAND_IN = 0.55
+
 
 def _seat_axis_upper(max_seat: float, total_seats: int) -> int:
     """
@@ -84,6 +103,43 @@ def _seat_axis_upper(max_seat: float, total_seats: int) -> int:
     padded = max_seat + X_AXIS_PAD
     ticks_up = -(-int(padded) // X_TICK_STEP)  # ceil division to next whole tick
     return min(ticks_up * X_TICK_STEP, total_seats)
+
+
+def _prop_line_label(group_label: str, iprop: float, total_seats: int) -> str:
+    """
+    One wording for the proportional-representation reference line, shared by
+    every figure that draws it, so the same dotted line never gets described two
+    different ways across the report.
+    """
+    return f"{group_label} share of VAP: {iprop * 100:.1f}% ({iprop * total_seats:.1f} seats)"
+
+
+def _layout_title_and_legend_bands(fig, title: str, subtitle: Optional[str] = None) -> None:
+    """
+    Lay the axes out inside a reserved title band and legend band, then draw the
+    title block. Panels are packed by tight_layout within that rect, so a figure
+    level legend placed by _bottom_legend cannot land on the axes, the x labels,
+    or the panel titles no matter how many panels there are.
+    """
+    height = fig.get_figheight()
+    fig.tight_layout(rect=(0, LEGEND_BAND_IN / height, 1, 1 - TITLE_BAND_IN / height))
+    fig.suptitle(title, fontsize=FIG_TITLE_SIZE, fontweight="bold", y=1 - 0.22 / height)
+    if subtitle:
+        # Run name as an italic grey line under the title, inside the same band.
+        fig.text(
+            0.5, 1 - 0.52 / height, subtitle, ha="center", va="center",
+            fontsize=SUBTITLE_SIZE, color="gray", style="italic",
+        )
+
+
+def _bottom_legend(fig, handles, labels, ncol: int = 2) -> None:
+    """Draw the one figure-level legend, centered in the reserved bottom band."""
+    if not handles:
+        return
+    fig.legend(
+        handles, labels, loc="lower center", bbox_to_anchor=(0.5, 0.01),
+        ncol=ncol, fontsize=LEGEND_SIZE, frameon=False,
+    )
 
 
 def _group_label(group: str) -> str:
@@ -176,8 +232,12 @@ def _draw_mode_histograms(ax, group_distn: pd.DataFrame, seat_col: str = "focal_
     return max_bin_height
 
 
-def _style_axes(ax, config, focal_group: str, ylim: float, x_upper: int) -> None:
-    """Apply spines, limits, ticks, labels, and title for one histogram figure."""
+def _style_method_axis(ax, method: str, ylim: float, x_upper: int) -> None:
+    """
+    Apply spines, limits, ticks, and labels to one election-method panel of the
+    by-mode figure. The panel title is the voting rule; the figure-level title
+    and run name are drawn once by the caller.
+    """
     for spine in ax.spines.values():
         spine.set_linewidth(0.5)
 
@@ -186,17 +246,9 @@ def _style_axes(ax, config, focal_group: str, ylim: float, x_upper: int) -> None
     ax.set_ylim(0, ylim)
     ax.set_xticks(range(0, x_upper + 1, X_TICK_STEP))
     ax.set_xticklabels([str(x) for x in range(0, x_upper + 1, X_TICK_STEP)])
-    ax.set_xlabel("Citywide Seats Won")
-    ax.set_title(
-        f"Election Outcomes for {_group_label(focal_group)}-Preferred Candidates",
-        fontsize=11, fontweight="bold", pad=18,
-    )
-    # Run name as an italic grey subtitle just under the title.
-    ax.text(
-        0.5, 1.01, str(config["run_name"]), transform=ax.transAxes,
-        fontsize=8, ha="center", va="bottom", color="gray", style="italic",
-    )
-    ax.tick_params(axis="both", which="major", labelsize=8)
+    ax.set_xlabel(SEAT_AXIS_LABEL, fontsize=AXIS_LABEL_SIZE)
+    ax.set_title(method, fontsize=PANEL_TITLE_SIZE)
+    ax.tick_params(axis="both", which="major", labelsize=TICK_SIZE)
 
 
 def _ordered_mode_handles(ax):
@@ -212,20 +264,20 @@ def _ordered_mode_handles(ax):
     return ordered_handles, ordered_labels
 
 
-def _build_mode_legend(ax, ref_handles=None, ref_labels=None) -> None:
+def _build_mode_legend(fig, ax, ref_handles=None, ref_labels=None) -> None:
     """
-    Draw a legend of modes (renamed via LEGEND_MAPPING, in DESIRED_ORDER),
-    followed by the reference-line entries so their descriptions live in the
-    legend instead of as free text overlapping the bars. Placed below the axes.
+    Draw one figure-level legend of modes (renamed via LEGEND_MAPPING, in
+    DESIRED_ORDER), followed by the reference-line entries so their descriptions
+    live in the legend instead of as free text overlapping the bars. Handles are
+    taken from a single panel -- every panel plots the same series -- and the
+    legend sits in the reserved band below the row of panels.
     """
     ordered_handles, ordered_labels = _ordered_mode_handles(ax)
     handles = ordered_handles + list(ref_handles or [])
     labels = ordered_labels + list(ref_labels or [])
-    ax.legend(
-        handles, labels, fontsize=8,
-        loc="upper center", bbox_to_anchor=(0.5, -0.18),
-        ncol=2, frameon=False,
-    )
+    # Two columns: the modes stack in the first, the reference line sits in the
+    # second, which keeps the block narrower than the panels it sits under.
+    _bottom_legend(fig, handles, labels, ncol=2)
 
 
 def _draw_reference_lines(ax, config, iprop, label=None):
@@ -246,7 +298,7 @@ def _draw_reference_lines(ax, config, iprop, label=None):
         return [], []
 
     i_share = iprop * config["total_seats"]
-    iprop_label = f"{group_label} share of VAP: {iprop * 100:.2f}% ({i_share:.2f} seats)"
+    iprop_label = _prop_line_label(group_label, iprop, config["total_seats"])
     iprop_line = ax.axvline(
         i_share, color=color_iprop, linestyle=":", linewidth=1, label=iprop_label
     )
@@ -260,10 +312,10 @@ def _style_slate_axis(ax, config, slate: str, ylim: float, x_upper: int) -> None
     ax.set_xlim(-1, x_upper + 1)
     ax.set_ylim(0, ylim)
     ax.set_xticks(range(0, x_upper + 1, X_TICK_STEP))
-    ax.set_xticklabels([str(x) for x in range(0, x_upper + 1, X_TICK_STEP)], fontsize=7)
-    ax.set_xlabel("Citywide Seats Won", fontsize=8)
-    ax.set_title(_group_label(slate), fontsize=10, fontweight="bold")
-    ax.tick_params(axis="both", which="major", labelsize=7)
+    ax.set_xticklabels([str(x) for x in range(0, x_upper + 1, X_TICK_STEP)], fontsize=TICK_SIZE)
+    ax.set_xlabel(SEAT_AXIS_LABEL, fontsize=AXIS_LABEL_SIZE)
+    ax.set_title(_group_label(slate), fontsize=PANEL_TITLE_SIZE)
+    ax.tick_params(axis="both", which="major", labelsize=TICK_SIZE)
 
 
 def _plot_slate_panel(
@@ -304,24 +356,24 @@ def _plot_slate_panel(
         ref_handles, ref_labels = _draw_reference_lines(
             ax, config, slate_baselines.get(slate), label=_group_label(slate)
         )
-        # Per-slate reference values differ, so each subplot carries its own
-        # legend for them; the shared mode legend lives on the figure below.
-        ax.legend(ref_handles, ref_labels, fontsize=6, loc="best")
+        # Per-slate reference values differ, so each subplot names its own line.
+        # Pinned to the upper right (not "best", which drifts panel to panel) and
+        # given a translucent frame so it never reads as part of the bars.
+        ax.legend(
+            ref_handles, ref_labels, fontsize=7, loc="upper right",
+            frameon=True, framealpha=0.85, borderpad=0.3,
+        )
 
     # Hide any unused cells in the grid.
     for ax in flat[n:]:
         ax.axis("off")
 
-    # One shared mode legend in the figure's top-right corner.
+    # The mode legend is the only figure-level one, and it sits in the reserved
+    # bottom band like every other figure's.
     handles, labels = _ordered_mode_handles(flat[0])
-    if handles:
-        fig.legend(
-            handles, labels, title="Mode", fontsize=8,
-            loc="upper right", bbox_to_anchor=(0.99, 0.99),
-        )
+    _layout_title_and_legend_bands(fig, "Election outcomes by slate", run_name)
+    _bottom_legend(fig, handles, labels, ncol=max(1, len(handles)))
 
-    fig.suptitle(f"Election Outcomes by Slate\n{run_name}", fontsize=12, fontweight="bold")
-    fig.tight_layout(rect=(0, 0, 1, 0.96))
     fig_path = figs_dir / f"{run_name}_{num_dist}x{seats_per_district}_{elm}_byslate.png"
     fig.savefig(fig_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
@@ -344,6 +396,69 @@ def plot_slate_representation_panels(
         )
 
 
+def _plot_method_histogram_panel(
+    df_plan: pd.DataFrame,
+    num_dist,
+    seats_per_district,
+    config,
+    focal_group: str,
+    iprop: Optional[float],
+    figs_dir: Path,
+    run_name: str,
+) -> None:
+    """
+    Create and save one paneled by-mode figure: a single row of seat-distribution
+    histograms, one panel per election method (voting rule), laid out like the
+    bubble figures. Panels share x and y limits so the rules are read by direct
+    comparison, and the figure carries one title, one run-name subtitle, and one
+    legend for the whole row.
+    """
+    methods = sorted(df_plan["election_method"].unique())
+    if not methods:
+        return
+
+    fig, axes = plt.subplots(
+        1, len(methods), figsize=(4 * len(methods), 3.6), sharey=True, squeeze=False
+    )
+    axes = axes[0]
+
+    total_seats = config["total_seats"]
+    max_seat = max(
+        df_plan["focal_seats"].max(),
+        iprop * total_seats if iprop is not None else 0,
+    )
+    x_upper = _seat_axis_upper(max_seat, total_seats)
+
+    # Draw every panel first, then apply the tallest bar across the whole row as a
+    # shared y limit -- with sharey the panels must agree anyway, and a common
+    # scale is what makes the voting rules comparable.
+    bin_heights = [
+        _draw_mode_histograms(ax, df_plan[df_plan["election_method"] == method])
+        for ax, method in zip(axes, methods)
+    ]
+    max_bin_height = max(bin_heights, default=0)
+    ylim = max_bin_height * 1.2 if max_bin_height > 0 else 1
+
+    ref_handles: List[Any] = []
+    ref_labels: List[str] = []
+    for ax, method in zip(axes, methods):
+        _style_method_axis(ax, method, ylim, x_upper)
+        ref_handles, ref_labels = _draw_reference_lines(ax, config, iprop)
+
+    axes[0].set_ylabel("Number of plans", fontsize=AXIS_LABEL_SIZE)
+
+    _layout_title_and_legend_bands(
+        fig,
+        f"Election outcomes for {_group_label(focal_group)}-preferred candidates",
+        run_name,
+    )
+    _build_mode_legend(fig, axes[0], ref_handles, ref_labels)
+
+    fig_path = figs_dir / f"{run_name}_{num_dist}x{seats_per_district}_bymode.png"
+    fig.savefig(fig_path, dpi=300, bbox_inches="tight")
+    plt.close(fig)
+
+
 def aggregate_to_plan_level(df: pd.DataFrame) -> pd.DataFrame:
     """
     Collapse the district-level summary table to one row per
@@ -354,14 +469,15 @@ def aggregate_to_plan_level(df: pd.DataFrame) -> pd.DataFrame:
     Also sums each per-slate seat column (seats_<slate>) up to the plan, which
     feeds the by-slate representation panel.
     """
-    seat_cols = [c for c in df.columns if c == "focal_seats" or c.startswith("seats_")]
-    return (
-        df.groupby(
-            ["plan", "num_districts", "seats_per_district", "mode", "election_method", "rep"],
-            as_index=False,
-        )
-        .agg({c: "sum" for c in seat_cols})
-    )
+    group_keys = ["plan", "num_districts", "seats_per_district", "mode", "election_method", "rep"]
+    # "seats_per_district" also matches the seats_<slate> prefix, but it is a
+    # grouping key describing the plan -- summing it would report a 9x1 plan as
+    # 9 seats per district and poison every figure keyed on that value.
+    seat_cols = [
+        c for c in df.columns
+        if (c == "focal_seats" or c.startswith("seats_")) and c not in group_keys
+    ]
+    return df.groupby(group_keys, as_index=False).agg({c: "sum" for c in seat_cols})
 
 
 def summarize_results(config) -> Path:
@@ -376,9 +492,10 @@ def summarize_results(config) -> Path:
           (replicate, plan, district) triple, with columns for plan, mode, district_id,
           rep, focal_seats, the population columns named in the config, and
           focal_vap_share (the district's focal share of VAP, turnout-free).
-        - outputs/summaries/<run_name>_summary/figures/*_bymode.png: one histogram per
-          (district_count, seats_per_district, election_method) showing the
-          distribution of focal-group seats across modes.
+        - outputs/summaries/<run_name>_summary/figures/*_bymode.png: one panel per
+          (district_count, seats_per_district), a single row of histograms with one
+          column per election method, each showing the distribution of focal-group
+          seats across modes under that voting rule.
         - outputs/summaries/<run_name>_summary/figures/*_byslate.png: one panel per
           (district_count, seats_per_district, election_method), a grid (2x2 for
           San Diego's four slates) of per-slate seat-distribution histograms with
@@ -508,28 +625,14 @@ def summarize_results(config) -> Path:
     # aggregate focal seats to the plan level (sum across districts)
     df_plan = aggregate_to_plan_level(df)
 
-    total_seats = config["total_seats"]
-
-    # one histogram per (district count, seats, election method) combo
-    for (num_dist, seats_per_district, elm), group_distn in df_plan.groupby(["num_districts", "seats_per_district", "election_method"]):
-        fig, ax = plt.subplots(figsize=(6, 4))
-
-        max_bin_height = _draw_mode_histograms(ax, group_distn)
-        ylim = max_bin_height * 1.2 if max_bin_height > 0 else 1
-
-        max_seat = max(
-            group_distn["focal_seats"].max(),
-            iprop * total_seats if iprop is not None else 0,
+    # one paneled histogram figure per (district count, seats), a column per method
+    for (num_dist, seats_per_district), config_plans in df_plan.groupby(
+        ["num_districts", "seats_per_district"]
+    ):
+        _plot_method_histogram_panel(
+            config_plans, num_dist, seats_per_district,
+            config, focal_group, iprop, figs_dir, run_name,
         )
-        x_upper = _seat_axis_upper(max_seat, total_seats)
-
-        _style_axes(ax, config, focal_group, ylim, x_upper)
-        ref_handles, ref_labels = _draw_reference_lines(ax, config, iprop)
-        _build_mode_legend(ax, ref_handles, ref_labels)
-
-        fig_path = figs_dir / f"{run_name}_{num_dist}x{seats_per_district}_{elm}_bymode.png"
-        fig.savefig(fig_path, dpi=300, bbox_inches="tight")
-        plt.close(fig)
 
     # By-slate proportional-representation panel (one histogram per candidate slate).
     if config.get("slate_to_candidates"):
@@ -608,10 +711,12 @@ def _draw_method_bubbles(ax, method_counts, modes_in_order, size_scale, iprop, c
     ax.set_xlim(-1, x_upper + 1)
     ax.set_xticks(range(0, x_upper + 1, X_TICK_STEP))
     ax.set_xticklabels([str(x) for x in range(0, x_upper + 1, X_TICK_STEP)])
-    ax.set_ylim(-0.5, len(modes_in_order) - 0.5)
+    # Inverted so the first mode is the TOP row, matching the cross-run figure and
+    # the left-to-right order of the histogram bars and legend.
+    ax.set_ylim(len(modes_in_order) - 0.5, -0.5)
     ax.set_yticks(range(len(modes_in_order)))
     ax.set_yticklabels([LEGEND_MAPPING.get(m, m) for m in modes_in_order])
-    ax.tick_params(axis="both", which="major", labelsize=8)
+    ax.tick_params(axis="both", which="major", labelsize=TICK_SIZE)
     for spine in ax.spines.values():
         spine.set_linewidth(0.5)
 
@@ -650,21 +755,20 @@ def _plot_bubbles_for_config(df_plan, config, iprop, figs_dir, run_name, num_dis
             ax, counts[counts["election_method"] == method], modes_in_order,
             size_scale, iprop, config, x_upper,
         )
-        ax.set_title(method, fontsize=10)
-        ax.set_xlabel("Seats won", fontsize=9)
+        ax.set_title(method, fontsize=PANEL_TITLE_SIZE)
+        ax.set_xlabel(SEAT_AXIS_LABEL, fontsize=AXIS_LABEL_SIZE)
 
-    fig.subplots_adjust(top=0.78, bottom=0.15)
-    fig.suptitle(
+    _layout_title_and_legend_bands(
+        fig,
         f"Election outcomes for {_group_label(config['focal_group'])}-preferred candidates",
-        fontsize=11, fontweight="bold", y=0.98,
+        run_name,
     )
-    fig.text(0.5, 0.88, run_name, ha="center", fontsize=8, color="gray", style="italic")
-
-    prop_handle = Line2D(
-        [0], [0], color=PROP_LINE_COLOR, linestyle=":", linewidth=1.2,
-        label=f"Proportional representation ({iprop * 100:.1f}%)",
-    )
-    fig.legend(handles=[prop_handle], loc="lower center", bbox_to_anchor=(0.5, 0.80), fontsize=7, frameon=True)
+    # The modes are named on the y-axis, so the only legend entry is the
+    # reference line -- and it goes in the bottom band with everything else's,
+    # not floating over the panel titles.
+    prop_label = _prop_line_label(_group_label(config["focal_group"]), iprop, config["total_seats"])
+    prop_handle = Line2D([0], [0], color=PROP_LINE_COLOR, linestyle=":", linewidth=1.2, label=prop_label)
+    _bottom_legend(fig, [prop_handle], [prop_label], ncol=1)
 
     fig_path = figs_dir / f"{run_name}_{num_dist}x{seats_per_district}_bubbles_by_method.png"
     fig.savefig(fig_path, dpi=300, bbox_inches="tight")
@@ -783,24 +887,26 @@ def plot_combined_bubbles_all_runs(config, output_dir=None, exclude_runs=None) -
         ax.set_xlim(-1, x_upper + 1)
         ax.set_ylim(len(modes_in_order) - 0.5, -0.5)  # inverted: first mode on top
         ax.set_yticks(range(len(modes_in_order)))
-        ax.set_yticklabels([LEGEND_MAPPING.get(m, m) for m in modes_in_order], fontsize=8)
+        ax.set_yticklabels([LEGEND_MAPPING.get(m, m) for m in modes_in_order], fontsize=TICK_SIZE)
         ax.set_xticks(x_ticks)
-        ax.set_xticklabels([str(x) for x in x_ticks], fontsize=8)
-        ax.tick_params(axis="both", which="major", labelsize=8)
+        ax.set_xticklabels([str(x) for x in x_ticks], fontsize=TICK_SIZE)
+        ax.tick_params(axis="both", which="major", labelsize=TICK_SIZE)
         for spine in ax.spines.values():
             spine.set_linewidth(0.5)
-        ax.set_title(label.replace("_", " "), fontsize=10, fontweight="bold", loc="left")
-    axes[-1].set_xlabel("Seats won", fontsize=9, fontweight="bold")
+        ax.set_title(label.replace("_", " "), fontsize=PANEL_TITLE_SIZE, fontweight="bold", loc="left")
+    axes[-1].set_xlabel(SEAT_AXIS_LABEL, fontsize=AXIS_LABEL_SIZE)
 
+    prop_label = _prop_line_label(_group_label(config["focal_group"]), iprop, total_seats)
     prop_handle = Line2D(
-        [0], [0], color=PROP_LINE_COLOR, linestyle=":", linewidth=1.2,
-        label=f"Proportional representation ({iprop * 100:.1f}%)",
+        [0], [0], color=PROP_LINE_COLOR, linestyle=":", linewidth=1.2, label=prop_label,
     )
-    fig.suptitle(
+    _layout_title_and_legend_bands(
+        fig,
         f"Election outcomes for {_group_label(config['focal_group'])}-preferred candidates",
-        fontsize=12, fontweight="bold",
     )
-    fig.legend(handles=[prop_handle], loc="upper right", fontsize=8, frameon=True)
+    # Same bottom-band legend as the per-run figures; the old upper-right box
+    # collided with the first run's panel title.
+    _bottom_legend(fig, [prop_handle], [prop_label], ncol=1)
 
     if output_dir is None:
         output_dir = Path("outputs") / "cross_run_summaries" / "figures"

@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>San Diego City Council Election Analysis</title>
+  <meta name="description" content="MGGG analysis of alternative electoral systems and representation outcomes for San Diego City Council.">
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Fonts: MGGG identity -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+Pro:ital,wght@0,400;0,600;1,400&family=Source+Serif+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* City of San Diego palette -- the same colors the figures are drawn in.
+       The gold sits at 1.47:1 against a white page, so it is never used for text
+       or as a lone indicator: it carries accents, rules, and fills that already
+       have a dark partner. Text tones are the red and two warm neutrals. */
+    :root {
+      --sd-red: #aa0000;        /* "Deliberative" bars; headings, links */
+      --sd-red-dark: #7a0000;   /* hover / navbar weight */
+      --sd-gold: #ffcc00;       /* "Impulsive" bars; accents only */
+      --sd-gold-soft: #fdf3d4;  /* pale gold wash for open panels */
+      --sd-ink: #52514e;        /* bar edge + reference lines; body text */
+      --sd-gray: #6b6963;       /* captions and muted text (5.3:1 on white) */
+      --sd-gray-light: #cfccc4; /* hairlines and borders */
+      --sd-light: #f8f7f4;      /* warm off-white panel fill */
+      --bs-link-color: var(--sd-red);
+      --bs-link-hover-color: var(--sd-red-dark);
+    }
+    body {
+      font-family: "Source Serif Pro", Georgia, serif;
+      color: #23211d;
+      scroll-behavior: smooth;
+    }
+    h1, h2, h3, h4, h5, h6, .navbar-brand {
+      font-family: "Playfair Display", Georgia, serif;
+      color: var(--sd-red);
+    }
+    a { color: var(--sd-red); }
+    a:hover { color: var(--sd-red-dark); }
+
+    .navbar-sd { background-color: var(--sd-red-dark); }
+    .navbar-sd .navbar-brand,
+    .navbar-sd .nav-link { color: #fff; }
+    .navbar-sd .nav-link:hover,
+    .navbar-sd .nav-link.active { color: var(--sd-gold); }
+
+    /* Hero: ink deepening into the city red, closed with a gold rule. Both stops
+       are palette colors, so the header reads as the figures do. */
+    .hero {
+      background: linear-gradient(135deg, var(--sd-ink) 0%, var(--sd-red-dark) 45%, var(--sd-red) 100%);
+      color: #fff;
+      border-bottom: 4px solid var(--sd-gold);
+    }
+    .hero h1 { color: #fff; }
+    .hero .lead { color: #fbe9d9; }
+
+    /* Section spacing / anchor offset for the sticky navbar */
+    section { scroll-margin-top: 70px; padding-top: .5rem; }
+    /* Hairline under each section head, with a short gold tab at the left. A
+       full-width gold rule repeated down the page shouts; this keeps the accent. */
+    section > h2 {
+      position: relative;
+      border-bottom: 1px solid var(--sd-gray-light);
+      padding-bottom: .3rem;
+      margin-bottom: 1rem;
+    }
+    section > h2::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 3rem;
+      height: 3px;
+      background: var(--sd-gold);
+    }
+
+    /* Table of contents sidebar */
+    .toc {
+      position: sticky;
+      top: 80px;
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+      font-family: "Source Sans Pro", sans-serif;
+      font-size: .9rem;
+    }
+    .toc .nav-link { padding: .15rem 0; color: var(--sd-gray); border-left: 2px solid transparent; padding-left: .6rem; }
+    .toc .nav-link:hover { color: var(--sd-red); }
+    /* Active entry is carried by the red text and weight; the gold rule is a
+       second, decorative cue rather than the only one. */
+    .toc .nav-link.active { color: var(--sd-red); font-weight: 600; border-left-color: var(--sd-gold); }
+    .toc .nav .nav .nav-link { padding-left: 1.4rem; font-size: .85rem; }
+
+    /* Abstract */
+    .abstract-card {
+      background: var(--sd-light);
+      border-left: 4px solid var(--sd-gold);
+    }
+
+    /* Figures */
+    figure.figure { display: block; width: 100%; text-align: center; }
+    .figure-img { max-height: 70vh; }
+    .figure-caption {
+      font-family: "Source Sans Pro", sans-serif;
+      font-style: italic;
+      font-size: .85rem;
+      color: var(--sd-gray);
+      margin-top: .4rem;
+    }
+    .fig-num { font-weight: 700; font-style: normal; color: var(--sd-red); }
+
+    /* Tables */
+    table { font-family: "Source Sans Pro", sans-serif; font-size: .9rem; }
+    caption, .table-caption {
+      caption-side: top;
+      font-family: "Source Sans Pro", sans-serif;
+      font-style: italic;
+      font-size: .85rem;
+      color: var(--sd-gray);
+      text-align: center;
+      margin-bottom: .35rem;
+    }
+    thead th { background: var(--sd-light) !important; color: var(--sd-red); border-bottom-color: var(--sd-gray-light) !important; }
+    /* Row labels sit in the ink tone so the red stays reserved for column heads. */
+    tbody th { color: var(--sd-ink); }
+
+    /* Scenario accordions */
+    .accordion-button {
+      font-family: "Playfair Display", serif;
+      font-size: 1.05rem;
+      color: var(--sd-red);
+    }
+    .accordion-button:not(.collapsed) {
+      background-color: var(--sd-gold-soft);
+      color: var(--sd-red);
+      box-shadow: inset 0 -1px 0 rgba(170,0,0,.2);
+    }
+    .accordion-button:focus { box-shadow: 0 0 0 .2rem rgba(170,0,0,.25); }
+
+    /* Scenario figure tabs */
+    .nav-tabs { border-bottom-color: #dee2e6; }
+    .nav-tabs .nav-link {
+      font-family: "Source Sans Pro", sans-serif;
+      font-size: .9rem;
+      color: var(--sd-gray);
+      border: none;
+      border-bottom: 2px solid transparent;
+    }
+    .nav-tabs .nav-link:hover { color: var(--sd-red); border-bottom-color: rgba(170,0,0,.35); }
+    /* Gold underlines the active tab but never marks it alone -- the red, bolded
+       label is the accessible signal, so the low-contrast gold stays decorative. */
+    .nav-tabs .nav-link.active {
+      color: var(--sd-red);
+      font-weight: 600;
+      background: transparent;
+      border-bottom: 3px solid var(--sd-gold);
+    }
+
+    /* Zoomable figures + lightbox */
+    img.zoomable { cursor: zoom-in; transition: box-shadow .15s ease; }
+    img.zoomable:hover { box-shadow: 0 0 0 3px rgba(170,0,0,.3); }
+    #lightbox .modal-content { background: transparent; }
+    #lightbox-img { max-height: 90vh; }
+
+    /* Placeholder for sections whose text or figures are not written yet */
+    .todo {
+      font-family: "Source Sans Pro", sans-serif;
+      font-style: italic;
+      font-size: .9rem;
+      color: var(--sd-gray);
+    }
+
+    .footnote { font-size: .85rem; color: var(--sd-gray); }
+    footer {
+      background: var(--sd-light);
+      font-family: "Source Sans Pro", sans-serif;
+      border-top: 3px solid var(--sd-gold) !important;
+    }
+
+    /* Back to top */
+    #toTop {
+      position: fixed; bottom: 1.5rem; right: 1.5rem; display: none; z-index: 1030;
+      background-color: var(--sd-red); border-color: var(--sd-red); color: #fff;
+    }
+    #toTop:hover { background-color: var(--sd-red-dark); border-color: var(--sd-red-dark); }
+  </style>
+
+  <!-- MathJax for LaTeX -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" id="MathJax-script" async></script>
+</head>
+
+<body data-bs-spy="scroll" data-bs-target="#toc-nav" data-bs-offset="90" tabindex="0">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-sd sticky-top shadow-sm">
+    <div class="container-xl">
+      <a class="navbar-brand fw-bold" href="#top">San Diego Election Analysis</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#background">Background</a></li>
+          <li class="nav-item"><a class="nav-link" href="#data">Data</a></li>
+          <li class="nav-item"><a class="nav-link" href="#methodology">Methodology</a></li>
+          <li class="nav-item"><a class="nav-link" href="#scenarios">Scenarios</a></li>
+          <li class="nav-item"><a class="nav-link" href="#appendix">Appendix</a></li>
+          <li class="nav-item"><a class="nav-link" href="https://github.com/mggg/San-Diego-Election-Analysis" target="_blank" rel="noopener">GitHub ↗</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero py-5" id="top">
+    <div class="container-xl">
+      <p class="text-uppercase mb-2" style="letter-spacing:.12em; font-family:'Source Sans Pro',sans-serif; font-size:.8rem; color:var(--sd-gold);">Metric Geometry &amp; Gerrymandering Group</p>
+      <h1 class="display-5 fw-bold">San Diego City Council Election Analysis</h1>
+      <p class="lead mb-0"><!-- TODO: one-line framing of the study --></p>
+    </div>
+  </header>
+
+  <div class="container-xl my-4">
+    <div class="row">
+      <!-- Sidebar TOC -->
+      <div class="col-lg-3 d-none d-lg-block">
+        <nav id="toc-nav" class="toc nav flex-column">
+          <a class="nav-link" href="#abstract">Abstract</a>
+          <a class="nav-link" href="#background">1. Background</a>
+          <a class="nav-link" href="#data">2. Data</a>
+          <nav class="nav flex-column">
+            <a class="nav-link" href="#data-units">2.1 Data units &amp; preprocessing</a>
+            <a class="nav-link" href="#demographics">2.2 Racial demographics</a>
+          </nav>
+          <a class="nav-link" href="#methodology">3. Methodology</a>
+          <nav class="nav flex-column">
+            <a class="nav-link" href="#ensembles">3.1 Districting ensembles</a>
+            <a class="nav-link" href="#blocs">3.2 Voter blocs &amp; slates</a>
+            <a class="nav-link" href="#candidates">3.3 Candidate availability</a>
+            <a class="nav-link" href="#ballots">3.4 Ballot generation</a>
+            <a class="nav-link" href="#voting-rules">3.5 Voting rules</a>
+          </nav>
+          <a class="nav-link" href="#scenarios">4. Election Scenarios</a>
+          <nav class="nav flex-column">
+            <a class="nav-link" href="#alternative-systems">4.1 Alternative electoral systems</a>
+            <a class="nav-link" href="#multi-member">4.2 Multi-member districts</a>
+            <a class="nav-link" href="#turnout-availability">4.3 Turnout &amp; availability</a>
+            <a class="nav-link" href="#diverse-preferences">4.4 Diverse AAPI preferences</a>
+            <a class="nav-link" href="#cross-run">4.5 Cross-run comparison</a>
+          </nav>
+          <a class="nav-link" href="#appendix">Appendix A. Configurations</a>
+        </nav>
+      </div>
+
+      <!-- Main content -->
+      <main class="col-lg-9">
+
+        <!-- Abstract -->
+        <section id="abstract">
+          <div class="card abstract-card shadow-sm mb-4">
+            <div class="card-body">
+              <h2 class="h4 card-title">Abstract</h2>
+              <p class="card-text todo mb-0">[Abstract to be written.]</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 1. Background -->
+        <section id="background" class="mb-5">
+          <h2>1. Background</h2>
+          <p class="todo">[Background to be written.]</p>
+        </section>
+
+        <!-- 2. Data -->
+        <section id="data" class="mb-5">
+          <h2>2. Data</h2>
+
+          <h3 class="h4 mt-4" id="data-units">2.1 Data units, collection, preprocessing</h3>
+          <p class="todo">[Data sources and preprocessing to be written.]</p>
+
+          <h3 class="h4 mt-4" id="demographics">2.2 Racial demographics</h3>
+          <p class="table-caption"><span class="fig-num">Table 1.</span> San Diego population and voting-age population (VAP) by racial/ethnic group, 2020 Census, summed over the 11,018 blocks in the study geography.</p>
+          <div class="table-responsive mb-4">
+            <table class="table table-bordered table-sm align-middle">
+              <thead><tr><th>Group</th><th>Population</th><th>% of Total Pop.</th><th>VAP</th><th>% of VAP</th></tr></thead>
+              <tbody>
+                <tr><td>White (non-Hispanic)</td><td>565,133</td><td>40.7%</td><td>492,810</td><td>43.8%</td></tr>
+                <tr><td>Hispanic/Latino</td><td>399,934</td><td>28.8%</td><td>298,979</td><td>26.6%</td></tr>
+                <tr><td>Asian / Native Hawaiian &amp; Pacific Islander</td><td>285,783</td><td>20.6%</td><td>229,884</td><td>20.4%</td></tr>
+                <tr><td>Black</td><td>106,863</td><td>7.7%</td><td>79,988</td><td>7.1%</td></tr>
+                <tr><td>American Indian / Alaska Native</td><td>10,612</td><td>0.8%</td><td>8,833</td><td>0.8%</td></tr>
+                <tr><td>Some Other Race</td><td>18,632</td><td>1.3%</td><td>14,593</td><td>1.3%</td></tr>
+                <tr><td><strong>Total</strong></td><td><strong>1,386,957</strong></td><td>100%</td><td><strong>1,125,087</strong></td><td>100%</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 3. Methodology -->
+        <section id="methodology" class="mb-5">
+          <h2>3. Methodology</h2>
+
+          <h3 class="h4 mt-4" id="ensembles">3.1 Districting Plan Ensembles</h3>
+          <p class="todo">[Ensemble generation to be written.]</p>
+          <ul>
+            <li>9 &times; 1 ensemble &mdash; each plan has 9 single-member districts, matching San Diego's current council structure</li>
+            <li>3 &times; 3 ensemble &mdash; each plan has 3 three-member districts, for a 9-seat council elected by STV</li>
+          </ul>
+
+          <h3 class="h4 mt-4" id="blocs">3.2 Voter Blocs and Candidate Slates</h3>
+          <p class="table-caption"><span class="fig-num">Table 2.</span> Voter blocs, the demographic groups each aggregates, and the default turnout weight applied to each.</p>
+          <div class="table-responsive mb-3">
+            <table class="table table-bordered table-sm align-middle">
+              <thead><tr><th>Bloc</th><th>Demographic groups (VAP)</th><th>Slate size</th><th>Default turnout</th></tr></thead>
+              <tbody>
+                <tr><th>WHI</th><td>White</td><td>4 candidates</td><td>1.00</td></tr>
+                <tr><th>HIS</th><td>Hispanic/Latino</td><td>3 candidates</td><td>0.75</td></tr>
+                <tr><th>AAPI</th><td>Asian / Native Hawaiian &amp; Pacific Islander</td><td>2 candidates</td><td>0.75</td></tr>
+                <tr><th>BAIO</th><td>Black + American Indian + Other race</td><td>2 candidates</td><td>1.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="table-caption"><span class="fig-num">Table 3.</span> Cohesion matrix: rows are voter blocs, columns are candidate slates, and each row sums to 1.</p>
+          <div class="table-responsive mb-3">
+            <table class="table table-bordered table-sm align-middle text-center">
+              <thead><tr><th>bloc &darr; / slate &rarr;</th><th>WHI</th><th>HIS</th><th>AAPI</th><th>BAIO</th></tr></thead>
+              <tbody>
+                <tr><th>WHI</th><td>0.80</td><td>0.05</td><td>0.10</td><td>0.05</td></tr>
+                <tr><th>HIS</th><td>0.10</td><td>0.80</td><td>0.05</td><td>0.05</td></tr>
+                <tr><th>AAPI</th><td>0.15</td><td>0.03</td><td>0.80</td><td>0.02</td></tr>
+                <tr><th>BAIO</th><td>0.05</td><td>0.10</td><td>0.05</td><td>0.80</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="h4 mt-4" id="candidates">3.3 Candidate Availability and Pool Size</h3>
+          <p class="todo">[Candidate pool sampling to be written.]</p>
+
+          <h3 class="h4 mt-4" id="ballots">3.4 Voter Profile and Ballot Generation</h3>
+          <p class="todo">[Ballot generation to be written.]</p>
+
+          <h4 class="h5 mt-3">The Impulsive Voter</h4>
+          <p class="todo">[Plackett-Luce description to be written.]</p>
+
+          <h4 class="h5 mt-3">The Deliberative Voter</h4>
+          <p class="todo">[Bradley-Terry description to be written.]</p>
+
+          <h3 class="h4 mt-4" id="voting-rules">3.5 Voting Rules</h3>
+          <p class="table-caption"><span class="fig-num">Table 4.</span> Voting rules simulated in this report, the district configurations they are applied to, and their parameters.</p>
+          <div class="table-responsive mb-3">
+            <table class="table table-bordered table-sm align-middle">
+              <thead><tr><th>Voting Rule</th><th>District Config</th><th>Seats/District</th><th>Parameters</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Plurality</strong></td><td>9 &times; 1</td><td>1</td><td>random tiebreak</td></tr>
+                <tr><td><strong>IRV</strong> (Instant-Runoff Voting)</td><td>9 &times; 1</td><td>1</td><td>random tiebreak</td></tr>
+                <tr><td><strong>Alaska</strong> (top-four primary &rarr; IRV)</td><td>9 &times; 1</td><td>1</td><td>$m_1 = 4$, $m_2 = 1$, random tiebreak</td></tr>
+                <tr><td><strong>Top Two</strong></td><td>9 &times; 1</td><td>1</td><td>random tiebreak</td></tr>
+                <tr><td><strong>Alaska, two-profile</strong></td><td>9 &times; 1</td><td>1</td><td>$m_1 = 4$, round 2 = STV (1 seat), ballots regenerated between rounds</td></tr>
+                <tr><td><strong>Top Two, two-profile</strong></td><td>9 &times; 1</td><td>1</td><td>$m_1 = 2$, round 2 = Plurality (1 seat), ballots regenerated between rounds</td></tr>
+                <tr><td><strong>STV</strong> (Single Transferable Vote)</td><td>3 &times; 3</td><td>3</td><td>3 seats, random tiebreak</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 4. Election Scenarios -->
+        <section id="scenarios" class="mb-5">
+          <h2>4. Election Scenarios</h2>
+          <p class="table-caption"><span class="fig-num">Table 5.</span> Number of district-level elections produced by each district configuration, per voting rule.</p>
+          <div class="table-responsive mb-4">
+            <table class="table table-bordered table-sm align-middle text-center">
+              <thead><tr><th>District Configuration</th><th>Districts / Plan</th><th>Sampled Plans</th><th>Replicates</th><th>Voter Models</th><th>Elections / Rule</th></tr></thead>
+              <tbody>
+                <tr><td>9 &times; 1</td><td>9</td><td>100</td><td>10</td><td>2</td><td>18,000</td></tr>
+                <tr><td>3 &times; 3</td><td>3</td><td>100</td><td>10</td><td>2</td><td>6,000</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- 4.1 -->
+          <h3 class="h4 mt-4" id="alternative-systems">4.1 Alternative Electoral Systems &mdash; 9 &times; 1</h3>
+
+          <div class="accordion mb-4">
+            <div class="accordion-item">
+              <h4 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#sc-1" aria-expanded="true" aria-controls="sc-1">9 &times; 1 &mdash; Plurality, IRV, Alaska, Top Two</button>
+              </h4>
+              <div id="sc-1" class="accordion-collapse collapse show">
+                <div class="accordion-body">
+                  <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item" role="presentation"><button class="nav-link active" id="tab1-bubble-btn" data-bs-toggle="tab" data-bs-target="#tab1-bubble" type="button" role="tab" aria-controls="tab1-bubble" aria-selected="true">Seat distribution</button></li>
+                    <li class="nav-item" role="presentation"><button class="nav-link" id="tab1-bymode-btn" data-bs-toggle="tab" data-bs-target="#tab1-bymode" type="button" role="tab" aria-controls="tab1-bymode" aria-selected="false">By voting rule</button></li>
+                  </ul>
+                  <div class="tab-content pt-3">
+                    <div class="tab-pane fade show active" id="tab1-bubble" role="tabpanel" aria-labelledby="tab1-bubble-btn">
+                      <figure class="figure d-block text-center my-2">
+                        <img src="figures/Alternative%20Electoral%20Systems/Alternative%20Electoral%20Systems_9x1_bubbles_by_method.png" class="figure-img img-fluid rounded border zoomable" alt="Seat distribution chart">
+                        <figcaption class="figure-caption"><span class="fig-num">Figure 1.</span> Citywide seats won by AAPI-preferred candidates across the sampled 9 &times; 1 plans, one panel per voting rule and one row per voter model plus a pooled combined row; bubble size reflects how often each seat count occurred.</figcaption>
+                      </figure>
+                    </div>
+                    <div class="tab-pane fade" id="tab1-bymode" role="tabpanel" aria-labelledby="tab1-bymode-btn">
+                      <figure class="figure d-block text-center my-2">
+                        <img src="figures/Alternative%20Electoral%20Systems/Alternative%20Electoral%20Systems_9x1_bymode.png" class="figure-img img-fluid rounded border zoomable" alt="Seat distribution histograms by voting rule">
+                        <figcaption class="figure-caption"><span class="fig-num">Figure 2.</span> Distribution of AAPI-preferred seat totals under each voting rule, with the two voter models shown side by side and a dotted line at the AAPI share of citywide VAP.</figcaption>
+                      </figure>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4.2 -->
+          <h3 class="h4 mt-4" id="multi-member">4.2 Multi-Member Districts &mdash; 3 &times; 3 STV</h3>
+
+          <div class="accordion mb-4">
+            <div class="accordion-item">
+              <h4 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sc-2" aria-expanded="false" aria-controls="sc-2">3 &times; 3 STV</button>
+              </h4>
+              <div id="sc-2" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                  <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item" role="presentation"><button class="nav-link active" id="tab2-bubble-btn" data-bs-toggle="tab" data-bs-target="#tab2-bubble" type="button" role="tab" aria-controls="tab2-bubble" aria-selected="true">Seat distribution</button></li>
+                    <li class="nav-item" role="presentation"><button class="nav-link" id="tab2-bymode-btn" data-bs-toggle="tab" data-bs-target="#tab2-bymode" type="button" role="tab" aria-controls="tab2-bymode" aria-selected="false">By voting rule</button></li>
+                  </ul>
+                  <div class="tab-content pt-3">
+                    <div class="tab-pane fade show active" id="tab2-bubble" role="tabpanel" aria-labelledby="tab2-bubble-btn">
+                      <figure class="figure d-block text-center my-2">
+                        <img src="figures/Basic%20-%203%20X%203%20STV/Basic%20-%203%20X%203%20STV_3x3_bubbles_by_method.png" class="figure-img img-fluid rounded border zoomable" alt="Seat distribution chart">
+                        <figcaption class="figure-caption"><span class="fig-num">Figure 3.</span> Citywide seats won by AAPI-preferred candidates across the sampled 3 &times; 3 STV plans, shown per voter model with a pooled combined row; bubble size reflects how often each seat count occurred.</figcaption>
+                      </figure>
+                    </div>
+                    <div class="tab-pane fade" id="tab2-bymode" role="tabpanel" aria-labelledby="tab2-bymode-btn">
+                      <figure class="figure d-block text-center my-2">
+                        <img src="figures/Basic%20-%203%20X%203%20STV/Basic%20-%203%20X%203%20STV_3x3_bymode.png" class="figure-img img-fluid rounded border zoomable" alt="Seat distribution histogram">
+                        <figcaption class="figure-caption"><span class="fig-num">Figure 4.</span> Distribution of AAPI-preferred seat totals under 3 &times; 3 STV, with the two voter models shown side by side and a dotted line at the AAPI share of citywide VAP.</figcaption>
+                      </figure>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4.3 -->
+          <h3 class="h4 mt-4" id="turnout-availability">4.3 Turnout and Candidate Availability</h3>
+
+          <div class="accordion mb-4">
+            <div class="accordion-item">
+              <h4 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sc-3" aria-expanded="false" aria-controls="sc-3">Low AAPI Turnout &mdash; 3 &times; 3 STV</button>
+              </h4>
+              <div id="sc-3" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                  <p class="todo mb-0">[Figures pending &mdash; run not yet complete.]</p>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h4 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sc-4" aria-expanded="false" aria-controls="sc-4">Low AAPI Availability &mdash; 3 &times; 3 STV</button>
+              </h4>
+              <div id="sc-4" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                  <p class="todo mb-0">[Figures pending &mdash; run not yet complete.]</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4.4 -->
+          <h3 class="h4 mt-4" id="diverse-preferences">4.4 Diverse AAPI Coalition Preferences</h3>
+
+          <div class="accordion mb-4">
+            <div class="accordion-item">
+              <h4 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sc-5" aria-expanded="false" aria-controls="sc-5">Diverse AAPI Coalition Preferences &mdash; 3 &times; 3 STV</button>
+              </h4>
+              <div id="sc-5" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                  <p class="todo mb-0">[Figures pending &mdash; run not yet complete.]</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4.5 -->
+          <h3 class="h4 mt-4" id="cross-run">4.5 Cross-Run Comparison</h3>
+          <figure class="figure d-block text-center my-4">
+            <img src="figures/cross_run_summaries/combined_bubbles_all_runs.png" class="figure-img img-fluid rounded border zoomable" alt="Cross-run comparison of seat outcomes">
+            <figcaption class="figure-caption"><span class="fig-num">Figure 5.</span> AAPI-preferred seat outcomes across every completed run, one panel per run, with a dotted line at the AAPI share of citywide VAP.</figcaption>
+          </figure>
+        </section>
+
+        <!-- Appendix -->
+        <section id="appendix" class="mb-5">
+          <h2>Appendix</h2>
+          <h3 class="h4 mt-3" id="appendix-a">A. Configuration Reference</h3>
+          <p class="table-caption"><span class="fig-num">Table 6.</span> Full list of simulated runs and the configuration parameters that distinguish them. All runs sample 100 plans, use 10 replicates and both voter models, and draw candidate pool sizes from a geometric distribution with $p = 0.2$.</p>
+          <div class="table-responsive mb-3">
+            <table class="table table-bordered table-sm align-middle">
+              <thead><tr><th>Run Name</th><th>Districts</th><th>Seats</th><th>Voting Rules</th><th>Turnout (WHI / HIS / AAPI / BAIO)</th><th>Departure from baseline</th></tr></thead>
+              <tbody>
+                <tr><td>Basic &ndash; 3 &times; 3 STV</td><td>3 &times; 3</td><td>9</td><td>STV (3 seats)</td><td>1.00 / 0.75 / 0.75 / 1.00</td><td>&mdash; (baseline)</td></tr>
+                <tr><td>Alternative Electoral Systems</td><td>9 &times; 1</td><td>9</td><td>Plurality, IRV, Alaska, Top Two, Alaska two-profile, Top Two two-profile</td><td>1.00 / 0.75 / 0.75 / 1.00</td><td>Single-member districts</td></tr>
+                <tr><td>Low AAPI Turnout</td><td>3 &times; 3</td><td>9</td><td>STV (3 seats)</td><td>1.00 / 0.75 / <strong>0.50</strong> / 1.00</td><td>AAPI turnout lowered to 0.50</td></tr>
+                <tr><td>Low AAPI Availability</td><td>3 &times; 3</td><td>9</td><td>STV (3 seats)</td><td>1.00 / 0.75 / 0.75 / 1.00</td><td>Availability exponents 2 / 2 / <strong>3</strong> / 2, shrinking the AAPI slate</td></tr>
+                <tr><td>Diverse AAPI Coalition Preferences</td><td>3 &times; 3</td><td>9</td><td>STV (3 seats)</td><td>1.00 / 0.75 / 0.75 / 1.00</td><td>AAPI Dirichlet alpha for the AAPI slate raised to 2</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <footer class="py-4 mt-5 border-top">
+    <div class="container-xl text-center">
+      <p class="mb-1">Metric Geometry &amp; Gerrymandering Group &mdash; San Diego City Council Election Analysis</p>
+      <p class="mb-0"><a href="https://github.com/mggg/San-Diego-Election-Analysis" target="_blank" rel="noopener">View the repository on GitHub</a></p>
+    </div>
+  </footer>
+
+  <button id="toTop" class="btn btn-sm" aria-label="Back to top">&uarr; Top</button>
+
+  <!-- Lightbox for zoomable figures -->
+  <div class="modal fade" id="lightbox" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content border-0">
+        <div class="modal-body p-0 text-center position-relative">
+          <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-2" data-bs-dismiss="modal" aria-label="Close" style="z-index:2;"></button>
+          <img id="lightbox-img" src="" alt="" class="img-fluid rounded">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Back-to-top button
+    var toTop = document.getElementById('toTop');
+    window.addEventListener('scroll', function () {
+      toTop.style.display = window.scrollY > 600 ? 'block' : 'none';
+    });
+    toTop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+    // Lightbox: click any zoomable figure to view it full size
+    var lightboxEl = document.getElementById('lightbox');
+    var lightbox = new bootstrap.Modal(lightboxEl);
+    var lightboxImg = document.getElementById('lightbox-img');
+    document.querySelectorAll('img.zoomable').forEach(function (img) {
+      img.addEventListener('click', function () {
+        lightboxImg.src = this.src;
+        lightboxImg.alt = this.alt;
+        lightbox.show();
+      });
+    });
+  </script>
+</body>
+</html>
