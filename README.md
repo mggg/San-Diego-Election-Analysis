@@ -182,7 +182,7 @@ Two parameters are currently being set to a default value:
 
 | Parameter                 | Value        | Description                                                                            |
 | --------------------------| -------------| ---------------------------------------------------------------------------------------|
-| Number of subsamples | 5 | Number of district plans to retain for election simulation. |
+| Number of subsamples | 100 | Number of district plans to retain for election simulation. |
 | Number of voters | 10,000 | Number of voters for each simulation. |
 
 Chain length was previously defaulted here; it is now a project-wide setting in
