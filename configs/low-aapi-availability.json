@@ -1,5 +1,5 @@
 {
-  "run_name": "Basic - 3 X 3 STV",
+  "run_name": "Low AAPI Availability",
   "num_subsamples": 100,
   "candidate_geometric_p": 0.2,
   "availability_exps": {
@@ -120,5 +120,5 @@
       "AAPI": 1
     }
   },
-  "num_reps": 100
+  "num_reps": 10
 }

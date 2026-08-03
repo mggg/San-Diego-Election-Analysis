@@ -1,5 +1,5 @@
 {
-  "run_name": "Alternative Electoral System",
+  "run_name": "Alternative Electoral Systems",
   "num_subsamples": 100,
   "candidate_geometric_p": 0.2,
 
@@ -12,11 +12,9 @@
   ],
   "voting_configs": {
     "IRV": {
-      "n_seats": 1,
       "tiebreak": "random"
     },
     "Plurality": {
-      "n_seats": 1,
       "tiebreak": "random"
     },
     "Alaska": {
@@ -127,5 +125,5 @@
       "AAPI": 1
     }
   },
-  "num_reps": 100
+  "num_reps": 10
 }
