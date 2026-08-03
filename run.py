@@ -148,12 +148,29 @@ def has_valid_settings(config):
         print("Settings do not exist. Running pipeline from settings stage.")
         return False
     district_nums = [d["num_districts"] for d in config["district_configs"]]
+    wants_primary = bool(config.get("primary_turnout"))
     for num_districts in district_nums:
-        count = sum(1 for f in (base / str(num_districts)).rglob("*.json") if f.stat().st_size > 0)
+        files = [f for f in (base / str(num_districts)).rglob("*.json") if f.stat().st_size > 0]
         expected_per_num_district = config["num_subsamples"] * num_districts
-        if count != expected_per_num_district:
+        if len(files) != expected_per_num_district:
             print(f"Missing valid settings for {num_districts} districts. Running pipeline from settings stage.")
             return False
+
+        # Settings written before primary_turnout was added carry no
+        # primary_bloc_proportions, and the profile stage would fail on the first
+        # one it reads. Counting files can't catch that, so sample one.
+        if wants_primary:
+            try:
+                with open(files[0], encoding="utf-8") as f:
+                    sample = json.load(f)
+            except (json.JSONDecodeError, OSError):
+                sample = {}
+            if "primary_bloc_proportions" not in sample:
+                print(
+                    f"Settings for {num_districts} districts predate primary_turnout. "
+                    "Running pipeline from settings stage."
+                )
+                return False
     return True
 
 def has_valid_profiles(config):
