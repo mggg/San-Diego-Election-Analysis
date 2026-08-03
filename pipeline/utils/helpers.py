@@ -2,16 +2,41 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Iterable, List, Dict, Optional
+from typing import Any, Iterable, List, Dict, Optional, Set
 import re
 import json
 import hashlib
+import zipfile
+import zlib
 
 @dataclass(frozen=True)
 class DistrictConfig:
     """One district configuration: number of districts and seats won per district."""
     num_districts: int
     winners: int
+
+def read_existing_zip_members(zip_path: Path) -> Optional[Set[str]]:
+    """
+    Return the set of member names already in zip_path, or None if it doesn't
+    exist or can't be safely read (missing, corrupted, or truncated).
+
+    None signals that resuming isn't possible and the archive must be rebuilt
+    from scratch. testzip() decompresses every member to verify its CRC, so a
+    truncated entry (e.g. a process killed mid-write) is caught here too.
+
+    Shared by profile_generator.py and simulate_elections.py -- both append to a
+    resumable zip archive of generated profiles.
+    """
+    if not zip_path.is_file():
+        return None
+    try:
+        with zipfile.ZipFile(zip_path) as archive:
+            if archive.testzip() is not None:
+                return None
+            return set(archive.namelist())
+    except (zipfile.BadZipFile, OSError, zlib.error, EOFError):
+        return None
+
 
 def load_json(path: Path) -> Dict[str, Any]:
     """
@@ -333,8 +358,13 @@ def find_settings_file(
 ) -> Optional[Path]:
     """
     Locate the settings json file for a given (plan, district) pair.
-    tries an exact filename match first, then falls back to glob patterns,
-    then returns the only file in the directory if exactly one exists.
+
+    Parses each candidate filename's plan/district numbers with the same regex
+    parse_plan_district_rep_from_path uses on profile filenames, then requires
+    an exact integer match. A glob-star pattern like "*plan_200*" would also
+    match "plan_2000" or "plan_2900" (200 is a numeric prefix of both),
+    silently resolving to the wrong district's settings -- exact integer
+    comparison after parsing avoids that.
 
     Args:
         settings_dir: Directory containing settings json files.
@@ -343,45 +373,22 @@ def find_settings_file(
         district: District id within the plan.
 
     Returns:
-        Path to the matching settings file, or None if not found.
+        Path to the matching settings file, or None if not found (or if
+        neither plan nor district is given and more than one file exists).
     """
     if not settings_dir.exists():
         return None
 
-    # 1) Exact match for the known generator format
-    if plan is not None and district is not None:
-        exact = settings_dir / f"sample_vk_sample_settings_district_plan_{plan:03d}_district_{district:02d}.json"
-        if exact.exists():
-            return exact
-
-    # 2) Best-effort matching (tolerant of minor naming variations)
-    patterns: List[str] = []
-    if plan is not None and district is not None:
-        patterns.extend([
-            f"*district_plan_{plan:03d}*district_{district:02d}.json",
-            f"*plan_{plan:03d}*district_{district:02d}.json",
-            f"*plan*{plan}*district*{district:02d}*.json",
-            f"*plan*{plan}*district*{district}*.json",
-        ])
-    elif plan is not None:
-        patterns.extend([
-            f"*district_plan_{plan:03d}*.json",
-            f"*plan_{plan:03d}*.json",
-            f"*plan*{plan}*.json",
-        ])
-    elif district is not None:
-        patterns.extend([
-            f"*district_{district:02d}.json",
-            f"*district*{district:02d}*.json",
-        ])
-
-    for pat in patterns:
-        hits = sorted(settings_dir.glob(pat))
-        if hits:
-            return hits[0]
-
-    # 3) If there is exactly one file, return it (useful for quick debugging)
     all_files = sorted(settings_dir.glob("*.json"))
-    if len(all_files) == 1:
-        return all_files[0]
+    if plan is None and district is None:
+        return all_files[0] if len(all_files) == 1 else None
+
+    for f in all_files:
+        f_plan, f_district, _ = parse_plan_district_rep_from_path(f)
+        if plan is not None and f_plan != plan:
+            continue
+        if district is not None and f_district != district:
+            continue
+        return f
+
     return None

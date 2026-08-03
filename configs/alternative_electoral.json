@@ -24,6 +24,24 @@
     },
     "TopTwo": {
       "tiebreak": "random"
+    },
+    "AlaskaTwoProfile": {
+      "m_1": 4,
+      "tiebreak": "random",
+      "round2_class": "STV",
+      "round2_kwargs": {
+        "n_seats": 1,
+        "tiebreak": "random"
+      }
+    },
+    "TopTwoTwoProfile": {
+      "m_1": 2,
+      "tiebreak": "random",
+      "round2_class": "Plurality",
+      "round2_kwargs": {
+        "n_seats": 1,
+        "tiebreak": "random"
+      }
     }
   },
   "voter_models": [

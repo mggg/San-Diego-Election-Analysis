@@ -23,10 +23,11 @@ import inspect
 import os
 import tempfile
 import zipfile
+from dataclasses import dataclass
 from pathlib import Path
 from joblib import Parallel, delayed
 from votekit import RankProfile, ScoreProfile, elections
-from typing import List, Iterable, Dict, Tuple, get_args
+from typing import List, Iterable, Dict, Optional, Tuple, get_args
 
 # Optional progress bar for joblib.
 try:
@@ -34,7 +35,16 @@ try:
 except Exception:
     joblib_progress = None
 
-from pipeline.utils.helpers import parse_district_configs, get_voter_models, election_results_signature, load_json
+from pipeline.utils.helpers import (
+    parse_district_configs,
+    get_voter_models,
+    election_results_signature,
+    load_json,
+    parse_plan_district_rep_from_path,
+    find_settings_file,
+    read_existing_zip_members,
+)
+from pipeline.two_round_election import run_two_round_fresh_profile
 
 
 def _required_profile(cls) -> Tuple[type, ...]:
@@ -50,54 +60,73 @@ def _required_profile(cls) -> Tuple[type, ...]:
     return expected_types if expected_types else (annotation,)
 
 
-def _import_voting_rules_from_votekit(rules: Iterable[str]) -> Dict[str, type]:
+@dataclass(frozen=True)
+class ElectionPlanEntry:
     """
-    Resolve configured rule names to VoteKit election classes.
-
-    Args:
-        rules: Election class names (the keys of the config's voting_configs).
-
-    Returns:
-        Dict mapping each rule name to its votekit.elections class.
-
-    Raises:
-        ValueError: If a name does not correspond to a VoteKit election class.
+    One resolved voting_configs entry: either an ordinary VoteKit election class,
+    or the generic two-round-fresh-profile rule (see pipeline.two_round_election).
     """
-    classes: Dict[str, type] = {}
-    for rule in rules:
-        cls = getattr(elections, rule, None)
-        if cls is None:
-            raise ValueError(
-                f"Unknown voting rule '{rule}' in voting_configs. "
-                f"Expected a VoteKit election class name (e.g. 'FastSTV', 'Plurality', 'IRV')."
-            )
-        classes[rule] = cls
-    return classes
+    rule: str
+    profile_class: type                       # RankProfile or ScoreProfile
+    election_class: Optional[type] = None     # set for ordinary VoteKit rules
+    is_two_round: bool = False                # set for the two-round-fresh-profile rule
+
+    @property
+    def is_custom(self) -> bool:
+        return self.is_two_round
 
 
-def _build_election_plan(voting_configs: dict) -> List[tuple]:
+def _build_election_plan(voting_configs: dict) -> List[ElectionPlanEntry]:
     """
-    Resolve each configured voting rule to its VoteKit election class and the
-    profile class it requires, once.
+    Resolve each configured voting rule to the plan entry that describes how to
+    run it, once. This work only depends on voting_configs (not on any profile),
+    so doing it a single time up front avoids repeating class lookups and
+    signature introspection for every profile file.
 
-    This work only depends on voting_configs (not on any profile), so doing it a
-    single time up front avoids repeating class lookups and signature
-    introspection for every profile file.
+    A rule is an ordinary VoteKit election class when its name resolves via
+    getattr(elections, rule). Otherwise, if its kwargs carry "round2_class", it's
+    the generic two-round-fresh-profile rule (Plurality round 1 -> freshly
+    resampled profile -> round2_class for round 2; see
+    pipeline.two_round_election.run_two_round_fresh_profile) -- this covers
+    Alaska- and TopTwo-shaped rules, and any future two-round rule, via config
+    alone. Anything else is an unrecognized rule name.
 
     Args:
         voting_configs: Mapping of rule name -> kwargs from the config file.
 
     Returns:
-        List of (rule, election_class, profile_class) tuples in config order.
-        profile_class is RankProfile when the rule accepts one, otherwise
-        ScoreProfile.
+        List of ElectionPlanEntry in config order.
+
+    Raises:
+        ValueError: If a rule name is neither a VoteKit election class nor a
+            two-round rule (missing "round2_class").
     """
-    plan: List[tuple] = []
-    for rule, election_class in _import_voting_rules_from_votekit(voting_configs.keys()).items():
-        profile_types = _required_profile(election_class)
-        profile_class = RankProfile if RankProfile in profile_types else ScoreProfile
-        plan.append((rule, election_class, profile_class))
+    plan: List[ElectionPlanEntry] = []
+    for rule, kwargs in voting_configs.items():
+        election_class = getattr(elections, rule, None)
+        if election_class is not None:
+            profile_types = _required_profile(election_class)
+            profile_class = RankProfile if RankProfile in profile_types else ScoreProfile
+            plan.append(ElectionPlanEntry(rule, profile_class, election_class=election_class))
+        elif "round2_class" in kwargs:
+            # Round 1 (Plurality) always runs on a RankProfile.
+            plan.append(ElectionPlanEntry(rule, RankProfile, is_two_round=True))
+        else:
+            raise ValueError(
+                f"Unknown voting rule '{rule}' in voting_configs. "
+                f"Expected a VoteKit election class name (e.g. 'FastSTV', 'Plurality', 'IRV'), "
+                f"or a two-round rule with a 'round2_class' kwarg."
+            )
     return plan
+
+
+def plan_needs_settings(plan: List[ElectionPlanEntry]) -> bool:
+    """
+    Whether any rule in the plan needs the district's settings dict (i.e. at
+    least one two-round-fresh-profile rule is configured). Gates the extra
+    settings-file lookups in simulate_elections so ordinary runs pay no cost.
+    """
+    return any(entry.is_custom for entry in plan)
 
 
 def _candidate_list_from_elected(elected: Iterable[set]) -> List[str]:
@@ -154,24 +183,34 @@ def _load_profile_from_bytes(csv_bytes: bytes, profile_class):
 
 def _process_profile(
     csv_bytes: bytes,
-    election_plan: List[tuple],
+    election_plan: List[ElectionPlanEntry],
     voting_configs: dict,
-) -> Dict[str, List[str]]:
+    settings: Optional[dict] = None,
+    mode: Optional[str] = None,
+) -> Tuple[Dict[str, List[str]], Dict[str, str]]:
     """
     Load a voter profile (its csv bytes, read from profiles.zip by the caller) and
     run each configured election to determine winners.
 
     Args:
         csv_bytes: The profile csv content, as read from the zip member.
-        election_plan: Precomputed (rule, election_class, profile_class) tuples
-            from _build_election_plan; avoids per-file class lookup/introspection.
+        election_plan: Precomputed ElectionPlanEntry list from
+            _build_election_plan; avoids per-file class lookup/introspection.
         voting_configs: Mapping of rule name -> kwargs from the config file. The
             kwargs are spread straight into the election class, so any VoteKit
             parameter (including the seat count) is set there.
+        settings: The profile's district settings dict (only needed when the
+            plan includes a two-round rule; see plan_needs_settings).
+        mode: Voter model name this profile was generated with (only needed for
+            the same reason as settings).
 
     Returns:
-        Dict mapping each configured rule name to its list of winner ids,
-        e.g. {"FastSTV": ["A2", "B1"], "Plurality": ["A2", "A3"]}.
+        (results, round2_profiles):
+            results maps each configured rule name to its list of winner ids,
+            e.g. {"FastSTV": ["A2", "B1"], "Plurality": ["A2", "A3"]}.
+            round2_profiles maps each two-round rule name to its freshly
+            sampled round-2 profile's CSV text (empty when the plan has none),
+            for the caller to persist.
     """
     # Parse each distinct profile type from the csv at most once and reuse it
     # across rules that need it (e.g. two rank-based rules), instead of
@@ -179,16 +218,25 @@ def _process_profile(
     profile_cache: dict = {}
 
     results: Dict[str, List[str]] = {}
-    for rule, election_class, profile_class in election_plan:
-        profile = profile_cache.get(profile_class)
+    round2_profiles: Dict[str, str] = {}
+    for entry in election_plan:
+        profile = profile_cache.get(entry.profile_class)
         if profile is None:
-            profile = _load_profile_from_bytes(csv_bytes, profile_class)
-            profile_cache[profile_class] = profile
+            profile = _load_profile_from_bytes(csv_bytes, entry.profile_class)
+            profile_cache[entry.profile_class] = profile
 
-        elected = election_class(profile, **voting_configs[rule]).get_elected()
-        results[rule] = _candidate_list_from_elected(elected)
+        if entry.is_custom:
+            winners, round2_csv = run_two_round_fresh_profile(
+                profile, settings, mode, voting_configs[entry.rule]
+            )
+            round2_profiles[entry.rule] = round2_csv
+        else:
+            elected = entry.election_class(profile, **voting_configs[entry.rule]).get_elected()
+            winners = _candidate_list_from_elected(elected)
 
-    return results
+        results[entry.rule] = winners
+
+    return results, round2_profiles
 
 
 def _result_file_current(out_path: Path, expected_len: int, signature: str) -> bool:
@@ -237,6 +285,13 @@ def simulate_elections(config) -> None:
         "profile_files", where each entry maps every configured rule name to its
         list of winner ids, e.g. {"FastSTV": [...], "Plurality": [...]}.
 
+        If any rule is a two-round-fresh-profile rule (see
+        pipeline.two_round_election), also writes
+        outputs/<run_name>/round2_profiles.zip -- one freshly-sampled,
+        finalists-only profile per (rule, profile file) -- and a
+        round2_profiles_metadata.json sidecar recording the signature it was
+        written under. Configs with no two-round rule never touch either file.
+
     Returns:
         None.
     """
@@ -247,11 +302,14 @@ def simulate_elections(config) -> None:
     # Resolve rules to classes once up front (also surfaces bad rule names before
     # any elections run).
     election_plan = _build_election_plan(voting_configs)
+    needs_settings = plan_needs_settings(election_plan)
 
     # Results already written under this signature (profiles + voting rules) can
     # be reused; a (mode, district) whose file is missing, stale, or short is
     # (re-)simulated -- so adding a voter model / voting rule / district config,
-    # or growing the profile set, only fills in what's missing.
+    # or growing the profile set, only fills in what's missing. Round-2 profile
+    # content depends on the same signature (it's derived from voting_configs'
+    # m_1/round2_kwargs), so round2_profiles.zip is kept current against it too.
     signature = election_results_signature(config)
 
     modes = get_voter_models(config)
@@ -266,64 +324,138 @@ def simulate_elections(config) -> None:
     with zipfile.ZipFile(zip_path) as archive:
         all_members = archive.namelist()
 
-    # run elections for each voter model
-    for mode in modes:
-        output_dir = out_root / mode
-        output_dir.mkdir(parents=True, exist_ok=True)
+    # Settings-file lookups are only needed by two-round rules; cached by
+    # resolved path (not (plan, district)) so every replicate sharing one
+    # settings file triggers just one JSON load, amortized across the whole run.
+    settings_cache: Dict[Path, dict] = {}
 
-        for dc in district_configs:
-            prefix = f"{mode}/{dc.num_districts}/"
-            all_profile_files = [m for m in all_members if m.startswith(prefix) and m.endswith(".csv")]
-
-            out_path = output_dir / (
-                f"{run_name}_{dc.num_districts}_districts_{dc.winners}_winners_for_voter_mode_{mode}.json"
+    def _settings_for_member(member: str, district_num: int) -> dict:
+        plan, district, _rep = parse_plan_district_rep_from_path(member)
+        settings_dir = Path(f"outputs/{run_name}/settings/{district_num}")
+        settings_path = find_settings_file(settings_dir, run_name, plan=plan, district=district)
+        if settings_path is None:
+            raise FileNotFoundError(
+                f"No settings file for member '{member}' (plan={plan}, district={district})."
             )
-            if _result_file_current(out_path, len(all_profile_files), signature):
-                print(f"[simulate_elections] Up to date, skipping: {out_path}")
-                continue
+        if settings_path not in settings_cache:
+            settings_cache[settings_path] = load_json(settings_path)
+        return settings_cache[settings_path]
 
-            desc = f"Running elections for {dc.num_districts} districts, {dc.winners} winner(s), mode={mode}"
-            if joblib_progress is not None:
-                ctx = joblib_progress(description=desc, total=len(all_profile_files))
-            else:
-                ctx = None
+    # Round-2 profiles are keyed by the same arcname as their round-1 profile
+    # (nested under the rule name), so a naive append risks a stale duplicate
+    # entry sitting alongside a fresh one -- ZipFile.read() would keep resolving
+    # to whichever was written first. Guard against that the same way
+    # profiles.zip's resumability does: rebuild wholesale on any signature
+    # mismatch (every combo is stale and gets recomputed in this same call, so
+    # the archive is fully repopulated in one pass); append-with-dedup only when
+    # resuming under an unchanged signature.
+    round2_zip_path = Path(f"outputs/{run_name}/round2_profiles.zip")
+    round2_metadata_path = Path(f"outputs/{run_name}/round2_profiles_metadata.json")
+    round2_archive: Optional[zipfile.ZipFile] = None
+    existing_round2_members: set = set()
 
-            # Open the archive once for the whole batch and stream each member's
-            # bytes to the workers, rather than having every worker reopen the zip
-            # (which re-parses the central directory per profile -- an
-            # O(profiles^2) cost on large runs). The bytes are yielded lazily, so
-            # joblib's pre_dispatch bounds how many decompressed profiles are held
-            # in memory at once. results_list stays index-aligned with
-            # all_profile_files because the generator yields in that order.
-            with zipfile.ZipFile(zip_path) as archive:
-                tasks = (
-                    delayed(_process_profile)(archive.read(member), election_plan, voting_configs)
-                    for member in all_profile_files
+    if needs_settings:
+        prior_round2_signature = None
+        if round2_metadata_path.is_file():
+            try:
+                prior_round2_signature = load_json(round2_metadata_path).get("signature")
+            except (json.JSONDecodeError, OSError):
+                prior_round2_signature = None
+
+        round2_zip_path.parent.mkdir(parents=True, exist_ok=True)
+        if prior_round2_signature == signature:
+            resumed_members = read_existing_zip_members(round2_zip_path)
+            if resumed_members is not None:
+                existing_round2_members = resumed_members
+                round2_archive = zipfile.ZipFile(round2_zip_path, "a", compression=zipfile.ZIP_DEFLATED)
+        if round2_archive is None:
+            round2_archive = zipfile.ZipFile(round2_zip_path, "w", compression=zipfile.ZIP_DEFLATED)
+            existing_round2_members = set()
+
+    try:
+        # run elections for each voter model
+        for mode in modes:
+            output_dir = out_root / mode
+            output_dir.mkdir(parents=True, exist_ok=True)
+
+            for dc in district_configs:
+                prefix = f"{mode}/{dc.num_districts}/"
+                all_profile_files = [m for m in all_members if m.startswith(prefix) and m.endswith(".csv")]
+
+                out_path = output_dir / (
+                    f"{run_name}_{dc.num_districts}_districts_{dc.winners}_winners_for_voter_mode_{mode}.json"
                 )
-                if ctx is not None:
-                    with ctx:
-                        results_list = Parallel(n_jobs=n_jobs)(tasks)
+                if _result_file_current(out_path, len(all_profile_files), signature):
+                    print(f"[simulate_elections] Up to date, skipping: {out_path}")
+                    continue
+
+                desc = f"Running elections for {dc.num_districts} districts, {dc.winners} winner(s), mode={mode}"
+                if joblib_progress is not None:
+                    ctx = joblib_progress(description=desc, total=len(all_profile_files))
                 else:
-                    print(f"[simulate_elections] {desc} (no joblib_progress installed)")
-                    results_list = Parallel(n_jobs=n_jobs)(tasks)
+                    ctx = None
 
-            # write all winners for this district/mode combo to one json file
-            with open(out_path, "w", encoding="utf-8") as f:
-                json.dump(
-                    {
-                        "run_name": run_name,
-                        "voter_mode": mode,
-                        "district_num": dc.num_districts,
-                        "winners_per_district": dc.winners,
-                        "signature": signature,
-                        "profile_files": all_profile_files,
-                        "election_results": results_list,
-                    },
-                    f,
-                    indent=2,
-                )
+                # Open the archive once for the whole batch and stream each member's
+                # bytes to the workers, rather than having every worker reopen the zip
+                # (which re-parses the central directory per profile -- an
+                # O(profiles^2) cost on large runs). The bytes are yielded lazily, so
+                # joblib's pre_dispatch bounds how many decompressed profiles are held
+                # in memory at once. results_list stays index-aligned with
+                # all_profile_files because the generator yields in that order.
+                with zipfile.ZipFile(zip_path) as archive:
+                    tasks = (
+                        delayed(_process_profile)(
+                            archive.read(member),
+                            election_plan,
+                            voting_configs,
+                            _settings_for_member(member, dc.num_districts) if needs_settings else None,
+                            mode if needs_settings else None,
+                        )
+                        for member in all_profile_files
+                    )
+                    if ctx is not None:
+                        with ctx:
+                            results_list = Parallel(n_jobs=n_jobs)(tasks)
+                    else:
+                        print(f"[simulate_elections] {desc} (no joblib_progress installed)")
+                        results_list = Parallel(n_jobs=n_jobs)(tasks)
 
-            print(f"[simulate_elections] Wrote: {out_path}")
+                # results_list is a list of (results, round2_profiles) pairs; only
+                # the winners dict goes into the election-results json.
+                election_results = [r for r, _ in results_list]
+
+                if needs_settings:
+                    for member, (_, round2_profiles) in zip(all_profile_files, results_list):
+                        for rule, csv_text in round2_profiles.items():
+                            arcname = f"{rule}/{member}"
+                            if arcname not in existing_round2_members:
+                                round2_archive.writestr(arcname, csv_text)
+                                existing_round2_members.add(arcname)
+
+                # write all winners for this district/mode combo to one json file
+                with open(out_path, "w", encoding="utf-8") as f:
+                    json.dump(
+                        {
+                            "run_name": run_name,
+                            "voter_mode": mode,
+                            "district_num": dc.num_districts,
+                            "winners_per_district": dc.winners,
+                            "signature": signature,
+                            "profile_files": all_profile_files,
+                            "election_results": election_results,
+                        },
+                        f,
+                        indent=2,
+                    )
+
+                print(f"[simulate_elections] Wrote: {out_path}")
+    finally:
+        if round2_archive is not None:
+            round2_archive.close()
+
+    if needs_settings:
+        with open(round2_metadata_path, "w", encoding="utf-8") as f:
+            json.dump({"signature": signature}, f)
 
 if __name__ == '__main__':
     config = load_json("configs/basic.json")
