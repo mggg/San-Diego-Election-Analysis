@@ -17,7 +17,12 @@ from pipeline.district_generator import generate_districts
 from pipeline.settings_generator import generate_settings
 from pipeline.profile_generator import generate_profiles
 from pipeline.simulate_elections import simulate_elections
-from pipeline.summarize_results import summarize_results, plot_combined_bubbles_all_runs
+from pipeline.summarize_results import (
+    summarize_results,
+    plot_combined_bubbles_all_runs,
+    aggregate_to_plan_level,
+    expected_figure_count,
+)
 from pipeline.utils.helpers import (
     election_results_signature,
     find_cached_district_output,
@@ -34,6 +39,7 @@ import json
 import shutil
 import zipfile
 import zlib
+import pandas as pd
 
 
 def load_config(config_path: str) -> dict:
@@ -235,14 +241,18 @@ def has_valid_election_results(config):
 
 def has_valid_summaries(config):
     run = config["run_name"]
-    base = Path("outputs") / run / "summaries"
-    figs = base / "figures"
-    csv = base / f"{run}_summary.csv"
-    if not base.is_dir() or not figs.is_dir() or not csv.is_file():
+    csv = Path("outputs") / run / "summaries" / f"{run}_summary.csv"
+    figs_dir = Path("figures") / run
+    if not csv.is_file() or not figs_dir.is_dir():
         print("Summaries do not exist. Running pipeline from summary stage.")
         return False
-    expected_figs = sum(2 if d["winners"] == 1 else 1 for d in config["district_configs"])
-    actual_figs = sum(1 for _ in figs.glob("*.png"))
+    try:
+        df_plan = aggregate_to_plan_level(pd.read_csv(csv))
+    except (pd.errors.EmptyDataError, OSError):
+        print("Summary csv unreadable. Running pipeline from summary stage.")
+        return False
+    expected_figs = expected_figure_count(df_plan, config)
+    actual_figs = sum(1 for _ in figs_dir.rglob("*.png"))
     if actual_figs != expected_figs:
         print("Incorrect number of figures.")
     return actual_figs == expected_figs

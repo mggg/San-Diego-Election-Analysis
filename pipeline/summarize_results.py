@@ -93,6 +93,24 @@ SEAT_AXIS_LABEL = "Seats won"
 TITLE_BAND_IN = 0.85
 LEGEND_BAND_IN = 0.55
 
+# Panel grid for the per-method figures. Four across is about as wide as a page
+# can carry before the panels stop being readable, so runs with more voting rules
+# than this wrap onto a second row instead of stretching into a 24-inch strip.
+MAX_PANEL_COLS = 4
+PANEL_W_IN = 4.0
+PANEL_H_IN = 3.4
+
+
+def _panel_grid(n_panels: int) -> Tuple[int, int]:
+    """
+    (rows, cols) for n panels: one row up to MAX_PANEL_COLS, then wrapped and
+    rebalanced so the rows are even (6 panels go 3+3, not 4+2).
+    """
+    if n_panels <= MAX_PANEL_COLS:
+        return 1, max(n_panels, 1)
+    nrows = -(-n_panels // MAX_PANEL_COLS)
+    return nrows, -(-n_panels // nrows)
+
 
 def _seat_axis_upper(max_seat: float, total_seats: int) -> int:
     """
@@ -305,6 +323,17 @@ def _draw_reference_lines(ax, config, iprop, label=None):
     return [iprop_line], [iprop_label]
 
 
+def _method_figs_dir(figs_dir: Path, elm: str) -> Path:
+    """
+    Per-election-method figures subfolder (figures/<run_name>/<election_method>/),
+    created on demand. Figures that span every method for a run (e.g. the
+    bubbles-by-method chart) stay at figs_dir's root instead.
+    """
+    method_dir = figs_dir / elm
+    method_dir.mkdir(parents=True, exist_ok=True)
+    return method_dir
+
+
 def _style_slate_axis(ax, config, slate: str, ylim: float, x_upper: int) -> None:
     """Spines, limits, ticks, and a per-slate subplot title for the by-slate panel."""
     for spine in ax.spines.values():
@@ -374,7 +403,7 @@ def _plot_slate_panel(
     _layout_title_and_legend_bands(fig, "Election outcomes by slate", run_name)
     _bottom_legend(fig, handles, labels, ncol=max(1, len(handles)))
 
-    fig_path = figs_dir / f"{run_name}_{num_dist}x{seats_per_district}_{elm}_byslate.png"
+    fig_path = _method_figs_dir(figs_dir, elm) / f"{run_name}_{num_dist}x{seats_per_district}_byslate.png"
     fig.savefig(fig_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
 
@@ -407,20 +436,22 @@ def _plot_method_histogram_panel(
     run_name: str,
 ) -> None:
     """
-    Create and save one paneled by-mode figure: a single row of seat-distribution
+    Create and save one paneled by-mode figure: a grid of seat-distribution
     histograms, one panel per election method (voting rule), laid out like the
-    bubble figures. Panels share x and y limits so the rules are read by direct
-    comparison, and the figure carries one title, one run-name subtitle, and one
-    legend for the whole row.
+    bubble figures -- a single row up to MAX_PANEL_COLS rules, wrapped beyond
+    that. Panels share x and y limits so the rules are read by direct comparison,
+    and the figure carries one title, one run-name subtitle, and one legend.
     """
     methods = sorted(df_plan["election_method"].unique())
     if not methods:
         return
 
-    fig, axes = plt.subplots(
-        1, len(methods), figsize=(4 * len(methods), 3.6), sharey=True, squeeze=False
+    nrows, ncols = _panel_grid(len(methods))
+    fig, axes_grid = plt.subplots(
+        nrows, ncols, figsize=(PANEL_W_IN * ncols, PANEL_H_IN * nrows),
+        sharey=True, squeeze=False,
     )
-    axes = axes[0]
+    axes = [ax for row in axes_grid for ax in row]
 
     total_seats = config["total_seats"]
     max_seat = max(
@@ -445,7 +476,14 @@ def _plot_method_histogram_panel(
         _style_method_axis(ax, method, ylim, x_upper)
         ref_handles, ref_labels = _draw_reference_lines(ax, config, iprop)
 
-    axes[0].set_ylabel("Number of plans", fontsize=AXIS_LABEL_SIZE)
+    # Blank out any cells the wrap leaves over in the last row.
+    for ax in axes[len(methods):]:
+        ax.axis("off")
+
+    # One y label per row: with sharey the tick labels only appear on the left
+    # panel anyway, so that is where the row's axis gets named.
+    for row in axes_grid:
+        row[0].set_ylabel("Number of plans", fontsize=AXIS_LABEL_SIZE)
 
     _layout_title_and_legend_bands(
         fig,
@@ -480,6 +518,22 @@ def aggregate_to_plan_level(df: pd.DataFrame) -> pd.DataFrame:
     return df.groupby(group_keys, as_index=False).agg({c: "sum" for c in seat_cols})
 
 
+def expected_figure_count(df_plan: pd.DataFrame, config: dict) -> int:
+    """
+    Number of figures summarize_results should produce for this run's df_plan:
+    one bymode histogram, plus (if slate_to_candidates is configured) one
+    byslate panel, per (district count, seats, election method) group -- plus
+    one bubbles-by-method figure per (district count, seats) pair.
+
+    Shared with run.py's has_valid_summaries, so both sides agree on what
+    "complete" means for the figures/<run_name>/ tree.
+    """
+    n_method_groups = df_plan.groupby(["num_districts", "seats_per_district", "election_method"]).ngroups
+    n_district_configs = df_plan.groupby(["num_districts", "seats_per_district"]).ngroups
+    per_method_figs = 2 if config.get("slate_to_candidates") else 1
+    return n_method_groups * per_method_figs + n_district_configs
+
+
 def summarize_results(config) -> Path:
     """
     Aggregate election results into a summary csv and produce histogram figures.
@@ -488,18 +542,23 @@ def summarize_results(config) -> Path:
         config: Parsed config dict.
 
     Outputs:
-        - outputs/summaries/<run_name>_summary/<run_name>_summary.csv: one row per
+        - outputs/<run_name>/summaries/<run_name>_summary.csv: one row per
           (replicate, plan, district) triple, with columns for plan, mode, district_id,
           rep, focal_seats, the population columns named in the config, and
           focal_vap_share (the district's focal share of VAP, turnout-free).
-        - outputs/summaries/<run_name>_summary/figures/*_bymode.png: one panel per
-          (district_count, seats_per_district), a single row of histograms with one
-          column per election method, each showing the distribution of focal-group
-          seats across modes under that voting rule.
-        - outputs/summaries/<run_name>_summary/figures/*_byslate.png: one panel per
+        - figures/<run_name>/*_bymode.png: one panel per (district_count,
+          seats_per_district), a single row of histograms with one column per
+          election method, each showing the distribution of focal-group seats
+          across modes under that voting rule. It spans every method, so it sits
+          at the run's figure root.
+        - figures/<run_name>/<election_method>/*_byslate.png: one panel per
           (district_count, seats_per_district, election_method), a grid (2x2 for
           San Diego's four slates) of per-slate seat-distribution histograms with
           each slate's own proportional-representation reference line.
+        - figures/<run_name>/*_bubbles_by_method.png: one bubble-grid figure per
+          (district_count, seats_per_district), spanning every election method,
+          so it lives at the run's figure root rather than under one method's
+          subfolder.
 
     Returns:
         Path to the summary directory.
@@ -524,10 +583,13 @@ def summarize_results(config) -> Path:
     if not results_dir.exists():
         raise FileNotFoundError(f"Could not find election results directory: {results_dir}")
 
-    # Output roots
+    # Output roots. The summary CSV stays under outputs/<run_name>/, but figures
+    # live in a separate top-level figures/<run_name>/ tree (organized by
+    # election method) so every run's figures can be browsed independently of
+    # the (gitignored, disposable) outputs/ working directory.
     summary_dir = Path("outputs") / f'{run_name}' / "summaries"
     summary_dir.mkdir(parents=True, exist_ok=True)
-    figs_dir = summary_dir / "figures"
+    figs_dir = Path("figures") / run_name
     figs_dir.mkdir(parents=True, exist_ok=True)
 
     # collect one row per simulation per district
@@ -625,7 +687,9 @@ def summarize_results(config) -> Path:
     # aggregate focal seats to the plan level (sum across districts)
     df_plan = aggregate_to_plan_level(df)
 
-    # one paneled histogram figure per (district count, seats), a column per method
+    # One paneled histogram figure per (district count, seats), a column per
+    # method. It spans every voting rule, so like the bubble figure it lives at
+    # the run's figure root rather than under any one method's folder.
     for (num_dist, seats_per_district), config_plans in df_plan.groupby(
         ["num_districts", "seats_per_district"]
     ):
@@ -741,10 +805,12 @@ def _plot_bubbles_for_config(df_plan, config, iprop, figs_dir, run_name, num_dis
     max_count = int(per_model_counts.max()) if not per_model_counts.empty else 0
     size_scale = (BUBBLE_MAX_AREA - BUBBLE_MIN_AREA) / max_count if max_count > 0 else 0
 
-    fig, axes = plt.subplots(
-        1, len(methods), figsize=(4 * len(methods), 3.5), sharey=True, squeeze=False
+    nrows, ncols = _panel_grid(len(methods))
+    fig, axes_grid = plt.subplots(
+        nrows, ncols, figsize=(PANEL_W_IN * ncols, PANEL_H_IN * nrows),
+        sharey=True, squeeze=False,
     )
-    axes = axes[0]
+    axes = [ax for row in axes_grid for ax in row]
 
     total_seats = config["total_seats"]
     seat_max = max(counts["focal_seats"].max(), iprop * total_seats)
@@ -757,6 +823,10 @@ def _plot_bubbles_for_config(df_plan, config, iprop, figs_dir, run_name, num_dis
         )
         ax.set_title(method, fontsize=PANEL_TITLE_SIZE)
         ax.set_xlabel(SEAT_AXIS_LABEL, fontsize=AXIS_LABEL_SIZE)
+
+    # Blank out any cells the wrap leaves over in the last row.
+    for ax in axes[len(methods):]:
+        ax.axis("off")
 
     _layout_title_and_legend_bands(
         fig,
@@ -819,7 +889,7 @@ def plot_combined_bubbles_all_runs(config, output_dir=None, exclude_runs=None) -
         config: Any run's parsed config; used for the seat-axis range and the
             population-share reference line (shared across runs).
         output_dir: Where to write the figure. Defaults to
-            outputs/cross_run_summaries/figures.
+            figures/cross_run_summaries.
         exclude_runs: Run names (matched case-insensitively as substrings) to omit.
 
     Returns:
@@ -909,7 +979,7 @@ def plot_combined_bubbles_all_runs(config, output_dir=None, exclude_runs=None) -
     _bottom_legend(fig, [prop_handle], [prop_label], ncol=1)
 
     if output_dir is None:
-        output_dir = Path("outputs") / "cross_run_summaries" / "figures"
+        output_dir = Path("figures") / "cross_run_summaries"
     output_dir.mkdir(parents=True, exist_ok=True)
     fig_path = output_dir / "combined_bubbles_all_runs.png"
     fig.savefig(fig_path, dpi=300, bbox_inches="tight")

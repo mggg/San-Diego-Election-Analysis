@@ -9,7 +9,20 @@ __pycache__/
 # =============================================================================
 # Folders
 # =============================================================================
-outputs/
+# outputs/ is mostly disposable/regenerable (profiles.zip, districts/, settings/,
+# round2_profiles.zip, ...), but election-results JSON is small and worth
+# tracking. git won't descend into a wholly excluded directory, so each level
+# down to election_results/ is ignored-then-re-included in turn, ending with
+# only the *.json files inside each voter-mode folder tracked.
+outputs/*
+!outputs/*/
+outputs/*/*
+!outputs/*/election_results/
+outputs/*/election_results/*
+!outputs/*/election_results/*/
+outputs/*/election_results/*/*
+!outputs/*/election_results/*/*.json
+
 # data/* rather than data/ so the tracked source layer below can be re-included;
 # git never descends into a wholly excluded directory.
 data/*
