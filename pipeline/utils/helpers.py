@@ -6,6 +6,7 @@ from typing import Any, Iterable, List, Dict, Optional, Set
 import re
 import json
 import hashlib
+import gzip
 import zipfile
 import zlib
 
@@ -217,6 +218,73 @@ def config_signature(config, keys) -> str:
 def profiles_signature(config) -> str:
     """Signature of the config parameters that determine profile content."""
     return config_signature(config, PROFILE_SIGNATURE_KEYS)
+
+
+# Config keys that determine the *content* of the districting Markov chain.
+# run_name and every other key (num_reps, voting_configs, blocs, ...) only
+# affect downstream stages, so two configs that agree on these keys produce
+# byte-identical district plans and can share one chain run.
+DISTRICTING_SIGNATURE_KEYS = [
+    "geodata_path",
+    "population_column",
+    "seed",
+    "chain_length",
+]
+
+
+def districting_signature(config) -> str:
+    """Signature of the config parameters that determine district-plan content."""
+    return config_signature(config, DISTRICTING_SIGNATURE_KEYS)
+
+
+def find_cached_district_output(config, num_districts: int, config_dir="configs") -> Optional[Path]:
+    """
+    Look for an existing district chain output equivalent to what generate_districts
+    would produce for this config and num_districts, so the chain_length-step
+    recombination Markov chain isn't rerun for a config that only changes
+    downstream parameters (num_reps, voting_configs, blocs, ...).
+
+    Scans every run config under config_dir for one whose districting_signature
+    matches (same geodata, population column, seed, and chain length) and that
+    has already produced a complete output file for num_districts.
+
+    Args:
+        config: Parsed config dict of the run needing this district count.
+        num_districts: District count being generated.
+        config_dir: Root directory to search for other run configs.
+
+    Returns:
+        Path to a reusable district output file, or None if no match is found.
+    """
+    target_signature = districting_signature(config)
+    chain_length = config["chain_length"]
+    own_run_name = config["run_name"]
+
+    for path in sorted(Path(config_dir).rglob("*.json")):
+        try:
+            other = load_run_config(path)
+        except (json.JSONDecodeError, OSError):
+            continue
+        other_run_name = other.get("run_name")
+        if not other_run_name or other_run_name == own_run_name:
+            continue
+        if districting_signature(other) != target_signature:
+            continue
+
+        candidate = (
+            Path("outputs") / other_run_name / "districts"
+            / f"{other_run_name}_{num_districts}_districts.jsonl.gz"
+        )
+        if not candidate.is_file():
+            continue
+        try:
+            with gzip.open(candidate, "rt", encoding="utf-8") as g:
+                if sum(1 for _ in g) != chain_length:
+                    continue
+        except OSError:
+            continue
+        return candidate
+    return None
 
 
 def election_results_signature(config) -> str:
