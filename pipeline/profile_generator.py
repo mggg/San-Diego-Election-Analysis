@@ -21,12 +21,10 @@ from votekit.ballot_generator import (
 from joblib import Parallel, delayed
 from joblib_progress import joblib_progress
 from pathlib import Path
-from typing import Optional, Set
 import time
 import json
 import zipfile
-import zlib
-from pipeline.utils.helpers import load_json, get_voter_models, profiles_signature
+from pipeline.utils.helpers import load_json, get_voter_models, profiles_signature, read_existing_zip_members
 from pipeline.utils.preference_matrix import preference_matrix_arcname, preference_matrix_json
 
 # maps mode name to votekit profile generator function
@@ -39,26 +37,6 @@ generator_name_to_function = {
 def _profiles_metadata_path(run_name: str) -> Path:
     """Sidecar recording the signature the profiles.zip was generated under."""
     return Path(f"outputs/{run_name}/profiles_metadata.json")
-
-
-def _read_existing_zip_members(zip_path: Path) -> Optional[Set[str]]:
-    """
-    Return the set of member names already in zip_path, or None if it doesn't
-    exist or can't be safely read (missing, corrupted, or truncated).
-
-    None signals that resuming isn't possible and the archive must be rebuilt
-    from scratch. testzip() decompresses every member to verify its CRC, so a
-    truncated entry (e.g. a process killed mid-write) is caught here too.
-    """
-    if not zip_path.is_file():
-        return None
-    try:
-        with zipfile.ZipFile(zip_path) as archive:
-            if archive.testzip() is not None:
-                return None
-            return set(archive.namelist())
-    except (zipfile.BadZipFile, OSError, zlib.error, EOFError):
-        return None
 
 
 def _expected_profile_filename(settings_file, duplicate_indx) -> str:
@@ -159,8 +137,8 @@ def generate_profiles(config):
             prior_signature = None
 
     same_signature = prior_signature == signature
-    existing_members = _read_existing_zip_members(zip_path) if same_signature else None
-    existing_matrix_members = _read_existing_zip_members(preference_matrix_zip_path) if same_signature else None
+    existing_members = read_existing_zip_members(zip_path) if same_signature else None
+    existing_matrix_members = read_existing_zip_members(preference_matrix_zip_path) if same_signature else None
 
     # Require both archives to be intact; if either is missing or corrupted,
     # rebuild everything so the two archives stay in sync.

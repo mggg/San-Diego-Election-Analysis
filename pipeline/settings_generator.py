@@ -326,7 +326,7 @@ def _build_slate_to_candidates(row, slate_columns, candidate_count, config):
     }
 
 
-def _filter_cohesion_to_slates(cohesion_parameters, active_slates):
+def filter_cohesion_to_slates(cohesion_parameters, active_slates):
     """
     Restrict each bloc's cohesion row to the active slates and renormalize so
     each row still sums to 1.
@@ -362,7 +362,7 @@ def _filter_cohesion_to_slates(cohesion_parameters, active_slates):
     return result
 
 
-def _filter_alphas_to_slates(alphas, active_slates):
+def filter_alphas_to_slates(alphas, active_slates):
     """
     Restrict each bloc's Dirichlet alpha row to the active slates.
 
@@ -555,8 +555,8 @@ def generate_settings(config):
                         row, slate_columns, candidate_count, config
                     )
                     active_slates = list(slate_to_candidates)
-                    cohesion_parameters = _filter_cohesion_to_slates(config["cohesion_parameters"], active_slates)
-                    alphas = _filter_alphas_to_slates(config["alphas"], active_slates)
+                    cohesion_parameters = filter_cohesion_to_slates(config["cohesion_parameters"], active_slates)
+                    alphas = filter_alphas_to_slates(config["alphas"], active_slates)
                     settings = output_settings | district_settings | {
                         "slate_to_candidates": slate_to_candidates,
                         "cohesion_parameters": cohesion_parameters,
