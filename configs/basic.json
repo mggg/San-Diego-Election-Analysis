@@ -17,7 +17,7 @@
     },
     "Limited": {
       "n_seats": 3,
-      "budget": 3,
+      "budget": 2,
       "tiebreak": "random"
     },
     "Cumulative": {
