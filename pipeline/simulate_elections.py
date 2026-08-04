@@ -38,6 +38,7 @@ except Exception:
 
 from pipeline.utils.helpers import (
     parse_district_configs,
+    score_rule_budgets,
     get_voter_models,
     election_results_signature,
     load_json,
@@ -46,7 +47,13 @@ from pipeline.utils.helpers import (
     primary_profiles_zip_path,
     read_existing_zip_members,
 )
-from pipeline.two_round_election import run_two_round_fresh_profile
+from pipeline.profile_generator import (
+    generator_accepts_total_points,
+    profile_arcname,
+    profile_class_for_mode,
+    score_budgets_for_run,
+)
+from pipeline.two_round_election import is_two_round, run_primary_general_election
 
 
 def _required_profile(cls) -> Tuple[type, ...]:
@@ -66,16 +73,24 @@ def _required_profile(cls) -> Tuple[type, ...]:
 class ElectionPlanEntry:
     """
     One resolved voting_configs entry: either an ordinary VoteKit election class,
-    or the generic two-round-fresh-profile rule (see pipeline.two_round_election).
+    or the generic primary/general rule (see pipeline.two_round_election).
+
+    accepted_profiles is every profile type the rule can run on, straight from
+    its own signature: ranked rules accept RankProfile, Cumulative/Limited accept
+    ScoreProfile, and a few (BlockPlurality) accept either. It decides which
+    voter models a rule is run under -- see plan_for_profile_class.
     """
     rule: str
-    profile_class: type                       # RankProfile or ScoreProfile
+    accepted_profiles: Tuple[type, ...]       # RankProfile and/or ScoreProfile
     election_class: Optional[type] = None     # set for ordinary VoteKit rules
-    is_two_round: bool = False                # set for the two-round-fresh-profile rule
+    is_two_round: bool = False                # set for the primary/general rule
 
     @property
     def is_custom(self) -> bool:
         return self.is_two_round
+
+    def accepts(self, profile_class: type) -> bool:
+        return profile_class in self.accepted_profiles
 
 
 def _build_election_plan(voting_configs: dict) -> List[ElectionPlanEntry]:
@@ -86,10 +101,11 @@ def _build_election_plan(voting_configs: dict) -> List[ElectionPlanEntry]:
     signature introspection for every profile file.
 
     A rule is an ordinary VoteKit election class when its name resolves via
-    getattr(elections, rule). Otherwise, if its kwargs carry "round2_class", it's
-    the generic two-round-fresh-profile rule (Plurality round 1 -> freshly
-    resampled profile -> round2_class for round 2; see
-    pipeline.two_round_election.run_two_round_fresh_profile) -- this covers
+    getattr(elections, rule). Otherwise, if its kwargs carry "general_class"
+    (or its former name "round2_class"), it's the generic primary/general rule
+    (Plurality primary -> freshly resampled profile -> general_class for the
+    general; see
+    pipeline.two_round_election.run_primary_general_election) -- this covers
     Alaska- and TopTwo-shaped rules, and any future two-round rule, via config
     alone. Anything else is an unrecognized rule name.
 
@@ -101,31 +117,49 @@ def _build_election_plan(voting_configs: dict) -> List[ElectionPlanEntry]:
 
     Raises:
         ValueError: If a rule name is neither a VoteKit election class nor a
-            two-round rule (missing "round2_class").
+            two-round rule (missing "general_class"/"round2_class").
     """
     plan: List[ElectionPlanEntry] = []
     for rule, kwargs in voting_configs.items():
         election_class = getattr(elections, rule, None)
         if election_class is not None:
-            profile_types = _required_profile(election_class)
-            profile_class = RankProfile if RankProfile in profile_types else ScoreProfile
-            plan.append(ElectionPlanEntry(rule, profile_class, election_class=election_class))
-        elif "round2_class" in kwargs:
-            # Round 1 (Plurality) always runs on a RankProfile.
-            plan.append(ElectionPlanEntry(rule, RankProfile, is_two_round=True))
+            profile_types = tuple(
+                t for t in _required_profile(election_class) if t in (RankProfile, ScoreProfile)
+            )
+            plan.append(
+                ElectionPlanEntry(rule, profile_types, election_class=election_class)
+            )
+        elif is_two_round(kwargs):
+            # The primary (Plurality) always runs on a RankProfile.
+            plan.append(ElectionPlanEntry(rule, (RankProfile,), is_two_round=True))
         else:
             raise ValueError(
                 f"Unknown voting rule '{rule}' in voting_configs. "
                 f"Expected a VoteKit election class name (e.g. 'FastSTV', 'Plurality', 'IRV'), "
-                f"or a two-round rule with a 'round2_class' kwarg."
+                f"or a two-round rule with a 'general_class' kwarg."
             )
     return plan
+
+
+def plan_for_profile_class(
+    plan: List[ElectionPlanEntry], profile_class: type
+) -> List[ElectionPlanEntry]:
+    """
+    The rules in `plan` that can run on ballots of this type.
+
+    Voter models and voting rules are no longer interchangeable: the ranked
+    models (slate_pl, slate_bt) produce RankProfiles that STV and IRV read but
+    Cumulative and Limited cannot, and name_cumulative produces ScoreProfiles the
+    other way around. Rather than fail when a run configures both families, each
+    model runs the subset of rules its ballots support.
+    """
+    return [entry for entry in plan if entry.accepts(profile_class)]
 
 
 def plan_needs_settings(plan: List[ElectionPlanEntry]) -> bool:
     """
     Whether any rule in the plan needs the district's settings dict (i.e. at
-    least one two-round-fresh-profile rule is configured). Gates the extra
+    least one primary/general rule is configured). Gates the extra
     settings-file lookups in simulate_elections so ordinary runs pay no cost.
     """
     return any(entry.is_custom for entry in plan)
@@ -190,7 +224,9 @@ def _process_profile(
     settings: Optional[dict] = None,
     mode: Optional[str] = None,
     primary_csv_bytes: Optional[bytes] = None,
-) -> Tuple[Dict[str, List[str]], Dict[str, str]]:
+    profile_class: type = RankProfile,
+    rule_budgets: Optional[Dict[str, int]] = None,
+) -> Tuple[Dict[str, List[str]], Dict[str, str], Dict[str, List[str]]]:
     """
     Load a voter profile (its csv bytes, read from profiles.zip by the caller) and
     run each configured election to determine winners.
@@ -198,7 +234,8 @@ def _process_profile(
     Args:
         csv_bytes: The profile csv content, as read from the zip member.
         election_plan: Precomputed ElectionPlanEntry list from
-            _build_election_plan; avoids per-file class lookup/introspection.
+            _build_election_plan, already filtered to the rules this voter model's
+            ballots support (see plan_for_profile_class).
         voting_configs: Mapping of rule name -> kwargs from the config file. The
             kwargs are spread straight into the election class, so any VoteKit
             parameter (including the seat count) is set there.
@@ -208,51 +245,71 @@ def _process_profile(
             the same reason as settings).
         primary_csv_bytes: The matching entry from primary_profiles.zip, when the
             run models a separate primary electorate. Two-round rules narrow on
-            these ballots instead of csv_bytes; every other rule, and round 2
+            these ballots instead of csv_bytes; every other rule, and the general
             itself, is unaffected.
+        profile_class: The profile type this voter model produces -- RankProfile
+            for the ranked models, ScoreProfile for name_cumulative.
+        rule_budgets: For score models, {rule -> budget}; csv_bytes is then a
+            {budget -> csv} mapping, since Cumulative and Limited reject ballots
+            worth more than their own budget and so cannot share one profile.
+            None for ranked models, where csv_bytes is a single csv.
 
     Returns:
-        (results, round2_profiles):
+        (results, general_profiles, primary_results):
             results maps each configured rule name to its list of winner ids,
-            e.g. {"FastSTV": ["A2", "B1"], "Plurality": ["A2", "A3"]}.
-            round2_profiles maps each two-round rule name to its freshly
-            sampled round-2 profile's CSV text (empty when the plan has none),
-            for the caller to persist.
+            e.g. {"FastSTV": ["A2", "B1"], "Plurality": ["A2", "A3"]}. For a
+            two-round rule these are the general's winners.
+            general_profiles maps each two-round rule name to the freshly
+            sampled general-election profile's CSV text (empty when the plan has
+            none), for the caller to persist.
+            primary_results maps each two-round rule name to the finalists its
+            primary advanced -- the intermediate outcome the general was decided
+            from, which is otherwise lost.
     """
-    # Parse each distinct profile type from the csv at most once and reuse it
-    # across rules that need it (e.g. two rank-based rules), instead of
-    # re-reading the same file per rule. Primary-round ballots are a separate
-    # electorate, so they get their own cache rather than sharing this one.
-    profile_cache: dict = {}
-    primary_cache: dict = {}
+    if not election_plan:
+        return {}, {}, {}
+
+    # A ranked model has one profile for every rule. A score model has one per
+    # budget, parsed on first use and reused across rules sharing that budget.
+    parsed: Dict = {}
+
+    def profile_for(entry: ElectionPlanEntry):
+        key = rule_budgets.get(entry.rule) if rule_budgets else None
+        if key not in parsed:
+            raw = csv_bytes[key] if rule_budgets else csv_bytes
+            parsed[key] = _load_profile_from_bytes(raw, profile_class)
+        return parsed[key]
+
+    primary_profile_cache: List = []
 
     results: Dict[str, List[str]] = {}
-    round2_profiles: Dict[str, str] = {}
+    general_profiles: Dict[str, str] = {}
+    primary_results: Dict[str, List[str]] = {}
     for entry in election_plan:
-        profile = profile_cache.get(entry.profile_class)
-        if profile is None:
-            profile = _load_profile_from_bytes(csv_bytes, entry.profile_class)
-            profile_cache[entry.profile_class] = profile
-
+        profile = profile_for(entry)
         if entry.is_custom:
-            round1_profile = profile
+            # Primary-round ballots are a separate electorate, so they are parsed
+            # separately -- once, then shared across the two-round rules.
+            primary_profile = profile
             if primary_csv_bytes is not None:
-                round1_profile = primary_cache.get(entry.profile_class)
-                if round1_profile is None:
-                    round1_profile = _load_profile_from_bytes(primary_csv_bytes, entry.profile_class)
-                    primary_cache[entry.profile_class] = round1_profile
+                if not primary_profile_cache:
+                    primary_profile_cache.append(
+                        _load_profile_from_bytes(primary_csv_bytes, profile_class)
+                    )
+                primary_profile = primary_profile_cache[0]
 
-            winners, round2_csv = run_two_round_fresh_profile(
-                round1_profile, settings, mode, voting_configs[entry.rule]
+            winners, general_csv, finalists = run_primary_general_election(
+                primary_profile, settings, mode, voting_configs[entry.rule]
             )
-            round2_profiles[entry.rule] = round2_csv
+            general_profiles[entry.rule] = general_csv
+            primary_results[entry.rule] = finalists
         else:
             elected = entry.election_class(profile, **voting_configs[entry.rule]).get_elected()
             winners = _candidate_list_from_elected(elected)
 
         results[entry.rule] = winners
 
-    return results, round2_profiles
+    return results, general_profiles, primary_results
 
 
 def _result_file_current(out_path: Path, expected_len: int, signature: str) -> bool:
@@ -301,12 +358,19 @@ def simulate_elections(config) -> None:
         "profile_files", where each entry maps every configured rule name to its
         list of winner ids, e.g. {"FastSTV": [...], "Plurality": [...]}.
 
-        If any rule is a two-round-fresh-profile rule (see
-        pipeline.two_round_election), also writes
-        outputs/<run_name>/round2_profiles.zip -- one freshly-sampled,
-        finalists-only profile per (rule, profile file) -- and a
-        round2_profiles_metadata.json sidecar recording the signature it was
-        written under. Configs with no two-round rule never touch either file.
+        If any rule is a primary/general rule (see pipeline.two_round_election),
+        also writes:
+
+        * outputs/<run_name>/primary_results/<mode>/<same filename>.json -- the
+          finalists each rule's primary advanced, in the same shape as the
+          election results and index-aligned with the same "profile_files", so
+          the primary and general files line up row for row.
+        * outputs/<run_name>/general_profiles.zip -- one freshly-sampled,
+          finalists-only profile per (rule, profile file) -- and a
+          general_profiles_metadata.json sidecar recording the signature it was
+          written under.
+
+        Configs with no two-round rule never touch any of them.
 
     Returns:
         None.
@@ -325,7 +389,8 @@ def simulate_elections(config) -> None:
     # (re-)simulated -- so adding a voter model / voting rule / district config,
     # or growing the profile set, only fills in what's missing. Round-2 profile
     # content depends on the same signature (it's derived from voting_configs'
-    # m_1/round2_kwargs), so round2_profiles.zip is kept current against it too.
+    # m_1/general_kwargs), so general_profiles.zip and primary_results/ are kept
+    # current against it too.
     signature = election_results_signature(config)
 
     modes = get_voter_models(config)
@@ -333,6 +398,9 @@ def simulate_elections(config) -> None:
 
     out_root = Path("outputs") / f'{run_name}' / "election_results"
     out_root.mkdir(parents=True, exist_ok=True)
+    # Finalists from the primary stage of any two-round rule, mirroring
+    # election_results/ file for file.
+    primary_out_root = Path("outputs") / f'{run_name}' / "primary_results"
 
     # profiles for the whole run live in one compressed archive; list its members
     # once and select the relevant ones per (mode, district count) below.
@@ -353,7 +421,7 @@ def simulate_elections(config) -> None:
         if builtin_two_round:
             print(
                 f"[simulate_elections] WARNING: primary_turnout is set, but {builtin_two_round} "
-                "build round 2 by stripping the round-1 ballots and cannot use a separate "
+                "build their general from the primary's own ballots and cannot use a separate "
                 "primary electorate. They will run on the standard profiles."
             )
 
@@ -382,28 +450,28 @@ def simulate_elections(config) -> None:
     # mismatch (every combo is stale and gets recomputed in this same call, so
     # the archive is fully repopulated in one pass); append-with-dedup only when
     # resuming under an unchanged signature.
-    round2_zip_path = Path(f"outputs/{run_name}/round2_profiles.zip")
-    round2_metadata_path = Path(f"outputs/{run_name}/round2_profiles_metadata.json")
-    round2_archive: Optional[zipfile.ZipFile] = None
-    existing_round2_members: set = set()
+    general_zip_path = Path(f"outputs/{run_name}/general_profiles.zip")
+    general_metadata_path = Path(f"outputs/{run_name}/general_profiles_metadata.json")
+    general_archive: Optional[zipfile.ZipFile] = None
+    existing_general_members: set = set()
 
     if needs_settings:
-        prior_round2_signature = None
-        if round2_metadata_path.is_file():
+        prior_general_signature = None
+        if general_metadata_path.is_file():
             try:
-                prior_round2_signature = load_json(round2_metadata_path).get("signature")
+                prior_general_signature = load_json(general_metadata_path).get("signature")
             except (json.JSONDecodeError, OSError):
-                prior_round2_signature = None
+                prior_general_signature = None
 
-        round2_zip_path.parent.mkdir(parents=True, exist_ok=True)
-        if prior_round2_signature == signature:
-            resumed_members = read_existing_zip_members(round2_zip_path)
+        general_zip_path.parent.mkdir(parents=True, exist_ok=True)
+        if prior_general_signature == signature:
+            resumed_members = read_existing_zip_members(general_zip_path)
             if resumed_members is not None:
-                existing_round2_members = resumed_members
-                round2_archive = zipfile.ZipFile(round2_zip_path, "a", compression=zipfile.ZIP_DEFLATED)
-        if round2_archive is None:
-            round2_archive = zipfile.ZipFile(round2_zip_path, "w", compression=zipfile.ZIP_DEFLATED)
-            existing_round2_members = set()
+                existing_general_members = resumed_members
+                general_archive = zipfile.ZipFile(general_zip_path, "a", compression=zipfile.ZIP_DEFLATED)
+        if general_archive is None:
+            general_archive = zipfile.ZipFile(general_zip_path, "w", compression=zipfile.ZIP_DEFLATED)
+            existing_general_members = set()
 
     try:
         # run elections for each voter model
@@ -411,8 +479,45 @@ def simulate_elections(config) -> None:
             output_dir = out_root / mode
             output_dir.mkdir(parents=True, exist_ok=True)
 
+            # A voter model's ballots decide which rules can run on them: the
+            # ranked models feed STV/IRV/Plurality, name_cumulative feeds
+            # Cumulative/Limited. Rules the model cannot supply are skipped here
+            # rather than raising when the csv fails to load as the wrong type.
+            mode_profile_class = profile_class_for_mode(mode)
+            mode_plan = plan_for_profile_class(election_plan, mode_profile_class)
+            skipped = [e.rule for e in election_plan if e not in mode_plan]
+            if skipped:
+                print(
+                    f"[simulate_elections] {mode} produces {mode_profile_class.__name__} ballots; "
+                    f"skipping {skipped} (they need "
+                    f"{'ScoreProfile' if mode_profile_class is RankProfile else 'RankProfile'})."
+                )
+            if not mode_plan:
+                print(
+                    f"[simulate_elections] WARNING: no configured voting rule can run on "
+                    f"{mode}'s ballots. Nothing to simulate for this voter model."
+                )
+                continue
+            mode_needs_settings = plan_needs_settings(mode_plan)
+            # Score models store one profile per budget; the canonical member
+            # list comes from any one budget's subtree and the others are read at
+            # the same path with the budget swapped.
+            is_score_mode = generator_accepts_total_points(mode)
+            mode_rule_budgets = (
+                {e.rule: score_rule_budgets(voting_configs)[e.rule] for e in mode_plan
+                 if e.rule in score_rule_budgets(voting_configs)}
+                if is_score_mode else None
+            )
+
             for dc in district_configs:
-                prefix = f"{mode}/{dc.num_districts}/"
+                if is_score_mode:
+                    budgets = score_budgets_for_run(config, dc.winners)
+                    canonical_budget = budgets[0]
+                    prefix = f"{mode}/{canonical_budget}/{dc.num_districts}/"
+                else:
+                    budgets = [None]
+                    canonical_budget = None
+                    prefix = f"{mode}/{dc.num_districts}/"
                 all_profile_files = [m for m in all_members if m.startswith(prefix) and m.endswith(".csv")]
 
                 out_path = output_dir / (
@@ -439,17 +544,26 @@ def simulate_elections(config) -> None:
                     archive = archives.enter_context(zipfile.ZipFile(zip_path))
                     primary_archive = (
                         archives.enter_context(zipfile.ZipFile(primary_zip_path))
-                        if primary_zip_path is not None and needs_settings
+                        if primary_zip_path is not None and mode_needs_settings
                         else None
                     )
+                    def _payload(member: str):
+                        """One profile for a ranked model; one per budget for a score model."""
+                        if not is_score_mode:
+                            return archive.read(member)
+                        tail = member.split("/", 2)[2]  # <district_num>/<file>.csv
+                        return {b: archive.read(f"{mode}/{b}/{tail}") for b in budgets}
+
                     tasks = (
                         delayed(_process_profile)(
-                            archive.read(member),
-                            election_plan,
+                            _payload(member),
+                            mode_plan,
                             voting_configs,
-                            _settings_for_member(member, dc.num_districts) if needs_settings else None,
-                            mode if needs_settings else None,
+                            _settings_for_member(member, dc.num_districts) if mode_needs_settings else None,
+                            mode if mode_needs_settings else None,
                             primary_archive.read(member) if primary_archive is not None else None,
+                            mode_profile_class,
+                            mode_rule_budgets,
                         )
                         for member in all_profile_files
                     )
@@ -460,17 +574,19 @@ def simulate_elections(config) -> None:
                         print(f"[simulate_elections] {desc} (no joblib_progress installed)")
                         results_list = Parallel(n_jobs=n_jobs)(tasks)
 
-                # results_list is a list of (results, round2_profiles) pairs; only
-                # the winners dict goes into the election-results json.
-                election_results = [r for r, _ in results_list]
+                # results_list holds (results, general_profiles, primary_results)
+                # triples; the winners dict goes into the election-results json and
+                # the finalists into the primary-results json beside it.
+                election_results = [r for r, _, _ in results_list]
+                primary_results = [pr for _, _, pr in results_list]
 
-                if needs_settings:
-                    for member, (_, round2_profiles) in zip(all_profile_files, results_list):
-                        for rule, csv_text in round2_profiles.items():
+                if mode_needs_settings:
+                    for member, (_, general_profiles, _) in zip(all_profile_files, results_list):
+                        for rule, csv_text in general_profiles.items():
                             arcname = f"{rule}/{member}"
-                            if arcname not in existing_round2_members:
-                                round2_archive.writestr(arcname, csv_text)
-                                existing_round2_members.add(arcname)
+                            if arcname not in existing_general_members:
+                                general_archive.writestr(arcname, csv_text)
+                                existing_general_members.add(arcname)
 
                 # write all winners for this district/mode combo to one json file
                 with open(out_path, "w", encoding="utf-8") as f:
@@ -489,12 +605,42 @@ def simulate_elections(config) -> None:
                     )
 
                 print(f"[simulate_elections] Wrote: {out_path}")
+
+                # The primary's finalists are an outcome in their own right --
+                # who reached the general -- and are otherwise unrecoverable
+                # without re-running the primary. Written in the same shape as the
+                # general's results, keyed by the same profile_files order, so the
+                # two files line up row for row.
+                if mode_needs_settings and any(primary_results):
+                    primary_dir = primary_out_root / mode
+                    primary_dir.mkdir(parents=True, exist_ok=True)
+                    primary_path = primary_dir / out_path.name
+                    with open(primary_path, "w", encoding="utf-8") as f:
+                        json.dump(
+                            {
+                                "run_name": run_name,
+                                "voter_mode": mode,
+                                "district_num": dc.num_districts,
+                                "winners_per_district": dc.winners,
+                                "signature": signature,
+                                "stage": "primary",
+                                "advances_per_rule": {
+                                    rule: voting_configs[rule].get("m_1")
+                                    for rule in primary_results[0]
+                                },
+                                "profile_files": all_profile_files,
+                                "primary_results": primary_results,
+                            },
+                            f,
+                            indent=2,
+                        )
+                    print(f"[simulate_elections] Wrote: {primary_path}")
     finally:
-        if round2_archive is not None:
-            round2_archive.close()
+        if general_archive is not None:
+            general_archive.close()
 
     if needs_settings:
-        with open(round2_metadata_path, "w", encoding="utf-8") as f:
+        with open(general_metadata_path, "w", encoding="utf-8") as f:
             json.dump({"signature": signature}, f)
 
 if __name__ == '__main__':

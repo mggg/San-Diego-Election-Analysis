@@ -11,13 +11,14 @@ than thousands of loose CSV files) keeps the output tree small and avoids the
 per-file filesystem overhead of a large ensemble.
 """
 
+import inspect
 from contextlib import ExitStack
 from glob import glob
 from votekit.ballot_generator import (
     BlocSlateConfig,
     slate_pl_profile_generator,
     slate_bt_profile_generator,
-    cambridge_profile_generator,
+    name_cumulative_profile_generator
 )
 from joblib import Parallel, delayed
 from joblib_progress import joblib_progress
@@ -25,9 +26,12 @@ from pathlib import Path
 import time
 import json
 import zipfile
+from typing import List
+
 from pipeline.utils.helpers import (
     load_json,
     get_voter_models,
+    required_score_budgets,
     profiles_signature,
     primary_profiles_signature,
     primary_profiles_metadata_path,
@@ -41,8 +45,33 @@ from pipeline.settings_generator import primary_turnout_map
 generator_name_to_function = {
     "slate_pl": slate_pl_profile_generator,
     "slate_bt": slate_bt_profile_generator,
-    "cambridge": cambridge_profile_generator,
+    "name_cumulative": name_cumulative_profile_generator,
 }
+
+
+def profile_class_for_mode(mode: str):
+    """
+    The profile type a voter model produces -- RankProfile for the ranked models,
+    ScoreProfile for the cumulative one.
+
+    Read off each generator's own return annotation rather than a hand-kept
+    table, so adding a generator above is enough for the rest of the pipeline to
+    know what it yields. simulate_elections uses this to pair each voting rule
+    with the models whose ballots it can actually run on: STV cannot read
+    cumulative ballots, and Cumulative/Limited cannot read ranked ones.
+
+    Raises:
+        KeyError: If mode is not a configured voter model.
+        TypeError: If its generator does not annotate a return type.
+    """
+    generator = generator_name_to_function[mode]
+    annotation = inspect.signature(generator).return_annotation
+    if annotation is inspect.Signature.empty:
+        raise TypeError(
+            f"Generator for voter model '{mode}' has no return annotation, so the "
+            "profile type it produces cannot be determined."
+        )
+    return annotation
 
 def _profiles_metadata_path(run_name: str) -> Path:
     """Sidecar recording the signature the profiles.zip was generated under."""
@@ -61,7 +90,45 @@ def _expected_profile_filename(settings_file, duplicate_indx) -> str:
     return f"{setting_file_stem.replace('sample_settings', 'profile')}_v{duplicate_indx}.csv"
 
 
-def process_settings_file(settings_file, mode, duplicate_indx, proportions_key="bloc_proportions"):
+def generator_accepts_total_points(mode: str) -> bool:
+    """Whether this voter model's generator takes a `total_points` budget."""
+    return "total_points" in inspect.signature(generator_name_to_function[mode]).parameters
+
+
+def score_budgets_for_run(config, district_winners: int) -> List[int]:
+    """
+    Every score-ballot budget this run needs, ascending.
+
+    Read from the configured rules: Cumulative fixes a voter's budget at n_seats,
+    Limited states its own, and each rejects ballots that spend more than that.
+    Two rules with different budgets need two different sets of ballots, so each
+    budget gets generated separately (and stored under its own subdirectory).
+
+    Falls back to the district's seat count when a score model is configured with
+    no score rule to read it -- the generator's own default (one point per
+    candidate) satisfies no rule, so it is never used.
+    """
+    budgets = required_score_budgets(config.get("voting_configs"))
+    return budgets or [int(district_winners)]
+
+
+def profile_arcname(mode: str, district_num: int, filename: str, budget=None) -> str:
+    """
+    Where a profile lives in the archive.
+
+    Ranked models keep the original "<mode>/<district_num>/<file>" layout. Score
+    models gain a budget level -- "<mode>/<budget>/<district_num>/<file>" --
+    because the same district needs one set of ballots per budget its rules ask
+    for, and they are not interchangeable.
+    """
+    if budget is None:
+        return f"{mode}/{district_num}/{filename}"
+    return f"{mode}/{budget}/{district_num}/{filename}"
+
+
+def process_settings_file(
+    settings_file, mode, duplicate_indx, proportions_key="bloc_proportions", total_points=None
+):
     """
     Generate a voter profile for a single district using the given voter model.
 
@@ -76,6 +143,8 @@ def process_settings_file(settings_file, mode, duplicate_indx, proportions_key="
         proportions_key: Which electorate to sample from -- "bloc_proportions"
             (the configured turnout) or "primary_bloc_proportions" (the lower
             turnout of a two-round rule's narrowing round).
+        total_points: Score-ballot budget, for models that produce score ballots.
+            Ignored by the ranked generators, which take no such argument.
 
     Returns:
         (filename, csv_text): filename is the profile's zip entry name within its
@@ -94,7 +163,11 @@ def process_settings_file(settings_file, mode, duplicate_indx, proportions_key="
     config.set_dirichlet_alphas(settings["alphas"])
 
     filename = _expected_profile_filename(settings_file, duplicate_indx)
-    profile = generator_name_to_function[mode](config)
+    generator = generator_name_to_function[mode]
+    if total_points is not None and generator_accepts_total_points(mode):
+        profile = generator(config, total_points=total_points)
+    else:
+        profile = generator(config)
     csv_text = profile.to_csv()
     matrix_json = preference_matrix_json(config)
 
@@ -198,49 +271,72 @@ def _generate_profile_archive(
             print(f"[rep {duplicate_indx + 1}/{num_reps}] Start at {time.strftime('%Y-%m-%d %H:%M:%S')}")
             district_nums =  [d_config['num_districts'] for d_config in config['district_configs']]
             for district_num in district_nums:
+                winners = next(
+                    (
+                        d["winners"] for d in config["district_configs"]
+                        if d["num_districts"] == district_num
+                    ),
+                    1,
+                )
                 for mode in voter_models:
                     settings_folder = Path(f"outputs/{run_name}/settings/{district_num}")
                     all_settings_files = glob(f"{settings_folder}/*.json")
 
-                    # Skip settings files whose profile AND matrix are already in
-                    # their respective archives. If either entry is missing,
-                    # regenerate both so the two archives stay in sync.
-                    pending_settings_files = [
-                        sf for sf in all_settings_files
-                        if f"{mode}/{district_num}/{_expected_profile_filename(sf, duplicate_indx)}"
-                        not in existing_members
-                        or (
-                            track_matrices
-                            and f"{mode}/{district_num}/{preference_matrix_arcname(_expected_profile_filename(sf, duplicate_indx))}"
-                            not in existing_matrix_members
-                        )
-                    ]
-                    if not pending_settings_files:
-                        continue
+                    # A score model needs one set of ballots per budget its rules
+                    # ask for; a ranked model has no budget at all, which the
+                    # single None pass stands for.
+                    if generator_accepts_total_points(mode):
+                        budgets = score_budgets_for_run(config, winners)
+                    else:
+                        budgets = [None]
 
-                    with joblib_progress(
-                        description=f"[{label}][rep {duplicate_indx + 1:03d}/{num_reps}] Generating VK profiles for {district_num:02d} districts and voter model {mode}",
-                        total=len(pending_settings_files),
-                    ):
-                        results = Parallel(n_jobs=-1, return_as="generator_unordered")(
-                            delayed(process_settings_file)(
-                                settings_file, mode, duplicate_indx, proportions_key
+                    for budget in budgets:
+                        # Skip settings files whose profile AND matrix are already
+                        # in their respective archives. If either entry is
+                        # missing, regenerate both so the two stay in sync.
+                        pending_settings_files = [
+                            sf for sf in all_settings_files
+                            if profile_arcname(
+                                mode, district_num, _expected_profile_filename(sf, duplicate_indx), budget
+                            ) not in existing_members
+                            or (
+                                track_matrices
+                                and profile_arcname(
+                                    mode, district_num,
+                                    preference_matrix_arcname(_expected_profile_filename(sf, duplicate_indx)),
+                                    budget,
+                                ) not in existing_matrix_members
                             )
-                            for settings_file in pending_settings_files
-                        )
+                        ]
+                        if not pending_settings_files:
+                            continue
 
-                        for filename, csv_text, matrix_json in results:
-                            profile_arcname = f"{mode}/{district_num}/{filename}"
-                            # Guard against duplicate zip entries when one archive
-                            # had an entry the other lacked.
-                            if profile_arcname not in existing_members:
-                                archive.writestr(profile_arcname, csv_text)
-                                existing_members.add(profile_arcname)
-                            if track_matrices:
-                                matrix_arcname = f"{mode}/{district_num}/{preference_matrix_arcname(filename)}"
-                                if matrix_arcname not in existing_matrix_members:
-                                    matrix_archive.writestr(matrix_arcname, matrix_json)
-                                    existing_matrix_members.add(matrix_arcname)
+                        budget_note = f", budget {budget}" if budget is not None else ""
+                        with joblib_progress(
+                            description=f"[{label}][rep {duplicate_indx + 1:03d}/{num_reps}] Generating VK profiles for {district_num:02d} districts and voter model {mode}{budget_note}",
+                            total=len(pending_settings_files),
+                        ):
+                            results = Parallel(n_jobs=-1, return_as="generator_unordered")(
+                                delayed(process_settings_file)(
+                                    settings_file, mode, duplicate_indx, proportions_key, budget
+                                )
+                                for settings_file in pending_settings_files
+                            )
+
+                            for filename, csv_text, matrix_json in results:
+                                arcname = profile_arcname(mode, district_num, filename, budget)
+                                # Guard against duplicate zip entries when one
+                                # archive had an entry the other lacked.
+                                if arcname not in existing_members:
+                                    archive.writestr(arcname, csv_text)
+                                    existing_members.add(arcname)
+                                if track_matrices:
+                                    matrix_arc = profile_arcname(
+                                        mode, district_num, preference_matrix_arcname(filename), budget
+                                    )
+                                    if matrix_arc not in existing_matrix_members:
+                                        matrix_archive.writestr(matrix_arc, matrix_json)
+                                        existing_matrix_members.add(matrix_arc)
             rep_elapsed = time.perf_counter() - rep_start
             print(f"[rep {duplicate_indx + 1}/{num_reps}] Done in {rep_elapsed:.1f}s")
 

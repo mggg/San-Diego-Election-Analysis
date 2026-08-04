@@ -19,26 +19,18 @@
     },
     "Alaska": {
       "m_1": 4,
-      "m_2": 1,
-      "tiebreak": "random"
-    },
-    "TopTwo": {
-      "tiebreak": "random"
-    },
-    "AlaskaTwoProfile": {
-      "m_1": 4,
       "tiebreak": "random",
-      "round2_class": "STV",
-      "round2_kwargs": {
+      "general_class": "STV",
+      "general_kwargs": {
         "n_seats": 1,
         "tiebreak": "random"
       }
     },
-    "TopTwoTwoProfile": {
+    "TopTwo": {
       "m_1": 2,
       "tiebreak": "random",
-      "round2_class": "Plurality",
-      "round2_kwargs": {
+      "general_class": "Plurality",
+      "general_kwargs": {
         "n_seats": 1,
         "tiebreak": "random"
       }

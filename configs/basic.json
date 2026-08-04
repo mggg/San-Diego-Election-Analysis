@@ -1,7 +1,7 @@
 {
   "run_name": "Basic - 3 X 3 STV",
   "num_subsamples": 100,
-  "candidate_geometric_p": 0.2,
+  "candidate_geometric_p": 0.1,
 
   "total_seats": 9,
   "district_configs": [
@@ -14,11 +14,21 @@
     "FastSTV": {
       "n_seats": 3,
       "tiebreak": "random"
+    },
+    "Limited": {
+      "n_seats": 3,
+      "budget": 3,
+      "tiebreak": "random"
+    },
+    "Cumulative": {
+      "n_seats": 3,
+      "tiebreak": "random"
     }
   },
   "voter_models": [
     "slate_pl",
-    "slate_bt"
+    "slate_bt",
+    "name_cumulative"
   ],
   "blocs": {
     "WHI": [

@@ -147,11 +147,86 @@ The interactive setup prompts only for run-specific parameters:
 | Candidate strength parameters                     | positive float | Shape parameters of the Dirichlet distribution that control how voters within a group distribute their preferences across candidate slates. α = 0 models perfect consensus among voters, α = 1 neutral preferences, and α → ∞ indifference. |
 | Turnout                                           | float (0-1)  | Turnout rate for each voter bloc                                                        |
 
-### Two-round elections and `primary_turnout`
+### Voter models and ballot types
 
-A `voting_configs` entry that names a `round2_class` is a **two-round rule**:
-round 1 narrows the field by Plurality, then a freshly-sampled profile restricted
-to the finalists decides round 2 (see `pipeline/two_round_election.py`).
+A voter model determines the *kind* of ballot it produces, and a voting rule can
+only read one kind:
+
+| Voter model | Ballots | Rules it can run |
+| --- | --- | --- |
+| `slate_pl`, `slate_bt` | `RankProfile` | STV, IRV, Plurality, Borda, the two-round rules |
+| `name_cumulative` | `ScoreProfile` | Cumulative, Limited |
+
+Configure both families in one run and each rule is simulated under the models
+whose ballots it supports, with the rest skipped and reported:
+
+```
+[simulate_elections] slate_pl produces RankProfile ballots; skipping ['Cumulative', 'Limited'] (they need ScoreProfile).
+[simulate_elections] name_cumulative produces ScoreProfile ballots; skipping ['FastSTV'] (they need RankProfile).
+```
+
+Each model writes its own results file, so the summary carries one row per
+(model, rule) pair that actually ran. A rule accepting either type (e.g.
+`BlockPlurality`) runs under both.
+
+**Score budgets.** A score ballot is only valid for one budget: `Cumulative`
+rejects any ballot spending more than `n_seats` points and `Limited` more than
+its `budget`. Rules with different budgets therefore need different ballots, so
+the profile stage reads the budgets off the configured rules and generates one
+set per distinct budget, stored under its own subdirectory:
+
+```
+profiles.zip
+├── slate_pl/3/…csv                 ranked ballots, no budget
+├── name_cumulative/2/3/…csv        every ballot spends exactly 2 points
+└── name_cumulative/3/3/…csv        every ballot spends exactly 3 points
+```
+
+So `Cumulative` (budget = `n_seats` = 3) and `Limited` (`budget: 2`) run in the
+same simulation, each reading the ballots it can accept. Changing any budget
+changes the profile signature and regenerates the score profiles, leaving the
+ranked ones alone.
+
+### Two-round elections: the primary and the general
+
+A `voting_configs` entry that names a `general_class` is a **two-round rule**. The
+two stages are named for what they do: the **primary** narrows the field by
+Plurality to `m_1` finalists, then a freshly-sampled profile restricted to those
+finalists decides the **general** (see `pipeline/two_round_election.py`).
+
+```json
+"AlaskaTwoProfile": {
+  "m_1": 4,
+  "tiebreak": "random",
+  "general_class": "STV",
+  "general_kwargs": { "n_seats": 1, "tiebreak": "random" }
+}
+```
+
+`round2_class` / `round2_kwargs` are still accepted as the former names of
+`general_class` / `general_kwargs`, so existing configs keep running. Note that
+renaming them in a config changes its election-results signature, which forces
+that run to re-simulate.
+
+Both stages are recorded. Alongside the usual
+`outputs/<run>/election_results/<mode>/<file>.json`, which holds the general's
+winners, a run with a two-round rule also writes
+`outputs/<run>/primary_results/<mode>/<same file>.json` giving the finalists each
+primary advanced. The two files carry the same `signature` and the same
+`profile_files` list in the same order, so they line up row for row:
+
+```jsonc
+// primary_results/slate_pl/<run>_9_districts_1_winners_for_voter_mode_slate_pl.json
+{
+  "stage": "primary",
+  "advances_per_rule": { "AlaskaTwoProfile": 4, "TopTwoTwoProfile": 2 },
+  "profile_files": ["slate_pl/9/..._district_02_v0.csv", "..."],
+  "primary_results": [ { "AlaskaTwoProfile": ["HIS4", "HIS2", "HIS1", "HIS3"] }, ... ]
+}
+```
+
+The general's ballots are kept too, in `outputs/<run>/general_profiles.zip` — one
+resampled, finalists-only profile per (rule, profile file).
 
 By default both rounds draw on the same electorate — the one `turnout` describes.
 Add an optional top-level `primary_turnout` block to model a narrowing round with

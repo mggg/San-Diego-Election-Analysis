@@ -29,3 +29,29 @@
   every standard profile for nothing. It has its own
   `primary_profiles_signature`, and is folded into
   `election_results_signature` because it does change two-round winners
+
+### 5. Primary and general are recorded separately
+- A two-round rule produces two outcomes worth keeping: who the primary advanced
+  and who the general elected. Only the second used to be written, so the
+  finalists could not be recovered without re-running the primary
+- `primary_results/` mirrors `election_results/` file for file, sharing its
+  `signature` and `profile_files` order, so the two join on row index
+- `has_valid_election_results` checks for the primary file explicitly: results
+  simulated before it existed look complete from the general's side alone
+
+
+### 6. Voter models fix the ballot type
+- `profile_class_for_mode` reads each generator's return annotation rather than a
+  hand-kept table, so adding a generator to `generator_name_to_function` is
+  enough for `simulate_elections` to know what it yields
+- `ElectionPlanEntry.accepted_profiles` comes from the election class's own
+  `profile` annotation, so union rules (BlockPlurality) run under both families
+  instead of being forced into one
+- Score ballots are only valid for the budget they were generated with, so the
+  budget is part of the archive path: `<mode>/<budget>/<district_num>/<file>`
+  (ranked models keep the original `<mode>/<district_num>/<file>`). Budgets come
+  from the rules themselves via `score_rule_budgets`, so Cumulative and Limited
+  with different budgets coexist in one run
+- The budgets are folded into `profiles_signature`. They come from
+  `voting_configs`, which is otherwise not profile-determining, but changing a
+  budget changes which ballots must exist

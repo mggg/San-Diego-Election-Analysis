@@ -226,7 +226,9 @@ def minimum_candidates(config) -> int:
             if kwarg in kwargs:
                 required.append(int(kwargs[kwarg]))
 
-    return max(required) if required else 1
+    # We set our minimum pool size for all elections to 4 for ease of comparison
+    # TO-DO: Is there a better place for this? Probably.
+    return max(required) if required else 4
 
 
 DEFAULT_AVAILABILITY_EXP = 2

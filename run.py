@@ -15,7 +15,11 @@ if os.environ.get("PYTHONHASHSEED") != "0" and __name__ == "__main__":
 from pipeline.data_generator import generate_data
 from pipeline.district_generator import generate_districts
 from pipeline.settings_generator import generate_settings
-from pipeline.profile_generator import generate_profiles
+from pipeline.profile_generator import (
+    generate_profiles,
+    generator_accepts_total_points,
+    score_budgets_for_run,
+)
 from pipeline.simulate_elections import simulate_elections
 from pipeline.summarize_results import (
     summarize_results,
@@ -33,6 +37,7 @@ from pipeline.utils.helpers import (
     primary_profiles_zip_path,
     profiles_signature,
 )
+from pipeline.two_round_election import is_two_round
 from setup import setup_config
 from pathlib import Path
 from glob import glob
@@ -215,14 +220,22 @@ def has_valid_profiles(config):
         for d in config["district_configs"]:
             n = d["num_districts"]
             expected = config["num_subsamples"] * n * config["num_reps"]
-            prefix = f"{mode}/{n}/"
-            count = sum(1 for m in members if m.startswith(prefix) and m.endswith(".csv"))
-            if count != expected:
-                print(
-                    f"Missing valid profiles for mode={mode}, district_count={n} "
-                    f"(found {count}, expected {expected}). Running pipeline from profiles stage."
-                )
-                return False
+            # Score models hold one subtree per ballot budget, so each budget is
+            # counted on its own -- a complete set at one budget must not mask a
+            # missing set at another.
+            if generator_accepts_total_points(mode):
+                prefixes = [f"{mode}/{b}/{n}/" for b in score_budgets_for_run(config, d["winners"])]
+            else:
+                prefixes = [f"{mode}/{n}/"]
+            for prefix in prefixes:
+                count = sum(1 for m in members if m.startswith(prefix) and m.endswith(".csv"))
+                if count != expected:
+                    print(
+                        f"Missing valid profiles for mode={mode}, district_count={n} "
+                        f"(prefix {prefix!r}: found {count}, expected {expected}). "
+                        "Running pipeline from profiles stage."
+                    )
+                    return False
 
     # Count csvs, not raw entries, so the two archives are compared on the same
     # basis (primary_profiles.zip holds profiles only -- no matrices).
@@ -315,6 +328,29 @@ def has_valid_election_results(config):
                     return False
             except Exception:
                 return False
+
+            # A run with a primary/general rule owes a primary-results file too.
+            # Results simulated before that file existed look complete otherwise,
+            # so check for it explicitly rather than inferring it from the general.
+            if any(is_two_round(kwargs) for kwargs in config["voting_configs"].values()):
+                primary_file = base.parent / "primary_results" / mode / files[0].name
+                if not primary_file.is_file():
+                    print(
+                        f"Primary results for {mode} mode and {d} number of districts do not exist. "
+                        "Running pipeline from election simulation stage."
+                    )
+                    return False
+                try:
+                    with open(primary_file, "r", encoding="utf-8") as f:
+                        primary_data = json.load(f)
+                except (json.JSONDecodeError, OSError):
+                    return False
+                if primary_data.get("signature") != signature:
+                    print(
+                        f"Primary results for {mode} mode and {d} number of districts are stale "
+                        "(signature changed). Running pipeline from election simulation stage."
+                    )
+                    return False
     return True
 
 def has_valid_summaries(config):

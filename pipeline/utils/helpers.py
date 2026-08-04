@@ -215,9 +215,55 @@ def config_signature(config, keys) -> str:
     return hashlib.sha256(blob.encode()).hexdigest()[:16]
 
 
+def score_rule_budgets(voting_configs) -> Dict[str, int]:
+    """
+    {rule -> per-voter point budget} for every configured rule that reads score
+    ballots.
+
+    A score ballot is only valid for one budget: Cumulative fixes it at n_seats,
+    Limited states it outright as `budget`, and both reject ballots that spend
+    more. Two such rules with different budgets therefore need two different sets
+    of ballots, which is why the budget is part of where a profile is stored.
+
+    votekit is imported inside the function so this module stays importable
+    without it (and to keep the import off the hot path for runs with no score
+    rules).
+    """
+    import inspect
+    from typing import get_args
+    from votekit import ScoreProfile, elections
+
+    budgets: Dict[str, int] = {}
+    for rule, kwargs in (voting_configs or {}).items():
+        election_class = getattr(elections, rule, None)
+        if election_class is None:
+            continue
+        annotation = inspect.signature(election_class.__init__).parameters["profile"].annotation
+        accepted = get_args(annotation) or (annotation,)
+        if ScoreProfile not in accepted:
+            continue
+        # Limited names its budget; Cumulative inherits n_seats as one.
+        budgets[rule] = int(kwargs.get("budget", kwargs.get("n_seats", 1)))
+    return budgets
+
+
+def required_score_budgets(voting_configs) -> List[int]:
+    """The distinct score-ballot budgets a run needs, ascending."""
+    return sorted(set(score_rule_budgets(voting_configs).values()))
+
+
 def profiles_signature(config) -> str:
-    """Signature of the config parameters that determine profile content."""
-    return config_signature(config, PROFILE_SIGNATURE_KEYS)
+    """
+    Signature of the config parameters that determine profile content.
+
+    The score budgets are folded in on top of PROFILE_SIGNATURE_KEYS: they come
+    from voting_configs, which is otherwise not profile-determining, but changing
+    a budget changes which ballots have to exist.
+    """
+    subset = {k: config.get(k) for k in PROFILE_SIGNATURE_KEYS}
+    subset["_score_budgets"] = required_score_budgets(config.get("voting_configs"))
+    blob = json.dumps(subset, sort_keys=True, default=str)
+    return hashlib.sha256(blob.encode()).hexdigest()[:16]
 
 
 def primary_profiles_zip_path(run_name: str) -> Path:

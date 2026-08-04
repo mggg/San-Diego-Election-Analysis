@@ -103,6 +103,18 @@
     /* Figures */
     figure.figure { display: block; width: 100%; text-align: center; }
     .figure-img { max-height: 70vh; }
+
+    /* Tall figures (the cross-run stack) fill their container's width instead of
+       being fitted by height: the 70vh cap scales a very tall image down until
+       it is a fraction of the column wide. Width-driven and never wider than the
+       parent, so it stays responsive and cannot overflow the page. */
+    figure.figure-fill { width: 100%; max-width: 100%; }
+    figure.figure-fill .figure-img {
+      max-height: none;
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+    }
     .figure-caption {
       font-family: "Source Sans Pro", sans-serif;
       font-style: italic;
@@ -258,6 +270,7 @@
             <a class="nav-link" href="#cross-run">4.5 Cross-run comparison</a>
           </nav>
           <a class="nav-link" href="#appendix">Appendix A. Configurations</a>
+          <a class="nav-link" href="#appendix-b">Appendix B. Availability vs. win rate</a>
         </nav>
       </div>
 
@@ -397,7 +410,7 @@
               </h4>
               <div id="sc-1" class="accordion-collapse collapse show">
                 <div class="accordion-body">
-                  <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><button class="nav-link active" id="tab1-bubble-btn" data-bs-toggle="tab" data-bs-target="#tab1-bubble" type="button" role="tab" aria-controls="tab1-bubble" aria-selected="true">Seat distribution</button></li><li class="nav-item" role="presentation"><button class="nav-link" id="tab1-bymode-btn" data-bs-toggle="tab" data-bs-target="#tab1-bymode" type="button" role="tab" aria-controls="tab1-bymode" aria-selected="false">By voting rule</button></li></ul>
+                  <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><button class="nav-link active" id="tab1-bubble-btn" data-bs-toggle="tab" data-bs-target="#tab1-bubble" type="button" role="tab" aria-controls="tab1-bubble" aria-selected="true">Bubble Plots</button></li><li class="nav-item" role="presentation"><button class="nav-link" id="tab1-bymode-btn" data-bs-toggle="tab" data-bs-target="#tab1-bymode" type="button" role="tab" aria-controls="tab1-bymode" aria-selected="false">Histograms</button></li></ul>
                   <div class="tab-content pt-3"><div class="tab-pane fade show active" id="tab1-bubble" role="tabpanel" aria-labelledby="tab1-bubble-btn"><figure class="figure d-block text-center my-2"><img src="figures/Alternative%20Electoral%20Systems/Alternative%20Electoral%20Systems_9x1_bubbles_by_method.png" class="figure-img img-fluid rounded border zoomable" alt="Seat distribution chart"><figcaption class="figure-caption"><span class="fig-num">Figure 1.</span> Citywide seats won by AAPI-preferred candidates, one panel per voting system (9 X 1 Plurality, IRV, Alaska, Top Two, and the two-profile variants) and one row per voter model plus a pooled combined row; bubble area reflects how often each seat count occurred, and the dotted line marks the AAPI share of citywide VAP.</figcaption></figure></div><div class="tab-pane fade" id="tab1-bymode" role="tabpanel" aria-labelledby="tab1-bymode-btn"><figure class="figure d-block text-center my-2"><img src="figures/Alternative%20Electoral%20Systems/Alternative%20Electoral%20Systems_9x1_bymode.png" class="figure-img img-fluid rounded border zoomable" alt="Seat distribution histograms by voting rule"><figcaption class="figure-caption"><span class="fig-num">Figure 2.</span> Distribution of AAPI-preferred seat totals, one panel per voting rule, with the two voter models dodged side by side. Panels share a seat axis and a count axis, so the rules compare directly.</figcaption></figure></div></div>
                 </div>
               </div>
@@ -534,9 +547,9 @@
 
           <!-- 4.5 -->
           <h3 class="h4 mt-4" id="cross-run">4.5 Cross-Run Comparison</h3>
-          <figure class="figure d-block text-center my-4">
+          <figure class="figure figure-fill d-block text-center my-4">
             <img src="figures/cross_run_summaries/combined_bubbles_all_runs.png" class="figure-img img-fluid rounded border zoomable" alt="Cross-run comparison of seat outcomes">
-            <figcaption class="figure-caption"><span class="fig-num">Figure 33.</span> AAPI-preferred seat outcomes across every completed run, one panel per run, with a dotted line at the AAPI share of citywide VAP.</figcaption>
+            <figcaption class="figure-caption"><span class="fig-num">Figure 33.</span> AAPI-preferred seat outcomes across every completed run on one shared seat axis, with the alternative-systems run broken out into a panel per voting system. Each panel shows one row per voter model plus a pooled combined row, and a dotted line at the AAPI share of citywide VAP. Click to open full size.</figcaption>
           </figure>
         </section>
 
@@ -556,6 +569,46 @@
                 <tr><td>Diverse AAPI Coalition Preferences</td><td>3 &times; 3</td><td>9</td><td>STV (3 seats)</td><td>1.00 / 0.75 / 0.75 / 1.00</td><td>AAPI Dirichlet alpha for the AAPI slate raised to 2</td></tr>
               </tbody>
             </table>
+          </div>
+
+          <h3 class="h4 mt-5" id="appendix-b">B. Candidate Availability and Win Rate &mdash; Alaska vs. Top Two</h3>
+          <p class="todo">[Discussion to be written.]</p>
+
+              <figure class="figure figure-fill d-block text-center my-2">
+                <img src="figures/Alternative%20Electoral%20Systems/Alternative%20Electoral%20Systems_9x1_AAPI_candidate_availability.png" class="figure-img img-fluid rounded border zoomable" alt="AAPI candidate availability by district rank">
+                <figcaption class="figure-caption"><span class="fig-num">Figure 34.</span> Districts ranked by AAPI share of district VAP within their own plan, low to high, pooled across all 100 sampled plans. Box fill is the average number of AAPI candidates on the ballot per district &mdash; the field the primary starts from, which is identical for both systems because slate sizes are drawn once in the settings stage and shared by every voting rule.</figcaption>
+              </figure>
+
+          <h4 class="h5 mt-4">9 X 1 Alaska</h4>
+          <div class="row g-3 align-items-start">
+            <div class="col-lg-6">
+              <figure class="figure figure-fill d-block text-center my-2">
+                <img src="figures/Alternative%20Electoral%20Systems/ALASKA/Alternative%20Electoral%20Systems_9x1_AAPI_ALASKA_round2_availability.png" class="figure-img img-fluid rounded border zoomable" alt="9 X 1 Alaska candidate availability after the primary">
+                <figcaption class="figure-caption"><span class="fig-num">Figure 35.</span> <strong>Candidate availability.</strong> AAPI candidates surviving 9 X 1 Alaska's top-4 primary, averaged per district and pooled over every replicate and both voter models. Boxes are the same districts and ranks as the figure on the right.</figcaption>
+              </figure>
+            </div>
+            <div class="col-lg-6">
+              <figure class="figure figure-fill d-block text-center my-2">
+                <img src="figures/Alternative%20Electoral%20Systems/ALASKA/Alternative%20Electoral%20Systems_9x1_AAPI_coalition_boxplot_available.png" class="figure-img img-fluid rounded border zoomable" alt="9 X 1 Alaska win rate by district rank">
+                <figcaption class="figure-caption"><span class="fig-num">Figure 36.</span> <strong>Win rate.</strong> How often AAPI-preferred candidates won under 9 X 1 Alaska, restricted to districts that had an AAPI candidate on the ballot. Thin low ranks carry few contests &mdash; see the notebook's diagnostics table.</figcaption>
+              </figure>
+            </div>
+          </div>
+
+          <h4 class="h5 mt-4">9 X 1 Top Two</h4>
+          <div class="row g-3 align-items-start">
+            <div class="col-lg-6">
+              <figure class="figure figure-fill d-block text-center my-2">
+                <img src="figures/Alternative%20Electoral%20Systems/TOPTWO/Alternative%20Electoral%20Systems_9x1_AAPI_TOPTWO_round2_availability.png" class="figure-img img-fluid rounded border zoomable" alt="9 X 1 Top Two candidate availability after the primary">
+                <figcaption class="figure-caption"><span class="fig-num">Figure 37.</span> <strong>Candidate availability.</strong> AAPI candidates surviving 9 X 1 Top Two's top-2 primary, averaged per district and pooled over every replicate and both voter models. Boxes are the same districts and ranks as the figure on the right.</figcaption>
+              </figure>
+            </div>
+            <div class="col-lg-6">
+              <figure class="figure figure-fill d-block text-center my-2">
+                <img src="figures/Alternative%20Electoral%20Systems/TOPTWO/Alternative%20Electoral%20Systems_9x1_AAPI_coalition_boxplot_available.png" class="figure-img img-fluid rounded border zoomable" alt="9 X 1 Top Two win rate by district rank">
+                <figcaption class="figure-caption"><span class="fig-num">Figure 38.</span> <strong>Win rate.</strong> How often AAPI-preferred candidates won under 9 X 1 Top Two, restricted to districts that had an AAPI candidate on the ballot. Thin low ranks carry few contests &mdash; see the notebook's diagnostics table.</figcaption>
+              </figure>
+            </div>
           </div>
         </section>
 
