@@ -263,6 +263,19 @@ def profiles_signature(config) -> str:
     """
     subset = {k: config.get(k) for k in PROFILE_SIGNATURE_KEYS}
     subset["_score_budgets"] = required_score_budgets(config.get("voting_configs"))
+    # The candidate-pool draw lives inside district_configs, which is deliberately
+    # not profile-determining as a whole (adding a magnitude only adds outputs).
+    # Its ceiling and mean *are*: they change the ballots for a magnitude that
+    # already exists.
+    subset["_candidate_pools"] = sorted(
+        (
+            d.get("num_districts"),
+            d.get("winners"),
+            d.get("candidate_pool_max"),
+            d.get("candidate_pool_mean"),
+        )
+        for d in (config.get("district_configs") or [])
+    )
     blob = json.dumps(subset, sort_keys=True, default=str)
     return hashlib.sha256(blob.encode()).hexdigest()[:16]
 

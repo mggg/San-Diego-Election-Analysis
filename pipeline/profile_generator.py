@@ -130,7 +130,10 @@ def profile_arcname(mode: str, district_num: int, filename: str, budget=None) ->
 
 def process_settings_file(
     settings_file, mode, duplicate_indx, proportions_key="bloc_proportions", total_points=None,
+<<<<<<< HEAD
     truncation_cfg=None,
+=======
+>>>>>>> main
 ):
     """
     Generate a voter profile for a single district using the given voter model.
@@ -141,7 +144,7 @@ def process_settings_file(
 
     Args:
         settings_file: Path to a votekit settings json file for one district.
-        mode: Voter model name; one of "slate_pl", "slate_bt", or "cambridge".
+        mode: Voter model name; one of "slate_pl", "slate_bt", or "name_cumulative".
         duplicate_indx: Replicate index, appended as _v<n> in the output filename.
         proportions_key: Which electorate to sample from -- "bloc_proportions"
             (the configured turnout) or "primary_bloc_proportions" (the lower
@@ -161,6 +164,8 @@ def process_settings_file(
         is the profile's CSV content (per votekit's PreferenceProfile.to_csv()).
     """
     settings = load_json(settings_file)
+    generator = generator_name_to_function[mode]
+    filename = _expected_profile_filename(settings_file, duplicate_indx)
 
     config = BlocSlateConfig(
         n_voters = settings['num_voters'],
@@ -168,11 +173,7 @@ def process_settings_file(
         bloc_proportions=settings[proportions_key],
         cohesion_mapping=settings["cohesion_parameters"],
     )
-
     config.set_dirichlet_alphas(settings["alphas"])
-
-    filename = _expected_profile_filename(settings_file, duplicate_indx)
-    generator = generator_name_to_function[mode]
     if total_points is not None and generator_accepts_total_points(mode):
         profile = generator(config, total_points=total_points)
     else:
@@ -333,7 +334,10 @@ def _generate_profile_archive(
                             results = Parallel(n_jobs=-1, return_as="generator_unordered")(
                                 delayed(process_settings_file)(
                                     settings_file, mode, duplicate_indx, proportions_key, budget,
+<<<<<<< HEAD
                                     truncation_cfg,
+=======
+>>>>>>> main
                                 )
                                 for settings_file in pending_settings_files
                             )

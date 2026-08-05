@@ -52,8 +52,8 @@ Each of those runs the `basic` config end to end: it generates the geodata if
 ballots, elections, and summaries.
 
 Outputs are keyed by the config's `run_name`, not its filename — `basic.json`
-has `"run_name": "Basic - 3 X 3 STV"`, so its results land in
-`outputs/Basic - 3 X 3 STV/`.
+has `"run_name": "Basic - 3 X 3"`, so its results land in
+`outputs/Basic - 3 X 3/`.
 
 Re-running is cheap. Every stage checks whether its outputs already exist and
 are still valid for the current config, so a second `run.py basic` picks up
@@ -146,6 +146,37 @@ The interactive setup prompts only for run-specific parameters:
 | Cohesion parameters                               | float (0-1)  | Probability that voters from a group vote for candidates from their own group. Higher values indicate stronger within-group voting cohesion. |
 | Candidate strength parameters                     | positive float | Shape parameters of the Dirichlet distribution that control how voters within a group distribute their preferences across candidate slates. α = 0 models perfect consensus among voters, α = 1 neutral preferences, and α → ∞ indifference. |
 | Turnout                                           | float (0-1)  | Turnout rate for each voter bloc                                                        |
+
+### Candidate pool size
+
+Each entry in `district_configs` controls how many candidates its districts put
+on the ballot. The pool is drawn per district as a binomial over the range
+`[floor, candidate_pool_max]`, with the mean placed at `candidate_pool_mean`:
+
+```json
+"district_configs": [
+  { "num_districts": 9, "winners": 1,
+    "candidate_pool_max": 9, "candidate_pool_mean": 5.67 }
+]
+```
+
+| Key | Meaning |
+| --- | --- |
+| `candidate_pool_max` | Ceiling on the pool. Required. |
+| `candidate_pool_mean` | Where the average pool size sits. Required. |
+
+The **floor** is not configurable: it is the smallest ballot every configured
+voting rule can actually run on (`minimum_candidates`), one more than the most
+demanding requirement in the run.
+
+Neither key is validated — keep the mean inside `[floor, candidate_pool_max]`.
+A mean outside that range gives numpy a probability outside `[0, 1]` and it
+raises `ValueError: p < 0, p > 1 or p is NaN`; a ceiling equal to the floor
+divides by zero. Because the pool size feeds the per-slate apportionment, it is
+the main lever on how often a small slate fields anyone at all.
+
+Both keys are part of the profile signature, so changing either regenerates the
+profiles for that magnitude.
 
 ### Voter models and ballot types
 

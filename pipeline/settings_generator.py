@@ -226,9 +226,10 @@ def minimum_candidates(config) -> int:
             if kwarg in kwargs:
                 required.append(int(kwargs[kwarg]))
 
-    # We set our minimum pool size for all elections to 4 for ease of comparison
-    # TO-DO: Is there a better place for this? Probably.
-    return max(required) if required else 4
+    # We set our minimum pool size for all elections to be one more than the
+    # largest number of required candidates of the voting systems we're simulating
+
+    return max(required) + 1
 
 
 DEFAULT_AVAILABILITY_EXP = 2
@@ -510,7 +511,10 @@ def generate_settings(config):
         outputs/settings/<run_name>_settings/<district_count>/<run_name>_<district_count>_sample_settings_district_plan_<plan_idx>_district_<district_id>.json.
         where <plan_idx> is the zero-based chain sample index and <district_id> is the district label.
         bloc_proportions in each file are turnout-adjusted proportions, one entry
-        per voter bloc. slate_to_candidates is resized per-district: candidate_count
+        per voter bloc. Each district config sets "candidate_pool_max" and
+        "candidate_pool_mean", the range and mean of its candidate-pool draw
+        (floor + Binomial), where the floor is minimum_candidates(config).
+        slate_to_candidates is resized per-district: candidate_count
         (drawn from a geometric distribution, capped at a log-VAP ceiling, floored
         at the district's winner count) is apportioned across slates in proportion
         to each slate's share of modeled VAP in that district (see
@@ -563,9 +567,21 @@ def generate_settings(config):
     output_settings = {k:config[k] for k in config if k in district_params}
     run_name = config['run_name']
 
-    for district_num, winners in [
-        (d_config['num_districts'], d_config['winners']) for d_config in config['district_configs']
-    ]:
+    for district_config in config['district_configs']:
+        district_num, winners = district_config['num_districts'], district_config['winners']
+
+        # Candidate pool size is drawn as floor + Binomial(n, p), with the range
+        # and the mean coming from this district config: n spans floor..ceiling,
+        # and p places the mean where the config asks. Neither is checked -- a
+        # mean outside [floor, ceiling] gives numpy a p outside [0, 1] and it
+        # will say so, and a ceiling equal to the floor divides by zero.
+        pool_n = district_config['candidate_pool_max'] - candidate_floor
+        pool_p = (district_config['candidate_pool_mean'] - candidate_floor) / pool_n
+        print(
+            f"[generate_settings] {district_num}x{winners}: candidate pool in "
+            f"[{candidate_floor}, {district_config['candidate_pool_max']}], "
+            f"mean {district_config['candidate_pool_mean']}"
+        )
         settings_folder = Path(f'outputs/{run_name}/settings/{district_num}')
         settings_folder.mkdir(exist_ok=True, parents=True)
 
@@ -589,23 +605,7 @@ def generate_settings(config):
                     district = row.name
                     district_settings = _build_district_settings(row, config, group_columns, bloc_definitions)
 
-                    # candidate_max is a log-scale ceiling on this district's VAP;
-                    # the geometric distribution's success probability is a fixed,
-                    # per-config value (candidate_geometric_p) rather than derived
-                    # from VAP, so different district-magnitude configs can be
-                    # tuned independently (e.g. a lower p, and so a larger expected
-                    # candidate count, for 10-district plans than 50-district ones).
-                    # Floored at `winners`: an election can never elect more seats
-                    # than there are candidates, so a multi-winner district (e.g.
-                    # 5-seat STV) must have at least that many candidates on the
-                    # ballot regardless of what the geometric draw happened to
-                    # sample -- the geometric distribution's support starts at 1
-                    # and has real mass below small ceilings like 5, so without
-                    # this floor some districts would otherwise be unelectable.
-                    vap = district_settings[config["population_vap_column"]]
-                    candidate_max = math.ceil(math.log(vap))
-                    candidate_count = min(np.random.geometric(config["candidate_geometric_p"]), candidate_max)
-                    candidate_count = max(candidate_count, candidate_floor)
+                    candidate_count = candidate_floor + np.random.binomial(pool_n, pool_p)
 
                     slate_to_candidates = _build_slate_to_candidates(
                         row, slate_columns, candidate_count, config
