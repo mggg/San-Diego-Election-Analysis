@@ -51,6 +51,7 @@ LEGEND_MAPPING = {
     "slate_pl": "Impulsive",
     "slate_bt": "Deliberative",
     "cambridge": "Cambridge",
+    "name_cumulative": "Name Cumulative",
 }
 
 # Pseudo-mode pooling occurrences across every voter model into one row.
@@ -58,13 +59,15 @@ COMBINED_MODE = "combined"
 LEGEND_MAPPING[COMBINED_MODE] = "Combined"
 
 # Preferred display order for the known voter models; any others sort after.
-DESIRED_ORDER = ["slate_pl", "slate_bt", "cambridge"]
+DESIRED_ORDER = ["slate_pl", "slate_bt", "cambridge", "name_cumulative"]
 
 # Bubble marker areas (points^2): most-frequent cell uses the max, a floor keeps
 # rare cells visible.
 BUBBLE_MAX_AREA = 150
 BUBBLE_MIN_AREA = 10
-BUBBLE_COLOR = "#898781"  # fallback fill for a mode not in MODE_COLORS
+# San Diego red -- the fallback fill for a mode with no MODE_COLORS entry of its
+# own (e.g. name_cumulative, the score-ballot model Cumulative/Limited run on).
+DEFAULT_MODE_COLOR = "#AA0000"
 PROP_LINE_COLOR = "#52514e"  # focal-group proportional-representation reference line
 
 # Seat-axis tick spacing. Seats are integers and these plans are small, so every
@@ -308,7 +311,7 @@ def _draw_mode_histograms(ax, group_distn: pd.DataFrame, seat_col: str = "focal_
             width=bar_width,
             edgecolor=BAR_EDGE_COLOR,
             linewidth=0.9,
-            color=MODE_COLORS.get(mode, "xkcd:light gray"),
+            color=MODE_COLORS.get(mode, DEFAULT_MODE_COLOR),
             alpha=BAR_ALPHA,
             label=mode,
         )
@@ -885,6 +888,26 @@ def _modes_in_display_order(present_modes) -> List[str]:
     return individual + ([COMBINED_MODE] if COMBINED_MODE in present else [])
 
 
+def _method_modes_in_order(mode_values) -> List[str]:
+    """
+    Row order for a bubble panel showing a single election method: that method's
+    own real voter models, plus the pooled Combined row only when there is more
+    than one of them to pool.
+
+    _occurrence_counts always synthesizes a Combined row per method, even when
+    only one voter model produced it (Cumulative and Limited both run on the
+    single name_cumulative model) -- pooling one model with itself is a no-op,
+    so that row is dropped rather than shown as a redundant duplicate. Without
+    this, a single-model method's panel would also inherit whichever other
+    modes happened to run under other methods in the same figure (Impulsive,
+    Deliberative, ...), showing up as rows with no bubbles at all.
+    """
+    real_modes = set(mode_values) - {COMBINED_MODE}
+    if len(real_modes) > 1:
+        real_modes.add(COMBINED_MODE)
+    return _modes_in_display_order(real_modes)
+
+
 def _draw_method_bubbles(ax, method_counts, modes_in_order, size_scale, iprop, config, x_upper):
     """
     Draw the bubble grid (mode x seats, area sized by occurrence count) for one
@@ -900,7 +923,7 @@ def _draw_method_bubbles(ax, method_counts, modes_in_order, size_scale, iprop, c
             sub["focal_seats"],
             [y_index[mode]] * len(sub),
             s=BUBBLE_MIN_AREA + sub["count"] * size_scale,
-            color=MODE_COLORS.get(mode, BUBBLE_COLOR),
+            color=MODE_COLORS.get(mode, DEFAULT_MODE_COLOR),
             alpha=0.7,
             edgecolor="gray",
             linewidth=0.5,
@@ -1012,8 +1035,13 @@ def _plot_bubbles_for_config(df_plan, config, iprop, figs_dir, run_name, num_dis
 
     if len(methods) > 1:
         for method in methods:
+            # This method's own rows, not the whole run's -- a single-model
+            # method (Cumulative, Limited) would otherwise inherit empty rows
+            # left over from other methods sharing the combined figure's axis.
+            method_counts = counts[counts["election_method"] == method]
+            method_modes = _method_modes_in_order(method_counts["mode"].unique())
             _render_method_bubbles_figure(
-                counts, [method], modes_in_order, size_scale, iprop, config, x_upper,
+                counts, [method], method_modes, size_scale, iprop, config, x_upper,
                 _figure_subtitle(run_name, method_labels[method], len(methods)),
                 _method_figs_dir(figs_dir, method)
                 / f"{run_name}_{num_dist}x{seats_per_district}_bubbles.png",
@@ -1125,11 +1153,6 @@ def plot_combined_bubbles_all_runs(config, output_dir=None, exclude_runs=None) -
     total_seats = max(int(config["total_seats"]), observed_max_seats)
     i_share = iprop * total_seats
 
-    all_modes: set = set()
-    for _, c in runs:
-        all_modes.update(c["mode"].unique())
-    modes_in_order = _modes_in_display_order(all_modes)
-
     x_upper = _seat_axis_upper(max(observed_max_seats, i_share), total_seats)
     x_ticks = range(0, x_upper + 1, X_TICK_STEP)
 
@@ -1145,9 +1168,13 @@ def plot_combined_bubbles_all_runs(config, output_dir=None, exclude_runs=None) -
     )
     axes = [a[0] for a in axes]
 
-    y_index = {mode: i for i, mode in enumerate(modes_in_order)}
     for ax, (label, per_mode) in zip(axes, runs):
-        for mode in modes_in_order:
+        # This panel's own rows, not every run/method's -- a single-model
+        # method (Cumulative, Limited) would otherwise inherit empty rows left
+        # over from other panels in the same stacked figure.
+        panel_modes = _method_modes_in_order(per_mode["mode"].unique())
+        y_index = {mode: i for i, mode in enumerate(panel_modes)}
+        for mode in panel_modes:
             sub = per_mode[per_mode["mode"] == mode]
             if sub.empty:
                 continue
@@ -1159,16 +1186,16 @@ def plot_combined_bubbles_all_runs(config, output_dir=None, exclude_runs=None) -
                 sub["focal_seats"],
                 [y_index[mode]] * len(sub),
                 s=BUBBLE_MIN_AREA + sub["count"] * row_scale,
-                color=MODE_COLORS.get(mode, BUBBLE_COLOR),
+                color=MODE_COLORS.get(mode, DEFAULT_MODE_COLOR),
                 alpha=0.7,
                 edgecolor="gray",
                 linewidth=0.5,
             )
         ax.axvline(i_share, color=PROP_LINE_COLOR, linestyle=":", linewidth=1.2)
         ax.set_xlim(-1, x_upper + 1)
-        ax.set_ylim(len(modes_in_order) - 0.5, -0.5)  # inverted: first mode on top
-        ax.set_yticks(range(len(modes_in_order)))
-        ax.set_yticklabels([LEGEND_MAPPING.get(m, m) for m in modes_in_order], fontsize=TICK_SIZE)
+        ax.set_ylim(len(panel_modes) - 0.5, -0.5)  # inverted: first mode on top
+        ax.set_yticks(range(len(panel_modes)))
+        ax.set_yticklabels([LEGEND_MAPPING.get(m, m) for m in panel_modes], fontsize=TICK_SIZE)
         ax.set_xticks(x_ticks)
         ax.set_xticklabels([str(x) for x in x_ticks], fontsize=TICK_SIZE)
         ax.tick_params(axis="both", which="major", labelsize=TICK_SIZE)
