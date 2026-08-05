@@ -2,13 +2,14 @@
   "run_name": "Basic - 3 X 3 STV",
   "num_subsamples": 100,
   "candidate_geometric_p": 0.1,
-
   "total_seats": 9,
   "district_configs": [
     {
       "num_districts": 3,
-      "winners": 3
-   }
+      "winners": 3,
+      "candidate_pool_max": 10,
+      "candidate_pool_mean": 7
+    }
   ],
   "voting_configs": {
     "FastSTV": {

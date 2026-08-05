@@ -12,7 +12,9 @@
   "district_configs": [
     {
       "num_districts": 3,
-      "winners": 3
+      "winners": 3,
+      "candidate_pool_max": 10,
+      "candidate_pool_mean": 7
     }
   ],
   "voting_configs": {

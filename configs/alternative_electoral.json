@@ -2,12 +2,13 @@
   "run_name": "Alternative Electoral Systems",
   "num_subsamples": 100,
   "candidate_geometric_p": 0.2,
-
   "total_seats": 9,
   "district_configs": [
     {
       "num_districts": 9,
-      "winners": 1
+      "winners": 1,
+      "candidate_pool_max": 7,
+      "candidate_pool_mean": 6
     }
   ],
   "voting_configs": {
