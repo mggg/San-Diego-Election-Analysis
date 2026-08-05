@@ -130,10 +130,7 @@ def profile_arcname(mode: str, district_num: int, filename: str, budget=None) ->
 
 def process_settings_file(
     settings_file, mode, duplicate_indx, proportions_key="bloc_proportions", total_points=None,
-<<<<<<< HEAD
-    truncation_cfg=None,
-=======
->>>>>>> main
+    truncation_cfg=None
 ):
     """
     Generate a voter profile for a single district using the given voter model.
@@ -334,10 +331,6 @@ def _generate_profile_archive(
                             results = Parallel(n_jobs=-1, return_as="generator_unordered")(
                                 delayed(process_settings_file)(
                                     settings_file, mode, duplicate_indx, proportions_key, budget,
-<<<<<<< HEAD
-                                    truncation_cfg,
-=======
->>>>>>> main
                                 )
                                 for settings_file in pending_settings_files
                             )
