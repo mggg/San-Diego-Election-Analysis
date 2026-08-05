@@ -179,6 +179,7 @@ PROFILE_SIGNATURE_KEYS = [
     "slate_to_candidates",
     "cohesion_parameters",
     "alphas",
+    "cambridge_truncation",
     "num_voters",
     "seed",
     "chain_length",

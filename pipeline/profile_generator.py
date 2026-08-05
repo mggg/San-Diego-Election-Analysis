@@ -14,6 +14,7 @@ per-file filesystem overhead of a large ensemble.
 import inspect
 from contextlib import ExitStack
 from glob import glob
+from votekit import RankProfile
 from votekit.ballot_generator import (
     BlocSlateConfig,
     slate_pl_profile_generator,
@@ -39,6 +40,7 @@ from pipeline.utils.helpers import (
     read_existing_zip_members,
 )
 from pipeline.utils.preference_matrix import preference_matrix_arcname, preference_matrix_json
+from pipeline.utils.cambridge_truncation import apply_cambridge_truncation
 from pipeline.settings_generator import primary_turnout_map
 
 # maps mode name to votekit profile generator function
@@ -127,7 +129,8 @@ def profile_arcname(mode: str, district_num: int, filename: str, budget=None) ->
 
 
 def process_settings_file(
-    settings_file, mode, duplicate_indx, proportions_key="bloc_proportions", total_points=None
+    settings_file, mode, duplicate_indx, proportions_key="bloc_proportions", total_points=None,
+    truncation_cfg=None,
 ):
     """
     Generate a voter profile for a single district using the given voter model.
@@ -145,6 +148,12 @@ def process_settings_file(
             turnout of a two-round rule's narrowing round).
         total_points: Score-ballot budget, for models that produce score ballots.
             Ignored by the ranked generators, which take no such argument.
+        truncation_cfg: The run config's "cambridge_truncation" block, or None.
+            When set and truncation_cfg["enabled"] is true, a ranked profile's
+            ballots are truncated to a length sampled from the Cambridge
+            historical distribution matching each ballot's first choice (see
+            pipeline.utils.cambridge_truncation). Ignored for score profiles,
+            which have no ranking to truncate.
 
     Returns:
         (filename, csv_text): filename is the profile's zip entry name within its
@@ -168,6 +177,10 @@ def process_settings_file(
         profile = generator(config, total_points=total_points)
     else:
         profile = generator(config)
+
+    if truncation_cfg and truncation_cfg.get("enabled") and isinstance(profile, RankProfile):
+        profile = apply_cambridge_truncation(profile, config, truncation_cfg)
+
     csv_text = profile.to_csv()
     matrix_json = preference_matrix_json(config)
 
@@ -206,6 +219,7 @@ def _generate_profile_archive(
     run_name = config['run_name']
 
     voter_models = get_voter_models(config)
+    truncation_cfg = config.get("cambridge_truncation")
 
     zip_path.parent.mkdir(exist_ok=True, parents=True)
     track_matrices = matrix_zip_path is not None
@@ -318,7 +332,8 @@ def _generate_profile_archive(
                         ):
                             results = Parallel(n_jobs=-1, return_as="generator_unordered")(
                                 delayed(process_settings_file)(
-                                    settings_file, mode, duplicate_indx, proportions_key, budget
+                                    settings_file, mode, duplicate_indx, proportions_key, budget,
+                                    truncation_cfg,
                                 )
                                 for settings_file in pending_settings_files
                             )
