@@ -15,23 +15,12 @@
     "FastSTV": {
       "n_seats": 3,
       "tiebreak": "random"
-    },
-    "Limited": {
-      "n_seats": 3,
-      "budget": 2,
-      "tiebreak": "random"
-    },
-    "Cumulative": {
-      "n_seats": 3,
-      "tiebreak": "random"
     }
   },
   "voter_models": [
     "slate_pl",
-    "slate_bt",
-    "name_cumulative",
-    "slate_pl_ct"
-  ],
+    "slate_bt"]
+    ,
     "cambridge_truncation": {
     "enabled": true,
     "majority_slates": ["WHI"],
