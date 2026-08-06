@@ -112,13 +112,22 @@ section { scroll-margin-top: 70px; padding-top: .5rem; }
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 1.5rem;
+  gap: .75rem 1.5rem;
   padding: .6rem .85rem;
   margin-bottom: 1.25rem;
   background: var(--sd-light);
   border: 1px solid var(--sd-gray-light);
   border-left: 3px solid var(--sd-gold);
   border-radius: 3px;
+}
+/* A full-width line inside the control bar, so a group that should start a new
+   row always does rather than only when the one above it happens to fill up. */
+.run-controls .control-row {
+  flex: 0 0 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .6rem 1.5rem;
 }
 .run-controls .control-group { display: flex; align-items: center; gap: .5rem; }
 .run-controls .control-label {
@@ -165,6 +174,70 @@ section { scroll-margin-top: 70px; padding-top: .5rem; }
    where half a column is too narrow to read a panel in. Each column centres its
    own figure so the pair reads as one row rather than two ragged charts. */
 .figure-pair > [class^="col"] { display: flex; flex-direction: column; justify-content: flex-start; }
+
+/* The cross-run picker: a chip per system on show, and one control to add the
+   next. Only what has been chosen takes up room. */
+.system-chips { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; }
+.system-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .25rem .3rem .25rem .7rem;
+  border: 1px solid var(--sd-ink);
+  border-radius: 999px;
+  background: #fff;
+  font-family: "Source Sans Pro", sans-serif;
+}
+.system-chip .chip-text { display: flex; flex-direction: column; line-height: 1.15; }
+.chip-run, .item-run { font-size: .68rem; color: var(--sd-gray); }
+.chip-system, .item-system { font-size: .8rem; font-weight: 600; color: #23211d; }
+.chip-remove {
+  border: 0;
+  background: transparent;
+  color: var(--sd-gray);
+  font-size: 1.05rem;
+  line-height: 1;
+  padding: 0 .3rem;
+  cursor: pointer;
+}
+.chip-remove:hover { color: var(--sd-red); }
+
+.add-system {
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: .82rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: .5rem .8rem;
+  border: 1px dashed var(--sd-gray-light);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--sd-gray);
+  cursor: pointer;
+}
+.add-system:hover, .add-system[aria-expanded="true"] {
+  border-color: var(--sd-red);
+  border-style: solid;
+  color: var(--sd-red);
+}
+.system-menu { max-height: 20rem; overflow-y: auto; }
+.system-menu .dropdown-item { display: flex; flex-direction: column; line-height: 1.2; }
+.system-menu .dropdown-item:active { background: var(--sd-gold-soft); }
+.system-menu .dropdown-item:active .chip-run,
+.system-menu .dropdown-item:active .item-run,
+.system-menu .dropdown-item:active .item-system { color: #23211d; }
+
+/* Two-line row labels in the cross-run figure: run above, system beneath. */
+.chart .row-run {
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 9.5px;
+  fill: var(--sd-gray);
+}
+.chart .row-system {
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  fill: #23211d;
+}
 
 .chart { width: 100%; }
 .chart svg { width: 100%; height: auto; display: block; }

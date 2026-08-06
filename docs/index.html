@@ -8,7 +8,7 @@
 
   <link rel="stylesheet" href="css/vendor/bootstrap.min.css">
   <link rel="stylesheet" href="fonts/fonts.css">
-  <link rel="stylesheet" href="css/report.css?v=858d748f86">
+  <link rel="stylesheet" href="css/report.css?v=18bbc79501">
 </head>
 
 <body data-bs-spy="scroll" data-bs-target="#toc-nav" data-bs-offset="90" tabindex="0">
@@ -25,9 +25,9 @@
           <li class="nav-item"><a class="nav-link" href="#abstract">Abstract</a></li>
           <li class="nav-item"><a class="nav-link" href="#background">Background</a></li>
           <li class="nav-item"><a class="nav-link" href="#methodology">Methodology</a></li>
+          <li class="nav-item"><a class="nav-link" href="#conclusion">Conclusion</a></li>
           <li class="nav-item"><a class="nav-link" href="#results">Results</a></li>
           <li class="nav-item"><a class="nav-link" href="#comparison">Comparison</a></li>
-          <li class="nav-item"><a class="nav-link" href="#conclusion">Conclusion</a></li>
           <li class="nav-item"><a class="nav-link" href="https://github.com/mggg/San-Diego-Election-Analysis" target="_blank" rel="noopener">GitHub ↗</a></li>
         </ul>
       </div>
@@ -51,7 +51,6 @@
           <a class="nav-link" href="#conclusion">Conclusion</a>
           <a class="nav-link" href="#results">Results by run</a>
           <nav class="nav flex-column">
-            <a class="nav-link" href="#run-alternative-electoral-systems">Alternative Electoral Systems</a>
             <a class="nav-link" href="#run-diverse-aapi-coalition-preferences">Diverse AAPI Coalition Preferences</a>
             <a class="nav-link" href="#run-low-aapi-availability">Low AAPI Availability</a>
             <a class="nav-link" href="#run-low-aapi-turnout">Low AAPI Turnout</a>
@@ -77,43 +76,15 @@
           <p class="todo">[Methodology to be written — edit
              <code>docs/prose/methodology.md</code>.]</p>
         </section>
+        <section id="conclusion" class="mb-5">
+          <h2>Conclusion</h2>
+          <p class="todo">[Conclusion to be written — edit
+             <code>docs/prose/conclusion.md</code>.]</p>
+        </section>
+
         <section id="results" class="mb-5">
           <h2>Results</h2>
 
-          <section id="run-alternative-electoral-systems" class="run mb-5" data-run="alternative-electoral-systems">
-            <h3 class="h4 mt-4">Alternative Electoral Systems</h3>
-            <p class="run-meta" data-run-meta="alternative-electoral-systems"></p>
-
-            <div class="run-controls" data-controls="alternative-electoral-systems"></div>
-
-            <ul class="nav nav-tabs" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" data-bs-toggle="tab"
-                        data-bs-target="#alternative-electoral-systems-focal" type="button" role="tab">
-                  AAPI focal group
-                </button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" data-bs-toggle="tab"
-                        data-bs-target="#alternative-electoral-systems-slate" type="button" role="tab">All slates</button>
-              </li>
-            </ul>
-            <div class="tab-content pt-3">
-              <div class="tab-pane fade show active" id="alternative-electoral-systems-focal" role="tabpanel">
-                <div class="row g-4 figure-pair">
-                  <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="bubble" data-run="alternative-electoral-systems"></div>
-                  </div>
-                  <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="histogram" data-run="alternative-electoral-systems"></div>
-                  </div>
-                </div>
-              </div>
-              <div class="tab-pane fade" id="alternative-electoral-systems-slate" role="tabpanel">
-                <div class="chart" data-chart="slate" data-run="alternative-electoral-systems"></div>
-              </div>
-            </div>
-          </section>
           <section id="run-diverse-aapi-coalition-preferences" class="run mb-5" data-run="diverse-aapi-coalition-preferences">
             <h3 class="h4 mt-4">Diverse AAPI Coalition Preferences</h3>
             <p class="run-meta" data-run-meta="diverse-aapi-coalition-preferences"></p>
@@ -220,13 +191,10 @@
 
         <section id="comparison" class="mb-5">
           <h2>Cross-run comparison</h2>
+          <div class="run-controls" data-controls="crossrun"></div>
           <div class="chart" data-chart="crossrun"></div>
         </section>
-        <section id="conclusion" class="mb-5">
-          <h2>Conclusion</h2>
-          <p class="todo">[Conclusion to be written — edit
-             <code>docs/prose/conclusion.md</code>.]</p>
-        </section>
+
         <section id="appendix" class="mb-5">
           <h2>Appendix: configuration reference</h2>
           <div data-table="config-reference"></div>
@@ -239,7 +207,7 @@
     <div class="container-xl text-center">
       <p class="mb-1">Metric Geometry &amp; Gerrymandering Group — San Diego City Council Election Analysis</p>
       <p class="mb-1"><a href="https://github.com/mggg/San-Diego-Election-Analysis" target="_blank" rel="noopener">View the repository on GitHub</a></p>
-      <p class="generated mb-0">Generated 2026-08-06T17:15:10+00:00</p>
+      <p class="generated mb-0">Generated 2026-08-06T22:36:34+00:00</p>
     </div>
   </footer>
 
@@ -257,14 +225,14 @@
   <script src="js/vendor/d3.min.js"></script>
   <script type="importmap">{
  "imports": {
-  "./js/charts/axes.js": "./js/charts/axes.js?v=858d748f86",
-  "./js/charts/bubble.js": "./js/charts/bubble.js?v=858d748f86",
-  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=858d748f86",
-  "./js/charts/histogram.js": "./js/charts/histogram.js?v=858d748f86",
-  "./js/charts/slate.js": "./js/charts/slate.js?v=858d748f86",
-  "./js/report.js": "./js/report.js?v=858d748f86"
+  "./js/charts/axes.js": "./js/charts/axes.js?v=18bbc79501",
+  "./js/charts/bubble.js": "./js/charts/bubble.js?v=18bbc79501",
+  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=18bbc79501",
+  "./js/charts/histogram.js": "./js/charts/histogram.js?v=18bbc79501",
+  "./js/charts/slate.js": "./js/charts/slate.js?v=18bbc79501",
+  "./js/report.js": "./js/report.js?v=18bbc79501"
  }
 }</script>
-  <script type="module" src="js/report.js?v=858d748f86"></script>
+  <script type="module" src="js/report.js?v=18bbc79501"></script>
 </body>
 </html>

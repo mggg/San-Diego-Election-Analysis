@@ -52,9 +52,20 @@ export function renderBubble(container, bundle, manifest, view) {
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
 
-  // Scale area from the per-model counts only: the pooled row averages those, so
-  // including it would shrink every individual bubble.
-  const perModelMax = d3.max(records.filter((r) => !r.pooled), (r) => r.plans) || 1;
+  /*
+   * Area is scaled from this system's per-model counts, whether or not those
+   * models are currently on show.
+   *
+   * Only the per-model counts, because the pooled row averages them and would
+   * otherwise shrink every individual bubble. But not only the *selected*
+   * records: with the pooled row selected on its own there are no per-model
+   * records left to measure, which left the domain at [0, 1] and clamped every
+   * bubble to the maximum -- four different plan counts drawn the same size.
+   * Reading the basis off the run rather than the selection also means toggling
+   * a model no longer resizes the bubbles that stayed.
+   */
+  const scaleBasis = focalSeats.filter((r) => r.system === system.id && !r.pooled);
+  const perModelMax = d3.max(scaleBasis, (r) => r.plans) || 1;
   const area = d3.scaleLinear().domain([0, perModelMax]).range([MIN_AREA, MAX_AREA]).clamp(true);
   const radius = (plans) => Math.sqrt(area(plans) / Math.PI);
 
@@ -108,7 +119,4 @@ export function renderBubble(container, bundle, manifest, view) {
   drawReferenceLine(panel, x, runMeta.proportionalSeats, innerHeight, tooltip,
     runMeta.proportionalLabel);
 
-  // Kept short: the note shares a row with the reference-line key in a
-  // half-width column, and a wrap here throws the figure pair out of line.
-  drawLegend(container, runMeta.proportionalLabel, 'Bubble area = plans');
 }

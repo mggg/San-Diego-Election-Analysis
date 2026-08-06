@@ -33,6 +33,7 @@ from pipeline.summarize_results import (
     LEGEND_MAPPING,
     MODE_COLORS,
     PROP_LINE_COLOR,
+    _prop_line_label,
     _rule_display_name,
 )
 from pipeline.utils.helpers import PROJECT_DIR, load_json
@@ -89,20 +90,67 @@ def discover_runs(outputs_dir: Optional[Path] = None) -> List[Dict[str, Any]]:
     return runs
 
 
+def _slate_records_with_pooled(records: List[Dict[str, Any]], n_models: int) -> List[Dict[str, Any]]:
+    """
+    The per-slate table plus a pooled row per (system, slate, seat count).
+
+    The pooled row is the same average _occurrence_counts computes for the focal
+    group, applied per slate: sum the counts and divide by the number of voter
+    models, so a (mode, seats) cell that only some models reached counts as zero
+    for the rest rather than being left out of the average. Pooling here rather
+    than in the browser keeps one definition of "combined" in the project.
+
+    This is everything the comparison figure needs, for any slate and any voter
+    model. The focal group is one of the slates and its rows reproduce the focal
+    table exactly, per model and pooled, so the figure has a single code path.
+    """
+    totals: Dict[tuple, Dict[str, Any]] = {}
+    for r in records:
+        key = (r["system"], r["slate"], r["seats"])
+        row = totals.get(key)
+        if row is None:
+            row = {**r, "mode": COMBINED_MODE, "modeLabel": LEGEND_MAPPING[COMBINED_MODE],
+                   "pooled": True, "plans": 0.0}
+            row.pop("share", None)
+            totals[key] = row
+        row["plans"] += r["plans"]
+
+    for row in totals.values():
+        row["plans"] = row["plans"] / n_models
+
+    per_model = [{**r, "pooled": False} for r in records]
+    return sorted(per_model + list(totals.values()),
+                  key=lambda r: (r["system"], r["slate"], r["mode"], r["seats"]))
+
+
 def _cross_run_series(runs: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """
     The comparison series: every run's focal-seat distribution, split per voting
-    system so a multi-system run contributes one panel per system rather than a
+    system so a multi-system run contributes one row per system rather than a
     pooled one that hides the differences between them.
+
+    Every record is carried, not just the pooled ones the comparison figure
+    draws, so the selection there can change without a rebuild.
     """
     series = []
     for meta in runs:
-        records = load_json(meta["_source"] / "focal_seats.json")
+        records = load_json(meta["_source"] / "focal_seats.json")  # for the labels only
+
+        # Per-slate rows for the same figure, so the comparison can be read for
+        # any slate and any voter model, not only the focal group pooled.
+        n_models = len([m for m in meta["voterModels"] if not m["pooled"]]) or 1
+        slate_records = _slate_records_with_pooled(
+            load_json(meta["_source"] / "slate_seats.json"), n_models,
+        )
+
         systems = sorted({r["system"] for r in records})
         for system in systems:
             rows = [r for r in records if r["system"] == system]
             label = rows[0]["systemLabel"] if rows else system
             series.append({
+                # Stable across builds: the page keys its rows on this, so a
+                # selection survives a rebuild that adds or reorders runs.
+                "id": f"{meta['slug']}::{system}",
                 "run": meta["runName"],
                 "runSlug": meta["slug"],
                 "system": system,
@@ -113,7 +161,7 @@ def _cross_run_series(runs: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
                     if len(systems) == 1 and label.lower() in meta["runName"].lower()
                     else f"{meta['runName']} - {label}"
                 ),
-                "records": rows,
+                "records": [r for r in slate_records if r["system"] == system],
             })
     return series
 
@@ -143,6 +191,18 @@ def build_manifest(runs: List[Dict[str, Any]]) -> Dict[str, Any]:
                 "proportionalSeats": m["proportionalSeats"],
                 "proportionalLabel": m["proportionalLabel"],
                 "districtConfigs": m["districtConfigs"],
+                # Each slate's own reference line, worded by the helper every
+                # figure shares so one dotted line is never described two ways.
+                "slates": [
+                    {
+                        **slate,
+                        "proportionalSeats": slate["vapShare"] * m["totalSeats"],
+                        "proportionalLabel": _prop_line_label(
+                            slate["label"], slate["vapShare"], m["totalSeats"],
+                        ),
+                    }
+                    for slate in m["slates"]
+                ],
                 "data": {
                     "run": f"data/{m['slug']}/run.json",
                     "focalSeats": f"data/{m['slug']}/focal_seats.json",

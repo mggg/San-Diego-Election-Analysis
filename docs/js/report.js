@@ -15,11 +15,12 @@ import { renderSlate } from './charts/slate.js';
 import { renderCrossRun } from './charts/crossrun.js';
 import { emptyState } from './charts/axes.js';
 
+// Per-run charts only; the cross-run figure has its own mount, since its
+// selection is a set of systems drawn from every run rather than one run's.
 const RENDERERS = {
   histogram: renderHistogram,
   bubble: renderBubble,
   slate: renderSlate,
-  crossrun: renderCrossRun,
 };
 
 const json = (path) => fetch(path).then((r) => {
@@ -127,6 +128,157 @@ function buildControls(mount, runMeta, palette, state, onChange) {
  * Wire up one run: load its artifacts once, build the controls, and redraw its
  * charts whenever the selection changes.
  */
+/**
+ * The cross-run picker: which electoral systems appear as rows.
+ *
+ * The figure is built up rather than narrowed down. Every system laid out at
+ * once is a wall of long labels that has to be read before anything can be done
+ * with it, so this starts empty and offers one "Add" control; the systems on
+ * show are the only ones taking up room, and each carries its own remove.
+ */
+function mountCrossRun(section, manifest) {
+  const node = section.querySelector('[data-chart="crossrun"]');
+  const mount = d3.select(section).select('[data-controls="crossrun"]');
+  if (!node) return;
+
+  const all = manifest.crossRun || [];
+  const container = d3.select(node);
+  if (!all.length) {
+    emptyState(container, 'No completed runs to compare yet.');
+    return;
+  }
+
+  const selected = new Set();
+
+  // Every slate any selected run defines, focal group first: that is what the
+  // comparison is normally read for, and it is the one every run shares.
+  const focal = manifest.runs[0]?.focalGroup;
+  const slates = [];
+  manifest.runs.forEach((run) => (run.slates || []).forEach((slate) => {
+    if (!slates.some((s) => s.id === slate.id)) slates.push(slate);
+  }));
+  slates.sort((a, b) => (b.id === focal) - (a.id === focal));
+  let slate = slates[0]?.id;
+
+  // Voter models are read off the records themselves rather than a separate
+  // manifest field, so the list can never name a model the data does not carry.
+  // Pooled last, as everywhere else on the page, but selected first: the pooled
+  // average is what a comparison between systems is normally read on.
+  const modeIds = new Set(all.flatMap((s) => s.records.map((r) => r.mode)));
+  const modes = Object.keys(manifest.modeLabels)
+    .filter((id) => modeIds.has(id))
+    .sort((a, b) => (a === 'combined') - (b === 'combined'));
+  let mode = modes.includes('combined') ? 'combined' : modes[0];
+
+  function draw() {
+    try {
+      // Manifest order, not the order they were added: rows stay put as the
+      // selection grows, and systems from one run stay together.
+      renderCrossRun(container, manifest, {
+        series: all.filter((s) => selected.has(s.id)),
+        slate,
+        mode,
+      });
+    } catch (error) {
+      emptyState(container, `Could not draw this chart: ${error.message}`);
+      console.error(error);
+    }
+  }
+
+  function add(id) { selected.add(id); controls(); draw(); }
+  function remove(id) { selected.delete(id); controls(); draw(); }
+
+  /** Two lines per entry -- run above, system beneath -- as in the row labels. */
+  function twoLine(node, series, runClass, systemClass) {
+    node.append('span').attr('class', runClass).text(series.run);
+    node.append('span').attr('class', systemClass).text(series.systemLabel);
+  }
+
+  function controls() {
+    if (mount.empty()) return;
+    mount.selectAll('*').remove();
+
+    // Two rows: the systems on show, then the filters that apply to all of them.
+    // Letting them share a line put the filters at the end of a chip list whose
+    // length changes with the selection, so they never sat in the same place.
+    const systemsRow = mount.append('div').attr('class', 'control-row');
+    const filtersRow = mount.append('div').attr('class', 'control-row');
+
+    const group = systemsRow.append('div').attr('class', 'control-group');
+    group.append('span').attr('class', 'control-label').text('Electoral systems');
+    const bar = group.append('div').attr('class', 'system-chips');
+
+    bar.selectAll('span.system-chip')
+      .data(all.filter((s) => selected.has(s.id)), (d) => d.id)
+      .join('span')
+      .attr('class', 'system-chip')
+      .each(function (d) {
+        const chip = d3.select(this);
+        twoLine(chip.append('span').attr('class', 'chip-text'), d, 'chip-run', 'chip-system');
+        chip.append('button')
+          .attr('type', 'button')
+          .attr('class', 'chip-remove')
+          .attr('aria-label', `Remove ${d.panelLabel}`)
+          .text('×')
+          .on('click', () => remove(d.id));
+      });
+
+    // The Add control is present only while something is left to add.
+    const remaining = all.filter((s) => !selected.has(s.id));
+    if (remaining.length) {
+      const dropdown = bar.append('span').attr('class', 'dropdown');
+      dropdown.append('button')
+        .attr('type', 'button')
+        .attr('class', 'add-system')
+        .attr('data-bs-toggle', 'dropdown')
+        .attr('aria-expanded', 'false')
+        .text(selected.size ? 'Add +' : 'Add a system +');
+
+      dropdown.append('ul').attr('class', 'dropdown-menu system-menu')
+        .selectAll('li')
+        .data(remaining, (d) => d.id)
+        .join('li')
+        .append('button')
+        .attr('type', 'button')
+        .attr('class', 'dropdown-item')
+        .each(function (d) {
+          twoLine(d3.select(this), d, 'item-run', 'item-system');
+        })
+        .on('click', (event, d) => add(d.id));
+    }
+
+    // One slate and one model at a time: a row is a voting system, and splitting
+    // it by either as well would make the y axis two things at once.
+    picker(filtersRow, 'crossrun-slate', 'Slate', slates, () => slate,
+      (value) => { slate = value; },
+      (d) => (d.id === focal ? `${d.label} (focal group)` : d.label));
+
+    picker(filtersRow, 'crossrun-mode', 'Voter model', modes.map((id) => ({ id })), () => mode,
+      (value) => { mode = value; },
+      (d) => manifest.modeLabels[d.id] || d.id);
+  }
+
+  /** One labelled <select> in the control bar, hidden when there is no choice. */
+  function picker(row, id, label, options, get, set, text) {
+    if (options.length < 2) return;
+    const group = row.append('div').attr('class', 'control-group');
+    group.append('label').attr('class', 'control-label').attr('for', id).text(label);
+    group.append('select')
+      .attr('id', id)
+      .attr('class', 'form-select form-select-sm')
+      .on('change', function () { set(this.value); draw(); })
+      .selectAll('option')
+      .data(options)
+      .join('option')
+      .attr('value', (d) => d.id)
+      .property('selected', (d) => d.id === get())
+      .text(text);
+  }
+
+  controls();
+  draw();
+}
+
 async function mountRun(section, manifest, cache) {
   const slug = section.dataset.run;
   const charts = Array.from(section.querySelectorAll('[data-chart]'));
@@ -205,15 +357,8 @@ async function main() {
 
   renderConfigTable(manifest.configReference);
 
-  const crossRunNode = document.querySelector('[data-chart="crossrun"]');
-  if (crossRunNode) {
-    try {
-      renderCrossRun(d3.select(crossRunNode), manifest.crossRun, manifest);
-    } catch (error) {
-      emptyState(d3.select(crossRunNode), `Could not draw this chart: ${error.message}`);
-      console.error(error);
-    }
-  }
+  const comparison = document.querySelector('#comparison');
+  if (comparison) mountCrossRun(comparison, manifest);
 
   const cache = new Map();
   const sections = Array.from(document.querySelectorAll('section.run[data-run]'));

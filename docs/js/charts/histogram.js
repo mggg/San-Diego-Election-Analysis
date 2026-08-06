@@ -114,5 +114,4 @@ export function renderHistogram(container, bundle, manifest, view) {
 
   drawReferenceLine(panel, x, runMeta.proportionalSeats, innerHeight, tooltip,
     runMeta.proportionalLabel);
-  drawLegend(container, runMeta.proportionalLabel);
 }
