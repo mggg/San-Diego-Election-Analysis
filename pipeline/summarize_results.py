@@ -12,6 +12,8 @@ across voter models and election methods.
 
 from __future__ import annotations
 
+import json
+import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 import geopandas as gpd
@@ -847,6 +849,9 @@ def summarize_results(config) -> Path:
     # Bubble grid (mode x seats, area = occurrence count) per districting config.
     plot_representation_bubbles(df_plan, config, focal_group, iprop, figs_dir, run_name)
 
+    # Same aggregates again, as JSON for the report page (pipeline.report_generator).
+    write_report_artifacts(df, df_plan, config, _slate_baselines(config, gdf), iprop)
+
     print(f"[summarize_results] Wrote CSV: {csv_path}")
     print(f"[summarize_results] Figures in: {figs_dir}")
     return summary_dir
@@ -1060,6 +1065,199 @@ def plot_representation_bubbles(df_plan, config, focal_group, iprop, figs_dir, r
         _plot_bubbles_for_config(
             config_plans, config, iprop, figs_dir, run_name, num_dist, seats_per_district
         )
+
+
+
+# --- Report artifacts ---------------------------------------------------------
+#
+# The report page draws the same charts as the figures above, but in the browser
+# from JSON rather than from matplotlib. Both read the same aggregates, so the
+# two cannot drift: everything written here comes from _occurrence_counts and
+# friends, not from a parallel calculation.
+#
+# Records are flat arrays of objects -- the shape d3.group / d3.rollup expect --
+# rather than nested by system or mode, so a chart can regroup them however it
+# needs without the artifact committing to one layout.
+
+
+def run_slug(run_name: str) -> str:
+    """URL-safe id for a run, used for its data directory and DOM ids."""
+    return re.sub(r"[^a-z0-9]+", "-", str(run_name).lower()).strip("-")
+
+
+def _focal_seat_records(df_plan: pd.DataFrame, config) -> List[Dict[str, Any]]:
+    """
+    One record per (system, voter model, seat count): how many sampled plans
+    elected that many focal-preferred candidates.
+
+    Straight from _occurrence_counts, so it carries the pooled COMBINED_MODE row
+    the bubble figures show -- an average across voter models, not a sum, which
+    the "pooled" flag marks so the page can say so.
+    """
+    counts = _occurrence_counts(df_plan)
+    if counts.empty:
+        return []
+
+    shapes = (
+        df_plan[["election_method", "num_districts", "seats_per_district"]]
+        .drop_duplicates()
+        .set_index("election_method")
+    )
+    records = []
+    for method, group in counts.groupby("election_method"):
+        num_dist = int(shapes.loc[method, "num_districts"])
+        winners = int(shapes.loc[method, "seats_per_district"])
+        label = _method_label(method, num_dist, winners)
+        for mode, mode_rows in group.groupby("mode"):
+            total = float(mode_rows["count"].sum())
+            for _, row in mode_rows.sort_values("focal_seats").iterrows():
+                records.append({
+                    "system": str(method),
+                    "systemLabel": label,
+                    "numDistricts": num_dist,
+                    "winners": winners,
+                    "mode": str(mode),
+                    "modeLabel": LEGEND_MAPPING.get(mode, str(mode)),
+                    "pooled": mode == COMBINED_MODE,
+                    "seats": int(row["focal_seats"]),
+                    "plans": float(row["count"]),
+                    "share": float(row["count"]) / total if total else 0.0,
+                })
+    return records
+
+
+def _slate_seat_records(df_plan: pd.DataFrame, config, slate_baselines) -> List[Dict[str, Any]]:
+    """
+    The same shape as _focal_seat_records, but per candidate slate rather than
+    the focal group alone -- the data behind the by-slate panels.
+    """
+    slates = list(config.get("slate_to_candidates") or {})
+    records = []
+    for (num_dist, winners, method), group in df_plan.groupby(
+        ["num_districts", "seats_per_district", "election_method"]
+    ):
+        label = _method_label(method, num_dist, winners)
+        for slate in slates:
+            column = f"seats_{slate}"
+            if column not in group.columns:
+                continue
+            for mode, mode_rows in group.groupby("mode"):
+                counts = mode_rows[column].value_counts().sort_index()
+                total = float(counts.sum())
+                for seats, plans in counts.items():
+                    records.append({
+                        "system": str(method),
+                        "systemLabel": label,
+                        "numDistricts": int(num_dist),
+                        "winners": int(winners),
+                        "mode": str(mode),
+                        "modeLabel": LEGEND_MAPPING.get(mode, str(mode)),
+                        "slate": str(slate),
+                        "slateLabel": _group_label(slate),
+                        "slateVapShare": float(slate_baselines.get(slate, 0.0)),
+                        "seats": int(seats),
+                        "plans": float(plans),
+                        "share": float(plans) / total if total else 0.0,
+                    })
+    return records
+
+
+def _run_metadata(df: pd.DataFrame, df_plan: pd.DataFrame, config, iprop: float,
+                  slate_baselines: Dict[str, float]) -> Dict[str, Any]:
+    """
+    Everything a chart needs that isn't a data point: labels, axis bounds, the
+    proportional-representation line, and the shape of the run behind it.
+    """
+    run_name = str(config["run_name"])
+    total_seats = int(config["total_seats"])
+    seat_max = max(int(df_plan["focal_seats"].max()), 0)
+    seat_upper = _seat_axis_upper(max(seat_max, iprop * total_seats), total_seats)
+
+    district_configs = []
+    for (num_dist, winners), group in df_plan.groupby(["num_districts", "seats_per_district"]):
+        systems = [
+            {"id": str(m), "label": _method_label(m, num_dist, winners)}
+            for m in sorted(group["election_method"].unique())
+        ]
+        source = next(
+            (d for d in config["district_configs"] if d["num_districts"] == num_dist), {}
+        )
+        district_configs.append({
+            "numDistricts": int(num_dist),
+            "winners": int(winners),
+            "systems": systems,
+            "candidatePoolMax": source.get("candidate_pool_max"),
+            "candidatePoolMean": source.get("candidate_pool_mean"),
+            "plans": int(group["plan"].nunique()),
+            "electionsPerSystem": int(len(df) / max(df["election_method"].nunique(), 1)),
+        })
+
+    # The pooled row is added by _occurrence_counts, so it is not in df_plan's
+    # modes -- but it is in the records, and the page has to know how to label it.
+    modes = _modes_in_display_order(set(df_plan["mode"].unique()) | {COMBINED_MODE})
+    return {
+        "runName": run_name,
+        "slug": run_slug(run_name),
+        "focalGroup": str(config["focal_group"]),
+        "focalGroupLabel": _group_label(config["focal_group"]),
+        "totalSeats": total_seats,
+        "focalVapShare": float(iprop),
+        "proportionalSeats": float(iprop) * total_seats,
+        "proportionalLabel": _prop_line_label(
+            _group_label(config["focal_group"]), iprop, total_seats
+        ),
+        "seatMax": int(seat_upper),
+        "seatTicks": list(range(0, seat_upper + 1, X_TICK_STEP)),
+        "districtConfigs": district_configs,
+        "voterModels": [
+            {"id": m, "label": LEGEND_MAPPING.get(m, m), "pooled": m == COMBINED_MODE}
+            for m in modes
+        ],
+        "slates": [
+            {"id": s, "label": _group_label(s), "vapShare": float(slate_baselines.get(s, 0.0))}
+            for s in (config.get("slate_to_candidates") or {})
+        ],
+        "turnout": config.get("turnout"),
+        "primaryTurnout": config.get("primary_turnout"),
+        "replicates": int(config.get("num_reps", 0)),
+        "subsamples": int(config.get("num_subsamples", 0)),
+    }
+
+
+def report_artifacts_dir(run_name: str) -> Path:
+    """Where a run's report artifacts live; read by pipeline.report_generator."""
+    return Path("outputs") / str(run_name) / "summaries" / "report"
+
+
+def write_report_artifacts(df: pd.DataFrame, df_plan: pd.DataFrame, config,
+                           slate_baselines: Dict[str, float], iprop: float) -> Path:
+    """
+    Write this run's JSON artifacts for the report page.
+
+    Args:
+        df: The district-level summary table.
+        df_plan: Its plan-level aggregate (aggregate_to_plan_level).
+        config: Parsed config dict.
+        slate_baselines: Each slate's share of citywide VAP (_slate_baselines).
+        iprop: The focal group's share of citywide VAP.
+
+    Outputs:
+        outputs/<run_name>/summaries/report/{run,focal_seats,slate_seats}.json
+    """
+    out_dir = report_artifacts_dir(config["run_name"])
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    payloads = {
+        "run.json": _run_metadata(df, df_plan, config, iprop, slate_baselines),
+        "focal_seats.json": _focal_seat_records(df_plan, config),
+        "slate_seats.json": _slate_seat_records(df_plan, config, slate_baselines),
+    }
+    for name, payload in payloads.items():
+        with open(out_dir / name, "w", encoding="utf-8") as f:
+            json.dump(payload, f, indent=1)
+
+    print(f"[summarize_results] Report artifacts in: {out_dir}")
+    return out_dir
 
 
 # --- Cross-run summaries ------------------------------------------------------
