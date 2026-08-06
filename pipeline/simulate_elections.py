@@ -100,14 +100,13 @@ def _build_election_plan(voting_configs: dict) -> List[ElectionPlanEntry]:
     so doing it a single time up front avoids repeating class lookups and
     signature introspection for every profile file.
 
-    A rule is an ordinary VoteKit election class when its name resolves via
-    getattr(elections, rule). Otherwise, if its kwargs carry "general_class"
-    (or its former name "round2_class"), it's the generic primary/general rule
-    (Plurality primary -> freshly resampled profile -> general_class for the
-    general; see
-    pipeline.two_round_election.run_primary_general_election) -- this covers
-    Alaska- and TopTwo-shaped rules, and any future two-round rule, via config
-    alone. Anything else is an unrecognized rule name.
+    A rule is the generic primary/general rule when its kwargs carry
+    "general_class" (or its former name "round2_class") -- checked first, and
+    unconditionally, since a config can freely name this rule after the VoteKit
+    class it's modeled on ("Alaska", "TopTwo") without that name being taken
+    literally. Only when that marker is absent does the rule name get resolved
+    as an ordinary VoteKit election class via getattr(elections, rule).
+    Anything else is an unrecognized rule name.
 
     Args:
         voting_configs: Mapping of rule name -> kwargs from the config file.
@@ -121,23 +120,22 @@ def _build_election_plan(voting_configs: dict) -> List[ElectionPlanEntry]:
     """
     plan: List[ElectionPlanEntry] = []
     for rule, kwargs in voting_configs.items():
-        election_class = getattr(elections, rule, None)
-        if election_class is not None:
-            profile_types = tuple(
-                t for t in _required_profile(election_class) if t in (RankProfile, ScoreProfile)
-            )
-            plan.append(
-                ElectionPlanEntry(rule, profile_types, election_class=election_class)
-            )
-        elif is_two_round(kwargs):
+        if is_two_round(kwargs):
             # The primary (Plurality) always runs on a RankProfile.
             plan.append(ElectionPlanEntry(rule, (RankProfile,), is_two_round=True))
-        else:
+            continue
+
+        election_class = getattr(elections, rule, None)
+        if election_class is None:
             raise ValueError(
                 f"Unknown voting rule '{rule}' in voting_configs. "
                 f"Expected a VoteKit election class name (e.g. 'FastSTV', 'Plurality', 'IRV'), "
                 f"or a two-round rule with a 'general_class' kwarg."
             )
+        profile_types = tuple(
+            t for t in _required_profile(election_class) if t in (RankProfile, ScoreProfile)
+        )
+        plan.append(ElectionPlanEntry(rule, profile_types, election_class=election_class))
     return plan
 
 

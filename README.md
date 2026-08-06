@@ -52,8 +52,8 @@ Each of those runs the `basic` config end to end: it generates the geodata if
 ballots, elections, and summaries.
 
 Outputs are keyed by the config's `run_name`, not its filename — `basic.json`
-has `"run_name": "Basic - 3 X 3 STV"`, so its results land in
-`outputs/Basic - 3 X 3 STV/`.
+has `"run_name": "Basic - 3 X 3"`, so its results land in
+`outputs/Basic - 3 X 3/`.
 
 Re-running is cheap. Every stage checks whether its outputs already exist and
 are still valid for the current config, so a second `run.py basic` picks up

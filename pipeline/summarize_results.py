@@ -133,7 +133,7 @@ def _figure_subtitle(run_name: str, system_label: str, n_run_systems: int) -> Op
     subtitle. The run name comes back only as a scenario tag after a dash, and
     only when the system alone would not identify the figure -- a single-system
     run whose name is not just its system ("Low AAPI Turnout" -> "3 X 3 STV -
-    Low AAPI Turnout", while "Basic - 3 X 3 STV" -> "3 X 3 STV").
+    Low AAPI Turnout", while "Basic - 3 X 3" -> "3 X 3 STV").
     """
     scenario = ""
     if n_run_systems == 1 and system_label and system_label.lower() not in run_name.lower():
