@@ -1,0 +1,59 @@
+## 3.1 Districting Plan Ensembles
+To generate a sufficient number of distinct districting plans, we use GerryChain to run a 10,000-step ReCom chain and subsample 100 plans that will be used in our election simulations. We do this a total of two times — once for each of the following configurations:
+
+- 3 × 3 ensemble — each plan has 3 single-member districts built from precincts
+- 9 × 1 ensemble — each plan has 1 multi-member districts built from precincts
+
+Additionally, we run a election 1 x 9 where San Diego city is represented as one single District. In this scenario, we dont need to run a MC chain as we only going to work with one districting plan but to compensate for a reduction in the number of simulations we increase the number of profiles from 10 to 100.
+
+## 3.2 Voter Blocs and Candidate Slates
+Mirroring past reports, we consider the four largest racial demographic groups when identifying blocs of voters with shared preferences and slates of candidates with similar policies and positions. Slates and Voters are limited to and delineated by Black, Asian, Hispanic, and White candidates. Additionally, the blocs were constructed using Decennial Census variables as sources of information, and the implemented methodology can be found in this [document](https://data-democracy.org/VAP-CVAP).
+
+## 3.3 Candidate Availability and Pool Size
+To simulate candidate availability per-district for each voting bloc, we make a few decisions and assumptions guided by available evidence from previous city council elections. For instance, the last three San Diego City Council Elections had a pattern where Asian and Black candidates tend to participate only in districts where their own community makes up a larger share of voters compared to other districts ([2020](https://en.wikipedia.org/wiki/2020_San_Diego_elections), [2022](https://en.wikipedia.org/wiki/2022_San_Diego_City_Council_election), [2024](https://en.wikipedia.org/wiki/2024_San_Diego_elections)). Analyzing the bloc distribution of current 9-district plan, District 4 and 6 have the highest shares of Black and Asian communities, respectively, and candidates running in those district are predominantly from those same communitities. On the other hand, the number of candidate or pool size that runs for each district is not homogenous. Since 2018, the distribution of candidates running per district have very diverse. On average, districts 2 and 9 had 7 and 5 candidates running whereas districts 5 and 7 had 2.
+
+**Table 3.1:** San Diego City Council elections, 2018–2024
+
+| District | Number of Elections | Average Number of Candidates | Std. Dev. |
+|:--------:|:--------------------:|:-----------------------------:|:---------:|
+| 1        | 2                     | 4.50                          | 4.95      |
+| 2        | 3                     | 6.67                          | 0.58      |
+| 3        | 2                     | 4.50                          | 0.71      |
+| 4        | 4                     | 3.25                          | 0.50      |
+| 5        | 2                     | 2.50                          | 2.12      |
+| 6        | 3                     | 3.67                          | 2.08      |
+| 7        | 2                     | 2.50                          | 2.12      |
+| 8        | 3                     | 4.00                          | 2.00      |
+| 9        | 2                     | 5.00                          | 2.83      |
+
+Based on the previous analysis, we assume the number of candidates ($m$) behaves as a Binomial Distribution with a floor setted as the number of winner per district plus one. Where, k is the number of winners. The floor $k + 1$ ensures that we never set the number of winner as the number of running candidates as they will automatically will declare as winners. The binomial distribution takes two parameters as inputs: $n$ and $p$.
+
+$$m = k + 1 + X \sim \text{Binomial}(n, p)$$
+
+Where:
+
+$n = \text{candidate pool max} - \text{candidate pool min} $
+
+$p = \frac{E(m)-  k + 1}{n}$
+
+Finally, we make an assumption that the racial composition of the slate pool will be roughly proportional to that of the VAP in each district.We use the bloc proportions to create an interval, with the intent of sampling candidates of different slates from it. However, before we do we first square each element, normalizing the “squared interval” over the sum of the squared values. This creates an “exaggeration” effect when we sample slate candidates. In other words, if a district has a large Black VAP, it's even more likely that the Black voter-preferred slate of candidates will be larger than the others. Similarly, if the Asian VAP is small it's much less likely that the Asian voter-preferred slate will have many candidates — if any, since we allow for slates to be empty. This is intended to model how community dynamics, segregation, or lack of institutional support may impact candidate availability across geography with respect to race. It is valid to state that, we modeled one scenario with a "cubic interval" for sensitivy results to the basic scenario.
+
+## 3.4 Voter Profile and Ballot Generation
+For each district in all 50 district plans of our ensemble, we generate voter preference profiles — a collection of ballots from voters that rank available candidates. These rankings are determined by using VoteKit's Plackett-Luce and Bradley-Terry ballot generators, which model impulsive voter behavior and deliberative voter behavior, respectively. Each assumes that each voter bloc has a preference interval for each slate of candidates, along with a tuple of cohesion parameters — one parameter for each slate.
+
+Both generators share the same two-stage process, and they only differ in how the first stage plays out. Before any ballots are drawn, each bloc's preference interval is assembled by taking that bloc's cohesion for a given slate and slicing off a sub-interval of that width, then filling it in with the individual candidates of the slate according to their support. We govern the within-slate split with a set of Dirichlet alphas — in this report we hold all alphas at 1, which means that once a voter has decided to reach for a particular slate, every candidate on that slate is treated as equally preferred. The cohesion parameters (the rows of the matrices below) therefore do all the work of ordering slates against one another, while the interval handles the ordering of candidates within a slate. What separates the two models is the story we tell about how a voter walks through that interval to produce a ranking.
+
+### The Impulsive Voter
+The Plackett-Luce generator builds a ballot from the top down, one position at a time. Starting from the first-place slot, a voter in bloc reaches for a candidate from slate  with probability equal to that bloc's cohesion for the slate, ; whichever slate is chosen then supplies a specific candidate by sampling from that slate's preference interval without replacement. The voter repeats this for the next position, renormalizing over whatever slates still have candidates left, and keeps going until the ballot is full. We call this the impulsive voter because they never look back — each ranking is a snapshot decision made in the moment, with no reconsideration of the choices already committed higher up the ballot. Concretely, a voter picks their favorite, then their next favorite from what remains, and so on, so the probability of a given slate ordering is just the product of these sequential draws.
+
+### The Deliberative Voter
+The Bradley-Terry generator instead asks the voter to weigh the ballot as a whole. Rather than filling positions in sequence, the probability of a complete ranking is proportional to the product of the pairwise slate preferences across every pair of slates on the ballot — for a ranking that places slate  above slate , each such head-to-head contributes a factor of . A voter effectively runs every candidate against every other in their head and only then settles on the ordering that is most internally consistent with all of those matchups at once. We call this the deliberative voter, since the ranking reflects a considered comparison of the full field rather than a run of top-down impulses. The candidate-filling stage is identical to Plackett-Luce — once the slate ordering is fixed, specific candidates are drawn from each slate's preference interval — so the two models diverge only in how much of the ballot a voter is imagined to be considering at once.
+
+### Cohesion Matrices
+Rows are voter blocs, columns are candidate slates; each row sums to 1.
+
+## 3.5 Cambridge Truncation Process
+The ballots generated in Section 3.5 are, by default, full rankings — every voter ranks every candidate on the slate. However, this scenario is not realistic as voters rarely rank full ballots. To capture this behavior, we simulate an additional scenario to the basic simulation with a truncation step. The truncation method was do calibrated to real ranked-choice ballots from Cambridge, MA's 2009–2017 municipal elections, which VoteKit distributes as two empirical distributions over ballot length: one for ballots that started with a candidate from the historical majority (white) slate, and one for ballots that started with a candidate from the historical minority (Black, Asian, or Hispanic) slate. After generating the ballots for vote types of voter profiles, we applied the truncation process... 
+
+## 3.6 Voting Rules
+Elections for each district are simulated using VoteKit's Elections module. We use the following voting rules with the corresponding district configurations:
