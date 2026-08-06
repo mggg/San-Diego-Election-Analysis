@@ -29,8 +29,7 @@
   "voter_models": [
     "slate_pl",
     "slate_bt",
-    "name_cumulative",
-    "slate_pl_ct"
+    "name_cumulative"
   ],
   "blocs": {
     "WHI": [
