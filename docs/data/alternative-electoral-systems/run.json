@@ -1,0 +1,111 @@
+{
+ "runName": "Alternative Electoral Systems",
+ "slug": "alternative-electoral-systems",
+ "focalGroup": "AAPI",
+ "focalGroupLabel": "AAPI",
+ "totalSeats": 9,
+ "focalVapShare": 0.20432553215884638,
+ "proportionalSeats": 1.8389297894296175,
+ "proportionalLabel": "AAPI share of VAP: 20.4% (1.8 seats)",
+ "seatMax": 8,
+ "seatTicks": [
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8
+ ],
+ "districtConfigs": [
+  {
+   "numDistricts": 9,
+   "winners": 1,
+   "systems": [
+    {
+     "id": "ALASKA",
+     "label": "9 X 1 Alaska"
+    },
+    {
+     "id": "ALASKATWOPROFILE",
+     "label": "9 X 1 Alaska (two-profile)"
+    },
+    {
+     "id": "IRV",
+     "label": "9 X 1 IRV"
+    },
+    {
+     "id": "PLURALITY",
+     "label": "9 X 1 Plurality"
+    },
+    {
+     "id": "TOPTWO",
+     "label": "9 X 1 Top Two"
+    },
+    {
+     "id": "TOPTWOTWOPROFILE",
+     "label": "9 X 1 Top Two (two-profile)"
+    }
+   ],
+   "candidatePoolMax": 7,
+   "candidatePoolMean": 6,
+   "plans": 100,
+   "electionsPerSystem": 18000
+  }
+ ],
+ "voterModels": [
+  {
+   "id": "slate_pl",
+   "label": "Impulsive",
+   "pooled": false
+  },
+  {
+   "id": "slate_bt",
+   "label": "Deliberative",
+   "pooled": false
+  },
+  {
+   "id": "combined",
+   "label": "Combined",
+   "pooled": true
+  }
+ ],
+ "slates": [
+  {
+   "id": "WHI",
+   "label": "WHI",
+   "vapShare": 0.4380194598284399
+  },
+  {
+   "id": "BAIO",
+   "label": "BAIO",
+   "vapShare": 0.0919164473502938
+  },
+  {
+   "id": "HIS",
+   "label": "HIS",
+   "vapShare": 0.2657385606624199
+  },
+  {
+   "id": "AAPI",
+   "label": "AAPI",
+   "vapShare": 0.20432553215884638
+  }
+ ],
+ "turnout": {
+  "AAPI": 0.75,
+  "BAIO": 1,
+  "HIS": 0.75,
+  "WHI": 1
+ },
+ "primaryTurnout": {
+  "AAPI": 0.5,
+  "BAIO": 0.75,
+  "HIS": 0.5,
+  "WHI": 1
+ },
+ "replicates": 10,
+ "subsamples": 100
+}

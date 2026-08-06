@@ -1,0 +1,1644 @@
+{
+ "generated": "2026-08-06T17:15:10+00:00",
+ "palette": {
+  "slate_pl": "#FFCC00",
+  "slate_bt": "#AA0000",
+  "cambridge": "#2a78d6",
+  "name_cumulative": "#AA0000",
+  "combined": "#898781"
+ },
+ "modeLabels": {
+  "slate_pl": "Impulsive",
+  "slate_bt": "Deliberative",
+  "cambridge": "Cambridge",
+  "name_cumulative": "Name Cumulative",
+  "combined": "Combined"
+ },
+ "colors": {
+  "referenceLine": "#52514e",
+  "barEdge": "#52514e"
+ },
+ "runs": [
+  {
+   "slug": "alternative-electoral-systems",
+   "name": "Alternative Electoral Systems",
+   "focalGroup": "AAPI",
+   "focalGroupLabel": "AAPI",
+   "totalSeats": 9,
+   "seatMax": 8,
+   "focalVapShare": 0.20432553215884638,
+   "proportionalSeats": 1.8389297894296175,
+   "proportionalLabel": "AAPI share of VAP: 20.4% (1.8 seats)",
+   "districtConfigs": [
+    {
+     "numDistricts": 9,
+     "winners": 1,
+     "systems": [
+      {
+       "id": "ALASKA",
+       "label": "9 X 1 Alaska"
+      },
+      {
+       "id": "ALASKATWOPROFILE",
+       "label": "9 X 1 Alaska (two-profile)"
+      },
+      {
+       "id": "IRV",
+       "label": "9 X 1 IRV"
+      },
+      {
+       "id": "PLURALITY",
+       "label": "9 X 1 Plurality"
+      },
+      {
+       "id": "TOPTWO",
+       "label": "9 X 1 Top Two"
+      },
+      {
+       "id": "TOPTWOTWOPROFILE",
+       "label": "9 X 1 Top Two (two-profile)"
+      }
+     ],
+     "candidatePoolMax": 7,
+     "candidatePoolMean": 6,
+     "plans": 100,
+     "electionsPerSystem": 18000
+    }
+   ],
+   "data": {
+    "run": "data/alternative-electoral-systems/run.json",
+    "focalSeats": "data/alternative-electoral-systems/focal_seats.json",
+    "slateSeats": "data/alternative-electoral-systems/slate_seats.json"
+   }
+  },
+  {
+   "slug": "diverse-aapi-coalition-preferences",
+   "name": "Diverse AAPI Coalition Preferences",
+   "focalGroup": "AAPI",
+   "focalGroupLabel": "AAPI",
+   "totalSeats": 9,
+   "seatMax": 6,
+   "focalVapShare": 0.20432553215884638,
+   "proportionalSeats": 1.8389297894296175,
+   "proportionalLabel": "AAPI share of VAP: 20.4% (1.8 seats)",
+   "districtConfigs": [
+    {
+     "numDistricts": 3,
+     "winners": 3,
+     "systems": [
+      {
+       "id": "FASTSTV",
+       "label": "3 X 3 STV"
+      }
+     ],
+     "candidatePoolMax": 10,
+     "candidatePoolMean": 7,
+     "plans": 100,
+     "electionsPerSystem": 6000
+    }
+   ],
+   "data": {
+    "run": "data/diverse-aapi-coalition-preferences/run.json",
+    "focalSeats": "data/diverse-aapi-coalition-preferences/focal_seats.json",
+    "slateSeats": "data/diverse-aapi-coalition-preferences/slate_seats.json"
+   }
+  },
+  {
+   "slug": "low-aapi-availability",
+   "name": "Low AAPI Availability",
+   "focalGroup": "AAPI",
+   "focalGroupLabel": "AAPI",
+   "totalSeats": 9,
+   "seatMax": 5,
+   "focalVapShare": 0.20432553215884638,
+   "proportionalSeats": 1.8389297894296175,
+   "proportionalLabel": "AAPI share of VAP: 20.4% (1.8 seats)",
+   "districtConfigs": [
+    {
+     "numDistricts": 3,
+     "winners": 3,
+     "systems": [
+      {
+       "id": "FASTSTV",
+       "label": "3 X 3 STV"
+      }
+     ],
+     "candidatePoolMax": 10,
+     "candidatePoolMean": 7,
+     "plans": 100,
+     "electionsPerSystem": 6000
+    }
+   ],
+   "data": {
+    "run": "data/low-aapi-availability/run.json",
+    "focalSeats": "data/low-aapi-availability/focal_seats.json",
+    "slateSeats": "data/low-aapi-availability/slate_seats.json"
+   }
+  },
+  {
+   "slug": "low-aapi-turnout",
+   "name": "Low AAPI Turnout",
+   "focalGroup": "AAPI",
+   "focalGroupLabel": "AAPI",
+   "totalSeats": 9,
+   "seatMax": 7,
+   "focalVapShare": 0.20432553215884638,
+   "proportionalSeats": 1.8389297894296175,
+   "proportionalLabel": "AAPI share of VAP: 20.4% (1.8 seats)",
+   "districtConfigs": [
+    {
+     "numDistricts": 3,
+     "winners": 3,
+     "systems": [
+      {
+       "id": "FASTSTV",
+       "label": "3 X 3 STV"
+      }
+     ],
+     "candidatePoolMax": 10,
+     "candidatePoolMean": 7,
+     "plans": 100,
+     "electionsPerSystem": 6000
+    }
+   ],
+   "data": {
+    "run": "data/low-aapi-turnout/run.json",
+    "focalSeats": "data/low-aapi-turnout/focal_seats.json",
+    "slateSeats": "data/low-aapi-turnout/slate_seats.json"
+   }
+  }
+ ],
+ "crossRun": [
+  {
+   "run": "Alternative Electoral Systems",
+   "runSlug": "alternative-electoral-systems",
+   "system": "ALASKA",
+   "systemLabel": "9 X 1 Alaska",
+   "panelLabel": "Alternative Electoral Systems - 9 X 1 Alaska",
+   "records": [
+    {
+     "system": "ALASKA",
+     "systemLabel": "9 X 1 Alaska",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 0,
+     "plans": 762.5,
+     "share": 0.7625
+    },
+    {
+     "system": "ALASKA",
+     "systemLabel": "9 X 1 Alaska",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 1,
+     "plans": 203.5,
+     "share": 0.2035
+    },
+    {
+     "system": "ALASKA",
+     "systemLabel": "9 X 1 Alaska",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 2,
+     "plans": 32.5,
+     "share": 0.0325
+    },
+    {
+     "system": "ALASKA",
+     "systemLabel": "9 X 1 Alaska",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 3,
+     "plans": 1.5,
+     "share": 0.0015
+    },
+    {
+     "system": "ALASKA",
+     "systemLabel": "9 X 1 Alaska",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 0,
+     "plans": 939.0,
+     "share": 0.939
+    },
+    {
+     "system": "ALASKA",
+     "systemLabel": "9 X 1 Alaska",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 1,
+     "plans": 57.0,
+     "share": 0.057
+    },
+    {
+     "system": "ALASKA",
+     "systemLabel": "9 X 1 Alaska",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 2,
+     "plans": 4.0,
+     "share": 0.004
+    },
+    {
+     "system": "ALASKA",
+     "systemLabel": "9 X 1 Alaska",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 0,
+     "plans": 586.0,
+     "share": 0.586
+    },
+    {
+     "system": "ALASKA",
+     "systemLabel": "9 X 1 Alaska",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 1,
+     "plans": 350.0,
+     "share": 0.35
+    },
+    {
+     "system": "ALASKA",
+     "systemLabel": "9 X 1 Alaska",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 2,
+     "plans": 61.0,
+     "share": 0.061
+    },
+    {
+     "system": "ALASKA",
+     "systemLabel": "9 X 1 Alaska",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 3,
+     "plans": 3.0,
+     "share": 0.003
+    }
+   ]
+  },
+  {
+   "run": "Alternative Electoral Systems",
+   "runSlug": "alternative-electoral-systems",
+   "system": "ALASKATWOPROFILE",
+   "systemLabel": "9 X 1 Alaska (two-profile)",
+   "panelLabel": "Alternative Electoral Systems - 9 X 1 Alaska (two-profile)",
+   "records": [
+    {
+     "system": "ALASKATWOPROFILE",
+     "systemLabel": "9 X 1 Alaska (two-profile)",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 0,
+     "plans": 843.0,
+     "share": 0.843
+    },
+    {
+     "system": "ALASKATWOPROFILE",
+     "systemLabel": "9 X 1 Alaska (two-profile)",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 1,
+     "plans": 149.5,
+     "share": 0.1495
+    },
+    {
+     "system": "ALASKATWOPROFILE",
+     "systemLabel": "9 X 1 Alaska (two-profile)",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 2,
+     "plans": 7.5,
+     "share": 0.0075
+    },
+    {
+     "system": "ALASKATWOPROFILE",
+     "systemLabel": "9 X 1 Alaska (two-profile)",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 0,
+     "plans": 945.0,
+     "share": 0.945
+    },
+    {
+     "system": "ALASKATWOPROFILE",
+     "systemLabel": "9 X 1 Alaska (two-profile)",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 1,
+     "plans": 52.0,
+     "share": 0.052
+    },
+    {
+     "system": "ALASKATWOPROFILE",
+     "systemLabel": "9 X 1 Alaska (two-profile)",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 2,
+     "plans": 3.0,
+     "share": 0.003
+    },
+    {
+     "system": "ALASKATWOPROFILE",
+     "systemLabel": "9 X 1 Alaska (two-profile)",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 0,
+     "plans": 741.0,
+     "share": 0.741
+    },
+    {
+     "system": "ALASKATWOPROFILE",
+     "systemLabel": "9 X 1 Alaska (two-profile)",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 1,
+     "plans": 247.0,
+     "share": 0.247
+    },
+    {
+     "system": "ALASKATWOPROFILE",
+     "systemLabel": "9 X 1 Alaska (two-profile)",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 2,
+     "plans": 12.0,
+     "share": 0.012
+    }
+   ]
+  },
+  {
+   "run": "Alternative Electoral Systems",
+   "runSlug": "alternative-electoral-systems",
+   "system": "IRV",
+   "systemLabel": "9 X 1 IRV",
+   "panelLabel": "Alternative Electoral Systems - 9 X 1 IRV",
+   "records": [
+    {
+     "system": "IRV",
+     "systemLabel": "9 X 1 IRV",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 0,
+     "plans": 762.5,
+     "share": 0.7625
+    },
+    {
+     "system": "IRV",
+     "systemLabel": "9 X 1 IRV",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 1,
+     "plans": 203.5,
+     "share": 0.2035
+    },
+    {
+     "system": "IRV",
+     "systemLabel": "9 X 1 IRV",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 2,
+     "plans": 32.5,
+     "share": 0.0325
+    },
+    {
+     "system": "IRV",
+     "systemLabel": "9 X 1 IRV",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 3,
+     "plans": 1.5,
+     "share": 0.0015
+    },
+    {
+     "system": "IRV",
+     "systemLabel": "9 X 1 IRV",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 0,
+     "plans": 939.0,
+     "share": 0.939
+    },
+    {
+     "system": "IRV",
+     "systemLabel": "9 X 1 IRV",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 1,
+     "plans": 57.0,
+     "share": 0.057
+    },
+    {
+     "system": "IRV",
+     "systemLabel": "9 X 1 IRV",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 2,
+     "plans": 4.0,
+     "share": 0.004
+    },
+    {
+     "system": "IRV",
+     "systemLabel": "9 X 1 IRV",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 0,
+     "plans": 586.0,
+     "share": 0.586
+    },
+    {
+     "system": "IRV",
+     "systemLabel": "9 X 1 IRV",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 1,
+     "plans": 350.0,
+     "share": 0.35
+    },
+    {
+     "system": "IRV",
+     "systemLabel": "9 X 1 IRV",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 2,
+     "plans": 61.0,
+     "share": 0.061
+    },
+    {
+     "system": "IRV",
+     "systemLabel": "9 X 1 IRV",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 3,
+     "plans": 3.0,
+     "share": 0.003
+    }
+   ]
+  },
+  {
+   "run": "Alternative Electoral Systems",
+   "runSlug": "alternative-electoral-systems",
+   "system": "PLURALITY",
+   "systemLabel": "9 X 1 Plurality",
+   "panelLabel": "Alternative Electoral Systems - 9 X 1 Plurality",
+   "records": [
+    {
+     "system": "PLURALITY",
+     "systemLabel": "9 X 1 Plurality",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 0,
+     "plans": 442.5,
+     "share": 0.4425
+    },
+    {
+     "system": "PLURALITY",
+     "systemLabel": "9 X 1 Plurality",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 1,
+     "plans": 335.5,
+     "share": 0.3355
+    },
+    {
+     "system": "PLURALITY",
+     "systemLabel": "9 X 1 Plurality",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 2,
+     "plans": 152.5,
+     "share": 0.1525
+    },
+    {
+     "system": "PLURALITY",
+     "systemLabel": "9 X 1 Plurality",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 3,
+     "plans": 58.0,
+     "share": 0.058
+    },
+    {
+     "system": "PLURALITY",
+     "systemLabel": "9 X 1 Plurality",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 4,
+     "plans": 10.5,
+     "share": 0.0105
+    },
+    {
+     "system": "PLURALITY",
+     "systemLabel": "9 X 1 Plurality",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 5,
+     "plans": 1.0,
+     "share": 0.001
+    },
+    {
+     "system": "PLURALITY",
+     "systemLabel": "9 X 1 Plurality",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 0,
+     "plans": 641.0,
+     "share": 0.641
+    },
+    {
+     "system": "PLURALITY",
+     "systemLabel": "9 X 1 Plurality",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 1,
+     "plans": 305.0,
+     "share": 0.305
+    },
+    {
+     "system": "PLURALITY",
+     "systemLabel": "9 X 1 Plurality",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 2,
+     "plans": 52.0,
+     "share": 0.052
+    },
+    {
+     "system": "PLURALITY",
+     "systemLabel": "9 X 1 Plurality",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 3,
+     "plans": 2.0,
+     "share": 0.002
+    },
+    {
+     "system": "PLURALITY",
+     "systemLabel": "9 X 1 Plurality",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 0,
+     "plans": 244.0,
+     "share": 0.244
+    },
+    {
+     "system": "PLURALITY",
+     "systemLabel": "9 X 1 Plurality",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 1,
+     "plans": 366.0,
+     "share": 0.366
+    },
+    {
+     "system": "PLURALITY",
+     "systemLabel": "9 X 1 Plurality",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 2,
+     "plans": 253.0,
+     "share": 0.253
+    },
+    {
+     "system": "PLURALITY",
+     "systemLabel": "9 X 1 Plurality",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 3,
+     "plans": 114.0,
+     "share": 0.114
+    },
+    {
+     "system": "PLURALITY",
+     "systemLabel": "9 X 1 Plurality",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 4,
+     "plans": 21.0,
+     "share": 0.021
+    },
+    {
+     "system": "PLURALITY",
+     "systemLabel": "9 X 1 Plurality",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 5,
+     "plans": 2.0,
+     "share": 0.002
+    }
+   ]
+  },
+  {
+   "run": "Alternative Electoral Systems",
+   "runSlug": "alternative-electoral-systems",
+   "system": "TOPTWO",
+   "systemLabel": "9 X 1 Top Two",
+   "panelLabel": "Alternative Electoral Systems - 9 X 1 Top Two",
+   "records": [
+    {
+     "system": "TOPTWO",
+     "systemLabel": "9 X 1 Top Two",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 0,
+     "plans": 716.5,
+     "share": 0.7165
+    },
+    {
+     "system": "TOPTWO",
+     "systemLabel": "9 X 1 Top Two",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 1,
+     "plans": 240.5,
+     "share": 0.2405
+    },
+    {
+     "system": "TOPTWO",
+     "systemLabel": "9 X 1 Top Two",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 2,
+     "plans": 39.0,
+     "share": 0.039
+    },
+    {
+     "system": "TOPTWO",
+     "systemLabel": "9 X 1 Top Two",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 3,
+     "plans": 3.5,
+     "share": 0.0035
+    },
+    {
+     "system": "TOPTWO",
+     "systemLabel": "9 X 1 Top Two",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 4,
+     "plans": 0.5,
+     "share": 0.0005
+    },
+    {
+     "system": "TOPTWO",
+     "systemLabel": "9 X 1 Top Two",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 0,
+     "plans": 901.0,
+     "share": 0.901
+    },
+    {
+     "system": "TOPTWO",
+     "systemLabel": "9 X 1 Top Two",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 1,
+     "plans": 93.0,
+     "share": 0.093
+    },
+    {
+     "system": "TOPTWO",
+     "systemLabel": "9 X 1 Top Two",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 2,
+     "plans": 6.0,
+     "share": 0.006
+    },
+    {
+     "system": "TOPTWO",
+     "systemLabel": "9 X 1 Top Two",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 0,
+     "plans": 532.0,
+     "share": 0.532
+    },
+    {
+     "system": "TOPTWO",
+     "systemLabel": "9 X 1 Top Two",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 1,
+     "plans": 388.0,
+     "share": 0.388
+    },
+    {
+     "system": "TOPTWO",
+     "systemLabel": "9 X 1 Top Two",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 2,
+     "plans": 72.0,
+     "share": 0.072
+    },
+    {
+     "system": "TOPTWO",
+     "systemLabel": "9 X 1 Top Two",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 3,
+     "plans": 7.0,
+     "share": 0.007
+    },
+    {
+     "system": "TOPTWO",
+     "systemLabel": "9 X 1 Top Two",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 4,
+     "plans": 1.0,
+     "share": 0.001
+    }
+   ]
+  },
+  {
+   "run": "Alternative Electoral Systems",
+   "runSlug": "alternative-electoral-systems",
+   "system": "TOPTWOTWOPROFILE",
+   "systemLabel": "9 X 1 Top Two (two-profile)",
+   "panelLabel": "Alternative Electoral Systems - 9 X 1 Top Two (two-profile)",
+   "records": [
+    {
+     "system": "TOPTWOTWOPROFILE",
+     "systemLabel": "9 X 1 Top Two (two-profile)",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 0,
+     "plans": 861.0,
+     "share": 0.861
+    },
+    {
+     "system": "TOPTWOTWOPROFILE",
+     "systemLabel": "9 X 1 Top Two (two-profile)",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 1,
+     "plans": 124.5,
+     "share": 0.1245
+    },
+    {
+     "system": "TOPTWOTWOPROFILE",
+     "systemLabel": "9 X 1 Top Two (two-profile)",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 2,
+     "plans": 14.5,
+     "share": 0.0145
+    },
+    {
+     "system": "TOPTWOTWOPROFILE",
+     "systemLabel": "9 X 1 Top Two (two-profile)",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 0,
+     "plans": 924.0,
+     "share": 0.924
+    },
+    {
+     "system": "TOPTWOTWOPROFILE",
+     "systemLabel": "9 X 1 Top Two (two-profile)",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 1,
+     "plans": 72.0,
+     "share": 0.072
+    },
+    {
+     "system": "TOPTWOTWOPROFILE",
+     "systemLabel": "9 X 1 Top Two (two-profile)",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 2,
+     "plans": 4.0,
+     "share": 0.004
+    },
+    {
+     "system": "TOPTWOTWOPROFILE",
+     "systemLabel": "9 X 1 Top Two (two-profile)",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 0,
+     "plans": 798.0,
+     "share": 0.798
+    },
+    {
+     "system": "TOPTWOTWOPROFILE",
+     "systemLabel": "9 X 1 Top Two (two-profile)",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 1,
+     "plans": 177.0,
+     "share": 0.177
+    },
+    {
+     "system": "TOPTWOTWOPROFILE",
+     "systemLabel": "9 X 1 Top Two (two-profile)",
+     "numDistricts": 9,
+     "winners": 1,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 2,
+     "plans": 25.0,
+     "share": 0.025
+    }
+   ]
+  },
+  {
+   "run": "Diverse AAPI Coalition Preferences",
+   "runSlug": "diverse-aapi-coalition-preferences",
+   "system": "FASTSTV",
+   "systemLabel": "3 X 3 STV",
+   "panelLabel": "Diverse AAPI Coalition Preferences - 3 X 3 STV",
+   "records": [
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 0,
+     "plans": 170.0,
+     "share": 0.17
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 1,
+     "plans": 539.5,
+     "share": 0.5395
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 2,
+     "plans": 246.5,
+     "share": 0.2465
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 3,
+     "plans": 44.0,
+     "share": 0.044
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 0,
+     "plans": 215.0,
+     "share": 0.215
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 1,
+     "plans": 612.0,
+     "share": 0.612
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 2,
+     "plans": 166.0,
+     "share": 0.166
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 3,
+     "plans": 7.0,
+     "share": 0.007
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 0,
+     "plans": 125.0,
+     "share": 0.125
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 1,
+     "plans": 467.0,
+     "share": 0.467
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 2,
+     "plans": 327.0,
+     "share": 0.327
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 3,
+     "plans": 81.0,
+     "share": 0.081
+    }
+   ]
+  },
+  {
+   "run": "Low AAPI Availability",
+   "runSlug": "low-aapi-availability",
+   "system": "FASTSTV",
+   "systemLabel": "3 X 3 STV",
+   "panelLabel": "Low AAPI Availability - 3 X 3 STV",
+   "records": [
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 0,
+     "plans": 501.5,
+     "share": 0.5015
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 1,
+     "plans": 456.0,
+     "share": 0.456
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 2,
+     "plans": 42.5,
+     "share": 0.0425
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 0,
+     "plans": 530.0,
+     "share": 0.53
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 1,
+     "plans": 452.0,
+     "share": 0.452
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 2,
+     "plans": 18.0,
+     "share": 0.018
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 0,
+     "plans": 473.0,
+     "share": 0.473
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 1,
+     "plans": 460.0,
+     "share": 0.46
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 2,
+     "plans": 67.0,
+     "share": 0.067
+    }
+   ]
+  },
+  {
+   "run": "Low AAPI Turnout",
+   "runSlug": "low-aapi-turnout",
+   "system": "FASTSTV",
+   "systemLabel": "3 X 3 STV",
+   "panelLabel": "Low AAPI Turnout - 3 X 3 STV",
+   "records": [
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 0,
+     "plans": 334.0,
+     "share": 0.334
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 1,
+     "plans": 437.0,
+     "share": 0.437
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 2,
+     "plans": 181.5,
+     "share": 0.1815
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 3,
+     "plans": 42.5,
+     "share": 0.0425
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "seats": 4,
+     "plans": 5.0,
+     "share": 0.005
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 0,
+     "plans": 450.0,
+     "share": 0.45
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 1,
+     "plans": 437.0,
+     "share": 0.437
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 2,
+     "plans": 83.0,
+     "share": 0.083
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "seats": 3,
+     "plans": 30.0,
+     "share": 0.03
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 0,
+     "plans": 218.0,
+     "share": 0.218
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 1,
+     "plans": 437.0,
+     "share": 0.437
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 2,
+     "plans": 280.0,
+     "share": 0.28
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 3,
+     "plans": 55.0,
+     "share": 0.055
+    },
+    {
+     "system": "FASTSTV",
+     "systemLabel": "3 X 3 STV",
+     "numDistricts": 3,
+     "winners": 3,
+     "mode": "slate_pl",
+     "modeLabel": "Impulsive",
+     "pooled": false,
+     "seats": 4,
+     "plans": 10.0,
+     "share": 0.01
+    }
+   ]
+  }
+ ],
+ "configReference": [
+  {
+   "run": "Alternative Electoral Systems",
+   "shape": "9 \u00d7 1",
+   "totalSeats": 9,
+   "rules": [
+    "IRV",
+    "Plurality",
+    "Alaska",
+    "Top Two"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative"
+   ],
+   "turnout": {
+    "AAPI": 0.75,
+    "BAIO": 1,
+    "HIS": 0.75,
+    "WHI": 1
+   },
+   "primaryTurnout": {
+    "AAPI": 0.5,
+    "BAIO": 0.75,
+    "HIS": 0.5,
+    "WHI": 1
+   },
+   "candidatePoolMax": 7,
+   "candidatePoolMean": 6
+  },
+  {
+   "run": "Nine Seats At-Large",
+   "shape": "1 \u00d7 9",
+   "totalSeats": 9,
+   "rules": [
+    "STV",
+    "Limited",
+    "Cumulative"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative",
+    "Name Cumulative"
+   ],
+   "turnout": {
+    "AAPI": 0.75,
+    "BAIO": 1,
+    "HIS": 0.75,
+    "WHI": 1
+   },
+   "primaryTurnout": null,
+   "candidatePoolMax": 20,
+   "candidatePoolMean": 17
+  },
+  {
+   "run": "Basic - 3 X 3",
+   "shape": "3 \u00d7 3",
+   "totalSeats": 9,
+   "rules": [
+    "STV",
+    "Limited",
+    "Cumulative"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative",
+    "Name Cumulative"
+   ],
+   "turnout": {
+    "AAPI": 0.75,
+    "BAIO": 1,
+    "HIS": 0.75,
+    "WHI": 1
+   },
+   "primaryTurnout": null,
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7
+  },
+  {
+   "run": "Diverse AAPI Coalition Preferences",
+   "shape": "3 \u00d7 3",
+   "totalSeats": 9,
+   "rules": [
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative"
+   ],
+   "turnout": {
+    "AAPI": 0.75,
+    "BAIO": 1,
+    "HIS": 0.75,
+    "WHI": 1
+   },
+   "primaryTurnout": null,
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7
+  },
+  {
+   "run": "Low AAPI Availability",
+   "shape": "3 \u00d7 3",
+   "totalSeats": 9,
+   "rules": [
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative"
+   ],
+   "turnout": {
+    "AAPI": 0.75,
+    "BAIO": 1,
+    "HIS": 0.75,
+    "WHI": 1
+   },
+   "primaryTurnout": null,
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7
+  },
+  {
+   "run": "Low AAPI Turnout",
+   "shape": "3 \u00d7 3",
+   "totalSeats": 9,
+   "rules": [
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative"
+   ],
+   "turnout": {
+    "AAPI": 0.5,
+    "BAIO": 1,
+    "HIS": 0.75,
+    "WHI": 1
+   },
+   "primaryTurnout": null,
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7
+  }
+ ]
+}

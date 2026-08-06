@@ -1,0 +1,238 @@
+/*
+ * Shared chart furniture: the seat axis, the proportional-representation line,
+ * the legend, and the tooltip.
+ *
+ * Every chart on the page measures the same quantity on x -- seats won -- so the
+ * scale, ticks, and reference line are defined once here rather than per chart.
+ * The matplotlib figures do the same thing with _seat_axis_upper and
+ * _prop_line_label; these read the values those produced out of run.json rather
+ * than recomputing them, so the two renderings cannot disagree.
+ *
+ * Everything here is idempotent: called twice on the same parent it updates what
+ * is there rather than appending a second copy. That is what lets a chart be
+ * redrawn on every change of selection while its marks stay put and animate to
+ * their new values -- see the note on motion below.
+ */
+
+export const PANEL = { width: 300, height: 190, margin: { top: 26, right: 14, bottom: 38, left: 46 } };
+
+/** Integer seat scale spanning 0..seatMax, padded by half a step at each end. */
+export function seatScale(seatMax, innerWidth) {
+  return d3.scaleLinear().domain([-0.6, seatMax + 0.6]).range([0, innerWidth]);
+}
+
+/*
+ * Bar geometry, translated from _plot_method_histogram in summarize_results.py
+ * so a bar here lands where its matplotlib counterpart does:
+ *
+ *     bar_width = 0.42                            # of one seat step
+ *     step      = bar_width / 2                   # centres half a bar apart
+ *     offset    = (i - (n_modes - 1) / 2) * step  # group centred on the seat
+ *
+ * The series overlap each other by half a bar rather than being dodged clear or
+ * stacked on one centre: enough offset that every bar keeps an exposed edge and
+ * its own baseline, enough overlap that the two distributions read as one
+ * comparison. A group of three spans 0.84 of a seat, leaving a gap to the next.
+ */
+const BAR_WIDTH = 0.42;
+
+export function barGeometry(scale, count) {
+  const width = (scale(1) - scale(0)) * BAR_WIDTH;
+  const step = width / 2;
+  return { width, offset: (index) => (index - (count - 1) / 2) * step };
+}
+
+/*
+ * Motion.
+ *
+ * The charts are redrawn, not rebuilt: marks are keyed by what they represent
+ * (a voter model at a seat count), so changing the voting system or switching a
+ * model off is an update to data that is already on screen. A bar grows or
+ * shrinks to its new count, a bubble swells or contracts, the count axis and its
+ * gridlines slide to the new scale, and only marks that genuinely have no
+ * counterpart in the new selection enter from -- or leave towards -- the
+ * baseline. Redrawing from scratch would throw that away and make every change
+ * look the same as every other.
+ *
+ * Anyone who has asked their system for less motion gets none: the values are
+ * applied directly to the selection instead of through a transition.
+ */
+export const MOTION = { duration: 520 };
+
+export function reducedMotion() {
+  return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+}
+
+/**
+ * Animate `selection`, or return it untouched when motion is not wanted.
+ *
+ * Callers chain the same `.attr` calls onto whichever comes back, so a chart
+ * states its target values once and never branches on motion itself.
+ */
+export function motion(selection) {
+  if (reducedMotion()) return selection;
+  return selection.transition().duration(MOTION.duration).ease(d3.easeCubicOut);
+}
+
+/** Select `selector` under `parent`, creating it the first time through. */
+export function ensure(parent, tag, className) {
+  const existing = parent.select(`${tag}.${className}`);
+  if (!existing.empty()) return existing;
+  return parent.append(tag).attr('class', className);
+}
+
+/**
+ * The chart's <svg>, created once and thereafter resized in place.
+ *
+ * Keeping the element means the marks inside it survive a redraw, which is the
+ * whole basis of the transitions above.
+ */
+export function ensureSvg(container, className, viewWidth, viewHeight, label) {
+  const svg = ensure(container, 'svg', className)
+    .attr('viewBox', `0 0 ${viewWidth} ${viewHeight}`)
+    .attr('role', 'img')
+    .attr('aria-label', label);
+  svg.style('max-width', `${viewWidth * MAX_SCALE}px`).style('margin', '0 auto');
+  return svg;
+}
+
+export function drawSeatAxis(g, scale, ticks, innerHeight, label) {
+  ensure(g, 'g', 'seat-axis')
+    .classed('axis', true)
+    .attr('transform', `translate(0,${innerHeight})`)
+    .call(d3.axisBottom(scale).tickValues(ticks).tickFormat(d3.format('d')).tickSizeOuter(0));
+
+  if (label) {
+    ensure(g, 'text', 'axis-label')
+      .attr('x', scale.range()[1] / 2)
+      .attr('y', innerHeight + 32)
+      .attr('text-anchor', 'middle')
+      .text(label);
+  }
+}
+
+/**
+ * A count axis that slides to its new scale.
+ *
+ * The domain changes whenever the selection does -- a different system peaks at
+ * a different number of plans -- so this is transitioned along with the bars it
+ * measures. d3's axis interpolates its own ticks when handed a transition.
+ */
+export function drawCountAxis(g, scale, ticks = 4) {
+  motion(ensure(g, 'g', 'count-axis').classed('axis', true))
+    .call(d3.axisLeft(scale).ticks(ticks).tickSizeOuter(0));
+}
+
+/** Horizontal gridlines, keyed by value so a tick that survives merely moves. */
+export function drawGridlines(g, scale, innerWidth, ticks = 4) {
+  ensure(g, 'g', 'gridlines').selectAll('line')
+    .data(scale.ticks(ticks), (d) => d)
+    .join(
+      (enter) => enter.append('line')
+        .attr('class', 'gridline')
+        .attr('x1', 0).attr('x2', innerWidth)
+        .attr('y1', (d) => scale(d)).attr('y2', (d) => scale(d))
+        .style('opacity', 0)
+        .call((sel) => motion(sel).style('opacity', 1)),
+      (update) => update
+        .call((sel) => motion(sel)
+          .attr('x1', 0).attr('x2', innerWidth)
+          .attr('y1', (d) => scale(d)).attr('y2', (d) => scale(d))),
+      (exit) => exit.call((sel) => motion(sel).style('opacity', 0).remove()),
+    );
+}
+
+/**
+ * The dotted proportional-representation line. Its position and wording both
+ * come from run.json, so the page never recomputes the share it describes.
+ */
+export function drawReferenceLine(g, scale, proportionalSeats, innerHeight, tooltip, label) {
+  const line = ensure(g, 'line', 'reference-line')
+    .attr('x1', scale(proportionalSeats))
+    .attr('x2', scale(proportionalSeats))
+    .attr('y1', 0)
+    .attr('y2', innerHeight);
+
+  if (tooltip && label) {
+    // A transparent line over the dotted one, wide enough to be hoverable.
+    ensure(g, 'line', 'reference-hit')
+      .attr('x1', scale(proportionalSeats)).attr('x2', scale(proportionalSeats))
+      .attr('y1', 0).attr('y2', innerHeight)
+      .attr('stroke', 'transparent').attr('stroke-width', 8)
+      .style('pointer-events', 'stroke')
+      .on('mousemove', (event) => tooltip.show(event, label))
+      .on('mouseleave', () => tooltip.hide());
+  }
+  return line;
+}
+
+/** One tooltip element per page, moved and filled as charts ask for it. */
+export function makeTooltip() {
+  let node = d3.select('body').select('.chart-tooltip');
+  if (node.empty()) node = d3.select('body').append('div').attr('class', 'chart-tooltip');
+  return {
+    show(event, html) {
+      node.html(html)
+        .style('left', `${event.pageX + 12}px`)
+        .style('top', `${event.pageY - 10}px`)
+        .style('opacity', 1);
+    },
+    hide() { node.style('opacity', 0); },
+  };
+}
+
+/**
+ * The reference line's key, plus any note the chart wants beside it.
+ *
+ * Deliberately not a legend of voter models: the control bar above the figures
+ * already carries a coloured swatch per model, and repeating them under every
+ * chart is the same key printed three times on one screen.
+ */
+export function drawLegend(container, referenceLabel, note) {
+  const legend = ensure(container, 'div', 'chart-legend');
+  legend.selectAll('*').remove();
+
+  if (referenceLabel) {
+    const key = legend.append('span').attr('class', 'key');
+    key.append('span').attr('class', 'swatch line');
+    key.append('span').text(referenceLabel);
+  }
+  if (note) legend.append('span').attr('class', 'key').text(note);
+  return legend;
+}
+
+/** Panel title, drawn in the space PANEL.margin.top reserves. */
+export function drawPanelTitle(g, text, innerWidth) {
+  ensure(g, 'text', 'panel-title')
+    .attr('x', innerWidth / 2)
+    .attr('y', -10)
+    .attr('text-anchor', 'middle')
+    .text(text);
+}
+
+/*
+ * Cap a panelled chart's on-page width so every chart draws at the same scale.
+ *
+ * The SVG scales to its viewBox, so a one-panel chart stretched across the
+ * column would render its 10px labels at twice the size of the same label in a
+ * six-panel chart. Capping each chart at the same multiple of its natural width
+ * keeps type and bar weight consistent between one figure and the next; a wide
+ * chart still fills the column, a narrow one centres.
+ */
+const MAX_SCALE = 1.4;
+
+/**
+ * Replace the chart with a message.
+ *
+ * This clears the container, so the next successful render starts from nothing
+ * and builds its marks fresh -- there is no half-torn-down chart to update into.
+ */
+export function emptyState(container, message) {
+  container.selectAll('*').remove();
+  container.append('p').attr('class', 'chart-empty').text(message);
+}
+
+/** Drop a previous message so a recovering chart is not drawn underneath it. */
+export function clearEmptyState(container) {
+  container.selectAll('p.chart-empty').remove();
+}

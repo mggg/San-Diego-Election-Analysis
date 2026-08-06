@@ -1,0 +1,169 @@
+{#
+  Page structure only. Every number on the page arrives at runtime from
+  docs/data/ -- a chart is a <div data-chart="..."> that js/report.js fills in.
+  Adding a run therefore changes manifest.json, not this template.
+#}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>San Diego City Council Election Analysis</title>
+  <meta name="description" content="MGGG analysis of alternative electoral systems and representation outcomes for San Diego City Council.">
+
+  <link rel="stylesheet" href="css/vendor/bootstrap.min.css">
+  <link rel="stylesheet" href="fonts/fonts.css">
+  <link rel="stylesheet" href="css/report.css?v={{ asset_version }}">
+</head>
+
+<body data-bs-spy="scroll" data-bs-target="#toc-nav" data-bs-offset="90" tabindex="0">
+
+  <nav class="navbar navbar-expand-lg navbar-sd sticky-top shadow-sm">
+    <div class="container-xl">
+      <a class="navbar-brand fw-bold" href="#top">San Diego Election Analysis</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+              aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto">
+          {% for id in prose_order %}
+          <li class="nav-item"><a class="nav-link" href="#{{ id }}">{{ prose[id].title }}</a></li>
+          {% endfor %}
+          <li class="nav-item"><a class="nav-link" href="#results">Results</a></li>
+          <li class="nav-item"><a class="nav-link" href="#comparison">Comparison</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ repo_url }}" target="_blank" rel="noopener">GitHub ↗</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero py-5" id="top">
+    <div class="container-xl">
+      <p class="eyebrow mb-2">Metric Geometry &amp; Gerrymandering Group</p>
+      <h1 class="display-5 fw-bold">San Diego City Council Election Analysis</h1>
+    </div>
+  </header>
+
+  <div class="container-xl my-4">
+    <div class="row">
+      <div class="col-lg-3 d-none d-lg-block">
+        <nav id="toc-nav" class="toc nav flex-column">
+          {% for id in prose_order %}
+          <a class="nav-link" href="#{{ id }}">{{ prose[id].title }}</a>
+          {% endfor %}
+          <a class="nav-link" href="#results">Results by run</a>
+          <nav class="nav flex-column">
+            {% for run in runs %}
+            <a class="nav-link" href="#run-{{ run.slug }}">{{ run.name }}</a>
+            {% endfor %}
+          </nav>
+          <a class="nav-link" href="#comparison">Cross-run comparison</a>
+          <a class="nav-link" href="#appendix">Appendix: configurations</a>
+        </nav>
+      </div>
+
+      <main class="col-lg-9">
+        {% for id in prose_order %}
+        <section id="{{ id }}" class="mb-5">
+          <h2>{{ prose[id].title }}</h2>
+          {% if prose[id].html %}
+          {{ prose[id].html }}
+          {% else %}
+          <p class="todo">[{{ prose[id].title }} to be written — edit
+             <code>docs/prose/{{ prose[id].file }}</code>.]</p>
+          {% endif %}
+        </section>
+        {% endfor %}
+
+        <section id="results" class="mb-5">
+          <h2>Results</h2>
+          {% if not runs %}
+          <p class="todo">No completed runs yet. Run the pipeline, then rebuild this page.</p>
+          {% endif %}
+
+          {% for run in runs %}
+          <section id="run-{{ run.slug }}" class="run mb-5" data-run="{{ run.slug }}">
+            <h3 class="h4 mt-4">{{ run.name }}</h3>
+            <p class="run-meta" data-run-meta="{{ run.slug }}"></p>
+
+            {# Every chart in this run reads the same selection; js/report.js fills this
+               in from the run's own systems and voter models. #}
+            <div class="run-controls" data-controls="{{ run.slug }}"></div>
+
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="tab"
+                        data-bs-target="#{{ run.slug }}-focal" type="button" role="tab">
+                  {{ run.focalGroupLabel }} focal group
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab"
+                        data-bs-target="#{{ run.slug }}-slate" type="button" role="tab">All slates</button>
+              </li>
+            </ul>
+            <div class="tab-content pt-3">
+              <div class="tab-pane fade show active" id="{{ run.slug }}-focal" role="tabpanel">
+                <div class="row g-4 figure-pair">
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="bubble" data-run="{{ run.slug }}"></div>
+                  </div>
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="histogram" data-run="{{ run.slug }}"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="{{ run.slug }}-slate" role="tabpanel">
+                <div class="chart" data-chart="slate" data-run="{{ run.slug }}"></div>
+              </div>
+            </div>
+          </section>
+          {% endfor %}
+        </section>
+
+        <section id="comparison" class="mb-5">
+          <h2>Cross-run comparison</h2>
+          <div class="chart" data-chart="crossrun"></div>
+        </section>
+
+        <section id="appendix" class="mb-5">
+          <h2>Appendix: configuration reference</h2>
+          <div data-table="config-reference"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <footer class="py-4 mt-5 border-top">
+    <div class="container-xl text-center">
+      <p class="mb-1">Metric Geometry &amp; Gerrymandering Group — San Diego City Council Election Analysis</p>
+      <p class="mb-1"><a href="{{ repo_url }}" target="_blank" rel="noopener">View the repository on GitHub</a></p>
+      <p class="generated mb-0">Generated {{ generated }}</p>
+    </div>
+  </footer>
+
+  {#
+    A classic, inline script -- deliberately not a module and not an external
+    file, because those are exactly what a file:// origin refuses to load.
+    Opening this page off disk blocks report.js as a cross-origin request, so
+    the page would otherwise sit there empty with nothing in it to explain why.
+  #}
+  <script>
+    if (location.protocol === 'file:') {
+      document.querySelectorAll('.chart').forEach(function (node) {
+        node.innerHTML = '<p class="chart-empty">This page is being opened from a file rather than '
+          + 'served, so the browser is blocking the scripts and data it needs. Run '
+          + '<code>uv run python -m http.server -d docs 8000</code> and open '
+          + '<a href="http://localhost:8000">localhost:8000</a>.</p>';
+      });
+    }
+  </script>
+  <script src="js/vendor/bootstrap.bundle.min.js"></script>
+  <script src="js/vendor/d3.min.js"></script>
+  {# Pins the whole module graph to one build -- see _import_map. Must precede
+     the first module load. #}
+  <script type="importmap">{{ import_map | safe }}</script>
+  <script type="module" src="js/report.js?v={{ asset_version }}"></script>
+</body>
+</html>
