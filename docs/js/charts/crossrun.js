@@ -33,7 +33,6 @@ const MIN_AREA = 14;
 const ROW_HEIGHT = 34;
 const WIDTH = 720;
 const MARGIN = { top: 14, right: 18, bottom: 42, left: 232 };
-const MAX_SCALE = 1.4;
 
 export function renderCrossRun(container, manifest, view) {
   const series = view.series;
@@ -68,9 +67,11 @@ export function renderCrossRun(container, manifest, view) {
   const innerHeight = series.length * ROW_HEIGHT;
   const height = MARGIN.top + innerHeight + MARGIN.bottom;
 
-  // The axis spans the widest run on show, so a row is never clipped and the
-  // seat positions stay comparable between rows.
-  const seatMax = d3.max(series, (s) => runBySlug.get(s.runSlug)?.seatMax ?? 0) || 0;
+  // Every seat on the body, not the widest outcome on show: the axis is the
+  // thing rows are read against, so it holds still as systems are added and
+  // removed, and a row that never elects more than two is visibly short of nine
+  // rather than filling the width.
+  const seatMax = d3.max(manifest.runs, (r) => r.totalSeats) || 0;
   const x = seatScale(seatMax, innerWidth);
   const seats = d3.range(0, seatMax + 1);
   const y = d3.scalePoint().domain(series.map((s) => s.id)).range([0, innerHeight]).padding(0.5);
@@ -89,14 +90,14 @@ export function renderCrossRun(container, manifest, view) {
   const area = d3.scaleLinear().domain([0, maxPlans]).range([MIN_AREA, MAX_AREA]).clamp(true);
   const radius = (plans) => Math.sqrt(area(plans) / Math.PI);
 
-  // Not ensureSvg: the viewBox grows and shrinks with the row count, and d3
-  // interpolates the numbers inside it, so the frame resizes with its contents
-  // instead of snapping while they animate.
+  // Not ensureSvg: this one fills its container rather than being capped to a
+  // multiple of its natural width like the per-run panels, and its viewBox grows
+  // and shrinks with the row count. d3 interpolates the numbers inside a viewBox,
+  // so the frame resizes with its contents instead of snapping while they
+  // animate.
   const svg = ensure(container, 'svg', 'crossrun')
     .attr('role', 'img')
-    .attr('aria-label', 'Seat outcomes across the selected electoral systems')
-    .style('max-width', `${WIDTH * MAX_SCALE}px`)
-    .style('margin', '0 auto');
+    .attr('aria-label', 'Seat outcomes across the selected electoral systems');
   const viewBox = `0 0 ${WIDTH} ${height}`;
   if (svg.attr('viewBox')) motion(svg).attr('viewBox', viewBox);
   else svg.attr('viewBox', viewBox);

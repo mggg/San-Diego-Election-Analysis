@@ -11,7 +11,12 @@
   <title>San Diego City Council Election Analysis</title>
   <meta name="description" content="MGGG analysis of alternative electoral systems and representation outcomes for San Diego City Council.">
 
-  <link rel="stylesheet" href="css/vendor/bootstrap.min.css">
+  {# Pinned by version and by SRI hash -- see CDN_STYLESHEETS in report_generator.
+     The fonts stay local so no reader's address reaches Google for them. #}
+  {% for asset in stylesheets %}
+  <link rel="stylesheet" href="{{ asset.url }}" integrity="{{ asset.integrity }}"
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+  {% endfor %}
   <link rel="stylesheet" href="fonts/fonts.css">
   <link rel="stylesheet" href="css/report.css?v={{ asset_version }}">
 </head>
@@ -157,12 +162,15 @@
         node.innerHTML = '<p class="chart-empty">This page is being opened from a file rather than '
           + 'served, so the browser is blocking the scripts and data it needs. Run '
           + '<code>uv run python -m http.server -d docs 8000</code> and open '
-          + '<a href="http://localhost:8000">localhost:8000</a>.</p>';
+          + '<a href="http://localhost:8000">localhost:8000</a> (with a network '
+          + 'connection: Bootstrap and D3 load from a CDN).</p>';
       });
     }
   </script>
-  <script src="js/vendor/bootstrap.bundle.min.js"></script>
-  <script src="js/vendor/d3.min.js"></script>
+  {% for asset in scripts %}
+  <script src="{{ asset.url }}" integrity="{{ asset.integrity }}"
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  {% endfor %}
   {# Pins the whole module graph to one build -- see _import_map. Must precede
      the first module load. #}
   <script type="importmap">{{ import_map | safe }}</script>
