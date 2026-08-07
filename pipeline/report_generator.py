@@ -42,6 +42,10 @@ from pipeline.utils.helpers import PROJECT_DIR, load_json
 DOCS_DIR = PROJECT_DIR / "docs"
 ARTIFACT_FILES = ("run.json", "focal_seats.json", "slate_seats.json")
 
+# Written only when a run's settings are still on disk to build them from, so a
+# run missing this publishes everything else rather than dropping off the page.
+OPTIONAL_ARTIFACT_FILES = ("availability.json",)
+
 # Prose sections, in the order they appear on the page. Each is a file in
 # docs/prose/; a missing or empty one renders as a placeholder rather than
 # breaking the build, so the site is publishable before the writing is done.
@@ -105,6 +109,11 @@ def _slate_records_with_pooled(records: List[Dict[str, Any]], n_models: int) -> 
     model. The focal group is one of the slates and its rows reproduce the focal
     table exactly, per model and pooled, so the figure has a single code path.
     """
+    # Drop any pooled rows already present: summarize_results emits them now, and
+    # re-pooling a pooled row would count the average twice. Filtering first makes
+    # this the same answer whether or not the artifact already carries them.
+    records = [r for r in records if not r.get("pooled")]
+
     totals: Dict[tuple, Dict[str, Any]] = {}
     for r in records:
         key = (r["system"], r["slate"], r["seats"])
@@ -143,6 +152,7 @@ def _cross_run_series(runs: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         slate_records = _slate_records_with_pooled(
             load_json(meta["_source"] / "slate_seats.json"), n_models,
         )
+        meta["_slate_records"] = slate_records
 
         systems = sorted({r["system"] for r in records})
         for system in systems:
@@ -208,6 +218,11 @@ def build_manifest(runs: List[Dict[str, Any]]) -> Dict[str, Any]:
                     "run": f"data/{m['slug']}/run.json",
                     "focalSeats": f"data/{m['slug']}/focal_seats.json",
                     "slateSeats": f"data/{m['slug']}/slate_seats.json",
+                    **(
+                        {"availability": f"data/{m['slug']}/availability.json"}
+                        if (m["_source"] / "availability.json").is_file()
+                        else {}
+                    ),
                 },
             }
             for m in runs
@@ -243,6 +258,12 @@ def _config_reference(config_dir: Optional[Path] = None) -> List[Dict[str, Any]]
                 "primaryTurnout": cfg.get("primary_turnout"),
                 "candidatePoolMax": dc.get("candidate_pool_max"),
                 "candidatePoolMean": dc.get("candidate_pool_mean"),
+                # The configured matrices, not the per-district ones in the
+                # settings files: those are renormalised over whichever slates
+                # drew a candidate there, so they describe a district rather than
+                # the run.
+                "cohesion": cfg.get("cohesion_parameters") or {},
+                "alphas": cfg.get("alphas") or {},
             })
     return rows
 
@@ -295,6 +316,21 @@ def copy_artifacts(runs: List[Dict[str, Any]], docs_dir: Path) -> None:
         target.mkdir(parents=True, exist_ok=True)
         for name in ARTIFACT_FILES:
             shutil.copyfile(meta["_source"] / name, target / name)
+        for name in OPTIONAL_ARTIFACT_FILES:
+            source = meta["_source"] / name
+            if source.is_file():
+                shutil.copyfile(source, target / name)
+            elif (target / name).is_file():
+                (target / name).unlink()
+
+        # The by-slate table is republished with its pooled rows filled in, so a
+        # chart can offer the combined reading for any slate. summarize_results
+        # emits them itself now; this is a deterministic derivation from the same
+        # file, so it stays reproducible for artifacts written before it did.
+        n_models = len([m for m in meta["voterModels"] if not m["pooled"]]) or 1
+        slate_rows = _slate_records_with_pooled(load_json(target / "slate_seats.json"), n_models)
+        with open(target / "slate_seats.json", "w", encoding="utf-8") as f:
+            json.dump(slate_rows, f, indent=1)
 
     live = {meta["slug"] for meta in runs}
     for stale in sorted(p for p in data_dir.iterdir() if p.is_dir() and p.name not in live):

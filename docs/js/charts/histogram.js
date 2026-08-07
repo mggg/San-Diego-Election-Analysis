@@ -15,20 +15,23 @@
  */
 
 import {
-  PANEL, seatScale, drawSeatAxis, drawCountAxis, drawGridlines, drawReferenceLine,
+  PANEL, FOCAL_MARGIN, seatScale, drawSeatAxis, drawCountAxis, drawGridlines, drawReferenceLine,
   drawLegend, drawPanelTitle, makeTooltip, emptyState, clearEmptyState,
   ensure, ensureSvg, motion, barGeometry,
 } from './axes.js';
 
 export function renderHistogram(container, bundle, manifest, view) {
-  const { runMeta, focalSeats } = bundle;
+  const { runMeta, slateSeats } = bundle;
   const system = view.systems[0];
+  const slate = view.slate;
   // The pooled row is an average across models, so it has no place among bars
   // that are counts -- it appears in the bubble plot instead.
   const models = view.models.filter((m) => !m.pooled);
   const modelIds = new Set(models.map((m) => m.id));
-  const records = focalSeats.filter(
-    (r) => !r.pooled && r.system === system.id && modelIds.has(r.mode),
+  // Off the by-slate table, not the focal one: the focal group is a slate, and
+  // its rows there reproduce the focal table exactly, so one path serves both.
+  const records = slateSeats.filter(
+    (r) => !r.pooled && r.system === system.id && r.slate === slate.id && modelIds.has(r.mode),
   );
 
   if (!models.length) {
@@ -43,21 +46,24 @@ export function renderHistogram(container, bundle, manifest, view) {
 
   const palette = manifest.palette;
   const tooltip = makeTooltip();
-  const { width, height, margin } = PANEL;
+  const { width, height } = PANEL;
+  const margin = FOCAL_MARGIN;
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
 
   const maxPlans = d3.max(records, (r) => r.plans);
-  const x = seatScale(runMeta.seatMax, innerWidth);
+  // Shared with the bubble chart beside it, so the two always line up.
+  const seatMax = view.seatMax;
+  const x = seatScale(seatMax, innerWidth);
   const y = d3.scaleLinear().domain([0, maxPlans * 1.1]).range([innerHeight, 0]).nice();
-  const seats = d3.range(0, runMeta.seatMax + 1);
+  const seats = d3.range(0, seatMax + 1);
 
   const geom = barGeometry(x, models.length);
   const order = new Map(models.map((m, i) => [m.id, i]));
   const barX = (d) => x(d.seats) + geom.offset(order.get(d.mode)) - geom.width / 2;
 
   const svg = ensureSvg(container, 'histogram', width, height,
-    `Seat distributions for ${runMeta.runName}`);
+    `${slate.label} seat distributions for ${runMeta.runName}`);
   const panel = ensure(svg, 'g', 'panel')
     .attr('transform', `translate(${margin.left},${margin.top})`);
 
@@ -70,7 +76,7 @@ export function renderHistogram(container, bundle, manifest, view) {
     .classed('axis-label', true)
     .attr('transform', 'rotate(-90)')
     .attr('x', -innerHeight / 2)
-    .attr('y', -34)
+    .attr('y', -46)
     .attr('text-anchor', 'middle')
     .text('Plans');
 
@@ -106,12 +112,12 @@ export function renderHistogram(container, bundle, manifest, view) {
     // Handlers go on the merged selection, never on the transition it returns.
     .on('mousemove', (event, d) => tooltip.show(
       event,
-      `<strong>${d.systemLabel}</strong><br>${d.modeLabel}<br>` +
+      `<strong>${d.systemLabel}</strong><br>${d.slateLabel} · ${d.modeLabel}<br>` +
       `${d.seats} seat${d.seats === 1 ? '' : 's'} in ${d3.format(',')(d.plans)} plans ` +
       `(${d3.format('.1%')(d.share)})`,
     ))
     .on('mouseleave', () => tooltip.hide());
 
-  drawReferenceLine(panel, x, runMeta.proportionalSeats, innerHeight, tooltip,
-    runMeta.proportionalLabel);
+  drawReferenceLine(panel, x, slate.proportionalSeats, innerHeight, tooltip,
+    slate.proportionalLabel);
 }

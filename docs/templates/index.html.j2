@@ -50,9 +50,9 @@
     </div>
   </header>
 
-  <div class="container-xl my-4">
+  <div class="container-xxl my-4">
     <div class="row">
-      <div class="col-lg-3 d-none d-lg-block">
+      <div class="col-lg-2 d-none d-lg-block">
         <nav id="toc-nav" class="toc nav flex-column">
           {% for id in prose_order %}
           <a class="nav-link" href="#{{ id }}">{{ prose[id].title }}</a>
@@ -64,11 +64,10 @@
             {% endfor %}
           </nav>
           <a class="nav-link" href="#comparison">Cross-run comparison</a>
-          <a class="nav-link" href="#appendix">Appendix: configurations</a>
         </nav>
       </div>
 
-      <main class="col-lg-9">
+      <main class="col-lg-10">
         {% for id in prose_order %}
         <section id="{{ id }}" class="mb-5">
           <h2>{{ prose[id].title }}</h2>
@@ -89,6 +88,7 @@
 
           {% for run in runs %}
           <section id="run-{{ run.slug }}" class="run mb-5" data-run="{{ run.slug }}">
+            <div class="run-main">
             <h3 class="h4 mt-4">{{ run.name }}</h3>
             <p class="run-meta" data-run-meta="{{ run.slug }}"></p>
 
@@ -100,17 +100,23 @@
               <li class="nav-item" role="presentation">
                 <button class="nav-link active" data-bs-toggle="tab"
                         data-bs-target="#{{ run.slug }}-focal" type="button" role="tab">
-                  {{ run.focalGroupLabel }} focal group
+                  Seat outcomes
                 </button>
               </li>
               <li class="nav-item" role="presentation">
                 <button class="nav-link" data-bs-toggle="tab"
-                        data-bs-target="#{{ run.slug }}-slate" type="button" role="tab">All slates</button>
+                        data-bs-target="#{{ run.slug }}-availability" type="button" role="tab">
+                  Districts by VAP rank
+                </button>
               </li>
             </ul>
             <div class="tab-content pt-3">
               <div class="tab-pane fade show active" id="{{ run.slug }}-focal" role="tabpanel">
-                <div class="row g-4 figure-pair">
+                {# One group or every group at once. This governs these figures
+                   alone -- the boxplot is always about a single group -- so it
+                   sits with them rather than in the run's control bar. #}
+                <div class="metric-toggles" data-view="{{ run.slug }}"></div>
+                <div class="row g-4 figure-pair" data-one-group="{{ run.slug }}">
                   <div class="col-12 col-xl-6">
                     <div class="chart" data-chart="bubble" data-run="{{ run.slug }}"></div>
                   </div>
@@ -118,11 +124,22 @@
                     <div class="chart" data-chart="histogram" data-run="{{ run.slug }}"></div>
                   </div>
                 </div>
+                <div data-all-groups="{{ run.slug }}" hidden>
+                  <div class="chart" data-chart="slate" data-run="{{ run.slug }}"></div>
+                </div>
               </div>
-              <div class="tab-pane fade" id="{{ run.slug }}-slate" role="tabpanel">
-                <div class="chart" data-chart="slate" data-run="{{ run.slug }}"></div>
+              <div class="tab-pane fade" id="{{ run.slug }}-availability" role="tabpanel">
+                {# Which reading fills the boxes; it applies to this figure alone,
+                   so it sits with the figure rather than in the run's control bar. #}
+                <div class="metric-toggles" data-metric="{{ run.slug }}"></div>
+                <div class="chart" data-chart="availability" data-run="{{ run.slug }}"></div>
               </div>
             </div>
+            </div>
+            {# Sticky within its own section: it starts level with the run's
+               heading, follows the reader down, and is released when the next
+               run's own table takes over. #}
+            <aside class="run-params" data-params="{{ run.slug }}"></aside>
           </section>
           {% endfor %}
         </section>
@@ -132,11 +149,6 @@
           {# Populated from manifest.crossRun; each toggle adds or removes a row. #}
           <div class="run-controls" data-controls="crossrun"></div>
           <div class="chart" data-chart="crossrun"></div>
-        </section>
-
-        <section id="appendix" class="mb-5">
-          <h2>Appendix: configuration reference</h2>
-          <div data-table="config-reference"></div>
         </section>
       </main>
     </div>

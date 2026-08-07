@@ -17,7 +17,7 @@
  */
 
 import {
-  PANEL, seatScale, drawSeatAxis, drawReferenceLine, drawPanelTitle,
+  PANEL, FOCAL_MARGIN, seatScale, drawSeatAxis, drawReferenceLine, drawPanelTitle,
   makeTooltip, emptyState, clearEmptyState, drawLegend,
   ensure, ensureSvg, motion,
 } from './axes.js';
@@ -26,12 +26,15 @@ const MAX_AREA = 260;
 const MIN_AREA = 12;
 
 export function renderBubble(container, bundle, manifest, view) {
-  const { runMeta, focalSeats } = bundle;
+  const { runMeta, slateSeats } = bundle;
   const system = view.systems[0];
+  const slate = view.slate;
   const models = view.models;                      // pooled row included, last
   const modelIds = new Set(models.map((m) => m.id));
-  const records = focalSeats.filter(
-    (r) => r.system === system.id && modelIds.has(r.mode) && r.plans > 0,
+  // The by-slate table, as in the histogram beside it: the focal group is one of
+  // the slates and its rows reproduce the focal table exactly.
+  const records = slateSeats.filter(
+    (r) => r.system === system.id && r.slate === slate.id && modelIds.has(r.mode) && r.plans > 0,
   );
 
   if (!records.length) {
@@ -48,7 +51,7 @@ export function renderBubble(container, bundle, manifest, view) {
   // figures sit side by side, and a bubble panel that grew and shrank as models
   // were toggled would never line up with the histogram beside it.
   const height = PANEL.height;
-  const margin = { top: 26, right: 14, bottom: 38, left: 78 };
+  const margin = FOCAL_MARGIN;   // shared, so a seat sits at the same x in both
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
 
@@ -64,17 +67,21 @@ export function renderBubble(container, bundle, manifest, view) {
    * Reading the basis off the run rather than the selection also means toggling
    * a model no longer resizes the bubbles that stayed.
    */
-  const scaleBasis = focalSeats.filter((r) => r.system === system.id && !r.pooled);
+  const scaleBasis = slateSeats.filter(
+    (r) => r.system === system.id && r.slate === slate.id && !r.pooled,
+  );
   const perModelMax = d3.max(scaleBasis, (r) => r.plans) || 1;
   const area = d3.scaleLinear().domain([0, perModelMax]).range([MIN_AREA, MAX_AREA]).clamp(true);
   const radius = (plans) => Math.sqrt(area(plans) / Math.PI);
 
-  const x = seatScale(runMeta.seatMax, innerWidth);
+  // Shared with the histogram beside it, so the two always line up.
+  const seatMax = view.seatMax;
+  const x = seatScale(seatMax, innerWidth);
   const y = d3.scalePoint().domain(models.map((m) => m.id)).range([0, innerHeight]).padding(0.6);
-  const seats = d3.range(0, runMeta.seatMax + 1);
+  const seats = d3.range(0, seatMax + 1);
 
   const svg = ensureSvg(container, 'bubbles', width, height,
-    `Seat outcome frequencies for ${runMeta.runName}`);
+    `${slate.label} seat outcome frequencies for ${runMeta.runName}`);
   const panel = ensure(svg, 'g', 'panel')
     .attr('transform', `translate(${margin.left},${margin.top})`);
 
@@ -109,14 +116,14 @@ export function renderBubble(container, bundle, manifest, view) {
     )
     .on('mousemove', (event, d) => tooltip.show(
       event,
-      `<strong>${d.systemLabel}</strong><br>${d.modeLabel}` +
+      `<strong>${d.systemLabel}</strong><br>${d.slateLabel} · ${d.modeLabel}` +
       `${d.pooled ? ' (averaged across models)' : ''}<br>` +
       `${d.seats} seat${d.seats === 1 ? '' : 's'} in ${d3.format(',.1f')(d.plans)} plans ` +
       `(${d3.format('.1%')(d.share)})`,
     ))
     .on('mouseleave', () => tooltip.hide());
 
-  drawReferenceLine(panel, x, runMeta.proportionalSeats, innerHeight, tooltip,
-    runMeta.proportionalLabel);
+  drawReferenceLine(panel, x, slate.proportionalSeats, innerHeight, tooltip,
+    slate.proportionalLabel);
 
 }

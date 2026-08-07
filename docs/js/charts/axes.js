@@ -16,6 +16,17 @@
 
 export const PANEL = { width: 300, height: 190, margin: { top: 26, right: 14, bottom: 38, left: 46 } };
 
+/*
+ * The margin the two focal figures share.
+ *
+ * They sit side by side and are read against each other, so their plot areas
+ * have to be the same width -- otherwise the same seat count lands at a
+ * different x in each and the pair only appears to line up because the tick
+ * labels agree. The left is the bubble chart's: it has to clear the voter-model
+ * row labels, and the histogram can afford the extra whitespace.
+ */
+export const FOCAL_MARGIN = { top: 26, right: 14, bottom: 38, left: 78 };
+
 /** Integer seat scale spanning 0..seatMax, padded by half a step at each end. */
 export function seatScale(seatMax, innerWidth) {
   return d3.scaleLinear().domain([-0.6, seatMax + 0.6]).range([0, innerWidth]);

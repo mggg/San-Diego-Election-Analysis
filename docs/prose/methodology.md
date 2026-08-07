@@ -17,7 +17,7 @@ The decision to simulate candidate availability per-district for each voting blo
 
 Similarly, evidence suggest that the number of candidate or pool size that runs for each district is not homogenous. Last 20 years of elections, the distribution of candidates running per district is diverse. On primaries, the average number of candidate is 3.5, where there has been districts bellow the mean with only 1 candidate running and districts above with 9 candidates.
 
-![Histogram](../../figures/candidate_count_histogram.png)
+<!-- ![Histogram](../../figures/candidate_count_histogram.png) -->
 
 Based on the previous analysis, we endogenous determine the pool size and the candidate availability per slate as variables for each district and plan.
 

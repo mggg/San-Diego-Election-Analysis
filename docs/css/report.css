@@ -71,6 +71,91 @@ section > h2::after {
 }
 section { scroll-margin-top: 70px; padding-top: .5rem; }
 
+/*
+ * A run and its parameters, side by side.
+ *
+ * The aside is sticky *within its own section*, which is the whole behaviour:
+ * it starts level with the run's heading, follows the reader down the figures,
+ * and is released when the section ends and the next run's table takes over.
+ * `align-self: start` is what makes that work -- a stretched grid item fills the
+ * row and has no space left to move within.
+ */
+.run {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 15rem;
+  gap: 1.75rem;
+  align-items: start;
+}
+.run-main { min-width: 0; }
+
+.run-params {
+  position: sticky;
+  top: 84px;
+  align-self: start;
+  margin-top: 2.4rem;      /* level with the run heading, which carries mt-4 */
+  padding: .7rem .8rem;
+  background: var(--sd-light);
+  border: 1px solid var(--sd-gray-light);
+  border-left: 3px solid var(--sd-gold);
+  border-radius: 3px;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: .72rem;
+  line-height: 1.35;
+  color: var(--sd-ink);
+}
+.params-title {
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--sd-gray);
+  margin: 0 0 .6rem;
+}
+/* Label and value on one line, so the table stays well short of the section it
+   has to travel within -- a table as tall as its section has nowhere to stick. */
+.params-list { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: .3rem .5rem; }
+.params-list > div { display: contents; }
+/* Same weight as .matrix-title: every label in the card is one kind of thing. */
+.params-list dt {
+  font-weight: 600;
+  color: var(--sd-gray);
+  white-space: nowrap;
+}
+.params-list dd { margin: 0; color: #23211d; overflow-wrap: anywhere; }
+
+/* Bloc-by-slate matrix: rows are voter blocs, columns the slates they support. */
+.params-matrix { margin-top: .7rem; }
+.matrix-title {
+  font-size: .7rem;
+  font-weight: 600;
+  color: var(--sd-gray);
+  margin-bottom: .25rem;
+}
+.params-matrix table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .66rem;
+  font-variant-numeric: tabular-nums;
+}
+.params-matrix th, .params-matrix td {
+  padding: .16rem .1rem;
+  text-align: right;
+  font-weight: 400;
+  border: 0;
+}
+.params-matrix thead th { color: var(--sd-gray); border-bottom: 1px solid var(--sd-gray-light); }
+.params-matrix tbody th { text-align: left; color: var(--sd-gray); padding-right: .3rem; }
+/* The diagonal is within-group cohesion, which is what these are read for. */
+.params-matrix td.own { font-weight: 600; color: #23211d; }
+.params-matrix td { color: var(--sd-ink); }
+
+/* No margin to put it in: the table goes back above the figures it describes. */
+@media (max-width: 991.98px) {
+  .run { display: block; }
+  .run-params { position: static; margin: 0 0 1.25rem; }
+}
+
 .toc {
   position: sticky;
   top: 80px;
@@ -87,7 +172,8 @@ section { scroll-margin-top: 70px; padding-top: .5rem; }
 .toc .nav-link:hover { color: var(--sd-red); }
 /* The red text and weight carry the active state; the gold rule is decorative. */
 .toc .nav-link.active { color: var(--sd-red); font-weight: 600; border-left-color: var(--sd-gold); }
-.toc .nav .nav-link { padding-left: 1.4rem; font-size: .85rem; }
+.toc .nav .nav-link { padding-left: 1rem; font-size: .78rem; line-height: 1.25; }
+.toc .nav-link { overflow-wrap: anywhere; }
 
 .nav-tabs .nav-link {
   font-family: "Source Sans Pro", sans-serif;
@@ -246,6 +332,65 @@ section { scroll-margin-top: 70px; padding-top: .5rem; }
   fill: #23211d;
 }
 
+/* The boxplot's own control, above the figure it governs. */
+.metric-toggles { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .9rem; }
+
+/* Box parts: the whiskers and caps are furniture, the fill carries the reading. */
+.chart .whisker, .chart .cap { stroke: var(--sd-ink); stroke-width: 1; }
+.chart .box-body { stroke: var(--sd-ink); stroke-width: .9; }
+.chart .median { stroke-width: 1.2; }
+.chart .outlier { fill: #898781; fill-opacity: .5; }
+.chart .mean-line { stroke: #0b0b0b; stroke-dasharray: 2 2; stroke-width: 1.2; }
+
+/* The boxplot key, above the figure: the colour ramp on the left, and the two
+   cases it cannot express boxed together on the right. The border is what says
+   those two are a legend rather than stray labels near a chart. */
+.box-key {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .75rem 1.5rem;
+  margin-bottom: .9rem;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: .8rem;
+  color: var(--sd-ink);
+}
+
+.box-key .key-box {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: .35rem;
+  padding: .5rem .65rem;
+  border: 1px solid var(--sd-gray-light);
+  border-radius: 3px;
+  background: #fff;
+}
+.box-key .key-item { display: flex; align-items: center; gap: .4rem; }
+.box-key .key-item .swatch { flex: 0 0 auto; }
+
+/* Title spanning the top, bar beneath it, the two end values under its ends. */
+.box-key .ramp-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: .2rem;
+  min-width: 9rem;
+}
+.box-key .ramp-title { grid-column: 1 / -1; }
+.box-key .ramp {
+  grid-column: 1 / -1;
+  height: .7rem;
+  border: 1px solid var(--sd-ink);
+}
+.box-key .ramp-min, .box-key .ramp-max {
+  font-variant-numeric: tabular-nums;
+  font-size: .75rem;
+  color: var(--sd-gray);
+}
+.box-key .ramp-max { text-align: right; }
+
 .chart { width: 100%; }
 .chart svg { width: 100%; height: auto; display: block; }
 .chart .panel-title {
@@ -275,13 +420,15 @@ section { scroll-margin-top: 70px; padding-top: .5rem; }
   margin-top: .25rem;
 }
 .chart-legend .key { display: inline-flex; align-items: center; gap: .35rem; }
-.chart-legend .swatch {
+.chart-legend .swatch,
+.box-key .swatch {
   width: .9rem;
   height: .9rem;
   border: 1px solid var(--sd-ink);
   display: inline-block;
 }
-.chart-legend .swatch.line {
+.chart-legend .swatch.line,
+.box-key .swatch.line {
   height: 0;
   border: 0;
   border-top: 2px dotted var(--sd-ink);

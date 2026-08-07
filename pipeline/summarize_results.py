@@ -1412,8 +1412,11 @@ def _availability_artifact(df: pd.DataFrame, config,
                 if stats:
                     boxes.append({**common, "restricted": restricted, **stats})
 
-            # Availability: every district, coloured by candidates fielded.
-            counts = ranked.groupby("rank")[f"cands_{slate}"].mean()
+            # Availability: every district, coloured by candidates fielded. The
+            # totals travel with the average so a reader can see what it is an
+            # average of -- 0.42 per district is 42 candidates over 100 of them.
+            by_rank = ranked.groupby("rank")[f"cands_{slate}"]
+            counts, totals, districts = by_rank.mean(), by_rank.sum(), by_rank.size()
             colors.append({
                 **common,
                 "metric": "availability",
@@ -1421,8 +1424,12 @@ def _availability_artifact(df: pd.DataFrame, config,
                 "format": "count",
                 "zeroLabel": f"No {_group_label(slate)} candidate at this rank",
                 "restricted": False,
-                "values": [{"rank": int(r), "value": round(float(v), 4)}
-                           for r, v in counts.items()],
+                "values": [{
+                    "rank": int(r),
+                    "value": round(float(v), 4),
+                    "candidates": int(totals.loc[r]),
+                    "districts": int(districts.loc[r]),
+                } for r, v in counts.items()],
             })
 
             # Win rate: contested districts only, one colouring per system.
@@ -1436,7 +1443,13 @@ def _availability_artifact(df: pd.DataFrame, config,
                 )
                 if merged.empty:
                     continue
-                rates = merged.groupby("rank")[seat_col].apply(lambda s: (s > 0).mean() * 100)
+                # The denominator is district elections, not districts: every
+                # (plan, district) the slate contested appears once per voter
+                # model and replicate. Both counts are carried so the percentage
+                # can be shown as the fraction it actually is.
+                won = merged.groupby("rank")[seat_col].apply(lambda s: int((s > 0).sum()))
+                contests = merged.groupby("rank")[seat_col].size()
+                rates = (won / contests * 100)
                 colors.append({
                     **common,
                     "metric": "winRate",
@@ -1446,8 +1459,12 @@ def _availability_artifact(df: pd.DataFrame, config,
                     "format": "percent",
                     "zeroLabel": f"No {_group_label(slate)} winner at this rank",
                     "restricted": True,
-                    "values": [{"rank": int(r), "value": round(float(v), 4)}
-                               for r, v in rates.items()],
+                    "values": [{
+                        "rank": int(r),
+                        "value": round(float(v), 4),
+                        "won": int(won.loc[r]),
+                        "contests": int(contests.loc[r]),
+                    } for r, v in rates.items()],
                 })
 
     return {"boxes": boxes, "colors": colors}
