@@ -110,8 +110,54 @@ each stage reading the previous stage's outputs:
 | 2 | `settings_generator.py` | Creates VoteKit settings JSONs by aggregating population data and computing turnout-adjusted bloc proportions for subsampled district plans |
 | 3 | `profile_generator.py` | Generates voter preference profiles (simulated ballots) for each settings file under three voting behavior models (impulsive, deliberate, and Cambridge) |
 | 4 | `simulate_elections.py` | Runs the election simulation (FastSTV) on the generated voter profiles to determine and record the winners |
-| 5 | `summarize_results.py` | Post-processes the election results into a dataframe and generates histograms of seat counts for comparative analysis |
+| 5 | `summarize_results.py` | Post-processes the election results into a dataframe, generates the matplotlib figures, and writes the run's JSON artifacts for the report |
+| 6 | `report_generator.py` | Collects every completed run's artifacts into `docs/` and renders `docs/index.html`, the published report |
 
+### 3. Build and view the digital report
+
+The report is a pipeline stage, not a document anyone edits. `run.py` rebuilds it
+at the end of every run, so the ordinary way to publish new results is simply to
+run the config.
+
+To rebuild it from the artifacts already in `outputs/` without re-simulating:
+
+```
+uv run run.py --report-only
+```
+
+`uv run python -m pipeline.report_generator` does the same thing directly.
+
+Neither reaches the network. `--vendor` re-downloads the web fonts into `docs/`
+and is only needed if they are missing; Bootstrap and D3 load from a CDN, pinned
+by version and SRI hash.
+
+#### Viewing it locally
+
+`docs/index.html` **cannot be opened from the file system.** The page loads its
+charts as ES modules and its data with `fetch`, and browsers block both over
+`file://` as cross-origin requests — the page comes up empty. Serve the
+directory instead:
+
+```
+uv run python -m http.server -d docs 8000
+```
+
+then open <http://localhost:8000>. (Opening the file directly shows a message
+saying this rather than failing silently.)
+
+#### What is generated and what is written by hand
+
+| Path | |
+| --- | --- |
+| `docs/index.html` | Generated. Every rebuild overwrites it. |
+| `docs/data/` | Generated. One directory per run, mirrored from `outputs/<run>/summaries/report/`, plus `manifest.json`. A run whose outputs are gone has its directory removed, so what is published always corresponds to a run that exists. |
+| `docs/prose/*.md` | **Written by hand** — `abstract.md`, `background.md`, `methodology.md`, `conclusion.md`. Markdown, rendered into the page. Empty ones show a placeholder, so the site is publishable before the writing is done. |
+| `docs/templates/`, `docs/css/`, `docs/js/` | The page itself: structure, styles, and the D3 charts. Edited when changing how the report looks or behaves, not when results change. |
+
+Adding a run therefore changes `manifest.json`, not any HTML.
+
+`docs/` is what GitHub Pages serves (**Settings → Pages → branch `main`, folder
+`/docs`**), so it is committed rather than ignored.
 
 ## Configuration
 

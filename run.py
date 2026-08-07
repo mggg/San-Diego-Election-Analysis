@@ -21,6 +21,7 @@ from pipeline.profile_generator import (
     score_budgets_for_run,
 )
 from pipeline.simulate_elections import simulate_elections
+from pipeline.report_generator import generate_report
 from pipeline.summarize_results import (
     summarize_results,
     plot_combined_bubbles_all_runs,
@@ -404,6 +405,10 @@ def run_pipeline(config):
     # Refresh the cross-run bubble figure over every completed run's summary
     # CSV, not just when --run-all is used.
     plot_combined_bubbles_all_runs(config)
+    # Rebuild docs/ from the artifacts every completed run has now written.
+    # Unconditional: it is seconds of work, and a staleness check here would be
+    # one more thing that can silently leave the published page behind the data.
+    generate_report()
 
 def pipeline(config):
     if not has_valid_geodata(config):
@@ -440,6 +445,9 @@ def main(argv=None):
       * (default) no arguments -> interactive CLI config setup (setup_config).
       * --run-all              -> run every config in configs/.
       * <config>               -> run a single config given by path or name.
+
+    --report-only rebuilds the published site from existing artifacts instead of
+    running anything.
     """
     parser = argparse.ArgumentParser(
         description="Run the electoral-redistricting simulation pipeline."
@@ -455,7 +463,18 @@ def main(argv=None):
         action="store_true",
         help="Run every config in the configs/ directory instead of a single run.",
     )
+    parser.add_argument(
+        "--report-only",
+        action="store_true",
+        help="Rebuild docs/ from the artifacts already in outputs/, without simulating.",
+    )
     args = parser.parse_args(argv)
+
+    if args.report_only:
+        if args.config or args.run_all:
+            parser.error("--report-only takes no config and cannot be combined with --run-all.")
+        generate_report()
+        return
 
     if args.run_all and args.config:
         parser.error("Pass either a single config or --run-all, not both.")
