@@ -1,5 +1,3 @@
-# Methodology
-
 ## 3.1 Districting Plan Ensembles
 To generate a sufficient number of distinct districting plans, we use GerryChain to run a 10,000-step ReCom chain and subsample 100 plans that will be used in our election simulations. We do this a total of two times — once for each of the following configurations:
 
