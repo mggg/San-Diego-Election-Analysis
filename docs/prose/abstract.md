@@ -1,3 +1,6 @@
 # Abstract
 
-In April 2019, the Metric Geometry and Gerrymandering Group published a study on reform proposals and alternative electoral systems for Chicago City Council, stating that many observers would agree that Chicago's City Council ward system is entrenched in problematic gerrymandering, segregation, and inefficiency — issues many would argue still persist today. The goal of the 2019 study was to apply mathematical models to analyze the then-active ward plan and propose reforms to address these problems. This report seeks to replicate and update the results of the 2019 study by using the more current ward plan, newer demographic data, and more refined techniques that the lab has since developed. We will additionally be examining the impacts of the included reform proposals on representation for Asian voters — a voting bloc that has consistently gone underrepresented in Chicago City Council.
+We analyze geography, demographics, and voting patterns in San Diego, CA in order to compare
+the likely performance of various systems of electing members of the City Council.
+This report seeks to work with the most recent demographic data from 2020 Census, new election systems, the introduction of score-based voting, and more refined techniques. We will additionally be examining the impacts of the included reform proposals on representation for Asian voters, a community that represents 20% of the voting age population in the city.
+
