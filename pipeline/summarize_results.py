@@ -17,6 +17,7 @@ import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 import geopandas as gpd
+import numpy as np
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -1130,6 +1131,11 @@ def _slate_seat_records(df_plan: pd.DataFrame, config, slate_baselines) -> List[
     """
     The same shape as _focal_seat_records, but per candidate slate rather than
     the focal group alone -- the data behind the by-slate panels.
+
+    Carries the pooled COMBINED_MODE row too, averaged across voter models the
+    way _occurrence_counts does it, so a chart can be switched from the focal
+    group to any slate without losing the combined reading. The focal group is one
+    of the slates, and its rows here reproduce _focal_seat_records exactly.
     """
     slates = list(config.get("slate_to_candidates") or {})
     records = []
@@ -1141,6 +1147,8 @@ def _slate_seat_records(df_plan: pd.DataFrame, config, slate_baselines) -> List[
             column = f"seats_{slate}"
             if column not in group.columns:
                 continue
+            pooled: Dict[int, float] = {}
+            n_modes = group["mode"].nunique() or 1
             for mode, mode_rows in group.groupby("mode"):
                 counts = mode_rows[column].value_counts().sort_index()
                 total = float(counts.sum())
@@ -1152,6 +1160,7 @@ def _slate_seat_records(df_plan: pd.DataFrame, config, slate_baselines) -> List[
                         "winners": int(winners),
                         "mode": str(mode),
                         "modeLabel": LEGEND_MAPPING.get(mode, str(mode)),
+                        "pooled": False,
                         "slate": str(slate),
                         "slateLabel": _group_label(slate),
                         "slateVapShare": float(slate_baselines.get(slate, 0.0)),
@@ -1159,6 +1168,28 @@ def _slate_seat_records(df_plan: pd.DataFrame, config, slate_baselines) -> List[
                         "plans": float(plans),
                         "share": float(plans) / total if total else 0.0,
                     })
+                    # A (mode, seats) cell no model reached counts as zero for it,
+                    # not as absent, so divide by the model count rather than by
+                    # however many models happened to land on that seat total.
+                    pooled[int(seats)] = pooled.get(int(seats), 0.0) + float(plans) / n_modes
+
+            pooled_total = sum(pooled.values())
+            for seats, plans in sorted(pooled.items()):
+                records.append({
+                    "system": str(method),
+                    "systemLabel": label,
+                    "numDistricts": int(num_dist),
+                    "winners": int(winners),
+                    "mode": COMBINED_MODE,
+                    "modeLabel": LEGEND_MAPPING[COMBINED_MODE],
+                    "pooled": True,
+                    "slate": str(slate),
+                    "slateLabel": _group_label(slate),
+                    "slateVapShare": float(slate_baselines.get(slate, 0.0)),
+                    "seats": int(seats),
+                    "plans": plans,
+                    "share": plans / pooled_total if pooled_total else 0.0,
+                })
     return records
 
 
@@ -1229,6 +1260,199 @@ def report_artifacts_dir(run_name: str) -> Path:
     return Path("outputs") / str(run_name) / "summaries" / "report"
 
 
+
+# --- Candidate-availability boxplots ------------------------------------------
+#
+# The browser data behind the coalition boxplot this project and the Chicago one
+# both use. Districts are not comparable across plans by id -- district 5 in plan
+# 0 is not the same geography as district 5 in plan 200 -- so each plan's
+# districts are ranked by the slate's share of district VAP, low to high, and the
+# ranks pool across plans. Each box is one rank's distribution of that share.
+#
+# The fill is one of two readings of the same boxes:
+#
+#   availability  every (plan, district) pair, coloured by the average number of
+#                 that slate's candidates on the ballot. settings_generator drops
+#                 a slate from slate_to_candidates when it draws zero candidates,
+#                 so the absence is the datum.
+#   win rate      Chicago's original reading: restricted to districts where the
+#                 slate actually had a candidate, coloured by the share of those
+#                 districts it won. Restricting matters -- a rank the slate never
+#                 contested would otherwise read as a rank it always lost.
+#
+# Ranks are computed before the restriction, so rank 3 means the same district
+# position under both readings and the two colourings sit on comparable boxes.
+# Win rate pools voter models and replicates, as the notebook does.
+
+BOX_WHISKER_IQR = 1.5
+
+
+def _box_stats(values: np.ndarray) -> Optional[Dict[str, Any]]:
+    """
+    Tukey box statistics, matching matplotlib's boxplot defaults exactly.
+
+    Computed here rather than in the browser so a box on the page and its
+    matplotlib counterpart cannot disagree about where a whisker ends.
+    """
+    arr = np.sort(np.asarray(values, dtype=float))
+    if arr.size == 0:
+        return None
+
+    q1, median, q3 = (float(v) for v in np.percentile(arr, [25, 50, 75]))
+    iqr = q3 - q1
+    inside = arr[(arr >= q1 - BOX_WHISKER_IQR * iqr) & (arr <= q3 + BOX_WHISKER_IQR * iqr)]
+    low = float(inside.min()) if inside.size else q1
+    high = float(inside.max()) if inside.size else q3
+
+    return {
+        "n": int(arr.size),
+        "q1": round(q1, 4),
+        "median": round(median, 4),
+        "q3": round(q3, 4),
+        "low": round(low, 4),
+        "high": round(high, 4),
+        "mean": round(float(arr.mean()), 4),
+        "outliers": [round(float(v), 4) for v in arr[(arr < low) | (arr > high)]],
+    }
+
+
+def _district_facts(config, num_districts: int) -> pd.DataFrame:
+    """
+    Per-(plan, district) VAP share and candidate count for every slate, read out
+    of the settings files that produced the elections.
+
+    Returns an empty frame when the settings are gone: they are the only record
+    of which slates were on which ballot, so a run whose settings have been
+    cleaned up cannot have this figure rebuilt from anything else.
+    """
+    settings_dir = Path("outputs") / config["run_name"] / "settings" / str(num_districts)
+    if not settings_dir.is_dir():
+        return pd.DataFrame()
+
+    total_vap_col = config["population_vap_column"]
+    slates = list(config.get("slate_to_candidates") or {})
+    rows = []
+    for path in sorted(settings_dir.rglob("*.json")):
+        plan, district, _ = parse_plan_district_rep_from_path(path.name)
+        if plan is None or district is None:
+            continue
+        data = load_json(path)
+        total_vap = data.get(total_vap_col) or 0
+        available = data.get("slate_to_candidates") or {}
+        row = {"plan": plan, "district_id": district}
+        for slate in slates:
+            group_vap = (data.get("group_vap") or {}).get(slate, 0.0)
+            row[f"vap_{slate}"] = (group_vap / total_vap) if total_vap else 0.0
+            row[f"cands_{slate}"] = len(available.get(slate, []))
+        rows.append(row)
+    return pd.DataFrame(rows)
+
+
+def _ranked_by_vap(facts: pd.DataFrame, slate: str) -> pd.DataFrame:
+    """Each plan's districts ranked by this slate's VAP share, 1 = lowest."""
+    ranked = facts.copy()
+    ranked["rank"] = ranked.groupby("plan")[f"vap_{slate}"].rank(method="first").astype(int)
+    return ranked
+
+
+def _rank_boxes(ranked: pd.DataFrame, slate: str) -> Dict[str, Any]:
+    """VAP-share percentages pooled by rank, as box statistics."""
+    column = f"vap_{slate}"
+    ranks = []
+    for rank, group in ranked.groupby("rank"):
+        stats = _box_stats(group[column].to_numpy() * 100)
+        if stats:
+            ranks.append({"rank": int(rank), **stats})
+    if not ranks:
+        return {}
+    return {
+        "ranks": ranks,
+        "overallMean": round(float(ranked[column].mean() * 100), 4),
+        "plans": int(ranked["plan"].nunique()),
+    }
+
+
+def _availability_artifact(df: pd.DataFrame, config,
+                           slate_baselines: Dict[str, float]) -> Dict[str, Any]:
+    """
+    Boxes and colourings for every (slate, districting shape) in the run.
+
+    The boxes come in two variants -- all districts, and only those the slate
+    contested -- and are shared by every colouring that sits on them, so a system
+    contributes a colour array rather than a second copy of the same distribution.
+    """
+    slates = list(config.get("slate_to_candidates") or {})
+    boxes: List[Dict[str, Any]] = []
+    colors: List[Dict[str, Any]] = []
+
+    shapes = df[["num_districts", "seats_per_district"]].drop_duplicates().astype(int)
+    for num_dist, winners in shapes.itertuples(index=False):
+        facts = _district_facts(config, int(num_dist))
+        if facts.empty:
+            print(
+                f"[summarize_results] No settings for {num_dist} districts; "
+                "skipping candidate-availability data."
+            )
+            continue
+
+        shaped = df[(df["num_districts"] == num_dist) & (df["seats_per_district"] == winners)]
+        for slate in slates:
+            ranked = _ranked_by_vap(facts, slate)
+            contested = ranked[ranked[f"cands_{slate}"] > 0]
+            common = {
+                "slate": str(slate),
+                "slateLabel": _group_label(slate),
+                "slateVapShare": float(slate_baselines.get(slate, 0.0)),
+                "numDistricts": int(num_dist),
+                "winners": int(winners),
+            }
+
+            for restricted, subset in ((False, ranked), (True, contested)):
+                stats = _rank_boxes(subset, slate)
+                if stats:
+                    boxes.append({**common, "restricted": restricted, **stats})
+
+            # Availability: every district, coloured by candidates fielded.
+            counts = ranked.groupby("rank")[f"cands_{slate}"].mean()
+            colors.append({
+                **common,
+                "metric": "availability",
+                "label": f"Avg. {_group_label(slate)} candidates per district",
+                "format": "count",
+                "zeroLabel": f"No {_group_label(slate)} candidate at this rank",
+                "restricted": False,
+                "values": [{"rank": int(r), "value": round(float(v), 4)}
+                           for r, v in counts.items()],
+            })
+
+            # Win rate: contested districts only, one colouring per system.
+            seat_col = f"seats_{slate}"
+            if seat_col not in shaped.columns or contested.empty:
+                continue
+            keys = contested[["plan", "district_id", "rank"]]
+            for method, rows in shaped.groupby("election_method"):
+                merged = rows[["plan", "district_id", seat_col]].merge(
+                    keys, on=["plan", "district_id"], how="inner"
+                )
+                if merged.empty:
+                    continue
+                rates = merged.groupby("rank")[seat_col].apply(lambda s: (s > 0).mean() * 100)
+                colors.append({
+                    **common,
+                    "metric": "winRate",
+                    "system": str(method),
+                    "systemLabel": _method_label(method, num_dist, winners),
+                    "label": "Win rate",
+                    "format": "percent",
+                    "zeroLabel": f"No {_group_label(slate)} winner at this rank",
+                    "restricted": True,
+                    "values": [{"rank": int(r), "value": round(float(v), 4)}
+                               for r, v in rates.items()],
+                })
+
+    return {"boxes": boxes, "colors": colors}
+
+
 def write_report_artifacts(df: pd.DataFrame, df_plan: pd.DataFrame, config,
                            slate_baselines: Dict[str, float], iprop: float) -> Path:
     """
@@ -1242,7 +1466,9 @@ def write_report_artifacts(df: pd.DataFrame, df_plan: pd.DataFrame, config,
         iprop: The focal group's share of citywide VAP.
 
     Outputs:
-        outputs/<run_name>/summaries/report/{run,focal_seats,slate_seats}.json
+        outputs/<run_name>/summaries/report/{run,focal_seats,slate_seats}.json, and
+        availability.json when the run's settings are still on disk to build it
+        from.
     """
     out_dir = report_artifacts_dir(config["run_name"])
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -1252,6 +1478,13 @@ def write_report_artifacts(df: pd.DataFrame, df_plan: pd.DataFrame, config,
         "focal_seats.json": _focal_seat_records(df_plan, config),
         "slate_seats.json": _slate_seat_records(df_plan, config, slate_baselines),
     }
+
+    # Optional, not part of the required set: it needs the settings files, and a
+    # run whose settings have been cleaned up should still publish everything
+    # else rather than dropping off the page entirely.
+    availability = _availability_artifact(df, config, slate_baselines)
+    if availability["boxes"]:
+        payloads["availability.json"] = availability
     for name, payload in payloads.items():
         with open(out_dir / name, "w", encoding="utf-8") as f:
             json.dump(payload, f, indent=1)
