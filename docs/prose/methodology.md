@@ -1,5 +1,3 @@
-# Methodology
-
 ## 3.1 Districting Plan Ensembles
 To generate a sufficient number of distinct districting plans, we use GerryChain to run a 10,000-step ReCom chain and subsample 100 plans that will be used in our election simulations. We do this a total of two times — once for each of the following configurations:
 
@@ -17,20 +15,25 @@ The decision to simulate candidate availability per-district for each voting blo
 
 Similarly, evidence suggest that the number of candidate or pool size that runs for each district is not homogenous. Last 20 years of elections, the distribution of candidates running per district is diverse. On primaries, the average number of candidate is 3.5, where there has been districts bellow the mean with only 1 candidate running and districts above with 9 candidates.
 
-<!-- ![Histogram](../../figures/candidate_count_histogram.png) -->
+![Histogram](../assets/candidate_count_histogram.png)
 
 Based on the previous analysis, we endogenous determine the pool size and the candidate availability per slate as variables for each district and plan.
 
-To model the pool sizr we assume the number of candidates ($m$) behaves as a Binomial Distribution with a floor setted as the number of winner per district plus one. Where, k is the number of winners. The floor $k + 1$ ensures that we never set the number of winner as the number of running candidates as they will automatically will declare as winners. The binomial distribution takes two parameters as inputs: $n$ and $p$.
+To model the pool size we assume the number of candidates ($m$) behaves as a Binomial Distribution with a floor set as the number of winner per district plus one. The floor $k + 1$ ensures that we never have a scenario where the number of winners is equal to the number of running candidates as they will automatically will declare as winners. 
 
 $$m = k + 1 + x $$
+
+The binomial distribution takes two parameters as inputs: $n$ and $p$.
+
 $$ x ~ \sim \text{Binomial}(n, p)$$
 
 Where:
 
-$n = \text{candidate pool max} - \text{candidate pool min} $
+$k: \text{Number of winners per district}$
 
-$p = \frac{E(m)-  k + 1}{n}$
+$n =  \text{Maximun Number of candidate per district} - \text{Minimun Number of candidate per district} $
+
+$p =  \frac{E(m)-  (k + 1)}{n}$
 
 Finally, we make an assumption that the racial composition of the slate pool will be roughly proportional to that of the VAP in each district. We use the bloc proportions to create an interval, with the intent of sampling candidates of different slates from it. However, before we do we first square each element, normalizing the “squared interval” over the sum of the squared values. This creates an “exaggeration” effect when we sample slate candidates. In other words, if a district has a large Black VAP, it's even more likely that the Black voter-preferred slate of candidates will be larger than the others. Similarly, if the Asian VAP is small it's much less likely that the Asian voter-preferred slate will have many candidates — if any, since we allow for slates to be empty. This is intended to model how community dynamics, segregation, or lack of institutional support may impact candidate availability across geography with respect to race. Finally, we modeled one scenario with a "cubic interval" for sensitivy results to increase the original scenario.
 
@@ -55,19 +58,26 @@ Rows are voter blocs, columns are candidate slates; each row sums to 1.
 | **Black** | 0.05 | 0.05 | 0.80 | 0.10 |
 | **Hispanic** | 0.10 | 0.05 | 0.05 | 0.80 |
 
-## 3.5 Cambridge Truncation Process
-The ballots generated in Section 3.5 are, by default, full rankings — every voter ranks every candidate on the slate. However, this scenario is not realistic as voters rarely rank full ballots. To capture this behavior, we simulate an additional scenario to the basic simulation with a truncation step. The truncation method was do calibrated to real ranked-choice ballots from Cambridge, MA's 2009–2017 municipal elections, which VoteKit distributes as two empirical distributions over ballot length: one for ballots that started with a candidate from the historical majority (white) slate, and one for ballots that started with a candidate from the historical minority (Black, Asian, or Hispanic) slate. After generating the ballots for vote types of voter profiles, we applied the truncation process... 
+## 3.5 Cambridge Ballot Truncation
+
+The ballots generated in Section 3.4 are, by default, full rankings — every voter ranks every candidate on the slate. However, we introduce a new scenario where voters don't all behave the same way, allowing for the existence of incomplete and bullet ballots.
+
+Cambridge has run ranked-choice elections continuously since 1941, and a subset of those elections from 2009–2017 shows real dispersion in ballot length. Moreover, this distribution differs between two groups: the historical minority and majority slates.
+
+To capture this behavior, we introduce a truncation process calibrated to real ranked-choice ballots from Cambridge, MA's 2009–2017 municipal elections. Using the same structure as VoteKit, we work with two empirical distributions over ballot length: one for ballots that started with a candidate from the historical majority (white) slate, and one for ballots that started with a candidate from the historical minority (Black, Asian, or Hispanic) slate.
+
+Finally, the PL and BT preference profiles are truncated to a ballot length sampled from the historical distribution corresponding to each ballot's minority or majority group.
 
 ## 3.6 Voting Rules
 Elections for each district are simulated using VoteKit's Elections module. We use the following voting rules with the corresponding district configurations:
 
 | Voting Rule | District Configs | Seats/District | Description |
 |---|---|---|---|
-| **Plurality** | 9 × 1 | 1 (single-winner) | Voters' first choices are tallied and the candidate with the most votes wins outright — no majority required. This is the closest analogue to San Diego's current single-member-district status quo. |
+| **Plurality** | 9 × 1 | 1 (single-winner) | Voters' first choices are tallied and the candidate with the most votes wins outright — no majority required.|
 | **IRV** (Instant-Runoff Voting) | 9 × 1 | 1 (single-winner) | The single-winner case of STV: last-place candidates are eliminated round by round and their ballots transferred to the next-ranked choice until one candidate holds a majority. |
-| **FastSTV** (Single Transferable Vote) | 3 × 3, 1 × 9 (at-large) | 3 or 9 (multi-winner) | Multi-winner ranked-choice rule using the Droop quota: candidates reaching the quota are elected and their surplus is redistributed, while last-place candidates are eliminated and transferred, until all seats are filled. |
+| **STV** (Single Transferable Vote) | 3 × 3, 1 × 9 (at-large) | 3 or 9 (multi-winner) | Multi-winner ranked-choice rule using the Droop quota: candidates reaching the quota are elected and their surplus is redistributed, while last-place candidates are eliminated and transferred, until all seats are filled. |
 | **Cumulative** | 3 × 3, 1 × 9 (at-large) | 3 or 9 (multi-winner) | Score-based multi-winner rule where each voter receives a budget equal to the number of seats and can distribute those points across candidates however they like, including stacking all of them on a single favorite; the top point-getters win. |
 | **Limited** | 3 × 3, 1 × 9 (at-large) | 3 or 9 (multi-winner) | Score-based multi-winner rule identical to Cumulative except each voter's budget is capped below the number of seats (2 of 3 for the 3 × 3 config, 5 of 9 for at-large), so voters cannot concentrate every point on one candidate. |
-| **Two-round rules** (Alaska- and Top-Two-style) | 9 × 1 | 1 (single-winner) | A Plurality primary narrows the field to a fixed number of finalists ($m_1$ = 4 for the Alaska-style rule, 2 for the Top-Two-style rule), a fresh ballot profile is resampled over just those finalists, and the general round decides the winner via STV (Alaska-style) or Plurality (Top-Two-style). |
+| **Two-round rules** (Alaska- and Top-Two-style) | 9 × 1 | 1 (single-winner) | A PSMD primary narrows the field to a fixed number of finalists ($m_1$ = 4 for the Alaska-style rule, 2 for the Top-Two-style rule), a new ballot profile is resampled over just those finalists, and the general round decides the winner via STV (Alaska-style) or Plurality (Top-Two-style). |
 
 For each system, tiebreaks are performed randomly when needed.
