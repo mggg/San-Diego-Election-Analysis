@@ -8,8 +8,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 0,
-  "plans": 501.5,
-  "share": 0.5015
+  "plans": 506.5,
+  "share": 0.5065
  },
  {
   "system": "FASTSTV",
@@ -20,8 +20,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 1,
-  "plans": 456.0,
-  "share": 0.456
+  "plans": 451.0,
+  "share": 0.451
  },
  {
   "system": "FASTSTV",
@@ -44,8 +44,8 @@
   "modeLabel": "Deliberative",
   "pooled": false,
   "seats": 0,
-  "plans": 530.0,
-  "share": 0.53
+  "plans": 537.0,
+  "share": 0.537
  },
  {
   "system": "FASTSTV",
@@ -56,8 +56,8 @@
   "modeLabel": "Deliberative",
   "pooled": false,
   "seats": 1,
-  "plans": 452.0,
-  "share": 0.452
+  "plans": 445.0,
+  "share": 0.445
  },
  {
   "system": "FASTSTV",
@@ -80,8 +80,8 @@
   "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 0,
-  "plans": 473.0,
-  "share": 0.473
+  "plans": 476.0,
+  "share": 0.476
  },
  {
   "system": "FASTSTV",
@@ -92,8 +92,8 @@
   "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 1,
-  "plans": 460.0,
-  "share": 0.46
+  "plans": 457.0,
+  "share": 0.457
  },
  {
   "system": "FASTSTV",

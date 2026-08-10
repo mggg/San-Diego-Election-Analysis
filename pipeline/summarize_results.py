@@ -39,6 +39,7 @@ MODE_COLORS = {
     "slate_pl": "#FFCC00",
     "slate_bt": "#AA0000",
     "cambridge": "#2a78d6",
+    "name_cumulative": "#2a78d6",
 }
 
 # Dark ink outline: the only thing holding the gold bars against the page.
@@ -68,8 +69,8 @@ DESIRED_ORDER = ["slate_pl", "slate_bt", "cambridge", "name_cumulative"]
 # rare cells visible.
 BUBBLE_MAX_AREA = 150
 BUBBLE_MIN_AREA = 10
-# San Diego red -- the fallback fill for a mode with no MODE_COLORS entry of its
-# own (e.g. name_cumulative, the score-ballot model Cumulative/Limited run on).
+# San Diego red -- the fallback fill for any voter model with no MODE_COLORS
+# entry of its own.
 DEFAULT_MODE_COLOR = "#AA0000"
 PROP_LINE_COLOR = "#52514e"  # focal-group proportional-representation reference line
 
@@ -107,6 +108,18 @@ RULE_DISPLAY_NAMES = {
     "TOPTWOTWOPROFILE": "Top Two (two-profile)",
     "PSMD": "PSMD",
 }
+
+# The report page's chart for a run defaults to that run's first "system" (see
+# docs/js/report.js and the per-chart modules, all of which read systems[0]).
+# Sorting plain-alphabetically would default a run like Basic's Cumulative/STV/
+# Limited mix to Cumulative, since it precedes "STV" alphabetically -- STV is
+# this project's original focus, so it sorts first wherever a run includes it,
+# with every other rule alphabetical after it.
+SYSTEM_SORT_PRIORITY = {"STV": 0, "FASTSTV": 0}
+
+
+def _system_sort_key(method: str) -> Tuple[int, str]:
+    return (SYSTEM_SORT_PRIORITY.get(str(method).upper(), 1), str(method))
 
 
 def _rule_display_name(method: str) -> str:
@@ -1208,7 +1221,7 @@ def _run_metadata(df: pd.DataFrame, df_plan: pd.DataFrame, config, iprop: float,
     for (num_dist, winners), group in df_plan.groupby(["num_districts", "seats_per_district"]):
         systems = [
             {"id": str(m), "label": _method_label(m, num_dist, winners)}
-            for m in sorted(group["election_method"].unique())
+            for m in sorted(group["election_method"].unique(), key=_system_sort_key)
         ]
         source = next(
             (d for d in config["district_configs"] if d["num_districts"] == num_dist), {}

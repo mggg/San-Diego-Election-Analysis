@@ -69,6 +69,28 @@ def _render_markdown(path: Path) -> str:
     return mistune.create_markdown(plugins=["table", "footnotes"])(text)
 
 
+def _run_prose_path(docs_dir: Path, slug: str) -> Path:
+    """Where a run's own hand-written description lives, if it has one."""
+    return docs_dir / "prose" / "runs" / f"{slug}.md"
+
+
+def _ensure_run_prose_stubs(docs_dir: Path, runs: List[Dict[str, Any]]) -> None:
+    """
+    Touch an empty prose file for any run that doesn't have one yet.
+
+    The top-level PROSE_SECTIONS files (abstract.md, background.md, ...) are
+    discoverable because they already exist, blank, ready to open and edit --
+    this gives each run's description the same discoverability instead of a
+    filename convention that's only written down.
+    """
+    prose_dir = docs_dir / "prose" / "runs"
+    prose_dir.mkdir(parents=True, exist_ok=True)
+    for meta in runs:
+        path = _run_prose_path(docs_dir, meta["slug"])
+        if not path.exists():
+            path.touch()
+
+
 def discover_runs(outputs_dir: Optional[Path] = None) -> List[Dict[str, Any]]:
     """
     Every run that has report artifacts, in a stable order between builds.
@@ -366,6 +388,12 @@ def generate_report(docs_dir: Path = DOCS_DIR, config_dir: Optional[Path] = None
         for section in PROSE_SECTIONS
     }
 
+    _ensure_run_prose_stubs(docs_dir, runs)
+    run_prose = {
+        meta["slug"]: _render_markdown(_run_prose_path(docs_dir, meta["slug"]))
+        for meta in runs
+    }
+
     env = Environment(
         loader=FileSystemLoader(str(docs_dir / "templates")),
         autoescape=select_autoescape(["html"]),
@@ -376,6 +404,7 @@ def generate_report(docs_dir: Path = DOCS_DIR, config_dir: Optional[Path] = None
     html = env.get_template("index.html.j2").render(
         prose=prose,
         prose_order=[s["id"] for s in PROSE_SECTIONS],
+        run_prose=run_prose,
         runs=manifest["runs"],
         generated=manifest["generated"],
         repo_url="https://github.com/mggg/San-Diego-Election-Analysis",

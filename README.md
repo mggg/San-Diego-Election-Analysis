@@ -152,6 +152,7 @@ saying this rather than failing silently.)
 | `docs/index.html` | Generated. Every rebuild overwrites it. |
 | `docs/data/` | Generated. One directory per run, mirrored from `outputs/<run>/summaries/report/`, plus `manifest.json`. A run whose outputs are gone has its directory removed, so what is published always corresponds to a run that exists. |
 | `docs/prose/*.md` | **Written by hand** — `abstract.md`, `background.md`, `methodology.md`, `conclusion.md`. Markdown, rendered into the page. Empty ones show a placeholder, so the site is publishable before the writing is done. |
+| `docs/prose/runs/<slug>.md` | **Written by hand** — one optional description per run, rendered under that run's heading. `generate_report` touches an empty file for every run that doesn't have one yet, so the exact path to edit is always there rather than only documented. Empty shows the same kind of placeholder as the top-level sections. |
 | `docs/templates/`, `docs/css/`, `docs/js/` | The page itself: structure, styles, and the D3 charts. Edited when changing how the report looks or behaves, not when results change. |
 
 Adding a run therefore changes `manifest.json`, not any HTML.

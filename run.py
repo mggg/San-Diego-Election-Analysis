@@ -21,7 +21,7 @@ from pipeline.profile_generator import (
     score_budgets_for_run,
 )
 from pipeline.simulate_elections import simulate_elections
-from pipeline.report_generator import generate_report
+from pipeline.report_generator import generate_report, ARTIFACT_FILES
 from pipeline.summarize_results import (
     summarize_results,
     plot_combined_bubbles_all_runs,
@@ -358,8 +358,17 @@ def has_valid_summaries(config):
     run = config["run_name"]
     csv = Path("outputs") / run / "summaries" / f"{run}_summary.csv"
     figs_dir = Path("figures") / run
+    report_dir = Path("outputs") / run / "summaries" / "report"
     if not csv.is_file() or not figs_dir.is_dir():
         print("Summaries do not exist. Running pipeline from summary stage.")
+        return False
+    # The report bundle (report_generator.discover_runs' input) is written by
+    # the same summarize_results call as the csv/figures, but predates it for
+    # runs summarized before write_report_artifacts existed -- checked
+    # separately so those runs get backfilled instead of silently never
+    # appearing on the published report.
+    if any(not (report_dir / name).is_file() for name in ARTIFACT_FILES):
+        print("Report bundle missing or incomplete. Running pipeline from summary stage.")
         return False
     try:
         df_plan = aggregate_to_plan_level(pd.read_csv(csv))

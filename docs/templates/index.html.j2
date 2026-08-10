@@ -90,6 +90,12 @@
           <section id="run-{{ run.slug }}" class="run mb-5" data-run="{{ run.slug }}">
             <div class="run-main">
             <h3 class="h4 mt-4">{{ run.name }}</h3>
+            {% if run_prose.get(run.slug) %}
+            <div class="run-prose">{{ run_prose[run.slug] }}</div>
+            {% else %}
+            <p class="todo">[Description to be written — edit
+               <code>docs/prose/runs/{{ run.slug }}.md</code>.]</p>
+            {% endif %}
             <p class="run-meta" data-run-meta="{{ run.slug }}"></p>
 
             {# Every chart in this run reads the same selection; js/report.js fills this
