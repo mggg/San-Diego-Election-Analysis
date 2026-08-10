@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>San Diego City Council Election Analysis</title>
+  <meta name="description" content="MGGG analysis of alternative electoral systems and representation outcomes for San Diego City Council.">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="fonts/fonts.css">
+  <link rel="stylesheet" href="css/report.css?v=7b49a6d8c5">
+</head>
+
+<body data-bs-spy="scroll" data-bs-target="#toc-nav" data-bs-offset="90" tabindex="0">
+
+  <nav class="navbar navbar-expand-lg navbar-sd sticky-top shadow-sm">
+    <div class="container-xl">
+      <a class="navbar-brand fw-bold" href="#top">San Diego Election Analysis</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+              aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#abstract">Abstract</a></li>
+          <li class="nav-item"><a class="nav-link" href="#background">Background</a></li>
+          <li class="nav-item"><a class="nav-link" href="#methodology">Methodology</a></li>
+          <li class="nav-item"><a class="nav-link" href="#conclusion">Conclusion</a></li>
+          <li class="nav-item"><a class="nav-link" href="#results">Results</a></li>
+          <li class="nav-item"><a class="nav-link" href="#comparison">Comparison</a></li>
+          <li class="nav-item"><a class="nav-link" href="https://github.com/mggg/San-Diego-Election-Analysis" target="_blank" rel="noopener">GitHub ↗</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero py-5" id="top">
+    <div class="container-xl">
+      <p class="eyebrow mb-2">Metric Geometry &amp; Gerrymandering Group</p>
+      <h1 class="display-5 fw-bold">San Diego City Council Election Analysis</h1>
+    </div>
+  </header>
+
+  <div class="container-xxl my-4">
+    <div class="row">
+      <div class="col-lg-2 d-none d-lg-block">
+        <nav id="toc-nav" class="toc nav flex-column">
+          <a class="nav-link" href="#abstract">Abstract</a>
+          <a class="nav-link" href="#background">Background</a>
+          <a class="nav-link" href="#methodology">Methodology</a>
+          <a class="nav-link" href="#conclusion">Conclusion</a>
+          <a class="nav-link" href="#results">Results by run</a>
+          <nav class="nav flex-column">
+            <a class="nav-link" href="#run-alternative-electoral-systems">Alternative Electoral Systems</a>
+            <a class="nav-link" href="#run-diverse-aapi-coalition-preferences">Diverse AAPI Coalition Preferences</a>
+            <a class="nav-link" href="#run-low-aapi-availability">Low AAPI Availability</a>
+            <a class="nav-link" href="#run-low-aapi-turnout">Low AAPI Turnout</a>
+          </nav>
+          <a class="nav-link" href="#comparison">Cross-run comparison</a>
+        </nav>
+      </div>
+
+      <main class="col-lg-10">
+        <section id="abstract" class="mb-5">
+          <h2>Abstract</h2>
+          <p>We analyze geography, demographics, and voting patterns in San Diego, CA in order to compare
+the likely performance of various systems of electing members of the City Council.
+This report seeks to work with the most recent demographic data from 2020 Census, new election systems, the introduction of score-based voting, and more refined techniques. We will additionally be examining the impacts of the included reform proposals on representation for Asian voters, a community that represents 20% of the voting age population in the city.</p>
+
+        </section>
+        <section id="background" class="mb-5">
+          <h2>Background</h2>
+          <p>In 2011, San Diego City proposed for the first time a 9-district plan with one single member district representation (&quot;<a href="https://en.wikipedia.org/wiki/2012_San_Diego_elections">2012 San Diego elections</a>,&quot; <em>Wikipedia</em>; &quot;<a href="https://voiceofsandiego.org/2021/12/29/after-redistricting-advocates-argue-for-more-council-districts-or-none-at-all/">After Redistricting, Advocates Argue for More Districts. Or None At All.</a>,&quot; <em>Voice of San Diego</em>, Feb. 23, 2022). Since then the city has kept the 9 single-member council districts and has gone through a redistricting process in 2021 using the 2020 Census (&quot;<a href="https://www.sandiego.gov/redistricting-commission">Redistricting Commission</a>,&quot; City of San Diego; &quot;<a href="https://www.kpbs.org/news/midday-edition/2021/12/16/san-diego-finalizes-new-map-of-city-council-districts">San Diego finalizes new map of City Council districts</a>,&quot; <em>KPBS</em>, Dec. 17, 2021). On the other hand, San Diego has staggered elections with a 4-year cycle--even districts (2, 4, 6, 8) in one cycle, odd districts (1, 3, 5, 7, 9) in the next. Additionally, the city uses a two-round system with a primary held in June followed by a runoff in November between the top-two candidates in each district.</p>
+<p>It is valid to state that this redistricting process, like every one since the City Charter created the independent Redistricting Commission in 1992, was carried out by that independent commission rather than the city council (&quot;<a href="https://docs.sandiego.gov/citycharter/Article%20II.pdf">City Charter, Article II</a>,&quot; §§5-5.1; &quot;<a href="https://www.sandiego.gov/redistricting-commission">Redistricting Commission</a>,&quot; City of San Diego). Based on that, it is interesting to analyze how proportionality has been affected or improved for all communities.  While White and Hispanic voters seem to achieve at least proportional representation regularly, the Asian population seems to be growing, yet they are still consistently underrepresented within city government. Black voters see consistent representation from their preferred candidates over time - primarily within District 4.</p>
+<p>This report employs new and updated tools like GerryChain and VoteKit in order to simulate a variety of electoral systems and scenarios. Primarily, we look at simulations of multi-member districts elected by Single Transferable Vote (STV), low target-bloc turnouts, and Cambridge Ballot truncation.</p>
+
+        </section>
+        <section id="methodology" class="mb-5">
+          <h2>Methodology</h2>
+          <h2>3.1 Districting Plan Ensembles</h2>
+<p>To generate a sufficient number of distinct districting plans, we use GerryChain to run a 10,000-step ReCom chain and subsample 100 plans that will be used in our election simulations. We do this a total of two times — once for each of the following configurations:</p>
+<ul>
+<li>3 × 3 ensemble — each plan has 3 single-member districts built from precincts</li>
+<li>9 × 1 ensemble — each plan has 1 multi-member districts built from precincts</li>
+</ul>
+<p>Additionally, we run a election 1 x 9 where San Diego city is represented as one single District. In this scenario, we dont need to run a MC chain as we only going to work with one districting plan but to compensate for a reduction in the number of simulations, we increase the number of profiles from 10 to 100.</p>
+<h2>3.2 Voter Blocs and Candidate Slates</h2>
+<p>Mirroring past reports, we consider the four largest racial demographic groups when identifying blocs of voters with shared preferences and slates of candidates with similar policies and positions. In that sense, Slates and Voters are limited to and delineated as Black, Asian, Hispanic, and White. The voting bloc variables were constructed using Decennial Census variables from 2020 following the <a href="https://data-democracy.org/VAP-CVAP">bloc classification methodology</a> of MGGG.</p>
+<h2>3.3 Candidate Availability and Pool Size</h2>
+<p>The decision to simulate candidate availability per-district for each voting bloc relies on evidence found from previous Sand Diego City council elections. For instance, the last three San Diego City Council Elections had a pattern where candidates representing the Asian and Black community run only in the districts where their own community makes up a larger share of voters across districts (<a href="https://en.wikipedia.org/wiki/2020_San_Diego_elections">2020</a>, <a href="https://en.wikipedia.org/wiki/2022_San_Diego_City_Council_election">2022</a>, <a href="https://en.wikipedia.org/wiki/2024_San_Diego_elections">2024</a>). Analyzing the bloc distribution of San Diego 9-district plan, District 4 and 6 have the highest shares of Black and Asian communities, respectively, and candidates running in those district are predominantly from those same communitities. Likewise, it is not common to find candidates from Asian and Black running on districts with a low share of their own communities.</p>
+<p>Similarly, evidence suggest that the number of candidate or pool size that runs for each district is not homogenous. Last 20 years of elections, the distribution of candidates running per district is diverse. On primaries, the average number of candidate is 3.5, where there has been districts bellow the mean with only 1 candidate running and districts above with 9 candidates.</p>
+<p><img src="../assets/candidate_count_histogram.png" alt="Histogram" /></p>
+<p>Based on the previous analysis, we endogenous determine the pool size and the candidate availability per slate as variables for each district and plan.</p>
+<p>To model the pool size we assume the number of candidates ($m$) behaves as a Binomial Distribution with a floor set as the number of winner per district plus one. The floor $k + 1$ ensures that we never have a scenario where the number of winners is equal to the number of running candidates as they will automatically will declare as winners.</p>
+<p>$$m = k + 1 + x $$</p>
+<p>The binomial distribution takes two parameters as inputs: $n$ and $p$.</p>
+<p>$$ x ~ \sim \text{Binomial}(n, p)$$</p>
+<p>Where:</p>
+<p>$k: \text{Number of winners per district}$</p>
+<p>$n =  \text{Maximun Number of candidate per district} - \text{Minimun Number of candidate per district} $</p>
+<p>$p =  \frac{E(m)-  (k + 1)}{n}$</p>
+<p>Finally, we make an assumption that the racial composition of the slate pool will be roughly proportional to that of the VAP in each district. We use the bloc proportions to create an interval, with the intent of sampling candidates of different slates from it. However, before we do we first square each element, normalizing the “squared interval” over the sum of the squared values. This creates an “exaggeration” effect when we sample slate candidates. In other words, if a district has a large Black VAP, it's even more likely that the Black voter-preferred slate of candidates will be larger than the others. Similarly, if the Asian VAP is small it's much less likely that the Asian voter-preferred slate will have many candidates — if any, since we allow for slates to be empty. This is intended to model how community dynamics, segregation, or lack of institutional support may impact candidate availability across geography with respect to race. Finally, we modeled one scenario with a &quot;cubic interval&quot; for sensitivy results to increase the original scenario.</p>
+<h2>3.4 Voter Profile and Ballot Generation</h2>
+<p>For each district in all 50 district plans of our ensemble, we generate voter preference profiles — a collection of ballots from voters that rank available candidates. These rankings are determined by using VoteKit's Plackett-Luce and Bradley-Terry ballot generators, which model impulsive voter behavior and deliberative voter behavior, respectively. Each assumes that each voter bloc has a preference interval for each slate of candidates, along with a tuple of cohesion parameters — one parameter for each slate.</p>
+<p>Both generators share the same two-stage process, and they only differ in how the first stage plays out. Before any ballots are drawn, each bloc's preference interval is assembled by taking that bloc's cohesion for a given slate and slicing off a sub-interval of that width, then filling it in with the individual candidates of the slate according to their support. We govern the within-slate split with a set of Dirichlet alphas — in this report we hold all alphas at 1, which means that once a voter has decided to reach for a particular slate, every candidate on that slate is treated as equally preferred. The cohesion parameters (the rows of the matrices below) therefore do all the work of ordering slates against one another, while the interval handles the ordering of candidates within a slate. What separates the two models is the story we tell about how a voter walks through that interval to produce a ranking.</p>
+<h3>The Impulsive Voter</h3>
+<p>The Plackett-Luce generator builds a ballot from the top down, one position at a time. Starting from the first-place slot, a voter in bloc reaches for a candidate from slate  with probability equal to that bloc's cohesion for the slate, ; whichever slate is chosen then supplies a specific candidate by sampling from that slate's preference interval without replacement. The voter repeats this for the next position, renormalizing over whatever slates still have candidates left, and keeps going until the ballot is full. We call this the impulsive voter because they never look back — each ranking is a snapshot decision made in the moment, with no reconsideration of the choices already committed higher up the ballot. Concretely, a voter picks their favorite, then their next favorite from what remains, and so on, so the probability of a given slate ordering is just the product of these sequential draws.</p>
+<h3>The Deliberative Voter</h3>
+<p>The Bradley-Terry generator instead asks the voter to weigh the ballot as a whole. Rather than filling positions in sequence, the probability of a complete ranking is proportional to the product of the pairwise slate preferences across every pair of slates on the ballot — for a ranking that places slate  above slate , each such head-to-head contributes a factor of . A voter effectively runs every candidate against every other in their head and only then settles on the ordering that is most internally consistent with all of those matchups at once. We call this the deliberative voter, since the ranking reflects a considered comparison of the full field rather than a run of top-down impulses. The candidate-filling stage is identical to Plackett-Luce — once the slate ordering is fixed, specific candidates are drawn from each slate's preference interval — so the two models diverge only in how much of the ballot a voter is imagined to be considering at once.</p>
+<h3>Cohesion Matrices</h3>
+<p>Rows are voter blocs, columns are candidate slates; each row sums to 1.</p>
+<table>
+<thead>
+<tr>
+  <th>bloc ↓ / slate →</th>
+  <th>White</th>
+  <th>Asian</th>
+  <th>Black</th>
+  <th>Hispanic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>White</strong></td>
+  <td>0.80</td>
+  <td>0.10</td>
+  <td>0.05</td>
+  <td>0.05</td>
+</tr>
+<tr>
+  <td><strong>Asian</strong></td>
+  <td>0.15</td>
+  <td>0.80</td>
+  <td>0.02</td>
+  <td>0.03</td>
+</tr>
+<tr>
+  <td><strong>Black</strong></td>
+  <td>0.05</td>
+  <td>0.05</td>
+  <td>0.80</td>
+  <td>0.10</td>
+</tr>
+<tr>
+  <td><strong>Hispanic</strong></td>
+  <td>0.10</td>
+  <td>0.05</td>
+  <td>0.05</td>
+  <td>0.80</td>
+</tr>
+</tbody>
+</table>
+<h2>3.5 Cambridge Ballot Truncation</h2>
+<p>The ballots generated in Section 3.4 are, by default, full rankings — every voter ranks every candidate on the slate. However, we introduce a new scenario where voters don't all behave the same way, allowing for the existence of incomplete and bullet ballots.</p>
+<p>Cambridge has run ranked-choice elections continuously since 1941, and a subset of those elections from 2009–2017 shows real dispersion in ballot length. Moreover, this distribution differs between two groups: the historical minority and majority slates.</p>
+<p>To capture this behavior, we introduce a truncation process calibrated to real ranked-choice ballots from Cambridge, MA's 2009–2017 municipal elections. Using the same structure as VoteKit, we work with two empirical distributions over ballot length: one for ballots that started with a candidate from the historical majority (white) slate, and one for ballots that started with a candidate from the historical minority (Black, Asian, or Hispanic) slate.</p>
+<p>Finally, the PL and BT preference profiles are truncated to a ballot length sampled from the historical distribution corresponding to each ballot's minority or majority group.</p>
+<h2>3.6 Voting Rules</h2>
+<p>Elections for each district are simulated using VoteKit's Elections module. We use the following voting rules with the corresponding district configurations:</p>
+<table>
+<thead>
+<tr>
+  <th>Voting Rule</th>
+  <th>District Configs</th>
+  <th>Seats/District</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>Plurality</strong></td>
+  <td>9 × 1</td>
+  <td>1 (single-winner)</td>
+  <td>Voters' first choices are tallied and the candidate with the most votes wins outright — no majority required.</td>
+</tr>
+<tr>
+  <td><strong>IRV</strong> (Instant-Runoff Voting)</td>
+  <td>9 × 1</td>
+  <td>1 (single-winner)</td>
+  <td>The single-winner case of STV: last-place candidates are eliminated round by round and their ballots transferred to the next-ranked choice until one candidate holds a majority.</td>
+</tr>
+<tr>
+  <td><strong>STV</strong> (Single Transferable Vote)</td>
+  <td>3 × 3, 1 × 9 (at-large)</td>
+  <td>3 or 9 (multi-winner)</td>
+  <td>Multi-winner ranked-choice rule using the Droop quota: candidates reaching the quota are elected and their surplus is redistributed, while last-place candidates are eliminated and transferred, until all seats are filled.</td>
+</tr>
+<tr>
+  <td><strong>Cumulative</strong></td>
+  <td>3 × 3, 1 × 9 (at-large)</td>
+  <td>3 or 9 (multi-winner)</td>
+  <td>Score-based multi-winner rule where each voter receives a budget equal to the number of seats and can distribute those points across candidates however they like, including stacking all of them on a single favorite; the top point-getters win.</td>
+</tr>
+<tr>
+  <td><strong>Limited</strong></td>
+  <td>3 × 3, 1 × 9 (at-large)</td>
+  <td>3 or 9 (multi-winner)</td>
+  <td>Score-based multi-winner rule identical to Cumulative except each voter's budget is capped below the number of seats (2 of 3 for the 3 × 3 config, 5 of 9 for at-large), so voters cannot concentrate every point on one candidate.</td>
+</tr>
+<tr>
+  <td><strong>Two-round rules</strong> (Alaska- and Top-Two-style)</td>
+  <td>9 × 1</td>
+  <td>1 (single-winner)</td>
+  <td>A PSMD primary narrows the field to a fixed number of finalists ($m_1$ = 4 for the Alaska-style rule, 2 for the Top-Two-style rule), a new ballot profile is resampled over just those finalists, and the general round decides the winner via STV (Alaska-style) or Plurality (Top-Two-style).</td>
+</tr>
+</tbody>
+</table>
+<p>For each system, tiebreaks are performed randomly when needed.</p>
+
+        </section>
+        <section id="conclusion" class="mb-5">
+          <h2>Conclusion</h2>
+          <p class="todo">[Conclusion to be written — edit
+             <code>docs/prose/conclusion.md</code>.]</p>
+        </section>
+
+        <section id="results" class="mb-5">
+          <h2>Results</h2>
+
+          <section id="run-alternative-electoral-systems" class="run mb-5" data-run="alternative-electoral-systems">
+            <div class="run-main">
+            <h3 class="h4 mt-4">Alternative Electoral Systems</h3>
+            <p class="run-meta" data-run-meta="alternative-electoral-systems"></p>
+
+            <div class="run-controls" data-controls="alternative-electoral-systems"></div>
+
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="tab"
+                        data-bs-target="#alternative-electoral-systems-focal" type="button" role="tab">
+                  Seat outcomes
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab"
+                        data-bs-target="#alternative-electoral-systems-availability" type="button" role="tab">
+                  Districts by VAP rank
+                </button>
+              </li>
+            </ul>
+            <div class="tab-content pt-3">
+              <div class="tab-pane fade show active" id="alternative-electoral-systems-focal" role="tabpanel">
+                <div class="metric-toggles" data-view="alternative-electoral-systems"></div>
+                <div class="row g-4 figure-pair" data-one-group="alternative-electoral-systems">
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="bubble" data-run="alternative-electoral-systems"></div>
+                  </div>
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="histogram" data-run="alternative-electoral-systems"></div>
+                  </div>
+                </div>
+                <div data-all-groups="alternative-electoral-systems" hidden>
+                  <div class="chart" data-chart="slate" data-run="alternative-electoral-systems"></div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="alternative-electoral-systems-availability" role="tabpanel">
+                <div class="metric-toggles" data-metric="alternative-electoral-systems"></div>
+                <div class="chart" data-chart="availability" data-run="alternative-electoral-systems"></div>
+              </div>
+            </div>
+            </div>
+            <aside class="run-params" data-params="alternative-electoral-systems"></aside>
+          </section>
+          <section id="run-diverse-aapi-coalition-preferences" class="run mb-5" data-run="diverse-aapi-coalition-preferences">
+            <div class="run-main">
+            <h3 class="h4 mt-4">Diverse AAPI Coalition Preferences</h3>
+            <p class="run-meta" data-run-meta="diverse-aapi-coalition-preferences"></p>
+
+            <div class="run-controls" data-controls="diverse-aapi-coalition-preferences"></div>
+
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="tab"
+                        data-bs-target="#diverse-aapi-coalition-preferences-focal" type="button" role="tab">
+                  Seat outcomes
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab"
+                        data-bs-target="#diverse-aapi-coalition-preferences-availability" type="button" role="tab">
+                  Districts by VAP rank
+                </button>
+              </li>
+            </ul>
+            <div class="tab-content pt-3">
+              <div class="tab-pane fade show active" id="diverse-aapi-coalition-preferences-focal" role="tabpanel">
+                <div class="metric-toggles" data-view="diverse-aapi-coalition-preferences"></div>
+                <div class="row g-4 figure-pair" data-one-group="diverse-aapi-coalition-preferences">
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="bubble" data-run="diverse-aapi-coalition-preferences"></div>
+                  </div>
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="histogram" data-run="diverse-aapi-coalition-preferences"></div>
+                  </div>
+                </div>
+                <div data-all-groups="diverse-aapi-coalition-preferences" hidden>
+                  <div class="chart" data-chart="slate" data-run="diverse-aapi-coalition-preferences"></div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="diverse-aapi-coalition-preferences-availability" role="tabpanel">
+                <div class="metric-toggles" data-metric="diverse-aapi-coalition-preferences"></div>
+                <div class="chart" data-chart="availability" data-run="diverse-aapi-coalition-preferences"></div>
+              </div>
+            </div>
+            </div>
+            <aside class="run-params" data-params="diverse-aapi-coalition-preferences"></aside>
+          </section>
+          <section id="run-low-aapi-availability" class="run mb-5" data-run="low-aapi-availability">
+            <div class="run-main">
+            <h3 class="h4 mt-4">Low AAPI Availability</h3>
+            <p class="run-meta" data-run-meta="low-aapi-availability"></p>
+
+            <div class="run-controls" data-controls="low-aapi-availability"></div>
+
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="tab"
+                        data-bs-target="#low-aapi-availability-focal" type="button" role="tab">
+                  Seat outcomes
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab"
+                        data-bs-target="#low-aapi-availability-availability" type="button" role="tab">
+                  Districts by VAP rank
+                </button>
+              </li>
+            </ul>
+            <div class="tab-content pt-3">
+              <div class="tab-pane fade show active" id="low-aapi-availability-focal" role="tabpanel">
+                <div class="metric-toggles" data-view="low-aapi-availability"></div>
+                <div class="row g-4 figure-pair" data-one-group="low-aapi-availability">
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="bubble" data-run="low-aapi-availability"></div>
+                  </div>
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="histogram" data-run="low-aapi-availability"></div>
+                  </div>
+                </div>
+                <div data-all-groups="low-aapi-availability" hidden>
+                  <div class="chart" data-chart="slate" data-run="low-aapi-availability"></div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="low-aapi-availability-availability" role="tabpanel">
+                <div class="metric-toggles" data-metric="low-aapi-availability"></div>
+                <div class="chart" data-chart="availability" data-run="low-aapi-availability"></div>
+              </div>
+            </div>
+            </div>
+            <aside class="run-params" data-params="low-aapi-availability"></aside>
+          </section>
+          <section id="run-low-aapi-turnout" class="run mb-5" data-run="low-aapi-turnout">
+            <div class="run-main">
+            <h3 class="h4 mt-4">Low AAPI Turnout</h3>
+            <p class="run-meta" data-run-meta="low-aapi-turnout"></p>
+
+            <div class="run-controls" data-controls="low-aapi-turnout"></div>
+
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="tab"
+                        data-bs-target="#low-aapi-turnout-focal" type="button" role="tab">
+                  Seat outcomes
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab"
+                        data-bs-target="#low-aapi-turnout-availability" type="button" role="tab">
+                  Districts by VAP rank
+                </button>
+              </li>
+            </ul>
+            <div class="tab-content pt-3">
+              <div class="tab-pane fade show active" id="low-aapi-turnout-focal" role="tabpanel">
+                <div class="metric-toggles" data-view="low-aapi-turnout"></div>
+                <div class="row g-4 figure-pair" data-one-group="low-aapi-turnout">
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="bubble" data-run="low-aapi-turnout"></div>
+                  </div>
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="histogram" data-run="low-aapi-turnout"></div>
+                  </div>
+                </div>
+                <div data-all-groups="low-aapi-turnout" hidden>
+                  <div class="chart" data-chart="slate" data-run="low-aapi-turnout"></div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="low-aapi-turnout-availability" role="tabpanel">
+                <div class="metric-toggles" data-metric="low-aapi-turnout"></div>
+                <div class="chart" data-chart="availability" data-run="low-aapi-turnout"></div>
+              </div>
+            </div>
+            </div>
+            <aside class="run-params" data-params="low-aapi-turnout"></aside>
+          </section>
+        </section>
+
+        <section id="comparison" class="mb-5">
+          <h2>Cross-run comparison</h2>
+          <div class="run-controls" data-controls="crossrun"></div>
+          <div class="chart" data-chart="crossrun"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <footer class="py-4 mt-5 border-top">
+    <div class="container-xl text-center">
+      <p class="mb-1">Metric Geometry &amp; Gerrymandering Group — San Diego City Council Election Analysis</p>
+      <p class="mb-1"><a href="https://github.com/mggg/San-Diego-Election-Analysis" target="_blank" rel="noopener">View the repository on GitHub</a></p>
+      <p class="generated mb-0">Generated 2026-08-07T20:54:50+00:00</p>
+    </div>
+  </footer>
+
+  <script>
+    if (location.protocol === 'file:') {
+      document.querySelectorAll('.chart').forEach(function (node) {
+        node.innerHTML = '<p class="chart-empty">This page is being opened from a file rather than '
+          + 'served, so the browser is blocking the scripts and data it needs. Run '
+          + '<code>uv run python -m http.server -d docs 8000</code> and open '
+          + '<a href="http://localhost:8000">localhost:8000</a> (with a network '
+          + 'connection: Bootstrap and D3 load from a CDN).</p>';
+      });
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js" integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i"
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script type="importmap">{
+ "imports": {
+  "./js/charts/availability.js": "./js/charts/availability.js?v=7b49a6d8c5",
+  "./js/charts/axes.js": "./js/charts/axes.js?v=7b49a6d8c5",
+  "./js/charts/bubble.js": "./js/charts/bubble.js?v=7b49a6d8c5",
+  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=7b49a6d8c5",
+  "./js/charts/histogram.js": "./js/charts/histogram.js?v=7b49a6d8c5",
+  "./js/charts/slate.js": "./js/charts/slate.js?v=7b49a6d8c5",
+  "./js/report.js": "./js/report.js?v=7b49a6d8c5"
+ }
+}</script>
+  <script type="module" src="js/report.js?v=7b49a6d8c5"></script>
+</body>
+</html>

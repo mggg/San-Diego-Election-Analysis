@@ -1,0 +1,479 @@
+/*
+  City of San Diego palette -- the same colors the figures are drawn in, so a
+  chart on this page and its PNG counterpart read as one system.
+
+  The gold sits at 1.47:1 against white, so it never carries text or acts as a
+  lone indicator: it marks accents and rules that already have a dark partner.
+*/
+:root {
+  --sd-red: #aa0000;        /* "Deliberative" bars; headings, links */
+  --sd-red-dark: #7a0000;   /* navbar, hero, hover */
+  --sd-gold: #ffcc00;       /* "Impulsive" bars; accents only */
+  --sd-gold-soft: #fdf3d4;  /* pale wash for open panels */
+  --sd-ink: #52514e;        /* bar edges, reference lines, body ink */
+  --sd-gray: #6b6963;       /* captions and muted text (5.3:1 on white) */
+  --sd-gray-light: #cfccc4; /* hairlines */
+  --sd-light: #f8f7f4;      /* warm off-white panel fill */
+  --bs-link-color: var(--sd-red);
+  --bs-link-hover-color: var(--sd-red-dark);
+}
+
+body {
+  font-family: "Source Serif Pro", Georgia, serif;
+  color: #23211d;
+  scroll-behavior: smooth;
+}
+
+h1, h2, h3, h4, h5, h6, .navbar-brand {
+  font-family: "Playfair Display", Georgia, serif;
+  color: var(--sd-red);
+}
+
+a { color: var(--sd-red); }
+a:hover { color: var(--sd-red-dark); }
+
+.navbar-sd { background-color: var(--sd-red-dark); }
+.navbar-sd .navbar-brand,
+.navbar-sd .nav-link { color: #fff; }
+.navbar-sd .nav-link:hover,
+.navbar-sd .nav-link.active { color: var(--sd-gold); }
+
+.hero {
+  background: linear-gradient(135deg, var(--sd-ink) 0%, var(--sd-red-dark) 45%, var(--sd-red) 100%);
+  color: #fff;
+  border-bottom: 4px solid var(--sd-gold);
+}
+.hero h1 { color: #fff; }
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: .8rem;
+  color: var(--sd-gold);
+}
+
+/* Hairline under each section head with a short gold tab -- a full-width gold
+   rule repeated down the page shouts; this keeps the accent. */
+section > h2 {
+  position: relative;
+  border-bottom: 1px solid var(--sd-gray-light);
+  padding-bottom: .3rem;
+  margin-bottom: 1rem;
+}
+section > h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 3rem;
+  height: 3px;
+  background: var(--sd-gold);
+}
+section { scroll-margin-top: 70px; padding-top: .5rem; }
+
+/*
+ * A run and its parameters, side by side.
+ *
+ * The aside is sticky *within its own section*, which is the whole behaviour:
+ * it starts level with the run's heading, follows the reader down the figures,
+ * and is released when the section ends and the next run's table takes over.
+ * `align-self: start` is what makes that work -- a stretched grid item fills the
+ * row and has no space left to move within.
+ */
+.run {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 15rem;
+  gap: 1.75rem;
+  align-items: start;
+}
+.run-main { min-width: 0; }
+
+.run-params {
+  position: sticky;
+  top: 84px;
+  align-self: start;
+  margin-top: 2.4rem;      /* level with the run heading, which carries mt-4 */
+  padding: .7rem .8rem;
+  background: var(--sd-light);
+  border: 1px solid var(--sd-gray-light);
+  border-left: 3px solid var(--sd-gold);
+  border-radius: 3px;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: .72rem;
+  line-height: 1.35;
+  color: var(--sd-ink);
+}
+.params-title {
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--sd-gray);
+  margin: 0 0 .6rem;
+}
+/* Label and value on one line, so the table stays well short of the section it
+   has to travel within -- a table as tall as its section has nowhere to stick. */
+.params-list { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: .3rem .5rem; }
+.params-list > div { display: contents; }
+/* Same weight as .matrix-title: every label in the card is one kind of thing. */
+.params-list dt {
+  font-weight: 600;
+  color: var(--sd-gray);
+  white-space: nowrap;
+}
+.params-list dd { margin: 0; color: #23211d; overflow-wrap: anywhere; }
+
+/* Bloc-by-slate matrix: rows are voter blocs, columns the slates they support. */
+.params-matrix { margin-top: .7rem; }
+.matrix-title {
+  font-size: .7rem;
+  font-weight: 600;
+  color: var(--sd-gray);
+  margin-bottom: .25rem;
+}
+.params-matrix table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .66rem;
+  font-variant-numeric: tabular-nums;
+}
+.params-matrix th, .params-matrix td {
+  padding: .16rem .1rem;
+  text-align: right;
+  font-weight: 400;
+  border: 0;
+}
+.params-matrix thead th { color: var(--sd-gray); border-bottom: 1px solid var(--sd-gray-light); }
+.params-matrix tbody th { text-align: left; color: var(--sd-gray); padding-right: .3rem; }
+/* The diagonal is within-group cohesion, which is what these are read for. */
+.params-matrix td.own { font-weight: 600; color: #23211d; }
+.params-matrix td { color: var(--sd-ink); }
+
+/* No margin to put it in: the table goes back above the figures it describes. */
+@media (max-width: 991.98px) {
+  .run { display: block; }
+  .run-params { position: static; margin: 0 0 1.25rem; }
+}
+
+.toc {
+  position: sticky;
+  top: 80px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: .9rem;
+}
+.toc .nav-link {
+  padding: .15rem 0 .15rem .6rem;
+  color: var(--sd-gray);
+  border-left: 2px solid transparent;
+}
+.toc .nav-link:hover { color: var(--sd-red); }
+/* The red text and weight carry the active state; the gold rule is decorative. */
+.toc .nav-link.active { color: var(--sd-red); font-weight: 600; border-left-color: var(--sd-gold); }
+.toc .nav .nav-link { padding-left: 1rem; font-size: .78rem; line-height: 1.25; }
+.toc .nav-link { overflow-wrap: anywhere; }
+
+.nav-tabs .nav-link {
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: .9rem;
+  color: var(--sd-gray);
+  border: none;
+  border-bottom: 2px solid transparent;
+}
+.nav-tabs .nav-link:hover { color: var(--sd-red); border-bottom-color: rgba(170, 0, 0, .35); }
+.nav-tabs .nav-link.active {
+  color: var(--sd-red);
+  font-weight: 600;
+  background: transparent;
+  border-bottom: 3px solid var(--sd-gold);
+}
+
+/* --- Charts --------------------------------------------------------------- */
+
+/* The selection both of a run's figures are drawn from. It sits directly under
+   the run heading so it reads as belonging to the pair, not to one figure. */
+.run-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .75rem 1.5rem;
+  padding: .6rem .85rem;
+  margin-bottom: 1.25rem;
+  background: var(--sd-light);
+  border: 1px solid var(--sd-gray-light);
+  border-left: 3px solid var(--sd-gold);
+  border-radius: 3px;
+}
+/* A full-width line inside the control bar, so a group that should start a new
+   row always does rather than only when the one above it happens to fill up. */
+.run-controls .control-row {
+  flex: 0 0 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .6rem 1.5rem;
+}
+.run-controls .control-group { display: flex; align-items: center; gap: .5rem; }
+.run-controls .control-label {
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--sd-gray);
+  margin: 0;
+  white-space: nowrap;
+}
+/* The selects are controls, not prose: same face and size as the toggle pills
+   beside them, rather than inheriting the body serif. */
+.run-controls select,
+.run-controls select option {
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: .82rem;
+}
+.run-controls select { width: auto; min-width: 12rem; }
+.model-toggles { display: flex; flex-wrap: wrap; gap: .4rem; }
+.model-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: .82rem;
+  line-height: 1;
+  padding: .35rem .7rem;
+  border: 1px solid var(--sd-gray-light);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--sd-gray);
+  cursor: pointer;
+}
+.model-toggle:hover { border-color: var(--sd-ink); color: var(--sd-ink); }
+.model-toggle.on { border-color: var(--sd-ink); color: #23211d; font-weight: 600; }
+/* Off reads as drained rather than hidden: the swatch stays, its colour goes. */
+.model-toggle .swatch {
+  width: .8rem;
+  height: .8rem;
+  border: 1px solid var(--sd-ink);
+  display: inline-block;
+  border-radius: 2px;
+  filter: grayscale(1);
+  opacity: .35;
+}
+.model-toggle.on .swatch { filter: none; opacity: 1; }
+
+/* The two focal-group figures sit side by side above xl and stack below it,
+   where half a column is too narrow to read a panel in. Each column centres its
+   own figure so the pair reads as one row rather than two ragged charts. */
+.figure-pair > [class^="col"] { display: flex; flex-direction: column; justify-content: flex-start; }
+
+/* The cross-run picker: a chip per system on show, and one control to add the
+   next. Only what has been chosen takes up room. */
+.system-chips { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; }
+.system-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .25rem .3rem .25rem .7rem;
+  border: 1px solid var(--sd-ink);
+  border-radius: 999px;
+  background: #fff;
+  font-family: "Source Sans Pro", sans-serif;
+}
+.system-chip .chip-text { display: flex; flex-direction: column; line-height: 1.15; }
+.chip-run, .item-run { font-size: .68rem; color: var(--sd-gray); }
+.chip-system, .item-system { font-size: .8rem; font-weight: 600; color: #23211d; }
+.chip-remove {
+  border: 0;
+  background: transparent;
+  color: var(--sd-gray);
+  font-size: 1.05rem;
+  line-height: 1;
+  padding: 0 .3rem;
+  cursor: pointer;
+}
+.chip-remove:hover { color: var(--sd-red); }
+
+.add-system {
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: .82rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: .5rem .8rem;
+  border: 1px dashed var(--sd-gray-light);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--sd-gray);
+  cursor: pointer;
+}
+.add-system:hover, .add-system[aria-expanded="true"] {
+  border-color: var(--sd-red);
+  border-style: solid;
+  color: var(--sd-red);
+}
+.system-menu { max-height: 20rem; overflow-y: auto; }
+.system-menu .dropdown-item { display: flex; flex-direction: column; line-height: 1.2; }
+.system-menu .dropdown-item:active { background: var(--sd-gold-soft); }
+.system-menu .dropdown-item:active .chip-run,
+.system-menu .dropdown-item:active .item-run,
+.system-menu .dropdown-item:active .item-system { color: #23211d; }
+
+/* Two-line row labels in the cross-run figure: run above, system beneath. */
+.chart .row-run {
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 9.5px;
+  fill: var(--sd-gray);
+}
+.chart .row-system {
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  fill: #23211d;
+}
+
+/* The boxplot's own control, above the figure it governs. */
+.metric-toggles { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .9rem; }
+
+/* Box parts: the whiskers and caps are furniture, the fill carries the reading. */
+.chart .whisker, .chart .cap { stroke: var(--sd-ink); stroke-width: 1; }
+.chart .box-body { stroke: var(--sd-ink); stroke-width: .9; }
+.chart .median { stroke-width: 1.2; }
+.chart .outlier { fill: #898781; fill-opacity: .5; }
+.chart .mean-line { stroke: #0b0b0b; stroke-dasharray: 2 2; stroke-width: 1.2; }
+
+/* The boxplot key, above the figure: the colour ramp on the left, and the two
+   cases it cannot express boxed together on the right. The border is what says
+   those two are a legend rather than stray labels near a chart. */
+.box-key {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .75rem 1.5rem;
+  margin-bottom: .9rem;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: .8rem;
+  color: var(--sd-ink);
+}
+
+.box-key .key-box {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: .35rem;
+  padding: .5rem .65rem;
+  border: 1px solid var(--sd-gray-light);
+  border-radius: 3px;
+  background: #fff;
+}
+.box-key .key-item { display: flex; align-items: center; gap: .4rem; }
+.box-key .key-item .swatch { flex: 0 0 auto; }
+
+/* Title spanning the top, bar beneath it, the two end values under its ends. */
+.box-key .ramp-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: .2rem;
+  min-width: 9rem;
+}
+.box-key .ramp-title { grid-column: 1 / -1; }
+.box-key .ramp {
+  grid-column: 1 / -1;
+  height: .7rem;
+  border: 1px solid var(--sd-ink);
+}
+.box-key .ramp-min, .box-key .ramp-max {
+  font-variant-numeric: tabular-nums;
+  font-size: .75rem;
+  color: var(--sd-gray);
+}
+.box-key .ramp-max { text-align: right; }
+
+.chart { width: 100%; }
+.chart svg { width: 100%; height: auto; display: block; }
+.chart .panel-title {
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 11px;
+  fill: #23211d;
+}
+.chart .axis text { font-family: "Source Sans Pro", sans-serif; font-size: 10px; fill: var(--sd-ink); }
+.chart .axis-label { font-family: "Source Sans Pro", sans-serif; font-size: 10px; fill: var(--sd-ink); }
+.chart .axis path, .chart .axis line { stroke: var(--sd-gray-light); }
+.chart .gridline { stroke: #e9e7e1; stroke-width: 1; }
+.chart .reference-line { stroke: var(--sd-ink); stroke-dasharray: 2 2; stroke-width: 1.2; }
+/* BAR_ALPHA and linewidth=0.9 from summarize_results.py. The series overlap by
+   half a bar, so the fill is translucent to let the occluded one through; the
+   alpha is kept high, and paired with the dark edge, because the city gold loses
+   contrast fast as alpha drops. */
+.chart .bar { stroke: var(--sd-ink); stroke-width: .9; fill-opacity: .7; }
+.chart .bubble { stroke: #898781; stroke-width: .5; }
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: .8rem;
+  color: var(--sd-ink);
+  margin-top: .25rem;
+}
+.chart-legend .key { display: inline-flex; align-items: center; gap: .35rem; }
+.chart-legend .swatch,
+.box-key .swatch {
+  width: .9rem;
+  height: .9rem;
+  border: 1px solid var(--sd-ink);
+  display: inline-block;
+}
+.chart-legend .swatch.line,
+.box-key .swatch.line {
+  height: 0;
+  border: 0;
+  border-top: 2px dotted var(--sd-ink);
+  width: 1.4rem;
+}
+
+.chart-tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: rgba(35, 33, 29, .94);
+  color: #fff;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: .78rem;
+  padding: .35rem .5rem;
+  border-radius: 3px;
+  opacity: 0;
+  transition: opacity .12s ease;
+  z-index: 1080;
+  max-width: 16rem;
+}
+
+.chart-empty, .todo {
+  font-family: "Source Sans Pro", sans-serif;
+  font-style: italic;
+  font-size: .9rem;
+  color: var(--sd-gray);
+}
+
+.run-meta {
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: .85rem;
+  color: var(--sd-gray);
+}
+
+table { font-family: "Source Sans Pro", sans-serif; font-size: .9rem; }
+thead th {
+  background: var(--sd-light) !important;
+  color: var(--sd-red);
+  border-bottom-color: var(--sd-gray-light) !important;
+}
+tbody th { color: var(--sd-ink); }
+
+footer {
+  background: var(--sd-light);
+  font-family: "Source Sans Pro", sans-serif;
+  border-top: 3px solid var(--sd-gold) !important;
+}
+.generated { font-size: .8rem; color: var(--sd-gray); }
