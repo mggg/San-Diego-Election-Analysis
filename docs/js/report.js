@@ -33,17 +33,6 @@ const json = (path) => fetch(path).then((r) => {
   return r.json();
 });
 
-/** One line under each run heading: what was simulated, in the run's own terms. */
-function renderRunMeta(runMeta) {
-  const node = d3.select(`[data-run-meta="${runMeta.slug}"]`);
-  if (node.empty()) return;
-  const shapes = runMeta.districtConfigs
-    .map((dc) => `${dc.numDistricts} × ${dc.winners} (${dc.plans} plans, ${dc.systems.length} system${dc.systems.length === 1 ? '' : 's'})`)
-    .join('; ');
-  const models = runMeta.voterModels.filter((m) => !m.pooled).map((m) => m.label).join(' and ');
-  node.text(`${shapes} · ${models} voter models · ${runMeta.replicates} replicates · ${runMeta.proportionalLabel}`);
-}
-
 /**
  * The parameters this run was simulated under, in the margin beside its figures.
  *
@@ -410,7 +399,6 @@ async function mountRun(section, manifest, cache) {
   }
 
   const { runMeta } = bundle;
-  renderRunMeta(runMeta);
   renderRunParams(section, entry, runMeta, manifest);
 
   const systems = runMeta.districtConfigs.flatMap((dc) => dc.systems);

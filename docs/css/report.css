@@ -457,12 +457,6 @@ section { scroll-margin-top: 70px; padding-top: .5rem; }
   color: var(--sd-gray);
 }
 
-.run-meta {
-  font-family: "Source Sans Pro", sans-serif;
-  font-size: .85rem;
-  color: var(--sd-gray);
-}
-
 table { font-family: "Source Sans Pro", sans-serif; font-size: .9rem; }
 thead th {
   background: var(--sd-light) !important;
