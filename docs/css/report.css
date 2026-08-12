@@ -457,6 +457,15 @@ section { scroll-margin-top: 70px; padding-top: .5rem; }
   color: var(--sd-gray);
 }
 
+/* Matches .todo above so a run's description reads the same once it's
+   written as it did as a placeholder -- writing the prose shouldn't change
+   its weight on the page. */
+.run-prose {
+  font-style: italic;
+  font-size: .9rem;
+  color: var(--sd-gray);
+}
+
 /* Figures written into the prose, held to 80% of the column they sit in and
    centred there. A bound rather than a fixed width: the histogram is 2060px
    across and reads as "80% of the measure", while anything already narrower

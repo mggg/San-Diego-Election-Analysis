@@ -46,6 +46,11 @@ ARTIFACT_FILES = ("run.json", "focal_seats.json", "slate_seats.json")
 # run missing this publishes everything else rather than dropping off the page.
 OPTIONAL_ARTIFACT_FILES = ("availability.json",)
 
+# Runs kept out of the published report even though their artifacts are
+# complete. Excluded by slug rather than deleted from outputs/, so the
+# scenario stays reproducible if it's ever brought back.
+EXCLUDED_RUN_SLUGS = {"basic-3-x-3-truncation"}
+
 # Prose sections, in the order they appear on the page. Each is a file in
 # docs/prose/; a missing or empty one renders as a placeholder rather than
 # breaking the build, so the site is publishable before the writing is done.
@@ -142,6 +147,8 @@ def discover_runs(outputs_dir: Optional[Path] = None) -> List[Dict[str, Any]]:
         if not run_json.is_file():
             continue
         meta = load_json(run_json)
+        if meta.get("slug") in EXCLUDED_RUN_SLUGS:
+            continue
         if any(not (run_dir / name).is_file() for name in ARTIFACT_FILES):
             print(f"[report_generator] Skipping {meta.get('runName')}: incomplete artifacts.")
             continue

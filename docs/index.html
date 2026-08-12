@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+"
         crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="fonts/fonts.css">
-  <link rel="stylesheet" href="css/report.css?v=9bf79b8675">
+  <link rel="stylesheet" href="css/report.css?v=9d3946afb2">
 </head>
 
 <body data-bs-spy="scroll" data-bs-target="#toc-nav" data-bs-offset="90" tabindex="0">
@@ -29,8 +29,8 @@
           <li class="nav-item"><a class="nav-link" href="#background">Background</a></li>
           <li class="nav-item"><a class="nav-link" href="#methodology">Methodology</a></li>
           <li class="nav-item"><a class="nav-link" href="#conclusion">Conclusion</a></li>
-          <li class="nav-item"><a class="nav-link" href="#results">Results</a></li>
-          <li class="nav-item"><a class="nav-link" href="#comparison">Comparison</a></li>
+          <li class="nav-item"><a class="nav-link" href="#results">Electoral Scenarios and Results</a></li>
+          <li class="nav-item"><a class="nav-link" href="#comparison">Cross-Run Comparison</a></li>
           <li class="nav-item"><a class="nav-link" href="https://github.com/mggg/San-Diego-Election-Analysis" target="_blank" rel="noopener">GitHub ↗</a></li>
         </ul>
       </div>
@@ -52,15 +52,16 @@
           <a class="nav-link" href="#background">Background</a>
           <a class="nav-link" href="#methodology">Methodology</a>
           <a class="nav-link" href="#conclusion">Conclusion</a>
-          <a class="nav-link" href="#results">Results by run</a>
+          <a class="nav-link" href="#results">Results by Scenario</a>
           <nav class="nav flex-column">
             <a class="nav-link" href="#run-basic-3-x-3">Basic - 3 X 3</a>
             <a class="nav-link" href="#run-alternative-electoral-systems">Alternative Electoral Systems</a>
             <a class="nav-link" href="#run-diverse-aapi-coalition-preferences">Diverse AAPI Coalition Preferences</a>
             <a class="nav-link" href="#run-low-aapi-availability">Low AAPI Availability</a>
             <a class="nav-link" href="#run-low-aapi-turnout">Low AAPI Turnout</a>
+            <a class="nav-link" href="#run-nine-seats-at-large">Nine Seats At-Large</a>
           </nav>
-          <a class="nav-link" href="#comparison">Cross-run comparison</a>
+          <a class="nav-link" href="#comparison">Cross-Run Comparison</a>
         </nav>
       </div>
 
@@ -223,7 +224,7 @@ $$</div>
         </section>
 
         <section id="results" class="mb-5">
-          <h2>Results</h2>
+          <h2>Results by Scenario</h2>
 
           <section id="run-basic-3-x-3" class="run mb-5" data-run="basic-3-x-3">
             <div class="run-main">
@@ -450,10 +451,55 @@ $$</div>
             </div>
             <aside class="run-params" data-params="low-aapi-turnout"></aside>
           </section>
+          <section id="run-nine-seats-at-large" class="run mb-5" data-run="nine-seats-at-large">
+            <div class="run-main">
+            <h3 class="h4 mt-4">Nine Seats At-Large</h3>
+            <div class="run-prose"><p>This scenario explores the expected outcome of maintaining the same number of city council seats but removing districts entirely - holding at-large elections for city council members.</p>
+</div>
+
+            <div class="run-controls" data-controls="nine-seats-at-large"></div>
+
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="tab"
+                        data-bs-target="#nine-seats-at-large-focal" type="button" role="tab">
+                  Seat outcomes
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab"
+                        data-bs-target="#nine-seats-at-large-availability" type="button" role="tab">
+                  Districts by VAP rank
+                </button>
+              </li>
+            </ul>
+            <div class="tab-content pt-3">
+              <div class="tab-pane fade show active" id="nine-seats-at-large-focal" role="tabpanel">
+                <div class="metric-toggles" data-view="nine-seats-at-large"></div>
+                <div class="row g-4 figure-pair" data-one-group="nine-seats-at-large">
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="bubble" data-run="nine-seats-at-large"></div>
+                  </div>
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="histogram" data-run="nine-seats-at-large"></div>
+                  </div>
+                </div>
+                <div data-all-groups="nine-seats-at-large" hidden>
+                  <div class="chart" data-chart="slate" data-run="nine-seats-at-large"></div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="nine-seats-at-large-availability" role="tabpanel">
+                <div class="metric-toggles" data-metric="nine-seats-at-large"></div>
+                <div class="chart" data-chart="availability" data-run="nine-seats-at-large"></div>
+              </div>
+            </div>
+            </div>
+            <aside class="run-params" data-params="nine-seats-at-large"></aside>
+          </section>
         </section>
 
         <section id="comparison" class="mb-5">
-          <h2>Cross-run comparison</h2>
+          <h2>Cross-Run Comparison</h2>
           <div class="run-controls" data-controls="crossrun"></div>
           <div class="chart" data-chart="crossrun"></div>
         </section>
@@ -465,7 +511,7 @@ $$</div>
     <div class="container-xl text-center">
       <p class="mb-1">Metric Geometry &amp; Gerrymandering Group — San Diego City Council Election Analysis</p>
       <p class="mb-1"><a href="https://github.com/mggg/San-Diego-Election-Analysis" target="_blank" rel="noopener">View the repository on GitHub</a></p>
-      <p class="generated mb-0">Generated 2026-08-12T19:13:37+00:00</p>
+      <p class="generated mb-0">Generated 2026-08-12T19:28:24+00:00</p>
     </div>
   </footer>
 
@@ -498,15 +544,15 @@ $$</div>
 
   <script type="importmap">{
  "imports": {
-  "./js/charts/availability.js": "./js/charts/availability.js?v=9bf79b8675",
-  "./js/charts/axes.js": "./js/charts/axes.js?v=9bf79b8675",
-  "./js/charts/bubble.js": "./js/charts/bubble.js?v=9bf79b8675",
-  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=9bf79b8675",
-  "./js/charts/histogram.js": "./js/charts/histogram.js?v=9bf79b8675",
-  "./js/charts/slate.js": "./js/charts/slate.js?v=9bf79b8675",
-  "./js/report.js": "./js/report.js?v=9bf79b8675"
+  "./js/charts/availability.js": "./js/charts/availability.js?v=9d3946afb2",
+  "./js/charts/axes.js": "./js/charts/axes.js?v=9d3946afb2",
+  "./js/charts/bubble.js": "./js/charts/bubble.js?v=9d3946afb2",
+  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=9d3946afb2",
+  "./js/charts/histogram.js": "./js/charts/histogram.js?v=9d3946afb2",
+  "./js/charts/slate.js": "./js/charts/slate.js?v=9d3946afb2",
+  "./js/report.js": "./js/report.js?v=9d3946afb2"
  }
 }</script>
-  <script type="module" src="js/report.js?v=9bf79b8675"></script>
+  <script type="module" src="js/report.js?v=9d3946afb2"></script>
 </body>
 </html>

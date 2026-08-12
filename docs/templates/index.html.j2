@@ -35,8 +35,8 @@
           {% for id in prose_order %}
           <li class="nav-item"><a class="nav-link" href="#{{ id }}">{{ prose[id].title }}</a></li>
           {% endfor %}
-          <li class="nav-item"><a class="nav-link" href="#results">Results</a></li>
-          <li class="nav-item"><a class="nav-link" href="#comparison">Comparison</a></li>
+          <li class="nav-item"><a class="nav-link" href="#results">Electoral Scenarios and Results</a></li>
+          <li class="nav-item"><a class="nav-link" href="#comparison">Cross-Run Comparison</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ repo_url }}" target="_blank" rel="noopener">GitHub ↗</a></li>
         </ul>
       </div>
@@ -57,13 +57,13 @@
           {% for id in prose_order %}
           <a class="nav-link" href="#{{ id }}">{{ prose[id].title }}</a>
           {% endfor %}
-          <a class="nav-link" href="#results">Results by run</a>
+          <a class="nav-link" href="#results">Results by Scenario</a>
           <nav class="nav flex-column">
             {% for run in runs %}
             <a class="nav-link" href="#run-{{ run.slug }}">{{ run.name }}</a>
             {% endfor %}
           </nav>
-          <a class="nav-link" href="#comparison">Cross-run comparison</a>
+          <a class="nav-link" href="#comparison">Cross-Run Comparison</a>
         </nav>
       </div>
 
@@ -81,7 +81,7 @@
         {% endfor %}
 
         <section id="results" class="mb-5">
-          <h2>Results</h2>
+          <h2>Results by Scenario</h2>
           {% if not runs %}
           <p class="todo">No completed runs yet. Run the pipeline, then rebuild this page.</p>
           {% endif %}
@@ -150,7 +150,7 @@
         </section>
 
         <section id="comparison" class="mb-5">
-          <h2>Cross-run comparison</h2>
+          <h2>Cross-Run Comparison</h2>
           {# Populated from manifest.crossRun; each toggle adds or removes a row. #}
           <div class="run-controls" data-controls="crossrun"></div>
           <div class="chart" data-chart="crossrun"></div>

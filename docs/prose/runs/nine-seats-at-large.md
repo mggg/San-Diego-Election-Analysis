@@ -1,0 +1,1 @@
+This scenario explores the expected outcome of maintaining the same number of city council seats but removing districts entirely - holding at-large elections for city council members. 
