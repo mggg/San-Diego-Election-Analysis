@@ -457,6 +457,23 @@ section { scroll-margin-top: 70px; padding-top: .5rem; }
   color: var(--sd-gray);
 }
 
+/* Figures written into the prose, held to 80% of the column they sit in and
+   centred there. A bound rather than a fixed width: the histogram is 2060px
+   across and reads as "80% of the measure", while anything already narrower
+   than that keeps its own size instead of being blown up past its pixels. */
+.prose img,
+.run-prose img {
+  display: block;
+  max-width: 80%;
+  height: auto;
+  margin: 1.25rem auto;
+}
+
+/* Display math sits alone in the measure the way a figure does; inline math
+   inherits the prose size so it doesn't tower over the sentence holding it. */
+.katex-display { margin: 1.25rem 0; }
+.katex { font-size: 1.05em; }
+
 table { font-family: "Source Sans Pro", sans-serif; font-size: .9rem; }
 thead th {
   background: var(--sd-light) !important;

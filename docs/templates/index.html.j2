@@ -69,7 +69,7 @@
 
       <main class="col-lg-10">
         {% for id in prose_order %}
-        <section id="{{ id }}" class="mb-5">
+        <section id="{{ id }}" class="prose mb-5">
           <h2>{{ prose[id].title }}</h2>
           {% if prose[id].html %}
           {{ prose[id].html }}
@@ -188,6 +188,18 @@
   <script src="{{ asset.url }}" integrity="{{ asset.integrity }}"
           crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   {% endfor %}
+  {# Typeset only the fragments mistune's math plugin wrapped in .math, so a "$"
+     written anywhere else in the prose is never mistaken for a delimiter. Runs
+     after the CDN scripts above, which it depends on, and no-ops when they are
+     blocked -- the page still reads, with the TeX left as source. #}
+  <script>
+    if (typeof renderMathInElement === "function") {
+      document.querySelectorAll(".math").forEach(function (el) {
+        renderMathInElement(el, { throwOnError: false });
+      });
+    }
+  </script>
+
   {# Pins the whole module graph to one build -- see _import_map. Must precede
      the first module load. #}
   <script type="importmap">{{ import_map | safe }}</script>

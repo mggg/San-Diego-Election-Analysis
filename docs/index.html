@@ -8,8 +8,10 @@
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
         crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+"
+        crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="fonts/fonts.css">
-  <link rel="stylesheet" href="css/report.css?v=ab519efaa9">
+  <link rel="stylesheet" href="css/report.css?v=9bf79b8675">
 </head>
 
 <body data-bs-spy="scroll" data-bs-target="#toc-nav" data-bs-offset="90" tabindex="0">
@@ -52,6 +54,7 @@
           <a class="nav-link" href="#conclusion">Conclusion</a>
           <a class="nav-link" href="#results">Results by run</a>
           <nav class="nav flex-column">
+            <a class="nav-link" href="#run-basic-3-x-3">Basic - 3 X 3</a>
             <a class="nav-link" href="#run-alternative-electoral-systems">Alternative Electoral Systems</a>
             <a class="nav-link" href="#run-diverse-aapi-coalition-preferences">Diverse AAPI Coalition Preferences</a>
             <a class="nav-link" href="#run-low-aapi-availability">Low AAPI Availability</a>
@@ -62,21 +65,21 @@
       </div>
 
       <main class="col-lg-10">
-        <section id="abstract" class="mb-5">
+        <section id="abstract" class="prose mb-5">
           <h2>Abstract</h2>
           <p>We analyze geography, demographics, and voting patterns in San Diego, CA in order to compare
 the likely performance of various systems of electing members of the City Council.
 This report seeks to work with the most recent demographic data from 2020 Census, new election systems, the introduction of score-based voting, and more refined techniques. We will additionally be examining the impacts of the included reform proposals on representation for Asian voters, a community that represents 20% of the voting age population in the city.</p>
 
         </section>
-        <section id="background" class="mb-5">
+        <section id="background" class="prose mb-5">
           <h2>Background</h2>
           <p>In 2011, San Diego City proposed for the first time a 9-district plan with one single member district representation (&quot;<a href="https://en.wikipedia.org/wiki/2012_San_Diego_elections">2012 San Diego elections</a>,&quot; <em>Wikipedia</em>; &quot;<a href="https://voiceofsandiego.org/2021/12/29/after-redistricting-advocates-argue-for-more-council-districts-or-none-at-all/">After Redistricting, Advocates Argue for More Districts. Or None At All.</a>,&quot; <em>Voice of San Diego</em>, Feb. 23, 2022). Since then the city has kept the 9 single-member council districts and has gone through a redistricting process in 2021 using the 2020 Census (&quot;<a href="https://www.sandiego.gov/redistricting-commission">Redistricting Commission</a>,&quot; City of San Diego; &quot;<a href="https://www.kpbs.org/news/midday-edition/2021/12/16/san-diego-finalizes-new-map-of-city-council-districts">San Diego finalizes new map of City Council districts</a>,&quot; <em>KPBS</em>, Dec. 17, 2021). On the other hand, San Diego has staggered elections with a 4-year cycle--even districts (2, 4, 6, 8) in one cycle, odd districts (1, 3, 5, 7, 9) in the next. Additionally, the city uses a two-round system with a primary held in June followed by a runoff in November between the top-two candidates in each district.</p>
 <p>It is valid to state that this redistricting process, like every one since the City Charter created the independent Redistricting Commission in 1992, was carried out by that independent commission rather than the city council (&quot;<a href="https://docs.sandiego.gov/citycharter/Article%20II.pdf">City Charter, Article II</a>,&quot; §§5-5.1; &quot;<a href="https://www.sandiego.gov/redistricting-commission">Redistricting Commission</a>,&quot; City of San Diego). Based on that, it is interesting to analyze how proportionality has been affected or improved for all communities.  While White and Hispanic voters seem to achieve at least proportional representation regularly, the Asian population seems to be growing, yet they are still consistently underrepresented within city government. Black voters see consistent representation from their preferred candidates over time - primarily within District 4.</p>
 <p>This report employs new and updated tools like GerryChain and VoteKit in order to simulate a variety of electoral systems and scenarios. Primarily, we look at simulations of multi-member districts elected by Single Transferable Vote (STV), low target-bloc turnouts, and Cambridge Ballot truncation.</p>
 
         </section>
-        <section id="methodology" class="mb-5">
+        <section id="methodology" class="prose mb-5">
           <h2>Methodology</h2>
           <h2>3.1 Districting Plan Ensembles</h2>
 <p>To generate a sufficient number of distinct districting plans, we use GerryChain to run a 10,000-step ReCom chain and subsample 100 plans that will be used in our election simulations. We do this a total of two times — once for each of the following configurations:</p>
@@ -90,16 +93,20 @@ This report seeks to work with the most recent demographic data from 2020 Census
 <h2>3.3 Candidate Availability and Pool Size</h2>
 <p>The decision to simulate candidate availability per-district for each voting bloc relies on evidence found from previous Sand Diego City council elections. For instance, the last three San Diego City Council Elections had a pattern where candidates representing the Asian and Black community run only in the districts where their own community makes up a larger share of voters across districts (<a href="https://en.wikipedia.org/wiki/2020_San_Diego_elections">2020</a>, <a href="https://en.wikipedia.org/wiki/2022_San_Diego_City_Council_election">2022</a>, <a href="https://en.wikipedia.org/wiki/2024_San_Diego_elections">2024</a>). Analyzing the bloc distribution of San Diego 9-district plan, District 4 and 6 have the highest shares of Black and Asian communities, respectively, and candidates running in those district are predominantly from those same communitities. Likewise, it is not common to find candidates from Asian and Black running on districts with a low share of their own communities.</p>
 <p>Similarly, evidence suggest that the number of candidate or pool size that runs for each district is not homogenous. Last 20 years of elections, the distribution of candidates running per district is diverse. On primaries, the average number of candidate is 3.5, where there has been districts bellow the mean with only 1 candidate running and districts above with 9 candidates.</p>
-<p><img src="../assets/candidate_count_histogram.png" alt="Histogram" /></p>
+<p><img src="assets/candidate_count_histogram.png" alt="Histogram" /></p>
 <p>Based on the previous analysis, we endogenous determine the pool size and the candidate availability per slate as variables for each district and plan.</p>
-<p>To model the pool size we assume the number of candidates ($m$) behaves as a Binomial Distribution with a floor set as the number of winner per district plus one. The floor $k + 1$ ensures that we never have a scenario where the number of winners is equal to the number of running candidates as they will automatically will declare as winners.</p>
-<p>$$m = k + 1 + x $$</p>
-<p>The binomial distribution takes two parameters as inputs: $n$ and $p$.</p>
-<p>$$ x ~ \sim \text{Binomial}(n, p)$$</p>
+<p>To model the pool size we assume the number of candidates (<span class="math">\(m\)</span>) behaves as a Binomial Distribution with a floor set as the number of winner per district plus one. The floor <span class="math">\(k + 1\)</span> ensures that we never have a scenario where the number of winners is equal to the number of running candidates as they will automatically will declare as winners.</p>
+<div class="math">$$
+m = k + 1 + x 
+$$</div>
+<p>The binomial distribution takes two parameters as inputs: <span class="math">\(n\)</span> and <span class="math">\(p\)</span>.</p>
+<div class="math">$$
+ x ~ \sim \text{Binomial}(n, p)
+$$</div>
 <p>Where:</p>
-<p>$k: \text{Number of winners per district}$</p>
-<p>$n =  \text{Maximun Number of candidate per district} - \text{Minimun Number of candidate per district} $</p>
-<p>$p =  \frac{E(m)-  (k + 1)}{n}$</p>
+<p><span class="math">\(k: \text{Number of winners per district}\)</span></p>
+<p><span class="math">\(n =  \text{Maximun Number of candidate per district} - \text{Minimun Number of candidate per district} \)</span></p>
+<p><span class="math">\(p =  \frac{E(m)-  (k + 1)}{n}\)</span></p>
 <p>Finally, we make an assumption that the racial composition of the slate pool will be roughly proportional to that of the VAP in each district. We use the bloc proportions to create an interval, with the intent of sampling candidates of different slates from it. However, before we do we first square each element, normalizing the “squared interval” over the sum of the squared values. This creates an “exaggeration” effect when we sample slate candidates. In other words, if a district has a large Black VAP, it's even more likely that the Black voter-preferred slate of candidates will be larger than the others. Similarly, if the Asian VAP is small it's much less likely that the Asian voter-preferred slate will have many candidates — if any, since we allow for slates to be empty. This is intended to model how community dynamics, segregation, or lack of institutional support may impact candidate availability across geography with respect to race. Finally, we modeled one scenario with a &quot;cubic interval&quot; for sensitivy results to increase the original scenario.</p>
 <h2>3.4 Voter Profile and Ballot Generation</h2>
 <p>For each district in all 50 district plans of our ensemble, we generate voter preference profiles — a collection of ballots from voters that rank available candidates. These rankings are determined by using VoteKit's Plackett-Luce and Bradley-Terry ballot generators, which model impulsive voter behavior and deliberative voter behavior, respectively. Each assumes that each voter bloc has a preference interval for each slate of candidates, along with a tuple of cohesion parameters — one parameter for each slate.</p>
@@ -202,14 +209,14 @@ This report seeks to work with the most recent demographic data from 2020 Census
   <td><strong>Two-round rules</strong> (Alaska- and Top-Two-style)</td>
   <td>9 × 1</td>
   <td>1 (single-winner)</td>
-  <td>A PSMD primary narrows the field to a fixed number of finalists ($m_1$ = 4 for the Alaska-style rule, 2 for the Top-Two-style rule), a new ballot profile is resampled over just those finalists, and the general round decides the winner via STV (Alaska-style) or Plurality (Top-Two-style).</td>
+  <td>A PSMD primary narrows the field to a fixed number of finalists (<span class="math">\(m_1\)</span> = 4 for the Alaska-style rule, 2 for the Top-Two-style rule), a new ballot profile is resampled over just those finalists, and the general round decides the winner via STV (Alaska-style) or Plurality (Top-Two-style).</td>
 </tr>
 </tbody>
 </table>
 <p>For each system, tiebreaks are performed randomly when needed.</p>
 
         </section>
-        <section id="conclusion" class="mb-5">
+        <section id="conclusion" class="prose mb-5">
           <h2>Conclusion</h2>
           <p class="todo">[Conclusion to be written — edit
              <code>docs/prose/conclusion.md</code>.]</p>
@@ -218,6 +225,51 @@ This report seeks to work with the most recent demographic data from 2020 Census
         <section id="results" class="mb-5">
           <h2>Results</h2>
 
+          <section id="run-basic-3-x-3" class="run mb-5" data-run="basic-3-x-3">
+            <div class="run-main">
+            <h3 class="h4 mt-4">Basic - 3 X 3</h3>
+            <div class="run-prose"><p>We explore the result of 3 X 3 STV, Cumlative, and Limited election systems. STV uses the deliberative and impulsive models (representing 3000 elections each) while Cumulative and Limited use the &quot;Name Cumulative&quot; model that allows for voters to &quot;plump&quot; their votes on preferred candidates.</p>
+</div>
+
+            <div class="run-controls" data-controls="basic-3-x-3"></div>
+
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="tab"
+                        data-bs-target="#basic-3-x-3-focal" type="button" role="tab">
+                  Seat outcomes
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab"
+                        data-bs-target="#basic-3-x-3-availability" type="button" role="tab">
+                  Districts by VAP rank
+                </button>
+              </li>
+            </ul>
+            <div class="tab-content pt-3">
+              <div class="tab-pane fade show active" id="basic-3-x-3-focal" role="tabpanel">
+                <div class="metric-toggles" data-view="basic-3-x-3"></div>
+                <div class="row g-4 figure-pair" data-one-group="basic-3-x-3">
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="bubble" data-run="basic-3-x-3"></div>
+                  </div>
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="histogram" data-run="basic-3-x-3"></div>
+                  </div>
+                </div>
+                <div data-all-groups="basic-3-x-3" hidden>
+                  <div class="chart" data-chart="slate" data-run="basic-3-x-3"></div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="basic-3-x-3-availability" role="tabpanel">
+                <div class="metric-toggles" data-metric="basic-3-x-3"></div>
+                <div class="chart" data-chart="availability" data-run="basic-3-x-3"></div>
+              </div>
+            </div>
+            </div>
+            <aside class="run-params" data-params="basic-3-x-3"></aside>
+          </section>
           <section id="run-alternative-electoral-systems" class="run mb-5" data-run="alternative-electoral-systems">
             <div class="run-main">
             <h3 class="h4 mt-4">Alternative Electoral Systems</h3>
@@ -413,7 +465,7 @@ This report seeks to work with the most recent demographic data from 2020 Census
     <div class="container-xl text-center">
       <p class="mb-1">Metric Geometry &amp; Gerrymandering Group — San Diego City Council Election Analysis</p>
       <p class="mb-1"><a href="https://github.com/mggg/San-Diego-Election-Analysis" target="_blank" rel="noopener">View the repository on GitHub</a></p>
-      <p class="generated mb-0">Generated 2026-08-11T18:44:59+00:00</p>
+      <p class="generated mb-0">Generated 2026-08-11T20:16:54+00:00</p>
     </div>
   </footer>
 
@@ -432,17 +484,29 @@ This report seeks to work with the most recent demographic data from 2020 Census
           crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js" integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i"
           crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg"
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk"
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    if (typeof renderMathInElement === "function") {
+      document.querySelectorAll(".math").forEach(function (el) {
+        renderMathInElement(el, { throwOnError: false });
+      });
+    }
+  </script>
+
   <script type="importmap">{
  "imports": {
-  "./js/charts/availability.js": "./js/charts/availability.js?v=ab519efaa9",
-  "./js/charts/axes.js": "./js/charts/axes.js?v=ab519efaa9",
-  "./js/charts/bubble.js": "./js/charts/bubble.js?v=ab519efaa9",
-  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=ab519efaa9",
-  "./js/charts/histogram.js": "./js/charts/histogram.js?v=ab519efaa9",
-  "./js/charts/slate.js": "./js/charts/slate.js?v=ab519efaa9",
-  "./js/report.js": "./js/report.js?v=ab519efaa9"
+  "./js/charts/availability.js": "./js/charts/availability.js?v=9bf79b8675",
+  "./js/charts/axes.js": "./js/charts/axes.js?v=9bf79b8675",
+  "./js/charts/bubble.js": "./js/charts/bubble.js?v=9bf79b8675",
+  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=9bf79b8675",
+  "./js/charts/histogram.js": "./js/charts/histogram.js?v=9bf79b8675",
+  "./js/charts/slate.js": "./js/charts/slate.js?v=9bf79b8675",
+  "./js/report.js": "./js/report.js?v=9bf79b8675"
  }
 }</script>
-  <script type="module" src="js/report.js?v=ab519efaa9"></script>
+  <script type="module" src="js/report.js?v=9bf79b8675"></script>
 </body>
 </html>

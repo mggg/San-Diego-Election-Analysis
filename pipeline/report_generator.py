@@ -57,7 +57,39 @@ PROSE_SECTIONS = [
 ]
 
 
-def _render_markdown(path: Path) -> str:
+def _rebase_relative_srcs(html: str, source_dir: Path, docs_dir: Path) -> str:
+    """
+    Rewrite relative image paths from prose-relative to index.html-relative.
+
+    A prose file links its images the way an editor's preview needs them --
+    ../assets/x.png from docs/prose/, ../../assets/x.png from docs/prose/runs/.
+    index.html sits at the root of docs/, so those same paths would climb out of
+    docs/ entirely and 404. Each one is resolved against the file it was written
+    in and re-expressed relative to docs/, which keeps the markdown previewable
+    and the built page correct.
+
+    Absolute URLs, root-relative paths, and data: URIs are left alone, as is
+    anything that genuinely resolves outside docs/ -- that is a broken link in
+    the prose, and rewriting it would only hide it.
+    """
+    import os
+
+    def rebase(match: re.Match) -> str:
+        src = match.group("src")
+        if re.match(r"^(?:[a-z][a-z0-9+.-]*:|//|/|#)", src, re.I):
+            return match.group(0)
+        resolved = (source_dir / src).resolve()
+        try:
+            relative = resolved.relative_to(docs_dir.resolve())
+        except ValueError:
+            print(f"[report_generator] warning: {source_dir.name} links outside docs/: {src}")
+            return match.group(0)
+        return f'{match.group("prefix")}{relative.as_posix().replace(os.sep, "/")}"'
+
+    return re.sub(r'(?P<prefix><img[^>]*?\ssrc=")(?P<src>[^"]*)"', rebase, html)
+
+
+def _render_markdown(path: Path, docs_dir: Path = DOCS_DIR) -> str:
     """One prose file as an HTML fragment, or "" when it has nothing in it yet."""
     if not path.is_file():
         return ""
@@ -66,7 +98,12 @@ def _render_markdown(path: Path) -> str:
         return ""
     import mistune
 
-    return mistune.create_markdown(plugins=["table", "footnotes"])(text)
+    # "math" only marks the delimiters it finds -- $$..$$ becomes <div class="math">
+    # and $..$ becomes <span class="math">, both left as literal TeX for KaTeX to
+    # typeset in the browser (see the render call in the template). Without it,
+    # markdown chews through the TeX itself: \sim and friends read as escapes.
+    html = mistune.create_markdown(plugins=["table", "footnotes", "math"])(text)
+    return _rebase_relative_srcs(html, path.parent, docs_dir)
 
 
 def _run_prose_path(docs_dir: Path, slug: str) -> Path:
@@ -384,13 +421,16 @@ def generate_report(docs_dir: Path = DOCS_DIR, config_dir: Optional[Path] = None
         json.dump(manifest, f, indent=1)
 
     prose = {
-        section["id"]: {**section, "html": _render_markdown(docs_dir / "prose" / section["file"])}
+        section["id"]: {
+            **section,
+            "html": _render_markdown(docs_dir / "prose" / section["file"], docs_dir),
+        }
         for section in PROSE_SECTIONS
     }
 
     _ensure_run_prose_stubs(docs_dir, runs)
     run_prose = {
-        meta["slug"]: _render_markdown(_run_prose_path(docs_dir, meta["slug"]))
+        meta["slug"]: _render_markdown(_run_prose_path(docs_dir, meta["slug"]), docs_dir)
         for meta in runs
     }
 
@@ -443,6 +483,15 @@ CDN_STYLESHEETS = [
         "url": "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css",
         "integrity": "sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH",
     },
+    # KaTeX typesets the prose's math in the browser. Unlike the other two CDN
+    # entries this stylesheet pulls its own woff2 files from jsDelivr as it
+    # renders, so the math fonts are the one asset on the page still fetched from
+    # a third party -- vendor_assets could take them local the way it does
+    # Google's if that matters more than the smaller build.
+    {
+        "url": "https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css",
+        "integrity": "sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+",
+    },
 ]
 
 CDN_SCRIPTS = [
@@ -453,6 +502,16 @@ CDN_SCRIPTS = [
     {
         "url": "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
         "integrity": "sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i",
+    },
+    {
+        "url": "https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js",
+        "integrity": "sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg",
+    },
+    # Finds the delimiters mistune left behind and hands what is between them to
+    # KaTeX; loads after katex.min.js, which it calls.
+    {
+        "url": "https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js",
+        "integrity": "sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk",
     },
 ]
 
