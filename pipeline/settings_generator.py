@@ -44,7 +44,14 @@ import geopandas as gpd
 from pathlib import Path
 import jsonlines as jl
 from tqdm import tqdm
-from pipeline.utils.helpers import load_run_config
+from pipeline.utils.helpers import (
+    load_run_config,
+    CANDIDATE_COUNT_KWARGS,
+    parse_district_configs,
+    match_hybrid_contests,
+    rule_seat_count,
+    slate_names,
+)
 
 
 # Default mapping from demographic-group label -> VAP column(s) in the geodata
@@ -80,7 +87,7 @@ def get_bloc_definitions(config):
     """
     if "blocs" in config:
         return {bloc: list(groups) for bloc, groups in config["blocs"].items()}
-    return {slate: [slate] for slate in config["slate_to_candidates"].keys()}
+    return {slate: [slate] for slate in slate_names(config)}
 
 
 def get_group_vap_columns(config, demographic_groups):
@@ -152,7 +159,7 @@ def _validate_bloc_config(config, bloc_definitions):
         KeyError: with a specific message if any bloc or slate entry is missing.
     """
     blocs = set(bloc_definitions)
-    slates = set(config["slate_to_candidates"])
+    slates = set(slate_names(config))
 
     missing_turnout = blocs - set(config["turnout"])
     if missing_turnout:
@@ -193,18 +200,14 @@ IMPLICIT_CANDIDATE_MINIMUMS = {
     "TopTwo": 2,
 }
 
-# Rule kwargs that name a candidate count the ballot must be able to supply.
-CANDIDATE_COUNT_KWARGS = ("n_seats", "m_1")
-
-
-def minimum_candidates(config) -> int:
+def minimum_candidates(config, rule: str | None = None) -> int:
     """
     Smallest ballot every configured election can actually be run on.
 
     A district's candidate count is drawn at random (see generate_settings), but
     a rule that cannot seat its winners raises rather than returning a result --
     votekit's "Not enough candidates received votes to be elected". So the draw
-    is floored here by the most demanding requirement in the run:
+    is floored here by the most demanding requirement:
 
     * each district config's `winners` (an election cannot fill more seats than
       it has candidates), and
@@ -214,17 +217,26 @@ def minimum_candidates(config) -> int:
 
     Args:
         config: Parsed config dict.
+        rule: When set (hybrid_election runs), floor using only this rule's own
+            requirement instead of pooling every rule configured in the run --
+            a hybrid entry's ballot never faces any rule but the one paired to
+            it, so it shouldn't be inflated by an unrelated contest's seat
+            count.
 
     Returns:
         The minimum number of candidates every district must put on the ballot.
     """
-    required = [int(d["winners"]) for d in config["district_configs"]]
-
-    for rule, kwargs in (config.get("voting_configs") or {}).items():
-        required.append(IMPLICIT_CANDIDATE_MINIMUMS.get(rule, 1))
-        for kwarg in CANDIDATE_COUNT_KWARGS:
-            if kwarg in kwargs:
-                required.append(int(kwargs[kwarg]))
+    voting_configs = config.get("voting_configs") or {}
+    if rule is not None:
+        kwargs = voting_configs[rule]
+        required = [rule_seat_count(kwargs), IMPLICIT_CANDIDATE_MINIMUMS.get(rule, 1)]
+    else:
+        required = [int(d["winners"]) for d in config["district_configs"]]
+        for r, kwargs in voting_configs.items():
+            required.append(IMPLICIT_CANDIDATE_MINIMUMS.get(r, 1))
+            for kwarg in CANDIDATE_COUNT_KWARGS:
+                if kwarg in kwargs:
+                    required.append(int(kwargs[kwarg]))
 
     # We set our minimum pool size for all elections to be one more than the
     # largest number of required candidates of the voting systems we're simulating
@@ -538,7 +550,7 @@ def generate_settings(config):
         g for groups in bloc_definitions.values() for g in groups
     ))
     group_columns = get_group_vap_columns(config, demographic_groups)
-    slate_columns = get_group_vap_columns(config, config["slate_to_candidates"].keys())
+    slate_columns = get_group_vap_columns(config, slate_names(config))
 
     population_data = gpd.read_file(config['geodata_path'])
     # group_columns / slate_columns map each label to a *list* of columns (a group
@@ -555,20 +567,35 @@ def generate_settings(config):
     num_subsamples = config['num_subsamples']
     subsample_interval = chain_length // num_subsamples
 
-    # Every district's ballot must be large enough for every configured rule.
-    candidate_floor = minimum_candidates(config)
-    print(f"[generate_settings] candidate floor for this run: {candidate_floor} "
-          f"(district winners and voting rules: {', '.join(config.get('voting_configs') or ['none'])})")
+    # In a hybrid_election run, every district_configs entry is paired to the
+    # one voting rule that fills its seat count (e.g. 9x1 <-> IRV, 1x6 <->
+    # FastSTV); candidate floors and modeled electorate size are then scoped
+    # to that pairing below instead of pooled across the whole run.
+    hybrid = bool(config.get("hybrid_election"))
+    parsed_district_configs = parse_district_configs(config["district_configs"])
+    hybrid_pairing = (
+        match_hybrid_contests(parsed_district_configs, config.get("voting_configs") or {})
+        if hybrid else {}
+    )
 
-    # pull only the relevant keys from config to pass downstream
-    # (slate_to_candidates, cohesion_parameters, and alphas are computed
-    # per-district below, not passed through as-is)
-    district_params = ['num_voters']
-    output_settings = {k:config[k] for k in config if k in district_params}
     run_name = config['run_name']
 
     for district_config in config['district_configs']:
         district_num, winners = district_config['num_districts'], district_config['winners']
+
+        # Every district's ballot must be large enough for the rule(s) it will
+        # actually face: in a hybrid run that's just this entry's matched rule,
+        # otherwise every rule configured in the run (since any of them may run
+        # against these districts -- see simulate_elections).
+        matched_rule = hybrid_pairing.get(winners) if hybrid else None
+        candidate_floor = minimum_candidates(config, rule=matched_rule)
+        rules_desc = matched_rule or ', '.join(config.get('voting_configs') or ['none'])
+        print(
+            f"[generate_settings] {district_num}x{winners}: candidate floor {candidate_floor} "
+            f"(voting rule(s): {rules_desc})"
+        )
+
+        output_settings = {"num_voters": config["num_voters"]}
 
         # Candidate pool size is drawn as floor + Binomial(n, p), with the range
         # and the mean coming from this district config: n spans floor..ceiling,

@@ -131,7 +131,9 @@ def load_run_config(config_path, project_path: Path = PROJECT_CONFIG_PATH) -> Di
     Returns:
         The merged config dict.
     """
-    return merge_configs(load_project_config(project_path), load_json(Path(config_path)))
+    config = merge_configs(load_project_config(project_path), load_json(Path(config_path)))
+    validate_total_seats(config)
+    return config
 
 
 # Voter models generated/simulated/summarized when a config does not specify its
@@ -276,6 +278,11 @@ def profiles_signature(config) -> str:
         )
         for d in (config.get("district_configs") or [])
     )
+    # hybrid_election changes profile content directly: it scopes the
+    # candidate floor to each entry's matched rule (minimum_candidates)
+    # instead of the whole run's largest requirement, so toggling it must
+    # invalidate previously-generated profiles.
+    subset["hybrid_election"] = bool(config.get("hybrid_election"))
     blob = json.dumps(subset, sort_keys=True, default=str)
     return hashlib.sha256(blob.encode()).hexdigest()[:16]
 
@@ -385,7 +392,7 @@ def election_results_signature(config) -> str:
     and so changes their winners.
     """
     return config_signature(
-        config, PROFILE_SIGNATURE_KEYS + ["voting_configs", "primary_turnout"]
+        config, PROFILE_SIGNATURE_KEYS + ["voting_configs", "primary_turnout", "hybrid_election"]
     )
 
 
@@ -436,6 +443,115 @@ def parse_district_configs(raw: Any) -> List[DistrictConfig]:
     return parsed
 
 
+def validate_total_seats(config: dict) -> None:
+    """
+    Check that total_seats equals the sum of every district_configs entry's
+    num_districts * winners, so a run's headline seat count can't silently
+    drift from what its district_configs actually produce (e.g. a hybrid run
+    that declares 15 seats but whose entries only add up to 9).
+
+    Args:
+        config: Parsed config dict.
+
+    Raises:
+        ValueError: If total_seats is set and doesn't match the computed sum.
+    """
+    expected = config.get("total_seats")
+    if expected is None or "district_configs" not in config:
+        return
+    district_configs = parse_district_configs(config["district_configs"])
+    total = sum(dc.num_districts * dc.winners for dc in district_configs)
+    if total != expected:
+        shape = ", ".join(f"{dc.num_districts}x{dc.winners}" for dc in district_configs)
+        raise ValueError(
+            f"total_seats ({expected}) does not match district_configs "
+            f"({shape} = {total} seat(s))."
+        )
+
+
+# Rule kwargs that name a candidate/seat count -- shared by minimum_candidates
+# (settings_generator) and rule_seat_count below.
+CANDIDATE_COUNT_KWARGS = ("n_seats", "m_1")
+
+# Keys marking a voting_configs entry as a two-round primary/general rule (see
+# pipeline.two_round_election.is_two_round). Duplicated here rather than
+# imported to avoid a circular import (two_round_election imports
+# settings_generator, which imports this module).
+_TWO_ROUND_KEYS = ("general_class", "round2_class")
+
+
+def rule_seat_count(kwargs: dict) -> int:
+    """
+    Number of seats a voting rule fills, read from its own kwargs.
+
+    Multi-winner rules state it explicitly (n_seats, or m_1 for the count
+    Alaska's primary advances); a rule with neither -- IRV, Plurality -- fills
+    exactly one seat.
+    """
+    for kwarg in CANDIDATE_COUNT_KWARGS:
+        if kwarg in kwargs:
+            return int(kwargs[kwarg])
+    return 1
+
+
+def match_hybrid_contests(
+    district_configs: List[DistrictConfig], voting_configs: dict
+) -> Dict[int, str]:
+    """
+    Pair each district_configs entry to the one voting_configs rule that fills
+    its seat count, for a hybrid_election run.
+
+    A hybrid run models several complementary contests at once -- e.g. 9
+    single-winner districts plus a 6-seat at-large block -- rather than several
+    alternative ways to fill the same seats, so every entry must resolve to
+    exactly one rule and every rule to exactly one entry. Matching is by seat
+    count (DistrictConfig.winners vs rule_seat_count), the one number both
+    sides already state, so no new pairing field is needed in the config.
+
+    Args:
+        district_configs: Parsed district_configs entries.
+        voting_configs: Mapping of rule name -> kwargs.
+
+    Returns:
+        Dict mapping each DistrictConfig.winners value to the rule name that
+        fills it.
+
+    Raises:
+        ValueError: If a two-round rule is configured (unsupported for hybrid
+            matching), a district_configs entry matches zero or multiple
+            rules, or a rule matches no entry.
+    """
+    two_round = [r for r, kw in voting_configs.items() if any(k in kw for k in _TWO_ROUND_KEYS)]
+    if two_round:
+        raise ValueError(
+            f"hybrid_election does not support two-round rules {two_round}; "
+            "use ordinary VoteKit rule names (IRV, FastSTV, ...) only."
+        )
+
+    by_winners: Dict[int, List[str]] = {}
+    for rule, kwargs in voting_configs.items():
+        by_winners.setdefault(rule_seat_count(kwargs), []).append(rule)
+
+    pairing: Dict[int, str] = {}
+    for dc in district_configs:
+        rules = by_winners.get(dc.winners, [])
+        if len(rules) != 1:
+            raise ValueError(
+                f"hybrid_election requires exactly one voting rule filling "
+                f"{dc.winners} seat(s) for the {dc.num_districts}x{dc.winners} "
+                f"district_configs entry; found {rules or 'none'}."
+            )
+        pairing[dc.winners] = rules[0]
+
+    unmatched_rules = sorted(set(voting_configs) - set(pairing.values()))
+    if unmatched_rules:
+        raise ValueError(
+            f"hybrid_election: voting rule(s) {unmatched_rules} don't match any "
+            "district_configs entry's winners count."
+        )
+    return pairing
+
+
 def parse_plan_district_rep_from_path(p: str | Path):
     """
     Parse the plan index, district id, and replicate number from a profile file path.
@@ -465,15 +581,49 @@ def parse_plan_district_rep_from_path(p: str | Path):
     return plan, district, rep
 
 
+def slate_names(config: dict) -> List[str]:
+    """
+    The candidate-slate labels this run uses.
+
+    Read from "slate_to_candidates" when a run sets one -- its candidate lists
+    are cosmetic (generate_settings replaces them per district, see
+    settings_generator._build_slate_to_candidates), but its keys name the
+    slates. Falls back to "blocs" when a run omits it, since every slate in
+    this repo is named after the same demographic group its bloc aggregates.
+
+    Args:
+        config: Parsed config dict.
+
+    Returns:
+        List of slate label strings.
+
+    Raises:
+        KeyError: If the config sets neither "slate_to_candidates" nor "blocs".
+    """
+    if config.get("slate_to_candidates"):
+        return list(config["slate_to_candidates"].keys())
+    if config.get("blocs"):
+        return list(config["blocs"].keys())
+    raise KeyError(
+        "config must set 'slate_to_candidates' (candidate-slate labels) or "
+        "'blocs' (voter-bloc labels, used as a fallback) -- neither is present."
+    )
+
+
 def is_focal_candidate(candidate: str, focal_group: str, slate_to_candidates: Dict[str, List[str]]) -> bool:
     """
     Check whether a candidate belongs to the focal group.
-    a candidate matches if they appear in the explicit slate list, or if the focal
-    group is a single character and the candidate id starts with that character.
+
+    A candidate matches if they appear in the explicit slate list, or if their
+    id starts with the focal group's name -- which is always true for the
+    candidates this run actually generates (settings_generator names every
+    district's candidates f"{slate}{i}", e.g. "AAPI1"), so this holds even
+    when slate_to_candidates is entirely unset. The explicit-list check exists
+    for a config that names its own candidates without that convention.
 
     Args:
         candidate: Candidate id string.
-        focal_group: Name of the focal group (e.g., "A").
+        focal_group: Name of the focal group (e.g., "AAPI").
         slate_to_candidates: Mapping from group name to list of candidate ids.
 
     Returns:
@@ -484,7 +634,7 @@ def is_focal_candidate(candidate: str, focal_group: str, slate_to_candidates: Di
 
     if c in focal_list:
         return True
-    if len(focal_group) == 1 and c.startswith(focal_group):
+    if c.startswith(focal_group):
         return True
     return False
 

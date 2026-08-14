@@ -2,13 +2,13 @@
   "run_name": "Nine Seats At-Large",
   "num_subsamples": 100,
   "candidate_geometric_p": 0.065,
-  "total_seats": 9,
+  "total_seats": 15,
   "district_configs": [
     {
       "num_districts": 1,
-      "winners": 9,
-      "candidate_pool_max": 20,
-      "candidate_pool_mean": 17
+      "winners": 15,
+      "candidate_pool_max": 25,
+      "candidate_pool_mean": 22
     }
   ],
   "voting_configs": {
@@ -46,12 +46,12 @@
     ]
   },
   "turnout": {
-    "AAPI": 0.75,
-    "BAIO": 1,
-    "HIS": 0.75,
+    "AAPI": 0.7,
+    "BAIO": 0.9,
+    "HIS": 0.6,
     "WHI": 1
   },
-  "num_voters": 10000,
+  "num_voters": 1000,
   "slate_to_candidates": {
     "WHI": [
       "WHI1",
@@ -82,10 +82,10 @@
       "BAIO": 0.05
     },
     "HIS": {
-      "WHI": 0.1,
+      "WHI": 0.05,
       "HIS": 0.8,
       "AAPI": 0.05,
-      "BAIO": 0.05
+      "BAIO": 0.1
     },
     "AAPI": {
       "WHI": 0.15,

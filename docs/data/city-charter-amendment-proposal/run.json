@@ -1,13 +1,13 @@
 {
- "runName": "Nine Seats At-Large",
- "slug": "nine-seats-at-large",
+ "runName": "City Charter Amendment Proposal",
+ "slug": "city-charter-amendment-proposal",
  "focalGroup": "AAPI",
  "focalGroupLabel": "AAPI",
  "totalSeats": 15,
  "focalVapShare": 0.20432553215884638,
  "proportionalSeats": 3.064882982382696,
  "proportionalLabel": "AAPI share of VAP: 20.4% (3.1 seats)",
- "seatMax": 7,
+ "seatMax": 9,
  "seatTicks": [
   0,
   1,
@@ -16,30 +16,52 @@
   4,
   5,
   6,
-  7
+  7,
+  8,
+  9
  ],
  "districtConfigs": [
   {
-   "numDistricts": 1,
+   "numDistricts": 0,
    "winners": 15,
    "systems": [
     {
-     "id": "FASTSTV",
-     "label": "1 X 15 STV"
-    },
-    {
-     "id": "CUMULATIVE",
-     "label": "1 X 15 Cumulative"
-    },
-    {
-     "id": "LIMITED",
-     "label": "1 X 15 Limited"
+     "id": "Combined",
+     "label": "Combined (15 seats)"
     }
    ],
-   "candidatePoolMax": 25,
-   "candidatePoolMean": 22,
-   "plans": 100,
-   "electionsPerSystem": 1333
+   "candidatePoolMax": null,
+   "candidatePoolMean": null,
+   "plans": 50,
+   "electionsPerSystem": 50000
+  },
+  {
+   "numDistricts": 1,
+   "winners": 6,
+   "systems": [
+    {
+     "id": "FASTSTV",
+     "label": "1 X 6 STV"
+    }
+   ],
+   "candidatePoolMax": 15,
+   "candidatePoolMean": 12,
+   "plans": 50,
+   "electionsPerSystem": 50000
+  },
+  {
+   "numDistricts": 9,
+   "winners": 1,
+   "systems": [
+    {
+     "id": "IRV",
+     "label": "9 X 1 IRV"
+    }
+   ],
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7,
+   "plans": 50,
+   "electionsPerSystem": 50000
   }
  ],
  "voterModels": [
@@ -51,11 +73,6 @@
   {
    "id": "slate_bt",
    "label": "Deliberative",
-   "pooled": false
-  },
-  {
-   "id": "name_cumulative",
-   "label": "Name Cumulative",
    "pooled": false
   },
   {
@@ -93,6 +110,6 @@
   "WHI": 1
  },
  "primaryTurnout": null,
- "replicates": 10,
- "subsamples": 100
+ "replicates": 100,
+ "subsamples": 50
 }

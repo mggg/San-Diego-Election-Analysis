@@ -23,7 +23,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
-from pipeline.utils.helpers import parse_district_configs, parse_plan_district_rep_from_path, count_focal_winners, load_run_config, load_json, find_settings_file, get_voter_models
+from pipeline.utils.helpers import parse_district_configs, parse_plan_district_rep_from_path, count_focal_winners, load_run_config, load_json, find_settings_file, get_voter_models, DistrictConfig, slate_names
 from pipeline.settings_generator import get_group_vap_columns
 
 
@@ -61,6 +61,12 @@ LEGEND_MAPPING = {
 # Pseudo-mode pooling occurrences across every voter model into one row.
 COMBINED_MODE = "combined"
 LEGEND_MAPPING[COMBINED_MODE] = "Combined"
+
+# Synthetic election_method tag for a hybrid_election run's pooled citywide
+# total (see aggregate_hybrid_totals / plot_hybrid_combined_totals): a hybrid
+# run pairs exactly one voting rule per contest, so there is no real method to
+# vary here, just this one pooled system standing in for all of them summed.
+HYBRID_COMBINED_METHOD = "Combined"
 
 # Preferred display order for the known voter models; any others sort after.
 DESIRED_ORDER = ["slate_pl", "slate_bt", "cambridge", "name_cumulative"]
@@ -133,7 +139,14 @@ def _method_label(method: str, num_districts, seats_per_district) -> str:
     run under, then the rule -- "3 X 3 STV", "9 X 1 IRV". The shape is part of the
     name because the same rule under a different magnitude is a different system
     as far as these results are concerned.
+
+    HYBRID_COMBINED_METHOD is the one exception: it pools every contest in a
+    hybrid_election run rather than running under one shape, so it's named by
+    the run's total seat count instead of a num_districts x seats_per_district
+    pair that wouldn't mean anything for it.
     """
+    if method == HYBRID_COMBINED_METHOD:
+        return f"Combined ({seats_per_district} seats)"
     return f"{num_districts} X {seats_per_district} {_rule_display_name(method)}"
 
 
@@ -273,10 +286,11 @@ def _slate_baselines(config, gdf) -> Dict[str, float]:
     representation panel's reference lines.
     """
     total_vap = float(gdf[config["population_vap_column"]].sum())
+    slates = slate_names(config)
     if total_vap <= 0:
-        return {slate: 0.0 for slate in config["slate_to_candidates"]}
+        return {slate: 0.0 for slate in slates}
 
-    group_columns = get_group_vap_columns(config, config["slate_to_candidates"].keys())
+    group_columns = get_group_vap_columns(config, slates)
     return {
         slate: sum(float(gdf[c].sum()) for c in cols) / total_vap
         for slate, cols in group_columns.items()
@@ -674,6 +688,66 @@ def aggregate_to_plan_level(df: pd.DataFrame) -> pd.DataFrame:
     return df.groupby(group_keys, as_index=False).agg({c: "sum" for c in seat_cols})
 
 
+def aggregate_hybrid_totals(df_plan: pd.DataFrame, district_configs: List[DistrictConfig]) -> pd.DataFrame:
+    """
+    Sum focal_seats and per-slate seat columns across every contest in a
+    hybrid_election run, to get one combined citywide total per (mode, rep,
+    plan). Each contest contributes exactly one election_method
+    (hybrid_election requires one voting rule per district_configs entry, see
+    match_hybrid_contests), so this is a plain join-and-sum -- no method
+    cross-product to resolve.
+
+    A contest with a single sampled "plan" (an at-large entry, num_districts
+    == 1, whose district assignment is trivial) is broadcast across every
+    sampled district plan sharing its (mode, rep): the same at-large outcome
+    paired with each district-plan draw for that replicate.
+
+    Args:
+        df_plan: Plan-level summary from aggregate_to_plan_level, covering
+            every district_configs entry in the run.
+        district_configs: This run's parsed district_configs entries.
+
+    Returns:
+        One row per (mode, rep, plan-of-the-largest-entry), with seat columns
+        summed across every contest and a "contests" column describing which
+        election_method served each entry (e.g. "9x1:IRV; 1x6:FastSTV").
+    """
+    seat_cols = [c for c in df_plan.columns if c == "focal_seats" or c.startswith("seats_")]
+    join_cols = ["mode", "rep"]
+    # Broadcasting requires starting from the entry with the most rows (the
+    # one with multiple sampled plans); every other entry is joined onto it.
+    ordered = sorted(district_configs, key=lambda dc: -dc.num_districts)
+
+    def _entry_rows(dc):
+        return df_plan[
+            (df_plan["num_districts"] == dc.num_districts)
+            & (df_plan["seats_per_district"] == dc.winners)
+        ].copy()
+
+    base_dc = ordered[0]
+    combined = _entry_rows(base_dc)
+    combined["contests"] = combined["election_method"].apply(
+        lambda m, dc=base_dc: f"{dc.num_districts}x{dc.winners}:{m}"
+    )
+    combined = combined.drop(columns=["election_method"])
+
+    for dc in ordered[1:]:
+        rows = _entry_rows(dc)
+        addend = rows[join_cols + seat_cols + ["election_method"]].rename(
+            columns={c: f"{c}__add" for c in seat_cols}
+        )
+        combined = combined.merge(addend, on=join_cols, how="inner")
+        for c in seat_cols:
+            combined[c] = combined[c] + combined[f"{c}__add"]
+        combined = combined.drop(columns=[f"{c}__add" for c in seat_cols])
+        combined["contests"] = combined["contests"] + combined["election_method"].apply(
+            lambda m, dc=dc: f"; {dc.num_districts}x{dc.winners}:{m}"
+        )
+        combined = combined.drop(columns=["election_method"])
+
+    return combined
+
+
 def expected_figure_count(df_plan: pd.DataFrame, config: dict) -> int:
     """
     Number of figures summarize_results should produce for this run's df_plan:
@@ -681,13 +755,21 @@ def expected_figure_count(df_plan: pd.DataFrame, config: dict) -> int:
     byslate panel, per (district count, seats, election method) group -- plus
     one bubbles-by-method figure per (district count, seats) pair.
 
+    A hybrid_election run also gets a pooled bymode histogram and bubble grid
+    over its combined seat total (plus a combined byslate panel when
+    slate_to_candidates is set) -- see plot_hybrid_combined_totals.
+
     Shared with run.py's has_valid_summaries, so both sides agree on what
     "complete" means for the figures/<run_name>/ tree.
     """
     n_method_groups = df_plan.groupby(["num_districts", "seats_per_district", "election_method"]).ngroups
     n_district_configs = df_plan.groupby(["num_districts", "seats_per_district"]).ngroups
-    per_method_figs = 2 if config.get("slate_to_candidates") else 1
-    return n_method_groups * per_method_figs + n_district_configs
+    has_slate_figs = bool(config.get("slate_to_candidates"))
+    per_method_figs = 2 if has_slate_figs else 1
+    total = n_method_groups * per_method_figs + n_district_configs
+    if config.get("hybrid_election"):
+        total += 3 if has_slate_figs else 2
+    return total
 
 
 def summarize_results(config) -> Path:
@@ -829,7 +911,11 @@ def summarize_results(config) -> Path:
                             ),
                         }
                         # Per-slate seat counts feed the by-slate representation panel.
-                        for slate in slate_to_candidates:
+                        # Slate names come from slate_names (falls back to blocs when
+                        # slate_to_candidates isn't set) -- count_focal_winners still
+                        # matches correctly against an empty slate_to_candidates dict,
+                        # since is_focal_candidate falls back to id-prefix matching.
+                        for slate in slate_names(config):
                             row[f"seats_{slate}"] = count_focal_winners(winners, slate, slate_to_candidates)
                         rows.append(row)
 
@@ -842,6 +928,21 @@ def summarize_results(config) -> Path:
 
     # aggregate focal seats to the plan level (sum across districts)
     df_plan = aggregate_to_plan_level(df)
+
+    # A hybrid_election run's district_configs entries are complementary
+    # contests of one government (e.g. 9 IRV districts + a 6-seat STV
+    # at-large block), so on top of each contest's own distribution, also
+    # write their combined citywide seat total.
+    if config.get("hybrid_election"):
+        df_combined = aggregate_hybrid_totals(df_plan, district_configs)
+        df_combined.insert(0, "run_name", run_name)
+        # Named so it can never be swept up by the outputs/*/summaries/*_summary.csv
+        # glob that plot_combined_bubbles_all_runs scans for per-run summaries --
+        # this file's rows are combined across district_configs entries and don't
+        # match that shape (no single election_method/num_districts per row).
+        combined_path = summary_dir / f"{run_name}_hybrid_combined_seats.csv"
+        df_combined.to_csv(combined_path, index=False)
+        print(f"[summarize_results] Wrote combined CSV: {combined_path}")
 
     # One paneled histogram figure per (district count, seats), a column per
     # method. It spans every voting rule, so like the bubble figure it lives at
@@ -863,8 +964,19 @@ def summarize_results(config) -> Path:
     # Bubble grid (mode x seats, area = occurrence count) per districting config.
     plot_representation_bubbles(df_plan, config, focal_group, iprop, figs_dir, run_name)
 
+    # Pooled citywide figures for a hybrid_election run -- the combined seat
+    # total across every contest, on top of each contest's own figures above.
+    if config.get("hybrid_election"):
+        plot_hybrid_combined_totals(
+            df_combined, config, focal_group, iprop,
+            _slate_baselines(config, gdf), figs_dir, run_name,
+        )
+
     # Same aggregates again, as JSON for the report page (pipeline.report_generator).
-    write_report_artifacts(df, df_plan, config, _slate_baselines(config, gdf), iprop)
+    write_report_artifacts(
+        df, df_plan, config, _slate_baselines(config, gdf), iprop,
+        df_combined=df_combined if config.get("hybrid_election") else None,
+    )
 
     print(f"[summarize_results] Wrote CSV: {csv_path}")
     print(f"[summarize_results] Figures in: {figs_dir}")
@@ -1081,6 +1193,128 @@ def plot_representation_bubbles(df_plan, config, focal_group, iprop, figs_dir, r
         )
 
 
+# --- Hybrid combined totals ----------------------------------------------------
+
+
+def _plot_combined_slate_panel(
+    combined: pd.DataFrame,
+    contests_label: str,
+    config,
+    slate_baselines: Dict[str, float],
+    figs_dir: Path,
+    run_name: str,
+) -> None:
+    """
+    By-slate panel for a hybrid run's pooled citywide total.
+
+    Same grid of per-slate histograms as _plot_slate_panel, but titled and
+    named for the combined total rather than any one contest's own shape (that
+    labelling depends on a single num_districts x seats_per_district, which
+    the pooled total doesn't have).
+    """
+    slates = list(config["slate_to_candidates"])
+    n = len(slates)
+    ncols = 2 if n > 1 else 1
+    nrows = (n + ncols - 1) // ncols
+
+    fig, axes = plt.subplots(nrows, ncols, figsize=(6 * ncols, 3.2 * nrows), squeeze=False)
+    flat = [ax for row in axes for ax in row]
+
+    total_seats = config["total_seats"]
+    seat_max = max((combined[f"seats_{s}"].max() for s in slates), default=0)
+    ref_max = max((slate_baselines.get(s, 0.0) * total_seats for s in slates), default=0)
+    x_upper = _seat_axis_upper(max(seat_max, ref_max), total_seats)
+
+    for ax, slate in zip(flat, slates):
+        max_bin_height = _draw_mode_histograms(ax, combined, seat_col=f"seats_{slate}")
+        ylim = max_bin_height * 1.2 if max_bin_height > 0 else 1
+        _style_slate_axis(ax, config, slate, ylim, x_upper)
+        ref_handles, ref_labels = _draw_reference_lines(
+            ax, config, slate_baselines.get(slate), label=_group_label(slate)
+        )
+        ax.legend(
+            ref_handles, ref_labels, fontsize=7, loc="upper right",
+            frameon=True, framealpha=0.85, borderpad=0.3,
+        )
+
+    for ax in flat[n:]:
+        ax.axis("off")
+
+    handles, labels = _ordered_mode_handles(flat[0])
+    subtitle = _figure_subtitle(run_name, contests_label, 1)
+    _layout_title_and_legend_bands(fig, "Election outcomes by slate", subtitle)
+    _bottom_legend(fig, handles, labels, ncol=max(1, len(handles)))
+
+    fig_path = figs_dir / f"{run_name}_combined_byslate.png"
+    fig.savefig(fig_path, dpi=300, bbox_inches="tight")
+    plt.close(fig)
+
+
+def plot_hybrid_combined_totals(
+    df_combined: pd.DataFrame,
+    config: dict,
+    focal_group: str,
+    iprop: Optional[float],
+    slate_baselines: Dict[str, float],
+    figs_dir: Path,
+    run_name: str,
+) -> None:
+    """
+    Write the pooled citywide figures for a hybrid_election run: a by-mode
+    histogram and a bubble grid over the combined seat total from
+    aggregate_hybrid_totals (each district_configs entry's own contest summed
+    into one number per (mode, rep, plan)), plus a by-slate panel when the run
+    configures slate_to_candidates. These sit alongside each contest's own
+    figures, which summarize_results still draws separately -- the combined
+    figures are the citywide total on top, not a replacement.
+
+    Reuses the exact panel-drawing code the per-contest figures use, by
+    tagging df_combined with the one synthetic HYBRID_COMBINED_METHOD, so the
+    combined figures read as one more system in the same visual language
+    rather than a different chart style.
+
+    Outputs:
+        figures/<run_name>/<run_name>_combined_bymode.png
+        figures/<run_name>/<run_name>_combined_bubbles.png
+        figures/<run_name>/<run_name>_combined_byslate.png (if slate_to_candidates is set)
+    """
+    if df_combined.empty:
+        return
+
+    contests_label = str(df_combined["contests"].iloc[0]) if "contests" in df_combined.columns else ""
+    combined = df_combined.assign(election_method=HYBRID_COMBINED_METHOD)
+    method_labels = {HYBRID_COMBINED_METHOD: _method_label(HYBRID_COMBINED_METHOD, 0, config["total_seats"])}
+    subtitle = _figure_subtitle(run_name, contests_label, 1)
+
+    total_seats = config["total_seats"]
+    max_seat = max(
+        combined["focal_seats"].max(),
+        iprop * total_seats if iprop is not None else 0,
+    )
+    x_upper = _seat_axis_upper(max_seat, total_seats)
+    max_bin_height = _max_mode_bin_height(combined)
+    ylim = max_bin_height * 1.2 if max_bin_height > 0 else 1
+
+    _render_method_histograms(
+        combined, [HYBRID_COMBINED_METHOD], config, focal_group, iprop,
+        subtitle, figs_dir / f"{run_name}_combined_bymode.png", ylim, x_upper, method_labels,
+    )
+
+    counts = _occurrence_counts(combined)
+    if not counts.empty:
+        modes_in_order = _modes_in_display_order(counts["mode"].unique())
+        per_model_counts = counts.loc[counts["mode"] != COMBINED_MODE, "count"]
+        max_count = int(per_model_counts.max()) if not per_model_counts.empty else 0
+        size_scale = (BUBBLE_MAX_AREA - BUBBLE_MIN_AREA) / max_count if max_count > 0 else 1
+        _render_method_bubbles_figure(
+            counts, [HYBRID_COMBINED_METHOD], modes_in_order, size_scale, iprop, config,
+            x_upper, subtitle, figs_dir / f"{run_name}_combined_bubbles.png", method_labels,
+        )
+
+    if config.get("slate_to_candidates"):
+        _plot_combined_slate_panel(combined, contests_label, config, slate_baselines, figs_dir, run_name)
+
+
 
 # --- Report artifacts ---------------------------------------------------------
 #
@@ -1150,7 +1384,7 @@ def _slate_seat_records(df_plan: pd.DataFrame, config, slate_baselines) -> List[
     group to any slate without losing the combined reading. The focal group is one
     of the slates, and its rows here reproduce _focal_seat_records exactly.
     """
-    slates = list(config.get("slate_to_candidates") or {})
+    slates = slate_names(config)
     records = []
     for (num_dist, winners, method), group in df_plan.groupby(
         ["num_districts", "seats_per_district", "election_method"]
@@ -1259,7 +1493,7 @@ def _run_metadata(df: pd.DataFrame, df_plan: pd.DataFrame, config, iprop: float,
         ],
         "slates": [
             {"id": s, "label": _group_label(s), "vapShare": float(slate_baselines.get(s, 0.0))}
-            for s in (config.get("slate_to_candidates") or {})
+            for s in slate_names(config)
         ],
         "turnout": config.get("turnout"),
         "primaryTurnout": config.get("primary_turnout"),
@@ -1343,7 +1577,7 @@ def _district_facts(config, num_districts: int) -> pd.DataFrame:
         return pd.DataFrame()
 
     total_vap_col = config["population_vap_column"]
-    slates = list(config.get("slate_to_candidates") or {})
+    slates = slate_names(config)
     rows = []
     for path in sorted(settings_dir.rglob("*.json")):
         plan, district, _ = parse_plan_district_rep_from_path(path.name)
@@ -1394,7 +1628,7 @@ def _availability_artifact(df: pd.DataFrame, config,
     contested -- and are shared by every colouring that sits on them, so a system
     contributes a colour array rather than a second copy of the same distribution.
     """
-    slates = list(config.get("slate_to_candidates") or {})
+    slates = slate_names(config)
     boxes: List[Dict[str, Any]] = []
     colors: List[Dict[str, Any]] = []
 
@@ -1483,8 +1717,32 @@ def _availability_artifact(df: pd.DataFrame, config,
     return {"boxes": boxes, "colors": colors}
 
 
+def _tag_hybrid_combined(df_combined: pd.DataFrame, total_seats: int) -> pd.DataFrame:
+    """
+    df_combined (aggregate_hybrid_totals' output) reshaped to df_plan's columns,
+    tagged as one synthetic system (HYBRID_COMBINED_METHOD) under a sentinel
+    shape (num_districts=0).
+
+    Concatenating this onto df_plan before building the report records makes
+    the combined total flow through _run_metadata, _focal_seat_records, and
+    _slate_seat_records exactly like any real contest: it becomes one more
+    entry in districtConfigs, with its own systems[] entry -- which is all
+    report.js's dropdown needs to offer it alongside each contest's own system
+    (see docs/js/report.js's buildControls, which flattens every
+    districtConfigs entry's systems into one <select>).
+    """
+    if df_combined.empty:
+        return df_combined
+    return df_combined.assign(
+        election_method=HYBRID_COMBINED_METHOD,
+        num_districts=0,
+        seats_per_district=total_seats,
+    )
+
+
 def write_report_artifacts(df: pd.DataFrame, df_plan: pd.DataFrame, config,
-                           slate_baselines: Dict[str, float], iprop: float) -> Path:
+                           slate_baselines: Dict[str, float], iprop: float,
+                           df_combined: Optional[pd.DataFrame] = None) -> Path:
     """
     Write this run's JSON artifacts for the report page.
 
@@ -1494,6 +1752,10 @@ def write_report_artifacts(df: pd.DataFrame, df_plan: pd.DataFrame, config,
         config: Parsed config dict.
         slate_baselines: Each slate's share of citywide VAP (_slate_baselines).
         iprop: The focal group's share of citywide VAP.
+        df_combined: A hybrid_election run's pooled citywide seat total
+            (aggregate_hybrid_totals), when the run has one. Folded into
+            df_plan as one more system before the records are built -- see
+            _tag_hybrid_combined.
 
     Outputs:
         outputs/<run_name>/summaries/report/{run,focal_seats,slate_seats}.json, and
@@ -1503,10 +1765,17 @@ def write_report_artifacts(df: pd.DataFrame, df_plan: pd.DataFrame, config,
     out_dir = report_artifacts_dir(config["run_name"])
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    report_df_plan = df_plan
+    if df_combined is not None and not df_combined.empty:
+        report_df_plan = pd.concat(
+            [df_plan, _tag_hybrid_combined(df_combined, config["total_seats"])],
+            ignore_index=True,
+        )
+
     payloads = {
-        "run.json": _run_metadata(df, df_plan, config, iprop, slate_baselines),
-        "focal_seats.json": _focal_seat_records(df_plan, config),
-        "slate_seats.json": _slate_seat_records(df_plan, config, slate_baselines),
+        "run.json": _run_metadata(df, report_df_plan, config, iprop, slate_baselines),
+        "focal_seats.json": _focal_seat_records(report_df_plan, config),
+        "slate_seats.json": _slate_seat_records(report_df_plan, config, slate_baselines),
     }
 
     # Optional, not part of the required set: it needs the settings files, and a

@@ -79,7 +79,7 @@ TIGER = "https://www2.census.gov/geo/tiger/TIGER2020"
 # Census vintages
 # --------------------------------------------------------------------------- #
 DECENNIAL_YEAR = 2020
-ACS_YEAR = 2020
+ACS_YEAR = 2024
 
 # --------------------------------------------------------------------------- #
 # PL 94-171 variable inventory
@@ -585,7 +585,10 @@ def download_acs_citizenship(state_fips, client, cache_dir):
     acs_state = {}
 
     for suffix, category in ACS_RATE_TABLES.items():
-        cache_file = cache_dir / f"acs_{state_fips}_{category}_tracts.parquet"
+        # Keyed by ACS_YEAR too: without it, bumping ACS_YEAR to a newer vintage
+        # would silently keep serving whichever year's rates happened to be
+        # cached first instead of fetching the new vintage.
+        cache_file = cache_dir / f"acs_{state_fips}_{ACS_YEAR}_{category}_tracts.parquet"
 
         if cache_file.exists():
             print(f"Loading {category} tract data from cache …")

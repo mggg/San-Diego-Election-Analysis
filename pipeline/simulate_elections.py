@@ -46,6 +46,7 @@ from pipeline.utils.helpers import (
     find_settings_file,
     primary_profiles_zip_path,
     read_existing_zip_members,
+    match_hybrid_contests,
 )
 from pipeline.profile_generator import (
     generator_accepts_total_points,
@@ -382,6 +383,12 @@ def simulate_elections(config) -> None:
     election_plan = _build_election_plan(voting_configs)
     needs_settings = plan_needs_settings(election_plan)
 
+    # In a hybrid_election run, each district_configs entry is paired to the
+    # one voting rule that fills its seat count, so only that rule runs
+    # against that entry's profiles instead of every configured rule.
+    hybrid = bool(config.get("hybrid_election"))
+    hybrid_pairing = match_hybrid_contests(district_configs, voting_configs) if hybrid else {}
+
     # Results already written under this signature (profiles + voting rules) can
     # be reused; a (mode, district) whose file is missing, stale, or short is
     # (re-)simulated -- so adding a voter model / voting rule / district config,
@@ -508,6 +515,17 @@ def simulate_elections(config) -> None:
             )
 
             for dc in district_configs:
+                if hybrid:
+                    matched_rule = hybrid_pairing[dc.winners]
+                    dc_plan = [e for e in mode_plan if e.rule == matched_rule]
+                    if not dc_plan:
+                        # This dc's matched rule needs a profile type this mode
+                        # doesn't produce (see plan_for_profile_class) -- nothing
+                        # to run for this (mode, dc) pair.
+                        continue
+                else:
+                    dc_plan = mode_plan
+
                 if is_score_mode:
                     budgets = score_budgets_for_run(config, dc.winners)
                     canonical_budget = budgets[0]
@@ -555,7 +573,7 @@ def simulate_elections(config) -> None:
                     tasks = (
                         delayed(_process_profile)(
                             _payload(member),
-                            mode_plan,
+                            dc_plan,
                             voting_configs,
                             _settings_for_member(member, dc.num_districts) if mode_needs_settings else None,
                             mode if mode_needs_settings else None,

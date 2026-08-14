@@ -18,7 +18,8 @@
     "districts_jurisdiction_column": "JUR_NAME",
     "districts_jurisdiction": "SAN DIEGO",
     "district_column": "DISTRICT",
-    "districts_output_path": "data/san_diego_council_districts.geojson"
+    "districts_output_path": "data/san_diego_council_districts.geojson",
+    "include_cvap": true
   },
   "gerrychain_output_dir": "outputs/districts/chain_out",
   "population_column": "total_pop_20",

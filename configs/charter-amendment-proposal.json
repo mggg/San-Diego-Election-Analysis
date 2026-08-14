@@ -1,31 +1,30 @@
 {
-  "run_name": "Alternative Electoral Systems",
-  "num_subsamples": 100,
-  "candidate_geometric_p": 0.2,
+  "run_name": "City Charter Amendment Proposal",
+  "num_subsamples": 50,
+  "candidate_geometric_p": 0.1,
+  "hybrid_election": true,
   "total_seats": 15,
   "district_configs": [
     {
-      "num_districts": 15,
+      "num_districts": 9,
       "winners": 1,
-      "candidate_pool_max": 5,
-      "candidate_pool_mean": 3
+      "candidate_pool_max": 10,
+      "candidate_pool_mean": 7
+    },
+    {
+      "num_districts": 1,
+      "winners": 6,
+      "candidate_pool_max": 15,
+      "candidate_pool_mean": 12
     }
   ],
   "voting_configs": {
     "IRV": {
       "tiebreak": "random"
     },
-    "Plurality": {
-      "tiebreak": "random"
-    },
-    "TopTwo": {
-      "m_1": 2,
-      "tiebreak": "random",
-      "general_class": "Plurality",
-      "general_kwargs": {
-        "n_seats": 1,
-        "tiebreak": "random"
-      }
+    "FastSTV": {
+        "tiebreak": "random",
+        "n_seats": 6
     }
   },
   "voter_models": [
@@ -52,34 +51,7 @@
     "HIS": 0.6,
     "WHI": 1
   },
-  "primary_turnout": {
-    "AAPI": 0.5,
-    "BAIO": 0.75,
-    "HIS": 0.5,
-    "WHI": 1
-  },
   "num_voters": 10000,
-  "slate_to_candidates": {
-    "WHI": [
-      "WHI1",
-      "WHI2",
-      "WHI3",
-      "WHI4"
-    ],
-    "BAIO": [
-      "BAIO1",
-      "BAIO2"
-    ],
-    "HIS": [
-      "HIS1",
-      "HIS2",
-      "HIS3"
-    ],
-    "AAPI": [
-      "AAPI1",
-      "AAPI2"
-    ]
-  },
   "focal_group": "AAPI",
   "cohesion_parameters": {
     "WHI": {
@@ -133,5 +105,5 @@
       "AAPI": 1
     }
   },
-  "num_reps": 10
+  "num_reps": 100
 }

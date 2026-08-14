@@ -56,6 +56,7 @@
           <nav class="nav flex-column">
             <a class="nav-link" href="#run-basic-3-x-3">Basic - 3 X 3</a>
             <a class="nav-link" href="#run-alternative-electoral-systems">Alternative Electoral Systems</a>
+            <a class="nav-link" href="#run-city-charter-amendment-proposal">City Charter Amendment Proposal</a>
             <a class="nav-link" href="#run-diverse-aapi-coalition-preferences">Diverse AAPI Coalition Preferences</a>
             <a class="nav-link" href="#run-low-aapi-availability">Low AAPI Availability</a>
             <a class="nav-link" href="#run-low-aapi-turnout">Low AAPI Turnout</a>
@@ -316,6 +317,51 @@ $$</div>
             </div>
             <aside class="run-params" data-params="alternative-electoral-systems"></aside>
           </section>
+          <section id="run-city-charter-amendment-proposal" class="run mb-5" data-run="city-charter-amendment-proposal">
+            <div class="run-main">
+            <h3 class="h4 mt-4">City Charter Amendment Proposal</h3>
+            <p class="todo">[Description to be written — edit
+               <code>docs/prose/runs/city-charter-amendment-proposal.md</code>.]</p>
+
+            <div class="run-controls" data-controls="city-charter-amendment-proposal"></div>
+
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="tab"
+                        data-bs-target="#city-charter-amendment-proposal-focal" type="button" role="tab">
+                  Seat outcomes
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab"
+                        data-bs-target="#city-charter-amendment-proposal-availability" type="button" role="tab">
+                  Districts by VAP rank
+                </button>
+              </li>
+            </ul>
+            <div class="tab-content pt-3">
+              <div class="tab-pane fade show active" id="city-charter-amendment-proposal-focal" role="tabpanel">
+                <div class="metric-toggles" data-view="city-charter-amendment-proposal"></div>
+                <div class="row g-4 figure-pair" data-one-group="city-charter-amendment-proposal">
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="bubble" data-run="city-charter-amendment-proposal"></div>
+                  </div>
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="histogram" data-run="city-charter-amendment-proposal"></div>
+                  </div>
+                </div>
+                <div data-all-groups="city-charter-amendment-proposal" hidden>
+                  <div class="chart" data-chart="slate" data-run="city-charter-amendment-proposal"></div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="city-charter-amendment-proposal-availability" role="tabpanel">
+                <div class="metric-toggles" data-metric="city-charter-amendment-proposal"></div>
+                <div class="chart" data-chart="availability" data-run="city-charter-amendment-proposal"></div>
+              </div>
+            </div>
+            </div>
+            <aside class="run-params" data-params="city-charter-amendment-proposal"></aside>
+          </section>
           <section id="run-diverse-aapi-coalition-preferences" class="run mb-5" data-run="diverse-aapi-coalition-preferences">
             <div class="run-main">
             <h3 class="h4 mt-4">Diverse AAPI Coalition Preferences</h3>
@@ -511,7 +557,7 @@ $$</div>
     <div class="container-xl text-center">
       <p class="mb-1">Metric Geometry &amp; Gerrymandering Group — San Diego City Council Election Analysis</p>
       <p class="mb-1"><a href="https://github.com/mggg/San-Diego-Election-Analysis" target="_blank" rel="noopener">View the repository on GitHub</a></p>
-      <p class="generated mb-0">Generated 2026-08-12T19:42:04+00:00</p>
+      <p class="generated mb-0">Generated 2026-08-14T14:45:26+00:00</p>
     </div>
   </footer>
 
