@@ -12,6 +12,8 @@ per-file filesystem overhead of a large ensemble.
 """
 
 import inspect
+import math
+import sys
 from contextlib import ExitStack
 from glob import glob
 from votekit import RankProfile
@@ -19,8 +21,10 @@ from votekit.ballot_generator import (
     BlocSlateConfig,
     slate_pl_profile_generator,
     slate_bt_profile_generator,
+    slate_bt_profile_generator_using_mcmc,
     name_cumulative_profile_generator
 )
+from votekit.ballot_generator.utils import system_memory
 from joblib import Parallel, delayed
 from joblib_progress import joblib_progress
 from pathlib import Path
@@ -43,12 +47,84 @@ from pipeline.utils.preference_matrix import preference_matrix_arcname, preferen
 from pipeline.utils.cambridge_truncation import apply_cambridge_truncation
 from pipeline.settings_generator import primary_turnout_map
 
-# maps mode name to votekit profile generator function
+# maps mode name to votekit profile generator function. slate_bt is resolved
+# per-district instead (see _resolve_slate_bt_generator); this entry is still
+# used by profile_class_for_mode/generator_accepts_total_points, which only
+# need its signature, not the callable actually run -- both slate_bt variants
+# share the same one (RankProfile, no total_points).
 generator_name_to_function = {
     "slate_pl": slate_pl_profile_generator,
     "slate_bt": slate_bt_profile_generator,
     "name_cumulative": name_cumulative_profile_generator,
 }
+
+# VoteKit's exact Bradley-Terry generator enumerates every distinct ordering of
+# slate-letters across the ballot before sampling from it, and refuses to run
+# at all past 12! (~479 million) such arrangements (see votekit's own
+# _check_slate_bt_memory, which raises ValueError beyond this point). The MCMC
+# variant samples ballot types directly instead of enumerating them, so it has
+# no such ceiling, at the cost of drawing from a Markov chain's stationary
+# distribution rather than the exact one. Plackett-Luce has no equivalent
+# limit or MCMC variant: its exact method samples every ballot directly (no
+# enumeration step), so it always uses the one generator regardless of
+# candidate count.
+BT_MAX_ARRANGEMENTS = math.factorial(12)
+
+# Fudge factor matching votekit's own _check_slate_bt_memory -- an empirical
+# upper-bound multiplier on the raw byte estimate, leaving headroom for
+# everything else running on the machine rather than assuming it has none.
+BT_MEMORY_FUDGE_FACTOR = 1.5
+
+
+def _bt_arrangement_count(config: BlocSlateConfig) -> int:
+    """
+    Number of distinct slate-letter orderings the exact Bradley-Terry generator
+    would need to enumerate for this district's candidate pool -- the same
+    multinomial coefficient (n_cands! / prod(per-slate!)) votekit's own
+    _check_slate_bt_memory computes.
+    """
+    n_cands = len(config.candidates)
+    denom = 1
+    for candidates in config.slate_to_candidates.values():
+        denom *= math.factorial(len(candidates))
+    return math.factorial(n_cands) // denom
+
+
+def _bt_estimated_bytes(config: BlocSlateConfig, arrangements: int) -> float:
+    """
+    Estimated peak memory (bytes) the exact Bradley-Terry generator would need
+    for this district: a full probability table (one entry per arrangement)
+    plus the sampled profile itself -- replicating votekit's own
+    _check_slate_bt_memory formula so this can be checked before running it,
+    not just after it fails.
+
+    Staying under BT_MAX_ARRANGEMENTS (12!) doesn't bound this on its own: a
+    288-million-arrangement district (well under the 479-million ceiling)
+    was observed needing an estimated 426 GiB, because the table's size scales
+    with the arrangement count directly, and 12! of anything is already huge.
+    """
+    n_cands = len(config.candidates)
+    longest = max(config.candidates, key=len)
+    est_bytes_pmf = arrangements * sys.getsizeof(longest) * n_cands
+    est_bytes_profile = config.n_voters * n_cands * sys.getsizeof(frozenset({longest}))
+    return (est_bytes_pmf + est_bytes_profile) * BT_MEMORY_FUDGE_FACTOR
+
+
+def _resolve_slate_bt_generator(config: BlocSlateConfig):
+    """
+    The exact Bradley-Terry generator when this district's candidate pool is
+    both within VoteKit's arrangement ceiling and small enough to fit in this
+    machine's available memory; the MCMC variant otherwise. Both are checked
+    because clearing the first doesn't imply the second -- see
+    _bt_estimated_bytes.
+    """
+    arrangements = _bt_arrangement_count(config)
+    if arrangements > BT_MAX_ARRANGEMENTS:
+        return slate_bt_profile_generator_using_mcmc
+    available_bytes = system_memory()["available_gib"] * 2**30
+    if _bt_estimated_bytes(config, arrangements) > available_bytes:
+        return slate_bt_profile_generator_using_mcmc
+    return slate_bt_profile_generator
 
 
 def profile_class_for_mode(mode: str):
@@ -161,7 +237,6 @@ def process_settings_file(
         is the profile's CSV content (per votekit's PreferenceProfile.to_csv()).
     """
     settings = load_json(settings_file)
-    generator = generator_name_to_function[mode]
     filename = _expected_profile_filename(settings_file, duplicate_indx)
 
     config = BlocSlateConfig(
@@ -171,6 +246,14 @@ def process_settings_file(
         cohesion_mapping=settings["cohesion_parameters"],
     )
     config.set_dirichlet_alphas(settings["alphas"])
+
+    # slate_bt's generator depends on this district's own candidate pool (see
+    # _resolve_slate_bt_generator); every other mode's is fixed.
+    generator = (
+        _resolve_slate_bt_generator(config) if mode == "slate_bt"
+        else generator_name_to_function[mode]
+    )
+
     if total_points is not None and generator_accepts_total_points(mode):
         profile = generator(config, total_points=total_points)
     else:
