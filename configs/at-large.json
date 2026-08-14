@@ -1,5 +1,5 @@
 {
-  "run_name": "Nine Seats At-Large",
+  "run_name": "Fifteen Seats At-Large - STV",
   "num_subsamples": 100,
   "candidate_geometric_p": 0.065,
   "total_seats": 15,
@@ -13,23 +13,22 @@
   ],
   "voting_configs": {
     "FastSTV": {
-      "n_seats": 9,
+      "n_seats": 15,
       "tiebreak": "random"
     },
     "Limited": {
-      "n_seats": 9,
+      "n_seats": 15,
       "budget": 5,
       "tiebreak": "random"
     },
     "Cumulative": {
-      "n_seats": 9,
+      "n_seats": 15,
       "tiebreak": "random"
     }
   },
   "voter_models": [
     "slate_pl",
-    "slate_bt",
-    "name_cumulative"
+    "slate_bt"
   ],
   "blocs": {
     "WHI": [

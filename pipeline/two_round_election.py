@@ -43,7 +43,7 @@ from votekit import RankProfile, elections
 from votekit.ballot_generator import BlocSlateConfig
 from votekit.elections import Plurality
 
-from pipeline.profile_generator import generator_name_to_function
+from pipeline.profile_generator import generator_name_to_function, _resolve_slate_bt_generator
 from pipeline.settings_generator import filter_alphas_to_slates, filter_cohesion_to_slates
 
 
@@ -127,7 +127,11 @@ def build_general_profile(settings: dict, mode: str, finalists: List[str]) -> Tu
     )
     config.set_dirichlet_alphas(alphas)
 
-    profile = generator_name_to_function[mode](config)
+    # slate_bt's generator depends on this profile's own (post-narrowing)
+    # candidate pool, same as the primary's -- see
+    # profile_generator._resolve_slate_bt_generator.
+    generator = _resolve_slate_bt_generator(config) if mode == "slate_bt" else generator_name_to_function[mode]
+    profile = generator(config)
     return profile, profile.to_csv()
 
 
