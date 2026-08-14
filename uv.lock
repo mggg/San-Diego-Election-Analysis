@@ -482,7 +482,7 @@ requires-dist = [
     { name = "pyarrow", specifier = ">=25.0.0" },
     { name = "requests", specifier = ">=2.32.0" },
     { name = "tqdm", specifier = ">=4.67.1" },
-    { name = "votekit", specifier = ">=3.4.0" },
+    { name = "votekit", editable = "../Votekit" },
 ]
 
 [[package]]
@@ -2277,8 +2277,8 @@ wheels = [
 
 [[package]]
 name = "votekit"
-version = "3.4.0"
-source = { registry = "https://pypi.org/simple" }
+version = "3.5.0"
+source = { editable = "../Votekit" }
 dependencies = [
     { name = "apportionment" },
     { name = "jinja2" },
@@ -2296,10 +2296,51 @@ dependencies = [
     { name = "types-psutil" },
     { name = "types-seaborn" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/7c/ef/16cbce198158253884d6bc3bc5fb76fdc5e4863aa2336d80cb5895c94032/votekit-3.4.0.tar.gz", hash = "sha256:836ab829fe0752be80424b60ad0b0a7fdfa27791fbbea9ebcd28a8763e88d478", size = 32788122, upload-time = "2026-04-09T01:43:58.143Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/b7/4c/5aa49ddf3f75795d0973e50ff2569a780f1e136afe79dfc5f84b0208c29f/votekit-3.4.0-py3-none-any.whl", hash = "sha256:8a6ad2c9614adbfbe4cbeec7d4b3bb7be44a06d4bc6bd39f955e3207e4a8b5e2", size = 263745, upload-time = "2026-04-09T01:43:51.22Z" },
+
+[package.metadata]
+requires-dist = [
+    { name = "apportionment", specifier = ">=1.0,<2.0" },
+    { name = "jinja2", specifier = ">=3.1.6,<4.0" },
+    { name = "manim", marker = "extra == 'animation'", specifier = ">=0.19.0,<0.20.0" },
+    { name = "matplotlib", specifier = ">=3.10.5,<4.0" },
+    { name = "networkx", specifier = ">=3.5,<4.0" },
+    { name = "numba", specifier = ">=0.62.1,<0.62.2" },
+    { name = "numpy", specifier = ">=2.3.3,<3.0" },
+    { name = "pandas", specifier = ">2.2" },
+    { name = "psutil", specifier = ">=7.1.0,<8.0.0" },
+    { name = "pydantic", specifier = ">=2.11.9,<3.0" },
+    { name = "scikit-learn", specifier = ">=1.7.1,<2.0" },
+    { name = "scipy", specifier = ">=1.16.1,<2.0" },
+    { name = "seaborn", specifier = ">=0.13.2,<0.14.0" },
+    { name = "types-networkx", specifier = ">=3.5.0.20250728,<4.0.0.0" },
+    { name = "types-psutil", specifier = ">=7.0.0.20250822,<8.0.0.0" },
+    { name = "types-seaborn", specifier = ">=0.13.2.20250728,<0.14.0.0" },
 ]
+provides-extras = ["animation"]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "ipykernel", specifier = ">=6.30.1,<7.0.0" },
+    { name = "ipython", specifier = ">=9.6.0,<10.0.0" },
+    { name = "pillow", specifier = ">=11.2.0,<12.0.0" },
+    { name = "pre-commit", specifier = ">=4.3.0,<5.0.0" },
+    { name = "pytest", specifier = ">=8.4.2,<9.0.0" },
+    { name = "pytest-cov", specifier = ">=7.0.0,<8.0.0" },
+    { name = "pytest-mpl", specifier = ">=0.17.0,<0.18.0" },
+    { name = "pytest-xdist", specifier = ">=3.8.0" },
+    { name = "recommonmark", specifier = ">=0.7.1,<0.8.0" },
+    { name = "ruff", specifier = ">=0.13.2,<0.14.0" },
+    { name = "scipy-stubs", specifier = ">=1.16.1.0,<2.0.0" },
+    { name = "ty", specifier = ">=0.0.21" },
+]
+docs = [
+    { name = "nbconvert", specifier = ">=7.16.6,<8.0.0" },
+    { name = "recommonmark", specifier = ">=0.7.1,<0.8.0" },
+    { name = "sphinx", specifier = ">=8.2.3,<9.0.0" },
+    { name = "sphinx-copybutton", specifier = ">=0.5.2,<0.6.0" },
+    { name = "sphinx-rtd-theme", specifier = ">=3.0.2,<4.0.0" },
+]
+notebooks = [{ name = "gdown", specifier = ">=5.2.1" }]
 
 [[package]]
 name = "wcwidth"
