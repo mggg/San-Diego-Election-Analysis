@@ -117,7 +117,10 @@ export function renderSlate(container, bundle, manifest, view) {
         ))
         .on('mouseleave', () => tooltip.hide());
 
-      const share = slate.vapShare * runMeta.totalSeats;
+      // Reference line is a share of this system's own seat count, not the
+      // run's combined total -- see the note in report.js where `systems` is
+      // built with each system's contest winners attached.
+      const share = slate.vapShare * (system.winners ?? runMeta.totalSeats);
       drawReferenceLine(g, x, share, innerHeight, tooltip,
         `${slate.label} share of VAP: ${d3.format('.1%')(slate.vapShare)} (${d3.format('.1f')(share)} seats)`);
     });
