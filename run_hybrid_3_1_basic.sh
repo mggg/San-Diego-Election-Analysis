@@ -40,3 +40,6 @@ echo "=== Running configs/hybrid_3_1.json ==="
 
 echo "=== Running configs/basic_3_5.json ==="
 "$UV" run python run.py basic_3_5
+
+echo "=== Running configs/plurality_9_1.json ==="
+"$UV" run python run.py plurality_9_1
