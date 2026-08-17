@@ -104,7 +104,7 @@ function renderRunParams(section, entry, runMeta, manifest, source) {
    * keys happen to sit in the config file.
    *
    * Those disagree: alternative_electoral.json writes cohesion as
-   * WHI, HIS, AAPI, BAIO and the alpha *columns* as WHI, BAIO, HIS, AAPI, so
+   * WAIO, HIS, AAPI, BLK and the alpha *columns* as WAIO, BLK, HIS, AAPI, so
    * iterating insertion order would print two matrices of the same blocs with
    * their axes in different orders -- and the alpha matrix with its own rows and
    * columns disagreeing. Values are keyed, so ordering is presentation only.
