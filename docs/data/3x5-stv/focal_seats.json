@@ -8,8 +8,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 0,
-  "plans": 647.5,
-  "share": 0.6475
+  "plans": 651.0,
+  "share": 0.651
  },
  {
   "system": "FASTSTV",
@@ -20,8 +20,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 1,
-  "plans": 280.0,
-  "share": 0.28
+  "plans": 278.5,
+  "share": 0.2785
  },
  {
   "system": "FASTSTV",
@@ -32,8 +32,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 2,
-  "plans": 67.5,
-  "share": 0.0675
+  "plans": 65.5,
+  "share": 0.0655
  },
  {
   "system": "FASTSTV",
@@ -56,8 +56,8 @@
   "modeLabel": "Deliberative",
   "pooled": false,
   "seats": 0,
-  "plans": 729.0,
-  "share": 0.729
+  "plans": 734.0,
+  "share": 0.734
  },
  {
   "system": "FASTSTV",
@@ -68,8 +68,8 @@
   "modeLabel": "Deliberative",
   "pooled": false,
   "seats": 1,
-  "plans": 237.0,
-  "share": 0.237
+  "plans": 233.0,
+  "share": 0.233
  },
  {
   "system": "FASTSTV",
@@ -80,8 +80,8 @@
   "modeLabel": "Deliberative",
   "pooled": false,
   "seats": 2,
-  "plans": 34.0,
-  "share": 0.034
+  "plans": 33.0,
+  "share": 0.033
  },
  {
   "system": "FASTSTV",
@@ -92,8 +92,8 @@
   "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 0,
-  "plans": 566.0,
-  "share": 0.566
+  "plans": 568.0,
+  "share": 0.568
  },
  {
   "system": "FASTSTV",
@@ -104,8 +104,8 @@
   "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 1,
-  "plans": 323.0,
-  "share": 0.323
+  "plans": 324.0,
+  "share": 0.324
  },
  {
   "system": "FASTSTV",
@@ -116,8 +116,8 @@
   "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 2,
-  "plans": 101.0,
-  "share": 0.101
+  "plans": 98.0,
+  "share": 0.098
  },
  {
   "system": "FASTSTV",

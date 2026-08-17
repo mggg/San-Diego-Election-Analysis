@@ -660,8 +660,8 @@
    "values": [
     {
      "rank": 1,
-     "value": 99.65,
-     "won": 1993,
+     "value": 99.6,
+     "won": 1992,
      "contests": 2000
     }
    ]
@@ -702,8 +702,8 @@
    "values": [
     {
      "rank": 1,
-     "value": 24.0741,
-     "won": 130,
+     "value": 23.5185,
+     "won": 127,
      "contests": 540
     }
    ]
@@ -744,8 +744,8 @@
    "values": [
     {
      "rank": 1,
-     "value": 78.2222,
-     "won": 1408,
+     "value": 76.8889,
+     "won": 1384,
      "contests": 1800
     }
    ]
@@ -786,8 +786,8 @@
    "values": [
     {
      "rank": 1,
-     "value": 71.4583,
-     "won": 1029,
+     "value": 70.6944,
+     "won": 1018,
      "contests": 1440
     }
    ]
@@ -906,20 +906,20 @@
    "values": [
     {
      "rank": 1,
-     "value": 3.0,
-     "won": 3,
+     "value": 5.0,
+     "won": 5,
      "contests": 100
     },
     {
      "rank": 2,
-     "value": 20.4545,
-     "won": 45,
+     "value": 20.9091,
+     "won": 46,
      "contests": 220
     },
     {
      "rank": 3,
-     "value": 54.7561,
-     "won": 449,
+     "value": 55.0,
+     "won": 451,
      "contests": 820
     }
    ]
@@ -972,14 +972,14 @@
    "values": [
     {
      "rank": 1,
-     "value": 25.4348,
-     "won": 117,
+     "value": 23.4783,
+     "won": 108,
      "contests": 460
     },
     {
      "rank": 2,
-     "value": 91.7647,
-     "won": 1560,
+     "value": 92.1176,
+     "won": 1566,
      "contests": 1700
     },
     {
@@ -1038,14 +1038,14 @@
    "values": [
     {
      "rank": 1,
-     "value": 49.8214,
-     "won": 279,
+     "value": 50.1786,
+     "won": 281,
      "contests": 560
     },
     {
      "rank": 2,
-     "value": 80.0,
-     "won": 928,
+     "value": 80.1724,
+     "won": 930,
      "contests": 1160
     },
     {
