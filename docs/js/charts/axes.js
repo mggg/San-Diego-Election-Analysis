@@ -33,6 +33,28 @@ export function seatScale(seatMax, innerWidth) {
 }
 
 /*
+ * Share-of-seats scale, 0..100%, for comparing systems that fill different
+ * numbers of seats.
+ *
+ * Counting seats only compares like with like: three of nine and three of
+ * fifteen are the same bubble on a seat axis and very different outcomes, and
+ * proportionality lands somewhere different for each. As a share, the
+ * proportional line is the slate's share of VAP whatever the seat count, so one
+ * dotted line reads across every row.
+ *
+ * Padded by four points at each end so a bubble at 0 or 100 is not sliced in
+ * half by the edge of the plot.
+ */
+export function shareScale(innerWidth) {
+  return d3.scaleLinear().domain([-4, 104]).range([0, innerWidth]);
+}
+
+/** Percentage tick values at `step` intervals across 0..100. */
+export function shareTicks(step = 20) {
+  return d3.range(0, 100 + step, step).filter((v) => v <= 100);
+}
+
+/*
  * Bar geometry, translated from _plot_method_histogram in summarize_results.py
  * so a bar here lands where its matplotlib counterpart does:
  *
@@ -107,11 +129,11 @@ export function ensureSvg(container, className, viewWidth, viewHeight, label) {
   return svg;
 }
 
-export function drawSeatAxis(g, scale, ticks, innerHeight, label) {
+export function drawSeatAxis(g, scale, ticks, innerHeight, label, tickFormat = d3.format('d')) {
   ensure(g, 'g', 'seat-axis')
     .classed('axis', true)
     .attr('transform', `translate(0,${innerHeight})`)
-    .call(d3.axisBottom(scale).tickValues(ticks).tickFormat(d3.format('d')).tickSizeOuter(0));
+    .call(d3.axisBottom(scale).tickValues(ticks).tickFormat(tickFormat).tickSizeOuter(0));
 
   if (label) {
     ensure(g, 'text', 'axis-label')
@@ -154,21 +176,44 @@ export function drawGridlines(g, scale, innerWidth, ticks = 4) {
 }
 
 /**
+ * A vertical line that slides to its new x rather than jumping to it.
+ *
+ * Created at its final position -- a line entering the chart has nowhere to
+ * travel from, and animating one in from x=0 would read as a value that had
+ * changed. Only a line already on screen transitions.
+ */
+function verticalLine(parent, className, x, innerHeight) {
+  let line = parent.select(`line.${className}`);
+  const entering = line.empty();
+  if (entering) line = parent.append('line').attr('class', className);
+
+  (entering ? line : motion(line))
+    .attr('x1', x).attr('x2', x)
+    .attr('y1', 0).attr('y2', innerHeight);
+
+  return line;
+}
+
+/**
  * The dotted proportional-representation line. Its position and wording both
  * come from run.json, so the page never recomputes the share it describes.
+ *
+ * It moves whenever the selected system's seat count does -- a run whose
+ * contests differ in size (1 X 6 STV against 9 X 1 IRV against their combined
+ * 15) puts proportionality at a different number of seats for each -- so it is
+ * transitioned like the axis and gridlines it is read against. Runs whose
+ * systems all share one seat count never move it, which is why a line applied
+ * directly looked correct for as long as they were the only runs on the page.
  */
 export function drawReferenceLine(g, scale, proportionalSeats, innerHeight, tooltip, label) {
-  const line = ensure(g, 'line', 'reference-line')
-    .attr('x1', scale(proportionalSeats))
-    .attr('x2', scale(proportionalSeats))
-    .attr('y1', 0)
-    .attr('y2', innerHeight);
+  const x = scale(proportionalSeats);
+  const line = verticalLine(g, 'reference-line', x, innerHeight);
 
   if (tooltip && label) {
-    // A transparent line over the dotted one, wide enough to be hoverable.
-    ensure(g, 'line', 'reference-hit')
-      .attr('x1', scale(proportionalSeats)).attr('x2', scale(proportionalSeats))
-      .attr('y1', 0).attr('y2', innerHeight)
+    // A transparent line over the dotted one, wide enough to be hoverable. It
+    // travels with the line it covers, or the hit area is left behind at the
+    // old position for the length of the transition.
+    verticalLine(g, 'reference-hit', x, innerHeight)
       .attr('stroke', 'transparent').attr('stroke-width', 8)
       .style('pointer-events', 'stroke')
       .on('mousemove', (event) => tooltip.show(event, label))

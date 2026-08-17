@@ -18,8 +18,8 @@ allows more than two blocs and coalitions of groups voting together.
   population_column, and the complement is the single non-focal group.
 * Coalition / multi-bloc model (config has a "blocs" entry): voter blocs and
   candidate slates are independent axes. "blocs" maps each voter bloc to the
-  demographic groups it aggregates (e.g. {"WHI-AAPI": ["WHI", "AAPI"],
-  "HIS": ["HIS"], "BAIO": ["BAIO"]}), each demographic group resolves to one or
+  demographic groups it aggregates (e.g. {"WAIO-AAPI": ["WAIO", "AAPI"],
+  "HIS": ["HIS"], "BLK": ["BLK"]}), each demographic group resolves to one or
   more VAP columns via "group_vap_columns" (or DEFAULT_GROUP_VAP_COLUMNS), and
   each bloc's proportion is its turnout-weighted summed VAP normalized across
   blocs. This allows more than two blocs and coalitions of groups voting
@@ -27,7 +27,7 @@ allows more than two blocs and coalitions of groups voting together.
   describe the (independent) candidate slates.
 
 Population is combined at two levels, in this order: a demographic group sums
-its VAP columns (BAIO = Black + American Indian + other races), then a bloc sums
+its VAP columns (WAIO = White + American Indian + other races), then a bloc sums
 its groups. Both are recorded in every settings file.
 slate_to_candidates is not passed through statically -- each district gets its
 own randomly-sized slate_to_candidates, apportioned across slates in
@@ -56,14 +56,21 @@ from pipeline.utils.helpers import (
 
 # Default mapping from demographic-group label -> VAP column(s) in the geodata
 # (matches the schema written by data_generator). A group may map to a single
-# column or to a list of columns that are summed, which is how BAIO combines
-# Black, American Indian, and other-race VAP into one group. Override per-run
+# column or to a list of columns that are summed, which is how WAIO combines
+# White, American Indian, and other-race VAP into one group. Override per-run
 # with a "group_vap_columns" entry if your groups or column names differ.
+#
+# American Indian and other-race VAP sit with White rather than with Black:
+# BAIO grouped them with Black voters, which made that bloc a residual category
+# rather than a description of an electorate, and left its cohesion and turnout
+# parameters describing three populations at once. BLK is Black VAP alone, and
+# the two small categories are carried by WAIO instead. Every column is still
+# assigned to exactly one group, so the four groups continue to partition VAP.
 DEFAULT_GROUP_VAP_COLUMNS = {
-    "WHI": "white_vap_20",
+    "WAIO": ["white_vap_20", "amin_vap_20", "other_vap_20"],
     "HIS": "hvap_20",
     "AAPI": "asian_nhpi_vap_20",
-    "BAIO": ["bvap_20", "amin_vap_20", "other_vap_20"],
+    "BLK": "bvap_20",
 }
 
 
@@ -98,7 +105,7 @@ def get_group_vap_columns(config, demographic_groups):
     DEFAULT_GROUP_VAP_COLUMNS. A group's entry may be a single column name or a
     list of columns; either way it is normalized to a list, and a group's VAP is
     the sum over that list. This is what lets one group span several census
-    categories (BAIO = Black + American Indian + other races).
+    categories (WAIO = White + American Indian + other races).
 
     Args:
         config: Parsed config dict.
@@ -330,13 +337,13 @@ def _build_slate_to_candidates(row, slate_columns, candidate_count, config):
     Args:
         row: Row from the district population dataframe.
         slate_columns: Dict mapping each slate to its list of VAP column names,
-            summed to give that slate's VAP (BAIO spans three columns).
+            summed to give that slate's VAP (WAIO spans three columns).
         candidate_count: Total number of candidate slots to fill.
         config: Parsed config dict; read for the optional "availability_exps".
 
     Returns:
         Dict mapping each slate with a nonzero count to a list of candidate ids,
-        e.g. {"WHI": ["WHI1", "WHI2"]}.
+        e.g. {"WAIO": ["WAIO1", "WAIO2"]}.
     """
     slates = list(slate_columns)
     weighted = {s: sum(float(row[column]) for column in slate_columns[s]) for s in slates}
@@ -478,7 +485,7 @@ def _build_district_settings(row, config, group_columns, bloc_definitions):
         the same districts under the narrowing round's lower turnout.
     """
     # A group's VAP is the sum over its columns, so a multi-column group like
-    # BAIO (Black + American Indian + other) is combined before anything else
+    # WAIO (White + American Indian + other) is combined before anything else
     # uses it.
     group_vap = {
         group: sum(float(row[column]) for column in columns)
@@ -554,7 +561,7 @@ def generate_settings(config):
 
     population_data = gpd.read_file(config['geodata_path'])
     # group_columns / slate_columns map each label to a *list* of columns (a group
-    # like BAIO spans several), so flatten before de-duplicating.
+    # like WAIO spans several), so flatten before de-duplicating.
     needed_columns = list(dict.fromkeys(
         [c for columns in group_columns.values() for c in columns]
         + [c for columns in slate_columns.values() for c in columns]

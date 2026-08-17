@@ -1,0 +1,37 @@
+{
+  "_comment": "The published report's outline: which sections and scenarios docs/index.html renders, and in what order. Hand-edited -- nothing generates or rewrites this file. manifest.json stays complete and is not affected by anything here; this only decides what the page shows.",
+
+  "_prose_comment": "Prose sections, in page order. 'file' is relative to docs/prose/. A missing or empty file renders as a placeholder rather than breaking the build, so a section can be listed before it is written.",
+  "prose_sections": [
+    { "id": "abstract", "file": "abstract.md", "title": "Abstract" },
+    { "id": "background", "file": "background.md", "title": "Background" },
+    { "id": "methodology", "file": "methodology.md", "title": "Methodology" },
+    { "id": "conclusion", "file": "conclusion.md", "title": "Conclusion" }
+  ],
+
+  "_scenarios_comment": "Scenario sections, in page order, by slug (the 'slug' in a run's outputs/<run>/summaries/report/run.json). This is an allow-list: a run with complete artifacts that is not listed here does not appear on the page. To park a scenario without losing the entry, replace the string with { \"slug\": \"...\", \"enabled\": false }. A hidden scenario keeps its data in manifest.json and docs/data/, and stays in the cross-run comparison.",
+  "_composed_comment": "A scenario may instead collect systems out of several runs, so one section can compare contests that were simulated separately. Give it a \"systems\" list: each entry names the \"run\" (slug) and the \"system\" (rule id as it appears in that run's run.json), optionally \"label\" to name it in the dropdown, and optionally \"districts\"/\"seats\" when one run uses the same rule in more than one contest. Switching systems reloads that run's records and repoints the figures, axes, proportional line, and the parameters card at it.",
+  "scenarios": [
+    "basic-3-x-3",
+    {
+      "_note": "Every standalone electoral structure lives here rather than in a section of its own: the 9 X 1 rules it was built for, plus the at-large and multi-member STV runs, which are the same question asked with a different districting. Basic and its parameter variations (diverse preferences, low turnout, low availability) keep their own sections, as do the two hybrid runs, whose combined view has no single contest to select.",
+      "slug": "alternative-electoral-systems",
+      "systems": [
+        { "run": "alternative-electoral-systems", "system": "IRV", "label": "9 × 1 IRV" },
+        { "run": "alternative-electoral-systems", "system": "PLURALITY", "label": "9 × 1 Plurality" },
+        { "run": "alternative-electoral-systems", "system": "TOPTWO", "label": "9 × 1 Top Two" },
+        { "run": "alternative-electoral-systems", "system": "ALASKA", "label": "9 × 1 Alaska" },
+        { "run": "3x5-stv", "system": "FASTSTV", "label": "3 × 5 STV" },
+        { "run": "nine-seats-at-large", "system": "FASTSTV", "label": "1 × 9 STV" },
+        { "run": "nine-seats-at-large", "system": "CUMULATIVE", "label": "1 × 9 Cumulative" },
+        { "run": "nine-seats-at-large", "system": "LIMITED", "label": "1 × 9 Limited" },
+        { "run": "fifteen-seats-at-large-stv", "system": "FASTSTV", "label": "1 × 15 STV" }
+      ]
+    },
+    "city-charter-amendment-proposal",
+    "hybrid-system-3x4-stv-1x3-plurality",
+    "diverse-aapi-coalition-preferences",
+    "low-aapi-availability",
+    "low-aapi-turnout"
+  ]
+}
