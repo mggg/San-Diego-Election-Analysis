@@ -1,7 +1,6 @@
 {
   "run_name": "3x5 STV",
   "num_subsamples": 100,
-  "candidate_geometric_p": 0.1,
   "total_seats": 15,
   "district_configs": [
     {

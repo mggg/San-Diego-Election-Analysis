@@ -543,13 +543,6 @@ def generate_settings(config):
     """
     random.seed(config["seed"])
 
-    if "candidate_geometric_p" not in config:
-        raise ValueError(
-            "'candidate_geometric_p' must be set in the config -- it's the success "
-            "probability for the per-district candidate-count draw (e.g. 0.2 for "
-            "50-district plans, 0.1 for 10-district plans)."
-        )
-
     bloc_definitions = get_bloc_definitions(config)
     _validate_bloc_config(config, bloc_definitions)
     # The demographic groups we need VAP for are the union across all blocs.

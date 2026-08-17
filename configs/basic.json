@@ -1,7 +1,6 @@
 {
   "run_name": "Basic - 3 X 3",
   "num_subsamples": 100,
-  "candidate_geometric_p": 0.1,
   "total_seats": 9,
   "district_configs": [
     {

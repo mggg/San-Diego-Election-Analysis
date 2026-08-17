@@ -1,7 +1,6 @@
 {
   "run_name": "City Charter Amendment Proposal",
   "num_subsamples": 50,
-  "candidate_geometric_p": 0.1,
   "hybrid_election": true,
   "total_seats": 15,
   "district_configs": [

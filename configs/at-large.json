@@ -1,7 +1,6 @@
 {
   "run_name": "Fifteen Seats At-Large - STV",
   "num_subsamples": 100,
-  "candidate_geometric_p": 0.065,
   "total_seats": 15,
   "district_configs": [
     {
