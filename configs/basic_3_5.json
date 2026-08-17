@@ -42,27 +42,6 @@
     "WHI": 1
   },
   "num_voters": 10000,
-  "slate_to_candidates": {
-    "WHI": [
-      "WHI1",
-      "WHI2",
-      "WHI3",
-      "WHI4"
-    ],
-    "BAIO": [
-      "BAIO1",
-      "BAIO2"
-    ],
-    "HIS": [
-      "HIS1",
-      "HIS2",
-      "HIS3"
-    ],
-    "AAPI": [
-      "AAPI1",
-      "AAPI2"
-    ]
-  },
   "focal_group": "BAIO",
   "cohesion_parameters": {
     "WHI": {

@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+"
         crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="fonts/fonts.css">
-  <link rel="stylesheet" href="css/report.css?v=9d3946afb2">
+  <link rel="stylesheet" href="css/report.css?v=4e054b07a1">
 </head>
 
 <body data-bs-spy="scroll" data-bs-target="#toc-nav" data-bs-offset="90" tabindex="0">
@@ -55,10 +55,12 @@
           <a class="nav-link" href="#results">Results by Scenario</a>
           <nav class="nav flex-column">
             <a class="nav-link" href="#run-basic-3-x-3">Basic - 3 X 3</a>
+            <a class="nav-link" href="#run-3x5-stv">3x5 STV</a>
             <a class="nav-link" href="#run-alternative-electoral-systems">Alternative Electoral Systems</a>
             <a class="nav-link" href="#run-city-charter-amendment-proposal">City Charter Amendment Proposal</a>
             <a class="nav-link" href="#run-diverse-aapi-coalition-preferences">Diverse AAPI Coalition Preferences</a>
             <a class="nav-link" href="#run-fifteen-seats-at-large-stv">Fifteen Seats At-Large - STV</a>
+            <a class="nav-link" href="#run-hybrid-system-3x4-stv-1x3-plurality">Hybrid System - 3x4 STV + 1x3 Plurality</a>
             <a class="nav-link" href="#run-low-aapi-availability">Low AAPI Availability</a>
             <a class="nav-link" href="#run-low-aapi-turnout">Low AAPI Turnout</a>
             <a class="nav-link" href="#run-nine-seats-at-large">Nine Seats At-Large</a>
@@ -273,6 +275,51 @@ $$</div>
             </div>
             <aside class="run-params" data-params="basic-3-x-3"></aside>
           </section>
+          <section id="run-3x5-stv" class="run mb-5" data-run="3x5-stv">
+            <div class="run-main">
+            <h3 class="h4 mt-4">3x5 STV</h3>
+            <p class="todo">[Description to be written — edit
+               <code>docs/prose/runs/3x5-stv.md</code>.]</p>
+
+            <div class="run-controls" data-controls="3x5-stv"></div>
+
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="tab"
+                        data-bs-target="#3x5-stv-focal" type="button" role="tab">
+                  Seat outcomes
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab"
+                        data-bs-target="#3x5-stv-availability" type="button" role="tab">
+                  Districts by VAP rank
+                </button>
+              </li>
+            </ul>
+            <div class="tab-content pt-3">
+              <div class="tab-pane fade show active" id="3x5-stv-focal" role="tabpanel">
+                <div class="metric-toggles" data-view="3x5-stv"></div>
+                <div class="row g-4 figure-pair" data-one-group="3x5-stv">
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="bubble" data-run="3x5-stv"></div>
+                  </div>
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="histogram" data-run="3x5-stv"></div>
+                  </div>
+                </div>
+                <div data-all-groups="3x5-stv" hidden>
+                  <div class="chart" data-chart="slate" data-run="3x5-stv"></div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="3x5-stv-availability" role="tabpanel">
+                <div class="metric-toggles" data-metric="3x5-stv"></div>
+                <div class="chart" data-chart="availability" data-run="3x5-stv"></div>
+              </div>
+            </div>
+            </div>
+            <aside class="run-params" data-params="3x5-stv"></aside>
+          </section>
           <section id="run-alternative-electoral-systems" class="run mb-5" data-run="alternative-electoral-systems">
             <div class="run-main">
             <h3 class="h4 mt-4">Alternative Electoral Systems</h3>
@@ -453,6 +500,51 @@ $$</div>
             </div>
             <aside class="run-params" data-params="fifteen-seats-at-large-stv"></aside>
           </section>
+          <section id="run-hybrid-system-3x4-stv-1x3-plurality" class="run mb-5" data-run="hybrid-system-3x4-stv-1x3-plurality">
+            <div class="run-main">
+            <h3 class="h4 mt-4">Hybrid System - 3x4 STV + 1x3 Plurality</h3>
+            <p class="todo">[Description to be written — edit
+               <code>docs/prose/runs/hybrid-system-3x4-stv-1x3-plurality.md</code>.]</p>
+
+            <div class="run-controls" data-controls="hybrid-system-3x4-stv-1x3-plurality"></div>
+
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="tab"
+                        data-bs-target="#hybrid-system-3x4-stv-1x3-plurality-focal" type="button" role="tab">
+                  Seat outcomes
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab"
+                        data-bs-target="#hybrid-system-3x4-stv-1x3-plurality-availability" type="button" role="tab">
+                  Districts by VAP rank
+                </button>
+              </li>
+            </ul>
+            <div class="tab-content pt-3">
+              <div class="tab-pane fade show active" id="hybrid-system-3x4-stv-1x3-plurality-focal" role="tabpanel">
+                <div class="metric-toggles" data-view="hybrid-system-3x4-stv-1x3-plurality"></div>
+                <div class="row g-4 figure-pair" data-one-group="hybrid-system-3x4-stv-1x3-plurality">
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="bubble" data-run="hybrid-system-3x4-stv-1x3-plurality"></div>
+                  </div>
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="histogram" data-run="hybrid-system-3x4-stv-1x3-plurality"></div>
+                  </div>
+                </div>
+                <div data-all-groups="hybrid-system-3x4-stv-1x3-plurality" hidden>
+                  <div class="chart" data-chart="slate" data-run="hybrid-system-3x4-stv-1x3-plurality"></div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="hybrid-system-3x4-stv-1x3-plurality-availability" role="tabpanel">
+                <div class="metric-toggles" data-metric="hybrid-system-3x4-stv-1x3-plurality"></div>
+                <div class="chart" data-chart="availability" data-run="hybrid-system-3x4-stv-1x3-plurality"></div>
+              </div>
+            </div>
+            </div>
+            <aside class="run-params" data-params="hybrid-system-3x4-stv-1x3-plurality"></aside>
+          </section>
           <section id="run-low-aapi-availability" class="run mb-5" data-run="low-aapi-availability">
             <div class="run-main">
             <h3 class="h4 mt-4">Low AAPI Availability</h3>
@@ -604,6 +696,7 @@ $$</div>
       <p class="mb-1">Metric Geometry &amp; Gerrymandering Group — San Diego City Council Election Analysis</p>
       <p class="mb-1"><a href="https://github.com/mggg/San-Diego-Election-Analysis" target="_blank" rel="noopener">View the repository on GitHub</a></p>
       <p class="generated mb-0">Generated 2026-08-14T20:16:07+00:00</p>
+      <p class="generated mb-0">Generated 2026-08-14T22:08:43+00:00</p>
     </div>
   </footer>
 
@@ -636,15 +729,15 @@ $$</div>
 
   <script type="importmap">{
  "imports": {
-  "./js/charts/availability.js": "./js/charts/availability.js?v=9d3946afb2",
-  "./js/charts/axes.js": "./js/charts/axes.js?v=9d3946afb2",
-  "./js/charts/bubble.js": "./js/charts/bubble.js?v=9d3946afb2",
-  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=9d3946afb2",
-  "./js/charts/histogram.js": "./js/charts/histogram.js?v=9d3946afb2",
-  "./js/charts/slate.js": "./js/charts/slate.js?v=9d3946afb2",
-  "./js/report.js": "./js/report.js?v=9d3946afb2"
+  "./js/charts/availability.js": "./js/charts/availability.js?v=4e054b07a1",
+  "./js/charts/axes.js": "./js/charts/axes.js?v=4e054b07a1",
+  "./js/charts/bubble.js": "./js/charts/bubble.js?v=4e054b07a1",
+  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=4e054b07a1",
+  "./js/charts/histogram.js": "./js/charts/histogram.js?v=4e054b07a1",
+  "./js/charts/slate.js": "./js/charts/slate.js?v=4e054b07a1",
+  "./js/report.js": "./js/report.js?v=4e054b07a1"
  }
 }</script>
-  <script type="module" src="js/report.js?v=9d3946afb2"></script>
+  <script type="module" src="js/report.js?v=4e054b07a1"></script>
 </body>
 </html>

@@ -401,9 +401,19 @@ async function mountRun(section, manifest, cache) {
   const { runMeta } = bundle;
   renderRunParams(section, entry, runMeta, manifest);
 
-  const systems = runMeta.districtConfigs.flatMap((dc) => dc.systems);
-  // Slate metadata comes from the manifest, which carries each slate's own
-  // reference line already worded by the helper the figures share.
+  // Each system carries its own contest's seat count, not the run's combined
+  // total: a hybrid_election run's citywide total (e.g. 15) is the wrong
+  // denominator for the proportional-representation line on a single contest
+  // (1 X 6 STV wants 6, 9 X 1 IRV wants 9), so the reference line is rescaled
+  // per system below rather than taken from the manifest as-is. `winners` on
+  // a districtConfigs entry is per-district (see _run_metadata's
+  // "seats_per_district"), so a real contest's seat count is numDistricts *
+  // winners; the synthetic combined entry is tagged numDistricts=0 with
+  // winners already holding the citywide total (_tag_hybrid_combined).
+  const systems = runMeta.districtConfigs
+    .flatMap((dc) => dc.systems.map((s) => (
+      { ...s, winners: dc.numDistricts > 0 ? dc.numDistricts * dc.winners : dc.winners }
+    )));
   const slates = entry.slates || [];
   const state = {
     system: systems[0].id,
@@ -416,10 +426,18 @@ async function mountRun(section, manifest, cache) {
   function draw() {
     // Resolve the selection once, so a chart takes plain lists and never has to
     // reach back into the control state.
+    const viewSystems = systems.filter((s) => s.id === state.system);
+    const winners = viewSystems[0] ? viewSystems[0].winners : runMeta.totalSeats;
+    const baseSlate = slates.find((s) => s.id === state.slate) || slates[0];
     const view = {
-      systems: systems.filter((s) => s.id === state.system),
+      systems: viewSystems,
       models: runMeta.voterModels.filter((m) => state.models.has(m.id)),
-      slate: slates.find((s) => s.id === state.slate) || slates[0],
+      slate: baseSlate && {
+        ...baseSlate,
+        proportionalSeats: baseSlate.vapShare * winners,
+        proportionalLabel: `${baseSlate.label} share of VAP: `
+          + `${d3.format('.1%')(baseSlate.vapShare)} (${d3.format('.1f')(baseSlate.vapShare * winners)} seats)`,
+      },
       metric: state.metric,
     };
     /*
