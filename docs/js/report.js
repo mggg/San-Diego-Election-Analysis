@@ -41,19 +41,29 @@ const json = (path) => fetch(path).then((r) => {
  * been re-run with different settings. Everything here is fixed for the run --
  * the controls above change what is drawn, never what was simulated.
  */
-function renderRunParams(section, entry, runMeta, manifest) {
+function renderRunParams(section, entry, runMeta, manifest, source) {
   const mount = d3.select(section).select(`[data-params="${entry.slug}"]`);
   if (mount.empty()) return;
   mount.selectAll('*').remove();
 
-  const cfg = (manifest.configReference || []).find((r) => r.run === runMeta.runName) || {};
+  /*
+   * A composed section's parameters belong to the selected system, not to the
+   * section: its systems come from different runs, simulated under different
+   * turnout, pools and matrices. Reading them off the section would describe
+   * one run's setup under every option in the dropdown.
+   */
+  const cfg = source || (manifest.configReference || []).find((r) => r.run === runMeta.runName) || {};
   const list = (xs) => (xs || []).join(', ') || '—';
   const rates = (t) => Object.entries(t || {})
     .map(([bloc, rate]) => `${bloc} ${rate}`).join(' · ') || '—';
 
-  const shape = runMeta.districtConfigs
+  const shape = source ? source.shape : runMeta.districtConfigs
     .map((dc) => `${dc.numDistricts} × ${dc.winners}`).join('; ');
-  const plans = d3.sum(runMeta.districtConfigs, (dc) => dc.plans);
+  const plans = source ? source.plans : d3.sum(runMeta.districtConfigs, (dc) => dc.plans);
+  const totalSeats = source ? source.seats : runMeta.totalSeats;
+  const replicates = source ? source.replicates : runMeta.replicates;
+  const turnout = source ? source.turnout : runMeta.turnout;
+  const primaryTurnout = source ? source.primaryTurnout : runMeta.primaryTurnout;
 
   // A matrix whose cells are all equal says one number, and says it in one line
   // instead of twenty-five cells.
@@ -61,16 +71,19 @@ function renderRunParams(section, entry, runMeta, manifest) {
   const uniform = (m) => flat(m).length > 0 && new Set(flat(m)).size === 1;
 
   const rows = [
-    ['Districting', `${shape} (${runMeta.totalSeats} seats)`],
-    ['Plans sampled', d3.format(',')(plans)],
-    ['Replicates', d3.format(',')(runMeta.replicates)],
+    ['Districting', `${shape} (${totalSeats} seats)`],
+    ['Plans sampled', plans == null ? '—' : d3.format(',')(plans)],
+    ['Replicates', replicates == null ? '—' : d3.format(',')(replicates)],
     ['Candidate pool', cfg.candidatePoolMax == null
       ? '—' : `max ${cfg.candidatePoolMax}, mean ${cfg.candidatePoolMean}`],
-    ['Turnout', rates(runMeta.turnout)],
+    ['Turnout', rates(turnout)],
   ];
+  // Which run this system was simulated in, shown only where the section mixes
+  // several: on an ordinary run it would repeat the heading above it.
+  if (source) rows.unshift(['Simulation', source.runName]);
   // Only shown when the run actually models a lower-turnout primary; an empty
   // row would imply the two rounds differ when they do not.
-  if (runMeta.primaryTurnout) rows.push(['Primary turnout', rates(runMeta.primaryTurnout)]);
+  if (primaryTurnout) rows.push(['Primary turnout', rates(primaryTurnout)]);
   // No focal-group row: it is chosen in the control bar above the figures, so a
   // fixed one here would contradict the selector the moment it is changed.
   if (uniform(cfg.alphas)) rows.push(['Dirichlet α', `${flat(cfg.alphas)[0]} (uniform)`]);
@@ -149,24 +162,27 @@ function drawMatrix(mount, title, matrix, fmt, order) {
  * Exactly one system is shown at a time; comparing systems is what the cross-run
  * figure is for.
  */
-function buildControls(mount, runMeta, palette, state, onChange, slates) {
+function buildControls(mount, context, palette, state, onChange, slates) {
   mount.selectAll('*').remove();
-  const systems = runMeta.districtConfigs.flatMap((dc) => dc.systems);
+  const { slug, systems, models, onSystemChange } = context;
 
-  // A run with one system has nothing to choose between; its name is already in
-  // the panel title.
+  // A section with one system has nothing to choose between; its name is
+  // already in the panel title.
   if (systems.length > 1) {
     const group = mount.append('div').attr('class', 'control-group');
     group.append('label')
       .attr('class', 'control-label')
-      .attr('for', `sys-${runMeta.slug}`)
+      .attr('for', `sys-${slug}`)
       .text('Voting system');
     group.append('select')
-      .attr('id', `sys-${runMeta.slug}`)
+      .attr('id', `sys-${slug}`)
       .attr('class', 'form-select form-select-sm')
       .on('change', function () {
         state.system = this.value;
-        onChange();
+        // A composed section's systems come from different runs, which need not
+        // model the same voter models -- so changing system can change what the
+        // toggles below should even offer.
+        (onSystemChange || onChange)();
       })
       .selectAll('option')
       .data(systems)
@@ -180,10 +196,10 @@ function buildControls(mount, runMeta, palette, state, onChange, slates) {
     const slateGroup = mount.append('div').attr('class', 'control-group');
     slateGroup.append('label')
       .attr('class', 'control-label')
-      .attr('for', `slate-${runMeta.slug}`)
+      .attr('for', `slate-${slug}`)
       .text('Focal group');
     slateGroup.append('select')
-      .attr('id', `slate-${runMeta.slug}`)
+      .attr('id', `slate-${slug}`)
       .attr('class', 'form-select form-select-sm')
       .on('change', function () { state.slate = this.value; onChange(); })
       .selectAll('option').data(slates)
@@ -197,7 +213,7 @@ function buildControls(mount, runMeta, palette, state, onChange, slates) {
   group.append('span').attr('class', 'control-label').text('Voter model');
   const toggles = group.append('div').attr('class', 'model-toggles');
 
-  toggles.selectAll('button').data(runMeta.voterModels).join('button')
+  toggles.selectAll('button').data(models).join('button')
     .attr('type', 'button')
     .attr('class', (d) => `model-toggle${state.models.has(d.id) ? ' on' : ''}`)
     .attr('aria-pressed', (d) => state.models.has(d.id))
@@ -367,6 +383,51 @@ function mountCrossRun(section, manifest) {
   draw();
 }
 
+/** One run's four artifacts, fetched once and shared between sections. */
+function loadBundle(cache, key, data) {
+  if (!cache.has(key)) {
+    cache.set(key, Promise.all([
+      json(data.run),
+      json(data.focalSeats),
+      json(data.slateSeats),
+      // Optional: a run whose settings were cleaned up has no availability
+      // artifact, and the tab says so rather than the run failing to load.
+      data.availability ? json(data.availability) : Promise.resolve(null),
+    ]).then(([runMeta, focalSeats, slateSeats, availability]) => (
+      { runMeta, focalSeats, slateSeats, availability }
+    )));
+  }
+  return cache.get(key);
+}
+
+/**
+ * One system's slice of the run it was simulated in.
+ *
+ * Narrowed by contest, not just by rule: a run can use the same rule in two
+ * contests of different sizes, and pooling those would put two districtings in
+ * one distribution. The records keep their own system id, so the charts filter
+ * by it exactly as they do for an ordinary run.
+ */
+function sourceBundle(bundles, source) {
+  const base = bundles.get(source.run);
+  const ofSource = (records) => (records || []).filter(
+    (r) => r.system === source.system
+      && (r.numDistricts === undefined || r.numDistricts === source.numDistricts)
+      && (r.winners === undefined || r.winners === source.winners),
+  );
+  return {
+    ...base,
+    focalSeats: ofSource(base.focalSeats),
+    slateSeats: ofSource(base.slateSeats),
+    availability: base.availability && {
+      ...base.availability,
+      boxes: base.availability.boxes.filter(
+        (b) => b.numDistricts === source.numDistricts && b.winners === source.winners,
+      ),
+    },
+  };
+}
+
 async function mountRun(section, manifest, cache) {
   const slug = section.dataset.run;
   const charts = Array.from(section.querySelectorAll('[data-chart]'));
@@ -377,21 +438,20 @@ async function mountRun(section, manifest, cache) {
     return null;
   }
 
+  // A composed section selects between contests that live in different runs, so
+  // it holds one bundle per run it draws on. The cache is shared with every
+  // other section, so a run that appears in two of them is fetched once.
+  const composition = entry.composition || null;
+  const bundles = new Map();
+
   let bundle;
   try {
-    if (!cache.has(slug)) {
-      cache.set(slug, Promise.all([
-        json(entry.data.run),
-        json(entry.data.focalSeats),
-        json(entry.data.slateSeats),
-        // Optional: a run whose settings were cleaned up has no availability
-        // artifact, and the tab says so rather than the run failing to load.
-        entry.data.availability ? json(entry.data.availability) : Promise.resolve(null),
-      ]).then(([runMeta, focalSeats, slateSeats, availability]) => (
-        { runMeta, focalSeats, slateSeats, availability }
-      )));
+    bundle = await loadBundle(cache, slug, entry.data);
+    for (const source of composition || []) {
+      if (!bundles.has(source.run)) {
+        bundles.set(source.run, await loadBundle(cache, source.run, source.data));
+      }
     }
-    bundle = await cache.get(slug);
   } catch (error) {
     charts.forEach((node) => emptyState(d3.select(node), `Could not load this run: ${error.message}`));
     console.error(error);
@@ -399,25 +459,39 @@ async function mountRun(section, manifest, cache) {
   }
 
   const { runMeta } = bundle;
-  renderRunParams(section, entry, runMeta, manifest);
 
-  // Each system carries its own contest's seat count, not the run's combined
-  // total: a hybrid_election run's citywide total (e.g. 15) is the wrong
-  // denominator for the proportional-representation line on a single contest
-  // (1 X 6 STV wants 6, 9 X 1 IRV wants 9), so the reference line is rescaled
-  // per system below rather than taken from the manifest as-is. `winners` on
-  // a districtConfigs entry is per-district (see _run_metadata's
-  // "seats_per_district"), so a real contest's seat count is numDistricts *
-  // winners; the synthetic combined entry is tagged numDistricts=0 with
-  // winners already holding the citywide total (_tag_hybrid_combined).
-  const systems = runMeta.districtConfigs
-    .flatMap((dc) => dc.systems.map((s) => (
+  /*
+   * The dropdown's options.
+   *
+   * Each carries its own contest's seat count, not the section's combined
+   * total: a hybrid_election run's citywide total (e.g. 15) is the wrong
+   * denominator for the proportional-representation line on a single contest
+   * (1 X 6 STV wants 6, 9 X 1 IRV wants 9), so the reference line is rescaled
+   * per system rather than taken from the manifest as-is. `winners` on a
+   * districtConfigs entry is per-district (see _run_metadata's
+   * "seats_per_district"), so a real contest's seat count is numDistricts *
+   * winners; the synthetic combined entry is tagged numDistricts=0 with winners
+   * already holding the citywide total (_tag_hybrid_combined).
+   *
+   * A composed section's options were resolved at build time and each names the
+   * run it came from -- otherwise identical to a run's own, so everything below
+   * treats the two the same.
+   */
+  const systems = composition
+    ? composition.map((source) => ({
+      id: source.id, label: source.label, winners: source.seats, source,
+    }))
+    : runMeta.districtConfigs.flatMap((dc) => dc.systems.map((s) => (
       { ...s, winners: dc.numDistricts > 0 ? dc.numDistricts * dc.winners : dc.winners }
     )));
   const slates = entry.slates || [];
+  /** The models offered for a selection -- a composed section's vary by system. */
+  const modelsOf = (selected) => (
+    selected && selected.source ? selected.source.voterModels : runMeta.voterModels
+  );
   const state = {
     system: systems[0].id,
-    models: new Set(runMeta.voterModels.map((m) => m.id)),
+    models: new Set(modelsOf(systems[0]).map((m) => m.id)),
     slate: (slates.find((s) => s.id === runMeta.focalGroup) || slates[0] || {}).id,
     metric: 'winRate',
     allGroups: false,
@@ -426,12 +500,19 @@ async function mountRun(section, manifest, cache) {
   function draw() {
     // Resolve the selection once, so a chart takes plain lists and never has to
     // reach back into the control state.
-    const viewSystems = systems.filter((s) => s.id === state.system);
-    const winners = viewSystems[0] ? viewSystems[0].winners : runMeta.totalSeats;
+    const selected = systems.find((s) => s.id === state.system) || systems[0];
+    const source = selected && selected.source;
+    // A composed section reads from the run the selected system was simulated
+    // in, narrowed to that one contest; an ordinary run reads its own bundle.
+    const active = source ? sourceBundle(bundles, source) : bundle;
+    const activeMeta = active.runMeta;
+    const systemId = source ? source.system : state.system;
+    const viewSystems = [{ ...selected, id: systemId }];
+    const winners = selected ? selected.winners : runMeta.totalSeats;
     const baseSlate = slates.find((s) => s.id === state.slate) || slates[0];
     const view = {
       systems: viewSystems,
-      models: runMeta.voterModels.filter((m) => state.models.has(m.id)),
+      models: modelsOf(selected).filter((m) => state.models.has(m.id)),
       slate: baseSlate && {
         ...baseSlate,
         proportionalSeats: baseSlate.vapShare * winners,
@@ -448,11 +529,21 @@ async function mountRun(section, manifest, cache) {
      * its own from the rows it happens to draw put them on different axes: the
      * histogram drops the pooled row and the bubble chart drops empty seat
      * counts, so the two disagreed whenever those differed.
+     *
+     * The floor is the selected system's own, so a section holding a 15-seat
+     * contest next to a 9-seat one does not measure the smaller against an axis
+     * sized for the larger.
      */
-    const shown = bundle.slateSeats.filter(
-      (r) => r.system === state.system && r.slate === view.slate.id,
+    const shown = active.slateSeats.filter(
+      (r) => r.system === systemId && r.slate === view.slate.id,
     );
-    view.seatMax = Math.max(runMeta.seatMax, d3.max(shown, (r) => r.seats) || 0);
+    view.seatMax = Math.max(
+      source ? source.seatMax : runMeta.seatMax, d3.max(shown, (r) => r.seats) || 0,
+    );
+
+    // Redrawn with the figures: on a composed section the parameters describe
+    // the selected system, and they change under it.
+    renderRunParams(section, entry, activeMeta, manifest, source);
 
     applyView(state.allGroups);
     // Note the absence of a teardown: the charts update what is already on
@@ -463,7 +554,7 @@ async function mountRun(section, manifest, cache) {
       const render = RENDERERS[node.dataset.chart];
       if (!render) return;
       try {
-        render(container, bundle, manifest, view);
+        render(container, active, manifest, view);
       } catch (error) {
         emptyState(container, `Could not draw this chart: ${error.message}`);
         console.error(error);
@@ -526,15 +617,45 @@ async function mountRun(section, manifest, cache) {
   }
 
   const mount = d3.select(section).select(`[data-controls="${slug}"]`);
-  if (!mount.empty()) buildControls(mount, runMeta, manifest.palette, state, draw, slates);
-
-  // The boxplot's own control: it changes what fills the boxes, and it changes
-  // which boxes, so it belongs with that figure rather than the shared bar.
   const metrics = d3.select(section).select(`[data-metric="${slug}"]`);
-  if (!metrics.empty() && bundle.availability) {
+
+  /*
+   * Rebuild the bar for the current selection.
+   *
+   * Only a change of system needs this: the models on offer belong to the run
+   * the selected system was simulated in, so a composed section can gain or
+   * lose a toggle when the dropdown moves. Toggling a model redraws without
+   * coming through here, so the buttons are not rebuilt under the pointer.
+   */
+  function refreshControls() {
+    const selected = systems.find((s) => s.id === state.system) || systems[0];
+    const models = modelsOf(selected);
+
+    // Carry the selection across a change of system, keeping whichever models
+    // the new one also has. A system that shares none of them starts with all
+    // of its own rather than an empty chart.
+    const kept = new Set(models.filter((m) => state.models.has(m.id)).map((m) => m.id));
+    state.models = kept.size ? kept : new Set(models.map((m) => m.id));
+
+    if (!mount.empty()) {
+      buildControls(
+        mount,
+        { slug, systems, models, onSystemChange: () => { refreshControls(); draw(); } },
+        manifest.palette, state, draw, slates,
+      );
+    }
+
+    // The boxplot's own control: it changes what fills the boxes, and it changes
+    // which boxes, so it belongs with that figure rather than the shared bar.
+    // Present only while the selected system has availability data behind it.
+    const source = selected && selected.source;
+    const hasAvailability = source
+      ? Boolean(bundles.get(source.run).availability) : Boolean(bundle.availability);
     metrics.selectAll('button')
-      .data([{ id: 'winRate', label: 'Win rate' },
-             { id: 'availability', label: 'Candidate availability' }])
+      .data(hasAvailability
+        ? [{ id: 'winRate', label: 'Win rate' },
+           { id: 'availability', label: 'Candidate availability' }]
+        : [])
       .join('button')
       .attr('type', 'button')
       .attr('class', (d) => `model-toggle${state.metric === d.id ? ' on' : ''}`)
@@ -548,6 +669,8 @@ async function mountRun(section, manifest, cache) {
         draw();
       });
   }
+
+  if (!metrics.empty() || !mount.empty()) refreshControls();
 
   draw();
   return draw;
