@@ -41,26 +41,84 @@ const json = (path) => fetch(path).then((r) => {
  * been re-run with different settings. Everything here is fixed for the run --
  * the controls above change what is drawn, never what was simulated.
  */
-function renderRunParams(section, entry, runMeta, manifest, source) {
+const PARAMS_TABS = [
+  { id: 'parameters', label: 'Parameters' },
+  { id: 'stats', label: 'Scenario Stats' },
+];
+
+/**
+ * How a contest's districting reads.
+ *
+ * "N × M" only describes a contest that actually has districts. One citywide
+ * district is an at-large election, and writing it as 1 × 15 describes a
+ * districting nobody drew; the synthetic entry standing for a hybrid run's two
+ * contests together is tagged with no districts at all, and printing 0 × 15
+ * describes nothing. Both are named for what they are instead.
+ */
+function districtingLabel(numDistricts, perDistrict, seats) {
+  const total = `${seats} seat${seats === 1 ? '' : 's'}`;
+  if (numDistricts === 0) return `All contests combined (${total})`;
+  if (numDistricts === 1) return `At-large (${total})`;
+  return `${numDistricts} × ${perDistrict} (${total})`;
+}
+
+/** A two- or three-column table of label against value(s), as in Scenario Stats. */
+function keyValueTable(mount, title, headers, rows) {
+  if (!rows.length) return;
+  if (title) mount.append('div').attr('class', 'matrix-title mt').text(title);
+  const wrap = mount.append('div').attr('class', 'params-matrix');
+  const table = wrap.append('table').attr('class', 'stats-table');
+
+  const head = table.append('thead').append('tr');
+  headers.forEach((label, i) => head.append('th')
+    .attr('scope', 'col')
+    .attr('class', i ? 'num' : null)
+    .text(label));
+
+  table.append('tbody').selectAll('tr').data(rows).join('tr')
+    .each(function (row) {
+      const tr = d3.select(this);
+      tr.append('th').attr('scope', 'row').text(row[0]);
+      row.slice(1).forEach((value) => tr.append('td').attr('class', 'num').text(value));
+    });
+}
+
+function renderRunParams(section, entry, runMeta, manifest, source, selected, tabs) {
   const mount = d3.select(section).select(`[data-params="${entry.slug}"]`);
   if (mount.empty()) return;
   mount.selectAll('*').remove();
 
+  const activeTab = (tabs && tabs.current) || PARAMS_TABS[0].id;
+
   /*
-   * A composed section's parameters belong to the selected system, not to the
-   * section: its systems come from different runs, simulated under different
-   * turnout, pools and matrices. Reading them off the section would describe
-   * one run's setup under every option in the dropdown.
+   * Everything below describes the selected contest, not the run.
+   *
+   * A composed section's parameters belong to the selected system: its systems
+   * come from different runs, simulated under different turnout, pools and
+   * matrices, so reading them off the section would describe one run's setup
+   * under every option in the dropdown.
+   *
+   * A run with more than one contest -- a hybrid's two tiers, Basic's three
+   * rules -- has a districting, a pool and a plan count per contest, and
+   * reporting the run's whole list under whichever one is on show described the
+   * others as much as it described that one. Composed sections resolved this at
+   * build time; ordinary runs carry it on the system the dropdown selected.
    */
-  const cfg = source || (manifest.configReference || []).find((r) => r.run === runMeta.runName) || {};
-  const list = (xs) => (xs || []).join(', ') || '—';
+  const numDistricts = source ? source.numDistricts : (selected && selected.numDistricts);
+  const perDistrict = source ? source.winners : (selected && selected.perDistrict);
+  const totalSeats = source ? source.seats : ((selected && selected.winners) ?? runMeta.totalSeats);
+  const shape = `${numDistricts} × ${perDistrict}`;
+
+  // Config rows are per (run, contest), so match the shape as well as the run:
+  // matching on the run alone hands a multi-contest run its first contest's
+  // pool whichever one is selected.
+  const byRun = (manifest.configReference || []).filter((r) => r.run === runMeta.runName);
+  const cfg = source || byRun.find((r) => r.shape === shape) || byRun[0] || {};
   const rates = (t) => Object.entries(t || {})
     .map(([bloc, rate]) => `${bloc} ${rate}`).join(' · ') || '—';
 
-  const shape = source ? source.shape : runMeta.districtConfigs
-    .map((dc) => `${dc.numDistricts} × ${dc.winners}`).join('; ');
-  const plans = source ? source.plans : d3.sum(runMeta.districtConfigs, (dc) => dc.plans);
-  const totalSeats = source ? source.seats : runMeta.totalSeats;
+  const plans = source ? source.plans
+    : ((selected && selected.plans) ?? d3.sum(runMeta.districtConfigs, (dc) => dc.plans));
   const replicates = source ? source.replicates : runMeta.replicates;
   const turnout = source ? source.turnout : runMeta.turnout;
   const primaryTurnout = source ? source.primaryTurnout : runMeta.primaryTurnout;
@@ -71,24 +129,40 @@ function renderRunParams(section, entry, runMeta, manifest, source) {
   const uniform = (m) => flat(m).length > 0 && new Set(flat(m)).size === 1;
 
   const rows = [
-    ['Districting', `${shape} (${totalSeats} seats)`],
-    ['Plans sampled', plans == null ? '—' : d3.format(',')(plans)],
-    ['Replicates', replicates == null ? '—' : d3.format(',')(replicates)],
-    ['Candidate pool', cfg.candidatePoolMax == null
-      ? '—' : `max ${cfg.candidatePoolMax}, mean ${cfg.candidatePoolMean}`],
-    ['Turnout', rates(turnout)],
+    ['Districting', districtingLabel(numDistricts, perDistrict, totalSeats)],
   ];
   // Which run this system was simulated in, shown only where the section mixes
   // several: on an ordinary run it would repeat the heading above it.
   if (source) rows.unshift(['Simulation', source.runName]);
-  // Only shown when the run actually models a lower-turnout primary; an empty
-  // row would imply the two rounds differ when they do not.
-  if (primaryTurnout) rows.push(['Primary turnout', rates(primaryTurnout)]);
   // No focal-group row: it is chosen in the control bar above the figures, so a
   // fixed one here would contradict the selector the moment it is changed.
   if (uniform(cfg.alphas)) rows.push(['Dirichlet α', `${flat(cfg.alphas)[0]} (uniform)`]);
 
-  mount.append('h4').attr('class', 'params-title').text('Simulation parameters');
+  /*
+   * Two cards in one, switched between rather than stacked.
+   *
+   * The parameters are what was configured; the stats are what the scenario is
+   * made of -- the electorate it models and the ballots it drew. They are read
+   * at different moments and the margin is too narrow to hold both, so they
+   * share the space and the tab remembers which was last open (per section, and
+   * across the redraws that follow every change of system or model).
+   */
+  const tabStrip = mount.append('div').attr('class', 'params-tabs');
+  tabStrip.selectAll('button').data(PARAMS_TABS).join('button')
+    .attr('type', 'button')
+    .attr('class', (d) => `params-tab${d.id === activeTab ? ' on' : ''}`)
+    .attr('aria-pressed', (d) => d.id === activeTab)
+    .text((d) => d.label)
+    .on('click', (event, d) => {
+      if (d.id === activeTab) return;
+      if (tabs && tabs.onSelect) tabs.onSelect(d.id);
+    });
+
+  if (activeTab === 'stats') {
+    renderScenarioStats(mount, entry, runMeta, cfg, source, { plans, replicates });
+    return;
+  }
+
   mount.append('dl').attr('class', 'params-list')
     .selectAll('div')
     .data(rows)
@@ -98,6 +172,45 @@ function renderRunParams(section, entry, runMeta, manifest, source) {
       row.append('dt').text(term);
       row.append('dd').text(value);
     });
+
+  const order = (entry.slates || []).map((sl) => sl.id);
+  /** Blocs in the run's own order, with anything unlisted kept on the end. */
+  const blocOrder = (keys) => [
+    ...order.filter((k) => keys.includes(k)),
+    ...keys.filter((k) => !order.includes(k)),
+  ];
+
+  /*
+   * Turnout as a table rather than a run-on line.
+   *
+   * Four blocs joined by separators is a sentence to be parsed before the one
+   * rate anyone came for can be found, and a run modelling a second, lower
+   * turnout for a narrowing round doubled its length. As a column per round the
+   * two are read against each other, which is the comparison a two-round rule
+   * exists to raise.
+   */
+  const turnoutBlocs = blocOrder(Object.keys(turnout || {}));
+  keyValueTable(
+    mount,
+    'Turnout',
+    primaryTurnout ? ['Bloc', 'General', 'Primary'] : ['Bloc', 'Rate'],
+    turnoutBlocs.map((bloc) => (primaryTurnout
+      // A partial override: a bloc the primary does not name votes at its
+      // general-round rate, so the cell repeats rather than emptying.
+      ? [bloc, turnout[bloc], primaryTurnout[bloc] ?? turnout[bloc]]
+      : [bloc, turnout[bloc]])),
+  );
+
+  /*
+   * The configured ends of the candidate-pool draw. Its floor is not configured
+   * -- it falls out of the rules the run has to satisfy -- so that one is
+   * reported under Scenario Stats with the rest of what the run turned out to
+   * be made of.
+   */
+  keyValueTable(mount, 'Candidate availability', ['Per district', 'Candidates'], [
+    ['Average', cfg.candidatePoolMean],
+    ['Maximum', cfg.candidatePoolMax],
+  ].filter(([, v]) => v != null));
 
   /*
    * Both matrices are laid out in the run's own bloc order, not the order the
@@ -109,9 +222,88 @@ function renderRunParams(section, entry, runMeta, manifest, source) {
    * their axes in different orders -- and the alpha matrix with its own rows and
    * columns disagreeing. Values are keyed, so ordering is presentation only.
    */
-  const order = (entry.slates || []).map((sl) => sl.id);
   drawMatrix(mount, 'Cohesion', cfg.cohesion, d3.format('.2f'), order);
   if (!uniform(cfg.alphas)) drawMatrix(mount, 'Dirichlet α', cfg.alphas, d3.format('.2g'), order);
+}
+
+/**
+ * What the scenario is made of: the electorate behind it, and the ballots it drew.
+ *
+ * The VAP shares are the same numbers the proportional-representation line is
+ * drawn from, so the dotted line on the figures and the table beside them can
+ * never tell different stories about the same bloc. A composed section reads
+ * them off the run its selected system was simulated in.
+ */
+function renderScenarioStats(mount, entry, runMeta, cfg, source, sampling) {
+  const slates = (source && source.slates) || entry.slates || runMeta.slates || [];
+  const pct = d3.format('.1%');
+  const count = (v) => (v == null ? '—' : d3.format(',')(v));
+
+  mount.append('div').attr('class', 'matrix-title').text('Voting-age population');
+  const wrap = mount.append('div').attr('class', 'params-matrix');
+  const table = wrap.append('table').attr('class', 'stats-table');
+  const head = table.append('thead').append('tr');
+  head.append('th').attr('scope', 'col').text('Bloc');
+  head.append('th').attr('scope', 'col').attr('class', 'num').text('VAP share');
+
+  table.append('tbody').selectAll('tr')
+    .data(slates)
+    .join('tr')
+    // The focal group is what every figure in the section is about, so it is
+    // marked here rather than left to be found among the others.
+    .attr('class', (d) => (d.id === runMeta.focalGroup ? 'focal' : null))
+    .each(function (slate) {
+      const row = d3.select(this);
+      row.append('th').attr('scope', 'row').text(slate.label);
+      row.append('td').attr('class', 'num').text(pct(slate.vapShare));
+    });
+
+  // Total, so a reader can see the blocs partition the electorate rather than
+  // having to add four percentages themselves.
+  const total = d3.sum(slates, (s) => s.vapShare);
+  table.append('tfoot').append('tr')
+    .call((tr) => {
+      tr.append('th').attr('scope', 'row').text('Total');
+      tr.append('td').attr('class', 'num').text(pct(total));
+    });
+
+  /*
+   * The floor of the candidate-pool draw, which is the one figure of the three
+   * nobody chose: it is the smallest ballot every rule in the run can actually
+   * be run on (settings_generator.minimum_candidates), so it follows from the
+   * rules rather than from the config. The mean and maximum that complete the
+   * distribution are configured, and are reported as parameters.
+   */
+  const pool = [
+    ['Minimum on ballot', cfg.candidatePoolMin],
+  ].filter(([, v]) => v != null);
+
+  const list = (title, items) => {
+    if (!items.length) return;
+    mount.append('div').attr('class', 'matrix-title mt').text(title);
+    mount.append('dl').attr('class', 'params-list')
+      .selectAll('div')
+      .data(items)
+      .join('div')
+      .each(function ([term, value]) {
+        const row = d3.select(this);
+        row.append('dt').text(term);
+        row.append('dd').text(value);
+      });
+  };
+
+  list('Candidates per district', pool);
+
+  /*
+   * How much was simulated: districting plans drawn from the chain, and how
+   * many times each was voted on. Both are sizes of the experiment rather than
+   * settings that shape an outcome, which is why they sit here with the pool
+   * rather than among the parameters.
+   */
+  list('Sampling', [
+    ['Plans sampled', count(sampling && sampling.plans)],
+    ['Replicates', count(sampling && sampling.replicates)],
+  ]);
 }
 
 /**
@@ -264,14 +456,26 @@ function mountCrossRun(section, manifest) {
   slates.sort((a, b) => (b.id === focal) - (a.id === focal));
   let slate = slates[0]?.id;
 
-  // Voter models are read off the records themselves rather than a separate
-  // manifest field, so the list can never name a model the data does not carry.
-  // Pooled last, as everywhere else on the page, but selected first: the pooled
-  // average is what a comparison between systems is normally read on.
-  const modeIds = new Set(all.flatMap((s) => s.records.map((r) => r.mode)));
-  const modes = Object.keys(manifest.modeLabels)
-    .filter((id) => modeIds.has(id))
-    .sort((a, b) => (a === 'combined') - (b === 'combined'));
+  /*
+   * Voter models are read off the records themselves rather than a separate
+   * manifest field, so the list can never name a model the data does not carry.
+   * Pooled last, as everywhere else on the page, but selected first: the pooled
+   * average is what a comparison between systems is normally read on.
+   *
+   * Narrowed to the systems on show, not to everything on offer: a comparison
+   * holding only Cumulative rows has no use for Impulsive, and picking it would
+   * empty the figure. The list is therefore recomputed as rows are added and
+   * removed, and the current pick moved to something the new set has if it no
+   * longer does.
+   */
+  function modesFor(shown) {
+    const present = new Set(shown.flatMap((s) => s.records.map((r) => r.mode)));
+    return Object.keys(manifest.modeLabels)
+      .filter((id) => present.has(id))
+      .sort((a, b) => (a === 'combined') - (b === 'combined'));
+  }
+
+  let modes = modesFor(all);
   let mode = modes.includes('combined') ? 'combined' : modes[0];
 
   function draw() {
@@ -301,6 +505,13 @@ function mountCrossRun(section, manifest) {
   function controls() {
     if (mount.empty()) return;
     mount.selectAll('*').remove();
+
+    // The models the rows on show were simulated under. Falls back to the full
+    // list while nothing is selected, so the filter is populated rather than
+    // empty on first paint.
+    const shown = all.filter((s) => selected.has(s.id));
+    modes = modesFor(shown.length ? shown : all);
+    if (!modes.includes(mode)) mode = modes.includes('combined') ? 'combined' : modes[0];
 
     // Two rows: the systems on show, then the filters that apply to all of them.
     // Letting them share a line put the filters at the end of a chip list whose
@@ -481,20 +692,79 @@ async function mountRun(section, manifest, cache) {
     ? composition.map((source) => ({
       id: source.id, label: source.label, winners: source.seats, source,
     }))
-    : runMeta.districtConfigs.flatMap((dc) => dc.systems.map((s) => (
-      { ...s, winners: dc.numDistricts > 0 ? dc.numDistricts * dc.winners : dc.winners }
-    )));
+    : runMeta.districtConfigs.flatMap((dc) => dc.systems.map((s) => ({
+      ...s,
+      winners: dc.numDistricts > 0 ? dc.numDistricts * dc.winners : dc.winners,
+      // The contest behind this option, so the card can describe the one on
+      // show rather than every contest the run happens to hold.
+      numDistricts: dc.numDistricts,
+      perDistrict: dc.winners,
+      plans: dc.plans,
+    })));
   const slates = entry.slates || [];
-  /** The models offered for a selection -- a composed section's vary by system. */
-  const modelsOf = (selected) => (
-    selected && selected.source ? selected.source.voterModels : runMeta.voterModels
-  );
+
+  /** Where a selection's records live, and which system identifies them there. */
+  function resolve(selection) {
+    const source = selection && selection.source;
+    return {
+      source,
+      base: source ? bundles.get(source.run) : bundle,
+      systemId: source ? source.system : (selection && selection.id),
+    };
+  }
+
+  /*
+   * The voter models one system was actually simulated under.
+   *
+   * A run's model list covers everything it did across all of its contests,
+   * which is rarely what any one of them used: Basic - 3 X 3 ranks its STV
+   * ballots under the two ranked models and scores its Cumulative and Limited
+   * ballots under name_cumulative, so the run-level list offers a toggle that
+   * can only draw an empty chart on whichever contest is on show. Read off the
+   * records, the list is exactly the models that have something to draw.
+   *
+   * The pooled row is dropped where only one real model exists: an average over
+   * a single series is that series, and offering both invites a comparison
+   * between a thing and itself.
+   */
+  function modelsFor(selection) {
+    const { source, base, systemId } = resolve(selection);
+    const declared = source ? source.voterModels : runMeta.voterModels;
+    const present = new Set((base.focalSeats || [])
+      .filter((r) => r.system === systemId
+        && (!source || r.numDistricts === undefined || r.numDistricts === source.numDistricts)
+        && (!source || r.winners === undefined || r.winners === source.winners))
+      .map((r) => r.mode));
+    const available = declared.filter((m) => present.has(m.id));
+    if (!available.length) return declared;
+    const real = available.filter((m) => !m.pooled);
+    return real.length > 1 ? available : real;
+  }
+
+  /*
+   * What a system starts with switched on: the models it was simulated under,
+   * pooled row excluded.
+   *
+   * So a ranked contest opens on Impulsive and Deliberative, and a Cumulative or
+   * Limited one opens on Name Cumulative -- each system showing the ballots it
+   * was actually run with, rather than carrying over a selection from a system
+   * that shares none of its models. The pooled average stays one click away
+   * wherever there is more than one model for it to average.
+   */
+  function defaultModels(models) {
+    const real = models.filter((m) => !m.pooled);
+    return new Set((real.length ? real : models).map((m) => m.id));
+  }
+
   const state = {
     system: systems[0].id,
-    models: new Set(modelsOf(systems[0]).map((m) => m.id)),
+    models: defaultModels(modelsFor(systems[0])),
     slate: (slates.find((s) => s.id === runMeta.focalGroup) || slates[0] || {}).id,
     metric: 'winRate',
     allGroups: false,
+    // Which face of the parameters card is open. Kept in state so it survives
+    // the redraws that every other control triggers.
+    paramsTab: PARAMS_TABS[0].id,
   };
 
   function draw() {
@@ -512,7 +782,7 @@ async function mountRun(section, manifest, cache) {
     const baseSlate = slates.find((s) => s.id === state.slate) || slates[0];
     const view = {
       systems: viewSystems,
-      models: modelsOf(selected).filter((m) => state.models.has(m.id)),
+      models: modelsFor(selected).filter((m) => state.models.has(m.id)),
       slate: baseSlate && {
         ...baseSlate,
         proportionalSeats: baseSlate.vapShare * winners,
@@ -542,8 +812,17 @@ async function mountRun(section, manifest, cache) {
     );
 
     // Redrawn with the figures: on a composed section the parameters describe
-    // the selected system, and they change under it.
-    renderRunParams(section, entry, activeMeta, manifest, source);
+    // the selected system, and they change under it. Switching the card's own
+    // tab re-renders only the card -- the figures beside it have not changed.
+    renderRunParams(section, entry, activeMeta, manifest, source, selected, {
+      current: state.paramsTab,
+      onSelect: (id) => {
+        state.paramsTab = id;
+        renderRunParams(section, entry, activeMeta, manifest, source, selected, {
+          current: id, onSelect: (next) => { state.paramsTab = next; draw(); },
+        });
+      },
+    });
 
     applyView(state.allGroups);
     // Note the absence of a teardown: the charts update what is already on
@@ -629,13 +908,14 @@ async function mountRun(section, manifest, cache) {
    */
   function refreshControls() {
     const selected = systems.find((s) => s.id === state.system) || systems[0];
-    const models = modelsOf(selected);
+    const models = modelsFor(selected);
 
-    // Carry the selection across a change of system, keeping whichever models
-    // the new one also has. A system that shares none of them starts with all
-    // of its own rather than an empty chart.
-    const kept = new Set(models.filter((m) => state.models.has(m.id)).map((m) => m.id));
-    state.models = kept.size ? kept : new Set(models.map((m) => m.id));
+    // Reset rather than carry the selection across: the models are a property of
+    // the system now on show, so each one opens on its own defaults instead of
+    // inheriting a set that may mean something different -- or nothing -- under
+    // it. Toggling a model redraws without coming through here, so a deliberate
+    // choice survives everything except changing system.
+    state.models = defaultModels(models);
 
     if (!mount.empty()) {
       buildControls(

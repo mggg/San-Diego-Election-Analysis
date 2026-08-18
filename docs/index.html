@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+"
         crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="fonts/fonts.css">
-  <link rel="stylesheet" href="css/report.css?v=39539d8fca">
+  <link rel="stylesheet" href="css/report.css?v=2b255b6ffe">
 </head>
 
 <body data-bs-spy="scroll" data-bs-target="#toc-nav" data-bs-offset="90" tabindex="0">
@@ -55,12 +55,9 @@
           <a class="nav-link" href="#results">Results by Scenario</a>
           <nav class="nav flex-column">
             <a class="nav-link" href="#run-basic-3-x-3">Basic - 3 X 3</a>
-            <a class="nav-link" href="#run-alternative-electoral-systems">Alternative Electoral Systems</a>
             <a class="nav-link" href="#run-city-charter-amendment-proposal">City Charter Amendment Proposal</a>
+            <a class="nav-link" href="#run-alternative-electoral-systems">Alternative Electoral Systems</a>
             <a class="nav-link" href="#run-hybrid-system-3x4-stv-1x3-plurality">Hybrid System - 3x4 STV + 1x3 Plurality</a>
-            <a class="nav-link" href="#run-diverse-aapi-coalition-preferences">Diverse AAPI Coalition Preferences</a>
-            <a class="nav-link" href="#run-low-aapi-availability">Low AAPI Availability</a>
-            <a class="nav-link" href="#run-low-aapi-turnout">Low AAPI Turnout</a>
           </nav>
           <a class="nav-link" href="#comparison">Cross-Run Comparison</a>
         </nav>
@@ -272,51 +269,6 @@ $$</div>
             </div>
             <aside class="run-params" data-params="basic-3-x-3"></aside>
           </section>
-          <section id="run-alternative-electoral-systems" class="run mb-5" data-run="alternative-electoral-systems">
-            <div class="run-main">
-            <h3 class="h4 mt-4">Alternative Electoral Systems</h3>
-            <div class="run-prose"><p>Here, we take San Diego's current 9 X 1 district configuration and explore the expected outcomes of alternative election systems. San Diego's current electoral system is closest to Top Two, where the the top-two vote getters in a primary election advance to a runoff general election. We also look at Alaska, which is similar to Top Two but takes the top four winners in the primary and uses STV in the general election. Plurality is included due to its current popularity and status as the &quot;default&quot; for American elections, while IRV is included due to its rising popularity.</p>
-</div>
-
-            <div class="run-controls" data-controls="alternative-electoral-systems"></div>
-
-            <ul class="nav nav-tabs" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" data-bs-toggle="tab"
-                        data-bs-target="#alternative-electoral-systems-focal" type="button" role="tab">
-                  Seat outcomes
-                </button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" data-bs-toggle="tab"
-                        data-bs-target="#alternative-electoral-systems-availability" type="button" role="tab">
-                  Districts by VAP rank
-                </button>
-              </li>
-            </ul>
-            <div class="tab-content pt-3">
-              <div class="tab-pane fade show active" id="alternative-electoral-systems-focal" role="tabpanel">
-                <div class="metric-toggles" data-view="alternative-electoral-systems"></div>
-                <div class="row g-4 figure-pair" data-one-group="alternative-electoral-systems">
-                  <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="bubble" data-run="alternative-electoral-systems"></div>
-                  </div>
-                  <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="histogram" data-run="alternative-electoral-systems"></div>
-                  </div>
-                </div>
-                <div data-all-groups="alternative-electoral-systems" hidden>
-                  <div class="chart" data-chart="slate" data-run="alternative-electoral-systems"></div>
-                </div>
-              </div>
-              <div class="tab-pane fade" id="alternative-electoral-systems-availability" role="tabpanel">
-                <div class="metric-toggles" data-metric="alternative-electoral-systems"></div>
-                <div class="chart" data-chart="availability" data-run="alternative-electoral-systems"></div>
-              </div>
-            </div>
-            </div>
-            <aside class="run-params" data-params="alternative-electoral-systems"></aside>
-          </section>
           <section id="run-city-charter-amendment-proposal" class="run mb-5" data-run="city-charter-amendment-proposal">
             <div class="run-main">
             <h3 class="h4 mt-4">City Charter Amendment Proposal</h3>
@@ -361,6 +313,51 @@ $$</div>
             </div>
             </div>
             <aside class="run-params" data-params="city-charter-amendment-proposal"></aside>
+          </section>
+          <section id="run-alternative-electoral-systems" class="run mb-5" data-run="alternative-electoral-systems">
+            <div class="run-main">
+            <h3 class="h4 mt-4">Alternative Electoral Systems</h3>
+            <div class="run-prose"><p>Here, we take San Diego's current 9 X 1 district configuration and explore the expected outcomes of alternative election systems. San Diego's current electoral system is closest to Top Two, where the the top-two vote getters in a primary election advance to a runoff general election. We also look at Alaska, which is similar to Top Two but takes the top four winners in the primary and uses STV in the general election. Plurality is included due to its current popularity and status as the &quot;default&quot; for American elections, while IRV is included due to its rising popularity.</p>
+</div>
+
+            <div class="run-controls" data-controls="alternative-electoral-systems"></div>
+
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="tab"
+                        data-bs-target="#alternative-electoral-systems-focal" type="button" role="tab">
+                  Seat outcomes
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab"
+                        data-bs-target="#alternative-electoral-systems-availability" type="button" role="tab">
+                  Districts by VAP rank
+                </button>
+              </li>
+            </ul>
+            <div class="tab-content pt-3">
+              <div class="tab-pane fade show active" id="alternative-electoral-systems-focal" role="tabpanel">
+                <div class="metric-toggles" data-view="alternative-electoral-systems"></div>
+                <div class="row g-4 figure-pair" data-one-group="alternative-electoral-systems">
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="bubble" data-run="alternative-electoral-systems"></div>
+                  </div>
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="histogram" data-run="alternative-electoral-systems"></div>
+                  </div>
+                </div>
+                <div data-all-groups="alternative-electoral-systems" hidden>
+                  <div class="chart" data-chart="slate" data-run="alternative-electoral-systems"></div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="alternative-electoral-systems-availability" role="tabpanel">
+                <div class="metric-toggles" data-metric="alternative-electoral-systems"></div>
+                <div class="chart" data-chart="availability" data-run="alternative-electoral-systems"></div>
+              </div>
+            </div>
+            </div>
+            <aside class="run-params" data-params="alternative-electoral-systems"></aside>
           </section>
           <section id="run-hybrid-system-3x4-stv-1x3-plurality" class="run mb-5" data-run="hybrid-system-3x4-stv-1x3-plurality">
             <div class="run-main">
@@ -407,141 +404,6 @@ $$</div>
             </div>
             <aside class="run-params" data-params="hybrid-system-3x4-stv-1x3-plurality"></aside>
           </section>
-          <section id="run-diverse-aapi-coalition-preferences" class="run mb-5" data-run="diverse-aapi-coalition-preferences">
-            <div class="run-main">
-            <h3 class="h4 mt-4">Diverse AAPI Coalition Preferences</h3>
-            <div class="run-prose"><p>San Diego has a diverse and varied Asian population, with significant shares of the AAPI coalition belonging to ethnically Filipino, Vietnamese, and Chinese voters - amongst many others. As such, we believe its reasonable to assume that their electoral and candidate preferences vary as well. In this scenario, we simulate this by adjusting the Diriclet alpha value for the AAPI bloc to reflect a more uniform preference distribution amongst available AAPI-preferred candidates. In other words, if we assume that the candidates in the AAPI slate reflect the diversity of the AAPI bloc, we'd expect support to be more evenly divided among them.</p>
-</div>
-
-            <div class="run-controls" data-controls="diverse-aapi-coalition-preferences"></div>
-
-            <ul class="nav nav-tabs" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" data-bs-toggle="tab"
-                        data-bs-target="#diverse-aapi-coalition-preferences-focal" type="button" role="tab">
-                  Seat outcomes
-                </button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" data-bs-toggle="tab"
-                        data-bs-target="#diverse-aapi-coalition-preferences-availability" type="button" role="tab">
-                  Districts by VAP rank
-                </button>
-              </li>
-            </ul>
-            <div class="tab-content pt-3">
-              <div class="tab-pane fade show active" id="diverse-aapi-coalition-preferences-focal" role="tabpanel">
-                <div class="metric-toggles" data-view="diverse-aapi-coalition-preferences"></div>
-                <div class="row g-4 figure-pair" data-one-group="diverse-aapi-coalition-preferences">
-                  <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="bubble" data-run="diverse-aapi-coalition-preferences"></div>
-                  </div>
-                  <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="histogram" data-run="diverse-aapi-coalition-preferences"></div>
-                  </div>
-                </div>
-                <div data-all-groups="diverse-aapi-coalition-preferences" hidden>
-                  <div class="chart" data-chart="slate" data-run="diverse-aapi-coalition-preferences"></div>
-                </div>
-              </div>
-              <div class="tab-pane fade" id="diverse-aapi-coalition-preferences-availability" role="tabpanel">
-                <div class="metric-toggles" data-metric="diverse-aapi-coalition-preferences"></div>
-                <div class="chart" data-chart="availability" data-run="diverse-aapi-coalition-preferences"></div>
-              </div>
-            </div>
-            </div>
-            <aside class="run-params" data-params="diverse-aapi-coalition-preferences"></aside>
-          </section>
-          <section id="run-low-aapi-availability" class="run mb-5" data-run="low-aapi-availability">
-            <div class="run-main">
-            <h3 class="h4 mt-4">Low AAPI Availability</h3>
-            <div class="run-prose"><p>Although the AAPI share of the voting age population is relatively high in San Diego, the candidate pools in the last several San Diego city elections do not feature AAPI candidates at a rate proportional to the AAPI electorate. In our Basic 3 X 3 scenario, we assume the candidate availability in each slate is roughly proportional to bloc VAP share. This scenario runs a 3 X 3 STV election to simulate a lower-than-proportional rate of AAPI candidate availability within each district. For comparison, the average per-district AAPI candidate availability within the Basic scenario is 0.98 while here it is 0.32.</p>
-</div>
-
-            <div class="run-controls" data-controls="low-aapi-availability"></div>
-
-            <ul class="nav nav-tabs" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" data-bs-toggle="tab"
-                        data-bs-target="#low-aapi-availability-focal" type="button" role="tab">
-                  Seat outcomes
-                </button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" data-bs-toggle="tab"
-                        data-bs-target="#low-aapi-availability-availability" type="button" role="tab">
-                  Districts by VAP rank
-                </button>
-              </li>
-            </ul>
-            <div class="tab-content pt-3">
-              <div class="tab-pane fade show active" id="low-aapi-availability-focal" role="tabpanel">
-                <div class="metric-toggles" data-view="low-aapi-availability"></div>
-                <div class="row g-4 figure-pair" data-one-group="low-aapi-availability">
-                  <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="bubble" data-run="low-aapi-availability"></div>
-                  </div>
-                  <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="histogram" data-run="low-aapi-availability"></div>
-                  </div>
-                </div>
-                <div data-all-groups="low-aapi-availability" hidden>
-                  <div class="chart" data-chart="slate" data-run="low-aapi-availability"></div>
-                </div>
-              </div>
-              <div class="tab-pane fade" id="low-aapi-availability-availability" role="tabpanel">
-                <div class="metric-toggles" data-metric="low-aapi-availability"></div>
-                <div class="chart" data-chart="availability" data-run="low-aapi-availability"></div>
-              </div>
-            </div>
-            </div>
-            <aside class="run-params" data-params="low-aapi-availability"></aside>
-          </section>
-          <section id="run-low-aapi-turnout" class="run mb-5" data-run="low-aapi-turnout">
-            <div class="run-main">
-            <h3 class="h4 mt-4">Low AAPI Turnout</h3>
-            <div class="run-prose"><p>Within California in 2024, Asian voters were observed to have voted at rate of 44.4%, while White and Black voters voted at rates of 56.1% and 60.1%, respectively. Low voter turnout among the AAPI coalition has been a consistent concern for civic and community activists in San Diego. In this scenario, we adjust the turnout parameter for the AAPI bloc to be even lower than the default configuration, from 0.75 to 0.5. This means that the relative turnout rate of AAPI voters is half that of White and Black voters. We examine the impacts of low AAPI turnout within a 3 X 3 STV electoral system on proportional representation.</p>
-</div>
-
-            <div class="run-controls" data-controls="low-aapi-turnout"></div>
-
-            <ul class="nav nav-tabs" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" data-bs-toggle="tab"
-                        data-bs-target="#low-aapi-turnout-focal" type="button" role="tab">
-                  Seat outcomes
-                </button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" data-bs-toggle="tab"
-                        data-bs-target="#low-aapi-turnout-availability" type="button" role="tab">
-                  Districts by VAP rank
-                </button>
-              </li>
-            </ul>
-            <div class="tab-content pt-3">
-              <div class="tab-pane fade show active" id="low-aapi-turnout-focal" role="tabpanel">
-                <div class="metric-toggles" data-view="low-aapi-turnout"></div>
-                <div class="row g-4 figure-pair" data-one-group="low-aapi-turnout">
-                  <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="bubble" data-run="low-aapi-turnout"></div>
-                  </div>
-                  <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="histogram" data-run="low-aapi-turnout"></div>
-                  </div>
-                </div>
-                <div data-all-groups="low-aapi-turnout" hidden>
-                  <div class="chart" data-chart="slate" data-run="low-aapi-turnout"></div>
-                </div>
-              </div>
-              <div class="tab-pane fade" id="low-aapi-turnout-availability" role="tabpanel">
-                <div class="metric-toggles" data-metric="low-aapi-turnout"></div>
-                <div class="chart" data-chart="availability" data-run="low-aapi-turnout"></div>
-              </div>
-            </div>
-            </div>
-            <aside class="run-params" data-params="low-aapi-turnout"></aside>
-          </section>
         </section>
 
         <section id="comparison" class="mb-5">
@@ -557,7 +419,7 @@ $$</div>
     <div class="container-xl text-center">
       <p class="mb-1">Metric Geometry &amp; Gerrymandering Group — San Diego City Council Election Analysis</p>
       <p class="mb-1"><a href="https://github.com/mggg/San-Diego-Election-Analysis" target="_blank" rel="noopener">View the repository on GitHub</a></p>
-      <p class="generated mb-0">Generated 2026-08-17T02:04:18+00:00</p>
+      <p class="generated mb-0">Generated 2026-08-17T18:21:41+00:00</p>
     </div>
   </footer>
 
@@ -590,15 +452,15 @@ $$</div>
 
   <script type="importmap">{
  "imports": {
-  "./js/charts/availability.js": "./js/charts/availability.js?v=39539d8fca",
-  "./js/charts/axes.js": "./js/charts/axes.js?v=39539d8fca",
-  "./js/charts/bubble.js": "./js/charts/bubble.js?v=39539d8fca",
-  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=39539d8fca",
-  "./js/charts/histogram.js": "./js/charts/histogram.js?v=39539d8fca",
-  "./js/charts/slate.js": "./js/charts/slate.js?v=39539d8fca",
-  "./js/report.js": "./js/report.js?v=39539d8fca"
+  "./js/charts/availability.js": "./js/charts/availability.js?v=2b255b6ffe",
+  "./js/charts/axes.js": "./js/charts/axes.js?v=2b255b6ffe",
+  "./js/charts/bubble.js": "./js/charts/bubble.js?v=2b255b6ffe",
+  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=2b255b6ffe",
+  "./js/charts/histogram.js": "./js/charts/histogram.js?v=2b255b6ffe",
+  "./js/charts/slate.js": "./js/charts/slate.js?v=2b255b6ffe",
+  "./js/report.js": "./js/report.js?v=2b255b6ffe"
  }
 }</script>
-  <script type="module" src="js/report.js?v=39539d8fca"></script>
+  <script type="module" src="js/report.js?v=2b255b6ffe"></script>
 </body>
 </html>

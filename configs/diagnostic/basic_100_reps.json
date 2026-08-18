@@ -2,12 +2,13 @@
   "run_name": "Basic - 100 profiles per district",
   "num_subsamples": 100,
   "candidate_geometric_p": 0.2,
+
   "total_seats": 9,
   "district_configs": [
     {
       "num_districts": 3,
       "winners": 3
-    }
+   }
   ],
   "voting_configs": {
     "FastSTV": {
@@ -20,11 +21,11 @@
     "slate_bt"
   ],
   "blocs": {
-    "WAIO": [
-      "WAIO"
+    "WHI": [
+      "WHI"
     ],
-    "BLK": [
-      "BLK"
+    "BAIO": [
+      "BAIO"
     ],
     "HIS": [
       "HIS"
@@ -35,21 +36,21 @@
   },
   "turnout": {
     "AAPI": 0.75,
-    "BLK": 1,
+    "BAIO": 1,
     "HIS": 0.75,
-    "WAIO": 1
+    "WHI": 1
   },
   "num_voters": 10000,
   "slate_to_candidates": {
-    "WAIO": [
-      "WAIO1",
-      "WAIO2",
-      "WAIO3",
-      "WAIO4"
+    "WHI": [
+      "WHI1",
+      "WHI2",
+      "WHI3",
+      "WHI4"
     ],
-    "BLK": [
-      "BLK1",
-      "BLK2"
+    "BAIO": [
+      "BAIO1",
+      "BAIO2"
     ],
     "HIS": [
       "HIS1",
@@ -63,53 +64,53 @@
   },
   "focal_group": "AAPI",
   "cohesion_parameters": {
-    "WAIO": {
-      "WAIO": 0.8,
+    "WHI": {
+      "WHI": 0.8,
       "HIS": 0.05,
       "AAPI": 0.1,
-      "BLK": 0.05
+      "BAIO": 0.05
     },
     "HIS": {
-      "WAIO": 0.1,
+      "WHI": 0.1,
       "HIS": 0.8,
       "AAPI": 0.05,
-      "BLK": 0.05
+      "BAIO": 0.05
     },
     "AAPI": {
-      "WAIO": 0.15,
+      "WHI": 0.15,
       "HIS": 0.03,
       "AAPI": 0.8,
-      "BLK": 0.02
+      "BAIO": 0.02
     },
-    "BLK": {
-      "WAIO": 0.05,
+    "BAIO": {
+      "WHI": 0.05,
       "HIS": 0.1,
       "AAPI": 0.05,
-      "BLK": 0.8
+      "BAIO": 0.8
     }
   },
   "alphas": {
-    "WAIO": {
-      "WAIO": 1,
-      "BLK": 1,
+    "WHI": {
+      "WHI": 1,
+      "BAIO": 1,
       "HIS": 1,
       "AAPI": 1
     },
     "HIS": {
-      "WAIO": 1,
-      "BLK": 1,
+      "WHI": 1,
+      "BAIO": 1,
       "HIS": 1,
       "AAPI": 1
     },
     "AAPI": {
-      "WAIO": 1,
-      "BLK": 1,
+      "WHI": 1,
+      "BAIO": 1,
       "HIS": 1,
       "AAPI": 1
     },
-    "BLK": {
-      "WAIO": 1,
-      "BLK": 1,
+    "BAIO": {
+      "WHI": 1,
+      "BAIO": 1,
       "HIS": 1,
       "AAPI": 1
     }

@@ -37,6 +37,7 @@ from pipeline.summarize_results import (
     _prop_line_label,
     _rule_display_name,
 )
+from pipeline.settings_generator import minimum_candidates
 from pipeline.utils.helpers import PROJECT_DIR, load_json
 
 DOCS_DIR = PROJECT_DIR / "docs"
@@ -273,8 +274,13 @@ def resolve_composition(
             "replicates": meta.get("replicates"),
             "turnout": meta.get("turnout"),
             "primaryTurnout": meta.get("primaryTurnout"),
+            "candidatePoolMin": cfg.get("candidatePoolMin"),
             "candidatePoolMax": dc.get("candidatePoolMax"),
             "candidatePoolMean": dc.get("candidatePoolMean"),
+            # The bloc VAP shares as this run measured them, so a composed
+            # section reports the electorate its selected system was run
+            # against rather than the section's first run's.
+            "slates": meta["slates"],
             "cohesion": cfg.get("cohesion") or {},
             "alphas": cfg.get("alphas") or {},
             # Carried per source rather than looked up in manifest.runs: a
@@ -650,6 +656,12 @@ def _config_reference(config_dir: Optional[Path] = None) -> List[Dict[str, Any]]
                 ],
                 "turnout": cfg.get("turnout") or {},
                 "primaryTurnout": cfg.get("primary_turnout"),
+                # The floor of the pool draw, which is the smallest ballot every
+                # rule in the run can actually be run on rather than a number
+                # anyone chose -- see settings_generator.minimum_candidates. It
+                # completes the min/mean/max the card reports, and it is derived
+                # here because the run artifacts have never carried it.
+                "candidatePoolMin": minimum_candidates(cfg),
                 "candidatePoolMax": dc.get("candidate_pool_max"),
                 "candidatePoolMean": dc.get("candidate_pool_mean"),
                 # The configured matrices, not the per-district ones in the

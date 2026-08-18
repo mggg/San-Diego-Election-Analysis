@@ -33,11 +33,11 @@
     "slate_bt"
   ],
   "blocs": {
-    "WAIO": [
-      "WAIO"
+    "WHI": [
+      "WHI"
     ],
-    "BLK": [
-      "BLK"
+    "BAIO": [
+      "BAIO"
     ],
     "HIS": [
       "HIS"
@@ -48,60 +48,60 @@
   },
   "turnout": {
     "AAPI": 0.7,
-    "BLK": 0.9,
+    "BAIO": 0.9,
     "HIS": 0.6,
-    "WAIO": 1
+    "WHI": 1
   },
   "num_voters": 10000,
-  "focal_group": "BLK",
+  "focal_group": "BAIO",
   "cohesion_parameters": {
-    "WAIO": {
-      "WAIO": 0.8,
+    "WHI": {
+      "WHI": 0.8,
       "HIS": 0.05,
       "AAPI": 0.1,
-      "BLK": 0.05
+      "BAIO": 0.05
     },
     "HIS": {
-      "WAIO": 0.1,
+      "WHI": 0.1,
       "HIS": 0.8,
       "AAPI": 0.05,
-      "BLK": 0.05
+      "BAIO": 0.05
     },
     "AAPI": {
-      "WAIO": 0.15,
+      "WHI": 0.15,
       "HIS": 0.03,
       "AAPI": 0.8,
-      "BLK": 0.02
+      "BAIO": 0.02
     },
-    "BLK": {
-      "WAIO": 0.05,
+    "BAIO": {
+      "WHI": 0.05,
       "HIS": 0.1,
       "AAPI": 0.05,
-      "BLK": 0.8
+      "BAIO": 0.8
     }
   },
   "alphas": {
-    "WAIO": {
-      "WAIO": 1,
-      "BLK": 1,
+    "WHI": {
+      "WHI": 1,
+      "BAIO": 1,
       "HIS": 1,
       "AAPI": 1
     },
     "HIS": {
-      "WAIO": 1,
-      "BLK": 1,
+      "WHI": 1,
+      "BAIO": 1,
       "HIS": 1,
       "AAPI": 1
     },
     "AAPI": {
-      "WAIO": 1,
-      "BLK": 1,
+      "WHI": 1,
+      "BAIO": 1,
       "HIS": 1,
       "AAPI": 1
     },
-    "BLK": {
-      "WAIO": 1,
-      "BLK": 1,
+    "BAIO": {
+      "WHI": 1,
+      "BAIO": 1,
       "HIS": 1,
       "AAPI": 1
     }

@@ -13,14 +13,15 @@
   "_composed_comment": "A scenario may instead collect systems out of several runs, so one section can compare contests that were simulated separately. Give it a \"systems\" list: each entry names the \"run\" (slug) and the \"system\" (rule id as it appears in that run's run.json), optionally \"label\" to name it in the dropdown, and optionally \"districts\"/\"seats\" when one run uses the same rule in more than one contest. Switching systems reloads that run's records and repoints the figures, axes, proportional line, and the parameters card at it.",
   "scenarios": [
     "basic-3-x-3",
+    "city-charter-amendment-proposal",
     {
       "_note": "Every standalone electoral structure lives here rather than in a section of its own: the 9 X 1 rules it was built for, plus the at-large and multi-member STV runs, which are the same question asked with a different districting. Basic and its parameter variations (diverse preferences, low turnout, low availability) keep their own sections, as do the two hybrid runs, whose combined view has no single contest to select.",
       "slug": "alternative-electoral-systems",
       "systems": [
-        { "run": "alternative-electoral-systems", "system": "IRV", "label": "9 × 1 IRV" },
-        { "run": "alternative-electoral-systems", "system": "PLURALITY", "label": "9 × 1 Plurality" },
-        { "run": "alternative-electoral-systems", "system": "TOPTWO", "label": "9 × 1 Top Two" },
-        { "run": "alternative-electoral-systems", "system": "ALASKA", "label": "9 × 1 Alaska" },
+        { "run": "alternative-electoral-systems", "system": "IRV", "label": "15 × 1 IRV" },
+        { "run": "alternative-electoral-systems", "system": "PLURALITY", "label": "15 × 1 Plurality" },
+        { "run": "alternative-electoral-systems", "system": "TOPTWO", "label": "15 × 1 Top Two" },
+        { "run": "9x1-plurality", "system": "PLURALITY", "label": "9 × 1 Plurality" },
         { "run": "3x5-stv", "system": "FASTSTV", "label": "3 × 5 STV" },
         { "run": "nine-seats-at-large", "system": "FASTSTV", "label": "1 × 9 STV" },
         { "run": "nine-seats-at-large", "system": "CUMULATIVE", "label": "1 × 9 Cumulative" },
@@ -28,10 +29,6 @@
         { "run": "fifteen-seats-at-large-stv", "system": "FASTSTV", "label": "1 × 15 STV" }
       ]
     },
-    "city-charter-amendment-proposal",
-    "hybrid-system-3x4-stv-1x3-plurality",
-    "diverse-aapi-coalition-preferences",
-    "low-aapi-availability",
-    "low-aapi-turnout"
+    "hybrid-system-3x4-stv-1x3-plurality"
   ]
 }
