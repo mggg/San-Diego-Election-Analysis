@@ -1,6 +1,6 @@
 {
   "run_name": "Testing - Basic",
-  "num_subsamples": 100,
+  "num_subsamples": 2,
   "candidate_geometric_p": 0.1,
   "total_seats": 9,
   "district_configs": [
@@ -79,9 +79,5 @@
       "POC": 1
     }
   },
-  "num_reps": 10,
-  "cambridge_blocs": {
-    "majority": "WHI",
-    "minority": "POC"
-  }
+  "num_reps": 10
 }
