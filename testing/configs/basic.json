@@ -58,17 +58,7 @@
     ]
   },
   "focal_group": "WHI",
-  "cambridge_truncation": {
-    "enabled": true,
-    "majority_slates": [
-      "WHI"
-    ],
-    "minority_slates": [
-      "HIS",
-      "AAPI",
-      "POC"
-    ]
-  },
+  "cambridge_truncation": false,
   "cohesion_parameters": {
     "WHI": {
       "WHI": 0.8,

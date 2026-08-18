@@ -19,6 +19,7 @@ from pipeline.profile_generator import (
     generate_profiles,
     generator_accepts_total_points,
     score_budgets_for_run,
+    count_cambridge_eligible_districts,
 )
 from pipeline.simulate_elections import simulate_elections
 from pipeline.report_generator import generate_report, ARTIFACT_FILES
@@ -220,7 +221,14 @@ def has_valid_profiles(config):
     for mode in get_voter_models(config):
         for d in config["district_configs"]:
             n = d["num_districts"]
-            expected = config["num_subsamples"] * n * config["num_reps"]
+            # cambridge skips any district whose candidate pool drew from
+            # only one slate (see process_settings_file), so its expected
+            # count isn't the flat num_subsamples * n every other mode uses --
+            # it's however many of those districts are actually eligible.
+            if mode == "cambridge":
+                expected = count_cambridge_eligible_districts(run, n) * config["num_reps"]
+            else:
+                expected = config["num_subsamples"] * n * config["num_reps"]
             # Score models hold one subtree per ballot budget, so each budget is
             # counted on its own -- a complete set at one budget must not mask a
             # missing set at another.
@@ -323,7 +331,10 @@ def has_valid_election_results(config):
                 if data.get("signature") != signature:
                     print(f"Election results for {mode} mode and {d} number of districts are stale (signature changed). Running pipeline from election simulation stage.")
                     return False
-                expected_len = config["num_subsamples"] * n * config["num_reps"]
+                if mode == "cambridge":
+                    expected_len = count_cambridge_eligible_districts(run, n) * config["num_reps"]
+                else:
+                    expected_len = config["num_subsamples"] * n * config["num_reps"]
                 if len(data.get("profile_files", [])) != expected_len:
                     print(f"Election results for {mode} mode and {d} number of districts have incorrect length. Running pipeline from election simulation stage.")
                     return False

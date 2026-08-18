@@ -36,7 +36,11 @@ from votekit.ballot_generator import BlocSlateConfig
 
 from pipeline.profile_generator import profile_class_for_mode
 from pipeline.simulate_elections import _load_profile_from_bytes
-from pipeline.utils.cambridge_truncation import build_length_distributions, truncate_profile
+from pipeline.utils.cambridge_truncation import (
+    build_length_distributions,
+    truncate_profile,
+    _default_majority_minority_slates,
+)
 from pipeline.utils.helpers import (
     find_settings_file,
     load_json,
@@ -102,22 +106,26 @@ def truncate_archive(
     config: dict,
     archive_path: Path,
     output_path: Path,
-    truncation_cfg: Optional[dict] = None,
     modes: Optional[List[str]] = None,
     seed: Optional[int] = None,
 ) -> Dict[str, int]:
     """
     Write a copy of one profile archive with every ranked ballot truncated.
 
+    Runs unconditionally on whatever archive it's pointed at -- this is an
+    explicit, standalone action, so it truncates because it was invoked, not
+    because the run's own "cambridge_truncation" flag happens to be set.
+    Majority/minority slates are derived per district from its own
+    slate_to_candidates by the DEFAULT_MAJORITY_SLATE convention (see
+    pipeline.utils.cambridge_truncation), the same as generation-time
+    truncation, so the two never disagree about which ballots count as which.
+
     Args:
-        config: Parsed run config, for the run name, the settings files, and the
-            "cambridge_truncation" block when truncation_cfg isn't given.
+        config: Parsed run config, for the run name and the settings files.
         archive_path: The existing archive to read.
         output_path: Where to write the truncated copy. May equal archive_path
             only via the caller's --in-place handling, which writes beside it
             and swaps; this function never writes to the file it is reading.
-        truncation_cfg: Overrides config["cambridge_truncation"]. Must carry
-            "majority_slates" and "minority_slates".
         modes: Only truncate these voter models. Defaults to every ranked model
             in the archive; score models are always copied through.
         seed: Seeds the length draws, so a run can be reproduced.
@@ -126,17 +134,10 @@ def truncate_archive(
         Counts of what happened: truncated, copied, and skipped entries.
 
     Raises:
-        ValueError: If no truncation config is available, or a ranked entry's
-            settings file cannot be found -- truncating without it would mean
-            guessing which slate a candidate belongs to.
+        ValueError: If a ranked entry's settings file cannot be found --
+            truncating without it would mean guessing which slate a candidate
+            belongs to.
     """
-    truncation_cfg = truncation_cfg or config.get("cambridge_truncation")
-    if not truncation_cfg:
-        raise ValueError(
-            f"No truncation config: {config['run_name']} has no 'cambridge_truncation' "
-            "block and none was passed. It needs 'majority_slates' and 'minority_slates'."
-        )
-
     run_name = config["run_name"]
     rng = np.random.default_rng(seed)
     tally = {"truncated": 0, "copied": 0, "skipped": 0}
@@ -144,7 +145,7 @@ def truncate_archive(
     # One config and one set of length distributions per district settings file:
     # the distributions depend only on that district's candidate counts, and
     # rebuilding them per profile is the bulk of the work in a large archive.
-    config_cache: Dict[Path, Tuple[BlocSlateConfig, dict]] = {}
+    config_cache: Dict[Path, Tuple[BlocSlateConfig, List[str], List[str], dict]] = {}
 
     with zipfile.ZipFile(archive_path) as source, zipfile.ZipFile(
         output_path, "w", compression=zipfile.ZIP_DEFLATED
@@ -178,22 +179,23 @@ def truncate_archive(
 
             if settings_path not in config_cache:
                 district_config = _district_config(settings_path)
+                majority_slates, minority_slates = _default_majority_minority_slates(
+                    district_config.slate_to_candidates.to_dict()
+                )
                 config_cache[settings_path] = (
                     district_config,
-                    build_length_distributions(
-                        district_config,
-                        truncation_cfg["majority_slates"],
-                        truncation_cfg["minority_slates"],
-                    ),
+                    majority_slates,
+                    minority_slates,
+                    build_length_distributions(district_config, majority_slates, minority_slates),
                 )
-            district_config, distributions = config_cache[settings_path]
+            district_config, majority_slates, minority_slates, distributions = config_cache[settings_path]
 
             profile = _load_profile_from_bytes(raw, profile_class_for_mode(mode))
             truncated = truncate_profile(
                 profile,
                 district_config,
-                truncation_cfg["majority_slates"],
-                truncation_cfg["minority_slates"],
+                majority_slates,
+                minority_slates,
                 distributions,
                 rng=rng,
             )

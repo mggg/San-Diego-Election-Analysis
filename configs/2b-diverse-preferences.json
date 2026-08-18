@@ -59,5 +59,6 @@
   "cambridge_blocs": {
     "majority": "WHI",
     "minority": "POC"
-  }
+  },
+  "cambridge_truncation": false
 }

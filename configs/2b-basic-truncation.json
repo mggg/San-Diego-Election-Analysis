@@ -21,15 +21,7 @@
     "slate_bt",
     "cambridge"
   ],
-  "cambridge_truncation": {
-    "enabled": true,
-    "majority_slates": [
-      "WHI"
-    ],
-    "minority_slates": [
-      "POC"
-    ]
-  },
+  "cambridge_truncation": false,
   "blocs": {
     "WHI": [
       "WHI"

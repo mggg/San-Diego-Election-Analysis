@@ -14,22 +14,12 @@
     "FastSTV": {
       "n_seats": 3,
       "tiebreak": "random"
-    },
-    "Limited": {
-      "n_seats": 3,
-      "budget": 2,
-      "tiebreak": "random"
-    },
-    "Cumulative": {
-      "n_seats": 3,
-      "tiebreak": "random"
     }
   },
   "voter_models": [
     "slate_pl",
     "slate_bt",
-    "cambridge",
-    "name_cumulative"
+    "cambridge"
   ],
   "blocs": {
     "WHI": [
@@ -69,5 +59,6 @@
   "cambridge_blocs": {
     "majority": "WHI",
     "minority": "POC"
-  }
+  },
+  "cambridge_truncation": false
 }
