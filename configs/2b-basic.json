@@ -28,6 +28,7 @@
   "voter_models": [
     "slate_pl",
     "slate_bt",
+    "cambridge",
     "name_cumulative"
   ],
   "blocs": {
@@ -64,5 +65,9 @@
       "POC": 1
     }
   },
-  "num_reps": 10
+  "num_reps": 10,
+  "cambridge_blocs": {
+    "majority": "WHI",
+    "minority": "POC"
+  }
 }

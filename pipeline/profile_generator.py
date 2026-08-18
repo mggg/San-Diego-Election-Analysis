@@ -22,7 +22,8 @@ from votekit.ballot_generator import (
     slate_pl_profile_generator,
     slate_bt_profile_generator,
     slate_bt_profile_generator_using_mcmc,
-    name_cumulative_profile_generator
+    name_cumulative_profile_generator,
+    cambridge_profile_generator,
 )
 from votekit.ballot_generator.utils import system_memory
 from joblib import Parallel, delayed
@@ -55,8 +56,36 @@ from pipeline.settings_generator import primary_turnout_map
 generator_name_to_function = {
     "slate_pl": slate_pl_profile_generator,
     "slate_bt": slate_bt_profile_generator,
+    # Ranked ballots drawn from Cambridge, MA's historical RCV elections rather
+    # than from a parametric model: a voter's first choice comes from the
+    # cohesion parameters as usual, and the rest of the ballot is a real ballot
+    # shape observed after that first choice. It works only with two blocs and
+    # two slates, which is what the runs now model.
+    "cambridge": cambridge_profile_generator,
     "name_cumulative": name_cumulative_profile_generator,
 }
+
+
+def _cambridge_bloc_kwargs(cambridge_cfg):
+    """
+    Which bloc Cambridge's historical majority and minority labels attach to.
+
+    The Cambridge data labels candidates W and C for its historical majority and
+    minority slates, so the generator has to be told which of this run's blocs
+    plays each part. Left unset, votekit infers it from the bloc proportions --
+    per district, which is the wrong basis here: a district where POC voters are
+    the local majority would be generated against the historical *majority*
+    distribution, so the ballot shapes a bloc is given would change from one
+    district to the next according to how the lines happened to fall.
+
+    Naming them in the config fixes each bloc to one side of that mapping for
+    the whole run. An unconfigured run falls back to votekit's inference.
+    """
+    cfg = cambridge_cfg or {}
+    majority, minority = cfg.get("majority"), cfg.get("minority")
+    if majority and minority:
+        return {"majority_bloc": majority, "minority_bloc": minority}
+    return {}
 
 # VoteKit's exact Bradley-Terry generator enumerates every distinct ordering of
 # slate-letters across the ballot before sampling from it, and refuses to run
@@ -206,7 +235,7 @@ def profile_arcname(mode: str, district_num: int, filename: str, budget=None) ->
 
 def process_settings_file(
     settings_file, mode, duplicate_indx, proportions_key="bloc_proportions", total_points=None,
-    truncation_cfg=None
+    truncation_cfg=None, cambridge_cfg=None
 ):
     """
     Generate a voter profile for a single district using the given voter model.
@@ -217,7 +246,8 @@ def process_settings_file(
 
     Args:
         settings_file: Path to a votekit settings json file for one district.
-        mode: Voter model name; one of "slate_pl", "slate_bt", or "name_cumulative".
+        mode: Voter model name; one of "slate_pl", "slate_bt", "cambridge", or
+            "name_cumulative".
         duplicate_indx: Replicate index, appended as _v<n> in the output filename.
         proportions_key: Which electorate to sample from -- "bloc_proportions"
             (the configured turnout) or "primary_bloc_proportions" (the lower
@@ -254,10 +284,14 @@ def process_settings_file(
         else generator_name_to_function[mode]
     )
 
+    # Only the Cambridge generator takes extra keywords; every other model is
+    # fully described by the district's own config.
+    generator_kwargs = _cambridge_bloc_kwargs(cambridge_cfg) if mode == "cambridge" else {}
+
     if total_points is not None and generator_accepts_total_points(mode):
-        profile = generator(config, total_points=total_points)
+        profile = generator(config, total_points=total_points, **generator_kwargs)
     else:
-        profile = generator(config)
+        profile = generator(config, **generator_kwargs)
 
     if truncation_cfg and truncation_cfg.get("enabled") and isinstance(profile, RankProfile):
         profile = apply_cambridge_truncation(profile, config, truncation_cfg)
@@ -301,6 +335,7 @@ def _generate_profile_archive(
 
     voter_models = get_voter_models(config)
     truncation_cfg = config.get("cambridge_truncation")
+    cambridge_cfg = config.get("cambridge_blocs")
 
     zip_path.parent.mkdir(exist_ok=True, parents=True)
     track_matrices = matrix_zip_path is not None
@@ -414,6 +449,7 @@ def _generate_profile_archive(
                             results = Parallel(n_jobs=-1, return_as="generator_unordered")(
                                 delayed(process_settings_file)(
                                     settings_file, mode, duplicate_indx, proportions_key, budget,
+                                    truncation_cfg, cambridge_cfg,
                                 )
                                 for settings_file in pending_settings_files
                             )

@@ -553,20 +553,20 @@
    "values": [
     {
      "rank": 1,
-     "value": 33.75,
-     "won": 54,
+     "value": 34.375,
+     "won": 55,
      "contests": 160
     },
     {
      "rank": 2,
-     "value": 45.9375,
-     "won": 147,
+     "value": 47.1875,
+     "won": 151,
      "contests": 320
     },
     {
      "rank": 3,
-     "value": 85.5556,
-     "won": 616,
+     "value": 86.25,
+     "won": 621,
      "contests": 720
     }
    ]
@@ -619,8 +619,8 @@
    "values": [
     {
      "rank": 1,
-     "value": 46.4706,
-     "won": 158,
+     "value": 49.1176,
+     "won": 167,
      "contests": 340
     },
     {
@@ -685,14 +685,14 @@
    "values": [
     {
      "rank": 1,
-     "value": 63.5714,
-     "won": 267,
+     "value": 63.0952,
+     "won": 265,
      "contests": 420
     },
     {
      "rank": 2,
-     "value": 89.5,
-     "won": 1074,
+     "value": 89.75,
+     "won": 1077,
      "contests": 1200
     },
     {
