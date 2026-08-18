@@ -29,113 +29,69 @@
   "voter_models": [
     "slate_pl",
     "slate_bt",
+    "cambridge",
     "name_cumulative"
   ],
   "blocs": {
-    "WAIO": [
-      "WAIO"
+    "WHI": [
+      "WHI"
     ],
-    "BLK": [
-      "BLK"
-    ],
-    "HIS": [
-      "HIS"
-    ],
-    "AAPI": [
-      "AAPI"
+    "POC": [
+      "POC"
     ]
   },
   "turnout": {
-    "AAPI": 0.75,
-    "BLK": 1,
-    "HIS": 0.75,
-    "WAIO": 1
+    "WHI": 1,
+    "POC": 0.7
   },
   "num_voters": 10000,
   "slate_to_candidates": {
-    "WAIO": [
-      "WAIO1",
-      "WAIO2",
-      "WAIO3",
-      "WAIO4"
+    "WHI": [
+      "WHI1",
+      "WHI2",
+      "WHI3"
     ],
-    "BLK": [
-      "BLK1",
-      "BLK2"
-    ],
-    "HIS": [
-      "HIS1",
-      "HIS2",
-      "HIS3"
-    ],
-    "AAPI": [
-      "AAPI1",
-      "AAPI2"
+    "POC": [
+      "POC1",
+      "POC2",
+      "POC3"
     ]
   },
-  "focal_group": "AAPI",
+  "focal_group": "WHI",
   "cambridge_truncation": {
     "enabled": true,
     "majority_slates": [
-      "WAIO"
+      "WHI"
     ],
     "minority_slates": [
       "HIS",
       "AAPI",
-      "BLK"
+      "POC"
     ]
   },
   "cohesion_parameters": {
-    "WAIO": {
-      "WAIO": 0.8,
-      "HIS": 0.05,
-      "AAPI": 0.1,
-      "BLK": 0.05
+    "WHI": {
+      "WHI": 0.8,
+      "POC": 0.2
     },
-    "HIS": {
-      "WAIO": 0.1,
-      "HIS": 0.8,
-      "AAPI": 0.05,
-      "BLK": 0.05
-    },
-    "AAPI": {
-      "WAIO": 0.15,
-      "HIS": 0.03,
-      "AAPI": 0.8,
-      "BLK": 0.02
-    },
-    "BLK": {
-      "WAIO": 0.05,
-      "HIS": 0.1,
-      "AAPI": 0.05,
-      "BLK": 0.8
+    "POC": {
+      "WHI": 0.11,
+      "POC": 0.89
     }
   },
   "alphas": {
-    "WAIO": {
-      "WAIO": 1,
-      "BLK": 1,
-      "HIS": 1,
-      "AAPI": 1
+    "WHI": {
+      "WHI": 1,
+      "POC": 1
     },
-    "HIS": {
-      "WAIO": 1,
-      "BLK": 1,
-      "HIS": 1,
-      "AAPI": 1
-    },
-    "AAPI": {
-      "WAIO": 1,
-      "BLK": 1,
-      "HIS": 1,
-      "AAPI": 1
-    },
-    "BLK": {
-      "WAIO": 1,
-      "BLK": 1,
-      "HIS": 1,
-      "AAPI": 1
+    "POC": {
+      "WHI": 1,
+      "POC": 1
     }
   },
-  "num_reps": 10
+  "num_reps": 10,
+  "cambridge_blocs": {
+    "majority": "WHI",
+    "minority": "POC"
+  }
 }

@@ -6,7 +6,7 @@ voters whose first choice was the historical majority slate vs. the historical
 minority slate -- how many candidates each ballot went on to rank. VoteKit's own
 Cambridge generator (`cambridge_profiles_by_bloc_generator`) only works with
 exactly two slates whose names match two blocs, so it can't run directly against
-a config with more than two candidate slates (e.g. San Diego's WAIO/HIS/AAPI/BLK).
+a config whose slates are not literally named majority/minority (e.g. San Diego's WHI/POC).
 
 This module reuses votekit's own shape-reduction logic (`_reduce_ballot_pmfs`)
 against a stand-in config that pools an arbitrary number of real slates into two

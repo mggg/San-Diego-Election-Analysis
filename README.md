@@ -311,8 +311,8 @@ Add an optional top-level `primary_turnout` block to model a narrowing round wit
 lower participation, as a primary typically has:
 
 ```json
-"turnout":         { "AAPI": 0.75, "HIS": 0.75, "WAIO": 1, "BLK": 1 },
-"primary_turnout": { "AAPI": 0.4,  "HIS": 0.4 }
+"turnout":         { "WHI": 1, "POC": 0.7 },
+"primary_turnout": { "POC": 0.4 }
 ```
 
 It is a **partial override**: blocs left out keep their `turnout` rate, so only

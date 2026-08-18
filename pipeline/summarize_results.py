@@ -270,14 +270,32 @@ def _focal_population_share(config, gdf) -> float:
     """
     Focal group's share of the voting-age population.
 
-    Both sides of this ratio must be VAP: pop_of_interest_column is a VAP column,
-    so the denominator is population_vap_column, not the total-population column.
-    No turnout adjustment is applied -- this is the plain demographic share the
-    reference lines are drawn against.
+    Both sides of this ratio must be VAP: the denominator is
+    population_vap_column, not the total-population column. No turnout
+    adjustment is applied -- this is the plain demographic share the reference
+    lines are drawn against.
+
+    The numerator is the focal group's own VAP columns, summed, which is the
+    only definition that survives a change of bloc model: pop_of_interest_column
+    names one column, and a group spanning several (POC = Black + Hispanic +
+    Asian/NHPI, WHI = White + American Indian + other) cannot be expressed as
+    one. Reading it from that field instead drew every reference line at the
+    share of whichever single group the project happened to be configured
+    around, however the run defined its focal group. Falls back to
+    pop_of_interest_column for the legacy two-group model, which has no groups
+    to resolve.
     """
     vap = gdf[config["population_vap_column"]].sum()
-    ivap = gdf[config["pop_of_interest_column"]].sum()
-    return float(ivap / vap) if vap else 0.0
+    if not vap:
+        return 0.0
+
+    focal = config.get("focal_group")
+    try:
+        columns = get_group_vap_columns(config, [focal])[focal]
+    except (KeyError, ValueError):
+        columns = [config["pop_of_interest_column"]]
+    ivap = sum(float(gdf[column].sum()) for column in columns)
+    return float(ivap / vap)
 
 
 def _slate_baselines(config, gdf) -> Dict[str, float]:
@@ -880,6 +898,12 @@ def summarize_results(config) -> Path:
                     total_pop = settings_data.get(config["population_column"], None)
                     total_vap = settings_data.get(config["population_vap_column"], None)
                     total_ivap = settings_data.get(config["pop_of_interest_column"], None)
+                    # The focal group's own VAP in this district. Every settings
+                    # file records group_vap per demographic group, which is the
+                    # per-district counterpart of _focal_population_share: a
+                    # focal group spanning several columns has no single column
+                    # to read, so pop_of_interest_column is only the fallback.
+                    focal_vap = (settings_data.get("group_vap") or {}).get(focal_group, total_ivap)
                     # partisan has p_prop_census -- add?
 
                     for method_key, winners in result.items():
@@ -906,8 +930,8 @@ def summarize_results(config) -> Path:
                             # Focal share of VAP for this district, the same
                             # (turnout-free) basis the reference lines use.
                             "focal_vap_share": (
-                                total_ivap / total_vap
-                                if total_ivap is not None and total_vap else None
+                                focal_vap / total_vap
+                                if focal_vap is not None and total_vap else None
                             ),
                         }
                         # Per-slate seat counts feed the by-slate representation panel.
