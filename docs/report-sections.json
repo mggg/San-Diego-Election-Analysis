@@ -27,8 +27,7 @@
         { "run": "nine-seats-at-large", "system": "CUMULATIVE", "label": "1 × 9 Cumulative" },
         { "run": "nine-seats-at-large", "system": "LIMITED", "label": "1 × 9 Limited" },
         { "run": "fifteen-seats-at-large-stv", "system": "FASTSTV", "label": "1 × 15 STV" },
-        { "run": "2b-15-at-large", "system": "FASTSTV", "label": "1 × 15 STV (Two Bloc)" }
-
+        { "run": "fifteen-seats-at-large-stv-2-blocs", "system": "FASTSTV", "label": "1 × 15 STV (Two Bloc)" }
       ]
     },
     "city-charter-amendment-proposal",

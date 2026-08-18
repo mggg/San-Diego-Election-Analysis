@@ -1,5 +1,5 @@
 {
- "generated": "2026-08-18T15:26:59+00:00",
+ "generated": "2026-08-18T15:33:19+00:00",
  "palette": {
   "slate_pl": "#FFCC00",
   "slate_bt": "#AA0000",
@@ -631,6 +631,94 @@
       "focalSeats": "data/fifteen-seats-at-large-stv/focal_seats.json",
       "slateSeats": "data/fifteen-seats-at-large-stv/slate_seats.json",
       "availability": "data/fifteen-seats-at-large-stv/availability.json"
+     }
+    },
+    {
+     "id": "fifteen-seats-at-large-stv-2-blocs::FASTSTV::1x15",
+     "label": "1 \u00d7 15 STV (Two Bloc)",
+     "run": "fifteen-seats-at-large-stv-2-blocs",
+     "runName": "Fifteen Seats At-Large - STV (2 Blocs)",
+     "system": "FASTSTV",
+     "systemLabel": "1 X 15 STV",
+     "numDistricts": 1,
+     "winners": 15,
+     "seats": 15,
+     "shape": "1 \u00d7 15",
+     "seatMax": 15,
+     "seatTicks": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+     ],
+     "voterModels": [
+      {
+       "id": "slate_pl",
+       "label": "Impulsive",
+       "pooled": false
+      },
+      {
+       "id": "slate_bt",
+       "label": "Deliberative",
+       "pooled": false
+      },
+      {
+       "id": "cambridge",
+       "label": "Cambridge",
+       "pooled": false
+      },
+      {
+       "id": "combined",
+       "label": "Combined",
+       "pooled": true
+      }
+     ],
+     "plans": 100,
+     "replicates": 10,
+     "turnout": {
+      "WHI": 1,
+      "POC": 0.7
+     },
+     "primaryTurnout": null,
+     "candidatePoolMax": 25,
+     "candidatePoolMean": 22,
+     "cohesion": {
+      "WHI": {
+       "WHI": 0.8,
+       "POC": 0.2
+      },
+      "POC": {
+       "WHI": 0.11,
+       "POC": 0.89
+      }
+     },
+     "alphas": {
+      "WHI": {
+       "WHI": 1,
+       "POC": 1
+      },
+      "POC": {
+       "WHI": 1,
+       "POC": 1
+      }
+     },
+     "data": {
+      "run": "data/fifteen-seats-at-large-stv-2-blocs/run.json",
+      "focalSeats": "data/fifteen-seats-at-large-stv-2-blocs/focal_seats.json",
+      "slateSeats": "data/fifteen-seats-at-large-stv-2-blocs/slate_seats.json",
+      "availability": "data/fifteen-seats-at-large-stv-2-blocs/availability.json"
      }
     }
    ]
