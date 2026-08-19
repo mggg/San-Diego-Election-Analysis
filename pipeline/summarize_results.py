@@ -40,6 +40,11 @@ MODE_COLORS = {
     "slate_bt": "#AA0000",
     "cambridge": "#2a78d6",
     "name_cumulative": "#2a78d6",
+    # The pooled average, in a hue no single model uses so a reader never has to
+    # check the legend to know whether a bar is one model or all of them. It was
+    # falling through to DEFAULT_MODE_COLOR here, which is slate_bt's red -- the
+    # figures drew the average and one of its inputs in the same colour.
+    "combined": "#6a3d9a",  # COMBINED_MODE, which is defined below this block
 }
 
 # Dark ink outline: the only thing holding the gold bars against the page.
@@ -50,6 +55,11 @@ BAR_EDGE_COLOR = "#52514e"
 # 1.3:1 against the page, so the dark edge below does much of the work of
 # defining those bars. Raise this if the gold ever looks like empty space.
 BAR_ALPHA = 0.7
+
+# How much of one seat tick a group of overlapping bars spans, whatever the
+# number of voter models in it (see _draw_mode_histograms). The gap to the
+# next seat is what keeps neighbouring groups readable as separate.
+BAR_GROUP_SPAN = 0.84
 
 LEGEND_MAPPING = {
     "slate_pl": "Impulsive",
@@ -337,8 +347,12 @@ def _draw_mode_histograms(ax, group_distn: pd.DataFrame, seat_col: str = "focal_
         return 0
 
     # Bars overlap each other by 50%: centres are spaced half a bar width apart,
-    # so a group spans 0.84 of a tick and leaves a visible gap to the next seat.
-    bar_width = 0.42
+    # and the width follows from how many there are, so the group always spans
+    # BAR_GROUP_SPAN of a tick and leaves a visible gap to the next seat. Fixing
+    # the width instead makes the group grow with the series count -- four
+    # series at 0.42 would span 1.05 of a tick and collide with the next seat's
+    # group. Three series still come out at exactly 0.42.
+    bar_width = 2 * BAR_GROUP_SPAN / (n_modes + 1)
     step = bar_width / 2
     max_bin_height = 0
 

@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+"
         crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="fonts/fonts.css">
-  <link rel="stylesheet" href="css/report.css?v=15542dbe3e">
+  <link rel="stylesheet" href="css/report.css?v=1c48273e9f">
 </head>
 
 <body data-bs-spy="scroll" data-bs-target="#toc-nav" data-bs-offset="90" tabindex="0">
@@ -58,6 +58,7 @@
             <a class="nav-link" href="#run-basic-3-x-3-2-blocs">Basic - 3 X 3 (2 Blocs)</a>
             <a class="nav-link" href="#run-alternative-electoral-systems">Alternative Electoral Systems</a>
             <a class="nav-link" href="#run-city-charter-amendment-proposal">City Charter Amendment Proposal</a>
+            <a class="nav-link" href="#run-hybrid-system-3x4-stv-1x3-plurality">Hybrid System - 3x4 STV + 1x3 Plurality</a>
             <a class="nav-link" href="#run-diverse-aapi-coalition-preferences">Diverse AAPI Coalition Preferences</a>
             <a class="nav-link" href="#run-low-aapi-availability">Low AAPI Availability</a>
             <a class="nav-link" href="#run-low-aapi-turnout">Low AAPI Turnout</a>
@@ -407,6 +408,51 @@ $$</div>
             </div>
             <aside class="run-params" data-params="city-charter-amendment-proposal"></aside>
           </section>
+          <section id="run-hybrid-system-3x4-stv-1x3-plurality" class="run mb-5" data-run="hybrid-system-3x4-stv-1x3-plurality">
+            <div class="run-main">
+            <h3 class="h4 mt-4">Hybrid System - 3x4 STV + 1x3 Plurality</h3>
+            <p class="todo">[Description to be written — edit
+               <code>docs/prose/runs/hybrid-system-3x4-stv-1x3-plurality.md</code>.]</p>
+
+            <div class="run-controls" data-controls="hybrid-system-3x4-stv-1x3-plurality"></div>
+
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="tab"
+                        data-bs-target="#hybrid-system-3x4-stv-1x3-plurality-focal" type="button" role="tab">
+                  Seat outcomes
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab"
+                        data-bs-target="#hybrid-system-3x4-stv-1x3-plurality-availability" type="button" role="tab">
+                  Districts by VAP rank
+                </button>
+              </li>
+            </ul>
+            <div class="tab-content pt-3">
+              <div class="tab-pane fade show active" id="hybrid-system-3x4-stv-1x3-plurality-focal" role="tabpanel">
+                <div class="metric-toggles" data-view="hybrid-system-3x4-stv-1x3-plurality"></div>
+                <div class="row g-4 figure-pair" data-one-group="hybrid-system-3x4-stv-1x3-plurality">
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="bubble" data-run="hybrid-system-3x4-stv-1x3-plurality"></div>
+                  </div>
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="histogram" data-run="hybrid-system-3x4-stv-1x3-plurality"></div>
+                  </div>
+                </div>
+                <div data-all-groups="hybrid-system-3x4-stv-1x3-plurality" hidden>
+                  <div class="chart" data-chart="slate" data-run="hybrid-system-3x4-stv-1x3-plurality"></div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="hybrid-system-3x4-stv-1x3-plurality-availability" role="tabpanel">
+                <div class="metric-toggles" data-metric="hybrid-system-3x4-stv-1x3-plurality"></div>
+                <div class="chart" data-chart="availability" data-run="hybrid-system-3x4-stv-1x3-plurality"></div>
+              </div>
+            </div>
+            </div>
+            <aside class="run-params" data-params="hybrid-system-3x4-stv-1x3-plurality"></aside>
+          </section>
           <section id="run-diverse-aapi-coalition-preferences" class="run mb-5" data-run="diverse-aapi-coalition-preferences">
             <div class="run-main">
             <h3 class="h4 mt-4">Diverse AAPI Coalition Preferences</h3>
@@ -557,7 +603,7 @@ $$</div>
     <div class="container-xl text-center">
       <p class="mb-1">Metric Geometry &amp; Gerrymandering Group — San Diego City Council Election Analysis</p>
       <p class="mb-1"><a href="https://github.com/mggg/San-Diego-Election-Analysis" target="_blank" rel="noopener">View the repository on GitHub</a></p>
-      <p class="generated mb-0">Generated 2026-08-18T15:33:19+00:00</p>
+      <p class="generated mb-0">Generated 2026-08-18T18:58:13+00:00</p>
     </div>
   </footer>
 
@@ -590,15 +636,15 @@ $$</div>
 
   <script type="importmap">{
  "imports": {
-  "./js/charts/availability.js": "./js/charts/availability.js?v=15542dbe3e",
-  "./js/charts/axes.js": "./js/charts/axes.js?v=15542dbe3e",
-  "./js/charts/bubble.js": "./js/charts/bubble.js?v=15542dbe3e",
-  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=15542dbe3e",
-  "./js/charts/histogram.js": "./js/charts/histogram.js?v=15542dbe3e",
-  "./js/charts/slate.js": "./js/charts/slate.js?v=15542dbe3e",
-  "./js/report.js": "./js/report.js?v=15542dbe3e"
+  "./js/charts/availability.js": "./js/charts/availability.js?v=1c48273e9f",
+  "./js/charts/axes.js": "./js/charts/axes.js?v=1c48273e9f",
+  "./js/charts/bubble.js": "./js/charts/bubble.js?v=1c48273e9f",
+  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=1c48273e9f",
+  "./js/charts/histogram.js": "./js/charts/histogram.js?v=1c48273e9f",
+  "./js/charts/slate.js": "./js/charts/slate.js?v=1c48273e9f",
+  "./js/report.js": "./js/report.js?v=1c48273e9f"
  }
 }</script>
-  <script type="module" src="js/report.js?v=15542dbe3e"></script>
+  <script type="module" src="js/report.js?v=1c48273e9f"></script>
 </body>
 </html>

@@ -112,6 +112,51 @@ section { scroll-margin-top: 70px; padding-top: .5rem; }
   color: var(--sd-gray);
   margin: 0 0 .6rem;
 }
+
+/* The card's two faces. Styled as a heading that happens to be switchable
+   rather than as buttons in a toolbar: it replaces .params-title, so the
+   inactive tab has to read as a quieter version of the same label, not as a
+   control competing with the figures for attention. */
+.params-tabs {
+  display: flex;
+  gap: .7rem;
+  margin: 0 0 .6rem;
+  border-bottom: 1px solid var(--sd-gray-light);
+}
+.params-tab {
+  appearance: none;
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  padding: 0 0 .35rem;
+  font: inherit;
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--sd-gray);
+  cursor: pointer;
+}
+.params-tab:hover { color: var(--sd-ink); }
+.params-tab.on {
+  color: #23211d;
+  border-bottom-color: var(--sd-gold);
+}
+
+/* Scenario stats: a two-column table of bloc against share. */
+.stats-table td.num, .stats-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+/* Each header sits over its own column: the label column reads from the left,
+   the figures column from the right, so a heading lines up with what it names.
+   Scoped to .stats-table, leaving the cohesion and alpha matrices -- whose
+   headers are slate labels above a grid, not columns of figures -- alone. */
+.stats-table thead th { text-align: left; }
+.stats-table thead th.num { text-align: right; }
+.stats-table tbody tr.focal th, .stats-table tbody tr.focal td { color: #23211d; font-weight: 600; }
+.stats-table tfoot th, .stats-table tfoot td {
+  border-top: 1px solid var(--sd-gray-light);
+  color: var(--sd-gray);
+}
+.matrix-title.mt { margin-top: .9rem; }
 /* Label and value on one line, so the table stays well short of the section it
    has to travel within -- a table as tall as its section has nowhere to stick. */
 .params-list { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: .3rem .5rem; }
