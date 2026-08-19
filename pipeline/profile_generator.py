@@ -285,11 +285,14 @@ def process_settings_file(
             turnout of a two-round rule's narrowing round).
         total_points: Score-ballot budget, for models that produce score ballots.
             Ignored by the ranked generators, which take no such argument.
-        truncate_ballots: The run config's "cambridge_truncation" flag. When
-            True, a ranked profile's ballots are truncated to a length sampled
-            from the Cambridge historical distribution matching each ballot's
-            first choice (see pipeline.utils.cambridge_truncation). Ignored
-            for score profiles, which have no ranking to truncate.
+        truncate_ballots: Whether the run config's "cambridge_truncation" key
+            is present and its "enabled" field is True. When True, a
+            slate_pl or slate_bt profile's ballots are truncated to a length
+            sampled from the Cambridge historical distribution matching each
+            ballot's first choice (see pipeline.utils.cambridge_truncation).
+            Ignored for cambridge mode, whose ballots already come from that
+            same historical data, and for score profiles, which have no
+            ranking to truncate.
 
     Returns:
         (filename, csv_text, matrix_json): filename is the profile's zip entry
@@ -329,7 +332,7 @@ def process_settings_file(
     else:
         profile = generator(config, **generator_kwargs)
 
-    if truncate_ballots and isinstance(profile, RankProfile):
+    if truncate_ballots and mode in ("slate_pl", "slate_bt") and isinstance(profile, RankProfile):
         profile = apply_cambridge_truncation(profile, config)
 
     csv_text = profile.to_csv()
@@ -370,8 +373,15 @@ def _generate_profile_archive(
     run_name = config['run_name']
 
     voter_models = get_voter_models(config)
-    truncate_ballots = bool(config.get("cambridge_truncation"))
+    cambridge_truncation_cfg = config.get("cambridge_truncation")
+    truncate_ballots = (
+        isinstance(cambridge_truncation_cfg, dict)
+        and cambridge_truncation_cfg.get("enabled") is True
+    )
     cambridge_cfg = config.get("cambridge_blocs")
+
+    if truncate_ballots:
+        print(f"[{label}] Truncating ballots sampling from Historical Cambridge Data")
 
     zip_path.parent.mkdir(exist_ok=True, parents=True)
     track_matrices = matrix_zip_path is not None

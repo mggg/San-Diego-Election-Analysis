@@ -69,5 +69,13 @@
     "majority": "WHI",
     "minority": "POC"
   },
-  "cambridge_truncation": false
+  "cambridge_truncation": {
+    "enabled": false,
+    "majority_slates": [
+      "WHI"
+    ],
+    "minority_slates": [
+      "POC"
+    ]
+  }
 }

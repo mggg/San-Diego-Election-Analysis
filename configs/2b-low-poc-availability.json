@@ -1,6 +1,10 @@
 {
-  "run_name": "Basic - 3 X 3 (2 Blocs)",
+  "run_name": "Low POC Availability (2 Blocs)",
   "num_subsamples": 100,
+  "availability_exps": {
+    "WHI": 2,
+    "POC": 3
+  },
   "total_seats": 9,
   "district_configs": [
     {

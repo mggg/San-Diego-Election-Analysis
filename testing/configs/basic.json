@@ -75,7 +75,7 @@
   },
   "focal_group": "AAPI",
   "cambridge_truncation": {
-    "enabled": true,
+    "enabled": false,
     "majority_slates": [
       "WAIO"
     ],

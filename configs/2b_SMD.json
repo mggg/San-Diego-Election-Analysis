@@ -1,22 +1,18 @@
 {
-  "run_name": "Low POC Availability (2 Blocs)",
+  "run_name": "12 x 1 SMD (2 Blocs)",
   "num_subsamples": 100,
-  "availability_exps": {
-    "WHI": 2,
-    "POC": 3
-  },
-  "total_seats": 9,
+  "total_seats": 15,
   "district_configs": [
     {
       "num_districts": 3,
-      "winners": 3,
+      "winners": 5,
       "candidate_pool_max": 10,
       "candidate_pool_mean": 7
     }
   ],
   "voting_configs": {
     "FastSTV": {
-      "n_seats": 3,
+      "n_seats": 5,
       "tiebreak": "random"
     }
   },
@@ -60,9 +56,9 @@
     }
   },
   "num_reps": 10,
-  "cambridge_blocs": {
-    "majority": "WHI",
-    "minority": "POC"
-  },
-  "cambridge_truncation": false
+"cambridge_truncation": {
+    "enabled": false,
+    "majority_slates": ["WHI"],
+    "minority_slates": ["POC"]
+  }
 }

@@ -1,7 +1,6 @@
 {
   "run_name": "Low AAPI Availability",
   "num_subsamples": 100,
-  "candidate_geometric_p": 0.2,
   "availability_exps": {
     "WAIO": 2,
     "BLK": 2,
@@ -69,7 +68,7 @@
       "AAPI2"
     ]
   },
-  "focal_group": "AAPI",
+  "focal_group": "BLK",
   "cohesion_parameters": {
     "WAIO": {
       "WAIO": 0.8,
@@ -122,5 +121,16 @@
       "AAPI": 1
     }
   },
-  "num_reps": 10
+  "num_reps": 10,
+  "cambridge_truncation": {
+    "enabled": false,
+    "majority_slates": [
+      "WAIO"
+    ],
+    "minority_slates": [
+      "HIS",
+      "AAPI",
+      "BLK"
+    ]
+  }
 }

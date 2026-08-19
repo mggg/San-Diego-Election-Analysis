@@ -1,18 +1,27 @@
 {
-  "run_name": "Low POC Turnout (2 Blocs)",
+  "run_name": "Nine Seats At-Large - STV (2 Blocs)",
   "num_subsamples": 100,
   "total_seats": 9,
   "district_configs": [
     {
-      "num_districts": 3,
-      "winners": 3,
-      "candidate_pool_max": 10,
-      "candidate_pool_mean": 7
+      "num_districts": 1,
+      "winners": 9,
+      "candidate_pool_max": 12,
+      "candidate_pool_mean": 11
     }
   ],
   "voting_configs": {
     "FastSTV": {
-      "n_seats": 3,
+      "n_seats": 9,
+      "tiebreak": "random"
+    },
+    "Limited": {
+      "n_seats": 9,
+      "budget": 3,
+      "tiebreak": "random"
+    },
+    "Cumulative": {
+      "n_seats": 9,
       "tiebreak": "random"
     }
   },
@@ -31,9 +40,9 @@
   },
   "turnout": {
     "WHI": 1,
-    "POC": 0.5
+    "POC": 0.7
   },
-  "num_voters": 10000,
+  "num_voters": 1000,
   "focal_group": "WHI",
   "cohesion_parameters": {
     "WHI": {
@@ -60,5 +69,13 @@
     "majority": "WHI",
     "minority": "POC"
   },
-  "cambridge_truncation": false
+  "cambridge_truncation": {
+    "enabled": false,
+    "majority_slates": [
+      "WHI"
+    ],
+    "minority_slates": [
+      "POC"
+    ]
+  }
 }
