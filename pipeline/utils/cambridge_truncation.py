@@ -41,10 +41,10 @@ _MINORITY_BALLOT_PATH = (
 )
 
 # Cambridge's historical data splits ballots by whether the voter's first
-# choice was the White-majority slate or not; this project has no run-level
-# mapping to that, so WHI -- consistently San Diego's largest single slate --
-# stands in for the historical majority, and every other configured slate
-# pools into the minority group.
+# choice was the White-majority slate or not. A run states its own mapping via
+# "cambridge_truncation.majority_slates"/"minority_slates" in its config; WHI --
+# consistently San Diego's largest single slate -- is only a fallback for a run
+# that leaves that mapping unset.
 DEFAULT_MAJORITY_SLATE = "WHI"
 
 
@@ -53,10 +53,13 @@ def _default_majority_minority_slates(slate_to_candidates: dict) -> tuple[list, 
     Split this run's slates into Cambridge's majority/minority groups by the
     DEFAULT_MAJORITY_SLATE convention.
 
-    Every slate lands in exactly one group (DEFAULT_MAJORITY_SLATE in
-    "majority", everything else in "minority"), so truncate_profile never
-    finds an unmapped slate. A run with no DEFAULT_MAJORITY_SLATE candidates
-    at all -- unusual, but not invalid -- pools everything into "minority".
+    Fallback for a run whose config doesn't set
+    "cambridge_truncation.majority_slates"/"minority_slates" (see
+    apply_cambridge_truncation). Every slate lands in exactly one group
+    (DEFAULT_MAJORITY_SLATE in "majority", everything else in "minority"), so
+    truncate_profile never finds an unmapped slate. A run with no
+    DEFAULT_MAJORITY_SLATE candidates at all -- unusual, but not invalid --
+    pools everything into "minority".
 
     Args:
         slate_to_candidates: This run's slate names mapped to candidate lists
@@ -196,29 +199,34 @@ def truncate_profile(
 def apply_cambridge_truncation(
     profile: RankProfile,
     config: "BlocSlateConfig",
+    majority_slates: Optional[Sequence[str]] = None,
+    minority_slates: Optional[Sequence[str]] = None,
     rng: Optional[np.random.Generator] = None,
 ) -> RankProfile:
     """
     Truncate profile's ballots to Cambridge-derived lengths.
 
     Single entry point combining build_length_distributions + truncate_profile,
-    for callers that just want a truncated profile. Majority/minority slates
-    are derived from config's own slate_to_candidates by the
-    DEFAULT_MAJORITY_SLATE convention (see _default_majority_minority_slates)
-    -- a run opts into truncation with the plain "cambridge_truncation"
-    boolean, not a per-run slate mapping.
+    for callers that just want a truncated profile.
 
     Args:
         profile: A RankProfile already produced by slate_pl/slate_bt.
         config: This district's BlocSlateConfig.
+        majority_slates: Slate names pooled into the historical "majority" (W)
+            group -- normally a run's configured "cambridge_truncation.majority_slates".
+            When omitted (along with minority_slates), falls back to the
+            DEFAULT_MAJORITY_SLATE convention (see _default_majority_minority_slates).
+        minority_slates: Slate names pooled into the historical "minority" (C)
+            group -- normally "cambridge_truncation.minority_slates".
         rng: Optional numpy Generator, for reproducible sampling in tests.
 
     Returns:
         A new, truncated RankProfile.
     """
-    majority_slates, minority_slates = _default_majority_minority_slates(
-        config.slate_to_candidates.to_dict()
-    )
+    if majority_slates is None or minority_slates is None:
+        majority_slates, minority_slates = _default_majority_minority_slates(
+            config.slate_to_candidates.to_dict()
+        )
     length_distributions = build_length_distributions(config, majority_slates, minority_slates)
     return truncate_profile(
         profile, config, majority_slates, minority_slates, length_distributions, rng=rng

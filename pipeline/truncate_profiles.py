@@ -114,11 +114,13 @@ def truncate_archive(
 
     Runs unconditionally on whatever archive it's pointed at -- this is an
     explicit, standalone action, so it truncates because it was invoked, not
-    because the run's own "cambridge_truncation" flag happens to be set.
-    Majority/minority slates are derived per district from its own
-    slate_to_candidates by the DEFAULT_MAJORITY_SLATE convention (see
-    pipeline.utils.cambridge_truncation), the same as generation-time
-    truncation, so the two never disagree about which ballots count as which.
+    because the run's own "cambridge_truncation.enabled" flag happens to be
+    set. Majority/minority slates come from the run's own
+    "cambridge_truncation.majority_slates"/"minority_slates" when configured,
+    falling back to the DEFAULT_MAJORITY_SLATE convention (see
+    pipeline.utils.cambridge_truncation) otherwise -- the same source
+    generation-time truncation reads, so the two never disagree about which
+    ballots count as which.
 
     Args:
         config: Parsed run config, for the run name and the settings files.
@@ -141,6 +143,16 @@ def truncate_archive(
     run_name = config["run_name"]
     rng = np.random.default_rng(seed)
     tally = {"truncated": 0, "copied": 0, "skipped": 0}
+
+    cambridge_truncation_cfg = config.get("cambridge_truncation")
+    configured_majority_slates = (
+        cambridge_truncation_cfg.get("majority_slates")
+        if isinstance(cambridge_truncation_cfg, dict) else None
+    )
+    configured_minority_slates = (
+        cambridge_truncation_cfg.get("minority_slates")
+        if isinstance(cambridge_truncation_cfg, dict) else None
+    )
 
     # One config and one set of length distributions per district settings file:
     # the distributions depend only on that district's candidate counts, and
@@ -179,9 +191,12 @@ def truncate_archive(
 
             if settings_path not in config_cache:
                 district_config = _district_config(settings_path)
-                majority_slates, minority_slates = _default_majority_minority_slates(
-                    district_config.slate_to_candidates.to_dict()
-                )
+                if configured_majority_slates is not None and configured_minority_slates is not None:
+                    majority_slates, minority_slates = configured_majority_slates, configured_minority_slates
+                else:
+                    majority_slates, minority_slates = _default_majority_minority_slates(
+                        district_config.slate_to_candidates.to_dict()
+                    )
                 config_cache[settings_path] = (
                     district_config,
                     majority_slates,
