@@ -37,7 +37,7 @@ from votekit.ballot_generator import BlocSlateConfig
 from pipeline.profile_generator import profile_class_for_mode
 from pipeline.simulate_elections import _load_profile_from_bytes
 from pipeline.utils.cambridge_truncation import (
-    build_length_distributions,
+    build_length_distributions_for_method,
     truncate_profile,
     _default_majority_minority_slates,
 )
@@ -115,12 +115,13 @@ def truncate_archive(
     Runs unconditionally on whatever archive it's pointed at -- this is an
     explicit, standalone action, so it truncates because it was invoked, not
     because the run's own "cambridge_truncation.enabled" flag happens to be
-    set. Majority/minority slates come from the run's own
-    "cambridge_truncation.majority_slates"/"minority_slates" when configured,
-    falling back to the DEFAULT_MAJORITY_SLATE convention (see
-    pipeline.utils.cambridge_truncation) otherwise -- the same source
-    generation-time truncation reads, so the two never disagree about which
-    ballots count as which.
+    set. Majority/minority slates, and which length distribution to sample
+    from ("cambridge_truncation.method"/"min_length"/"max_length" -- see
+    build_length_distributions_for_method), come from the run's own
+    "cambridge_truncation" config when present, falling back to the
+    DEFAULT_MAJORITY_SLATE convention and the "historical" method otherwise --
+    the same source generation-time truncation reads, so the two never
+    disagree about which ballots count as which or how they get truncated.
 
     Args:
         config: Parsed run config, for the run name and the settings files.
@@ -145,14 +146,18 @@ def truncate_archive(
     tally = {"truncated": 0, "copied": 0, "skipped": 0}
 
     cambridge_truncation_cfg = config.get("cambridge_truncation")
-    configured_majority_slates = (
-        cambridge_truncation_cfg.get("majority_slates")
-        if isinstance(cambridge_truncation_cfg, dict) else None
-    )
-    configured_minority_slates = (
-        cambridge_truncation_cfg.get("minority_slates")
-        if isinstance(cambridge_truncation_cfg, dict) else None
-    )
+    if isinstance(cambridge_truncation_cfg, dict):
+        configured_majority_slates = cambridge_truncation_cfg.get("majority_slates")
+        configured_minority_slates = cambridge_truncation_cfg.get("minority_slates")
+        truncation_method = cambridge_truncation_cfg.get("method", "historical")
+        truncation_min_length = cambridge_truncation_cfg.get("min_length")
+        truncation_max_length = cambridge_truncation_cfg.get("max_length")
+    else:
+        configured_majority_slates = None
+        configured_minority_slates = None
+        truncation_method = "historical"
+        truncation_min_length = None
+        truncation_max_length = None
 
     # One config and one set of length distributions per district settings file:
     # the distributions depend only on that district's candidate counts, and
@@ -201,7 +206,10 @@ def truncate_archive(
                     district_config,
                     majority_slates,
                     minority_slates,
-                    build_length_distributions(district_config, majority_slates, minority_slates),
+                    build_length_distributions_for_method(
+                        district_config, majority_slates, minority_slates,
+                        truncation_method, truncation_min_length, truncation_max_length,
+                    ),
                 )
             district_config, majority_slates, minority_slates, distributions = config_cache[settings_path]
 

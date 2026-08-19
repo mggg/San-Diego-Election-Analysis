@@ -266,8 +266,7 @@ def profile_arcname(mode: str, district_num: int, filename: str, budget=None) ->
 
 def process_settings_file(
     settings_file, mode, duplicate_indx, proportions_key="bloc_proportions", total_points=None,
-    truncate_ballots=False, cambridge_cfg=None, truncation_majority_slates=None,
-    truncation_minority_slates=None,
+    cambridge_cfg=None, truncation_cfg=None,
 ):
     """
     Generate a voter profile for a single district using the given voter model.
@@ -286,22 +285,18 @@ def process_settings_file(
             turnout of a two-round rule's narrowing round).
         total_points: Score-ballot budget, for models that produce score ballots.
             Ignored by the ranked generators, which take no such argument.
-        truncate_ballots: Whether the run config's "cambridge_truncation" key
-            is present and its "enabled" field is True. When True, a
-            slate_pl or slate_bt profile's ballots are truncated to a length
-            sampled from the Cambridge historical distribution matching each
-            ballot's first choice (see pipeline.utils.cambridge_truncation).
+        truncation_cfg: The run config's "cambridge_truncation" dict, or None
+            when truncation is off (the key is absent, or "enabled" is not
+            True -- see _generate_profile_archive). When set, a slate_pl or
+            slate_bt profile's ballots are truncated to a length sampled from
+            a Cambridge-derived distribution matching each ballot's first
+            choice (see pipeline.utils.cambridge_truncation); "majority_slates"/
+            "minority_slates" pick which slates pool into which historical
+            group, and "method"/"min_length"/"max_length" pick which
+            distribution to sample from (see apply_cambridge_truncation).
             Ignored for cambridge mode, whose ballots already come from that
             same historical data, and for score profiles, which have no
             ranking to truncate.
-        truncation_majority_slates: The run config's
-            "cambridge_truncation.majority_slates" -- slate names pooled into
-            Cambridge's historical majority group. Only read when
-            truncate_ballots is True; falls back to the DEFAULT_MAJORITY_SLATE
-            convention when left unset (see apply_cambridge_truncation).
-        truncation_minority_slates: The run config's
-            "cambridge_truncation.minority_slates", the historical minority
-            group's pooled slates. Same fallback as truncation_majority_slates.
 
     Returns:
         (filename, csv_text, matrix_json): filename is the profile's zip entry
@@ -341,9 +336,15 @@ def process_settings_file(
     else:
         profile = generator(config, **generator_kwargs)
 
-    if truncate_ballots and mode in ("slate_pl", "slate_bt") and isinstance(profile, RankProfile):
+    if truncation_cfg is not None and mode in ("slate_pl", "slate_bt") and isinstance(profile, RankProfile):
         profile = apply_cambridge_truncation(
-            profile, config, truncation_majority_slates, truncation_minority_slates
+            profile,
+            config,
+            majority_slates=truncation_cfg.get("majority_slates"),
+            minority_slates=truncation_cfg.get("minority_slates"),
+            method=truncation_cfg.get("method", "historical"),
+            min_length=truncation_cfg.get("min_length"),
+            max_length=truncation_cfg.get("max_length"),
         )
 
     csv_text = profile.to_csv()
@@ -389,12 +390,7 @@ def _generate_profile_archive(
         isinstance(cambridge_truncation_cfg, dict)
         and cambridge_truncation_cfg.get("enabled") is True
     )
-    truncation_majority_slates = (
-        cambridge_truncation_cfg.get("majority_slates") if truncate_ballots else None
-    )
-    truncation_minority_slates = (
-        cambridge_truncation_cfg.get("minority_slates") if truncate_ballots else None
-    )
+    truncation_cfg = cambridge_truncation_cfg if truncate_ballots else None
     cambridge_cfg = config.get("cambridge_blocs")
 
     if truncate_ballots:
@@ -512,8 +508,7 @@ def _generate_profile_archive(
                             results = Parallel(n_jobs=-1, return_as="generator_unordered")(
                                 delayed(process_settings_file)(
                                     settings_file, mode, duplicate_indx, proportions_key, budget,
-                                    truncate_ballots, cambridge_cfg,
-                                    truncation_majority_slates, truncation_minority_slates,
+                                    cambridge_cfg=cambridge_cfg, truncation_cfg=truncation_cfg,
                                 )
                                 for settings_file in pending_settings_files
                             )
