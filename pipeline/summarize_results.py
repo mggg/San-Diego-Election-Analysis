@@ -782,10 +782,15 @@ def aggregate_hybrid_totals(df_plan: pd.DataFrame, district_configs: List[Distri
 
 def expected_figure_count(df_plan: pd.DataFrame, config: dict) -> int:
     """
-    Number of figures summarize_results should produce for this run's df_plan:
-    one bymode histogram, plus (if slate_to_candidates is configured) one
-    byslate panel, per (district count, seats, election method) group -- plus
-    one bubbles-by-method figure per (district count, seats) pair.
+    Number of figures summarize_results should produce for this run's df_plan.
+
+    Per (district count, seats) shape: one combined bymode histogram and one
+    combined bubbles-by-method figure (both span every method in the shape).
+    When the shape has more than one election method, _plot_method_histogram_panel
+    and _plot_bubbles_for_config each *also* write a standalone bymode/bubbles
+    pair per method -- a single-method shape doesn't duplicate itself. On top
+    of that, slate_to_candidates being configured adds one byslate panel per
+    (shape, method) group, unconditionally (not gated by method count).
 
     A hybrid_election run also gets a pooled bymode histogram and bubble grid
     over its combined seat total (plus a combined byslate panel when
@@ -794,11 +799,15 @@ def expected_figure_count(df_plan: pd.DataFrame, config: dict) -> int:
     Shared with run.py's has_valid_summaries, so both sides agree on what
     "complete" means for the figures/<run_name>/ tree.
     """
-    n_method_groups = df_plan.groupby(["num_districts", "seats_per_district", "election_method"]).ngroups
-    n_district_configs = df_plan.groupby(["num_districts", "seats_per_district"]).ngroups
     has_slate_figs = bool(config.get("slate_to_candidates"))
-    per_method_figs = 2 if has_slate_figs else 1
-    total = n_method_groups * per_method_figs + n_district_configs
+    total = 0
+    for _shape, group in df_plan.groupby(["num_districts", "seats_per_district"]):
+        n_methods = group["election_method"].nunique()
+        total += 2  # combined bymode + combined bubbles_by_method
+        if n_methods > 1:
+            total += n_methods * 2  # per-method standalone bymode + bubbles
+        if has_slate_figs:
+            total += n_methods  # byslate panel per (shape, method), always
     if config.get("hybrid_election"):
         total += 3 if has_slate_figs else 2
     return total
