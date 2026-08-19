@@ -72,8 +72,17 @@ from pipeline.utils.helpers import (
 # electorate; get_group_vap_columns enforces that, and a column left out of both
 # would quietly shrink every share computed from them.
 DEFAULT_GROUP_VAP_COLUMNS = {
+    # Two-bloc runs.
     "WHI": ["white_vap_20", "amin_vap_20", "other_vap_20"],
     "POC": ["bvap_20", "hvap_20", "asian_nhpi_vap_20"],
+    # Four-bloc runs. WAIO holds the same columns WHI does -- both are White
+    # with American Indian and other-race VAP folded in -- and the two names
+    # exist because the runs that use them split the rest differently: POC
+    # against one bloc, BLK/HIS/AAPI against three.
+    "WAIO": ["white_vap_20", "amin_vap_20", "other_vap_20"],
+    "BLK": "bvap_20",
+    "HIS": "hvap_20",
+    "AAPI": "asian_nhpi_vap_20",
 }
 
 
