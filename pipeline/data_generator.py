@@ -157,8 +157,6 @@ DISCOUNT_MAP = {
 
 VAP_FLOOR = 20
 
-
-
 # --------------------------------------------------------------------------- #
 # Small helpers
 # --------------------------------------------------------------------------- #
@@ -268,6 +266,13 @@ def load_districtr_plan(geo):
             "https://districtr.org/.netlify/functions/planRead",
             params={"id": plan_id}, timeout=60,
         )
+        if response.status_code == 404:
+            # Older plans (like this one) live on the legacy site, not the
+            # current one.
+            response = requests.get(
+                "https://legacy.districtr.org/.netlify/functions/planRead",
+                params={"id": plan_id}, timeout=60,
+            )
         response.raise_for_status()
         payload = response.json()
         if plan_path:

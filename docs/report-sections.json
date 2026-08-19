@@ -13,6 +13,7 @@
   "_composed_comment": "A scenario may instead collect systems out of several runs, so one section can compare contests that were simulated separately. Give it a \"systems\" list: each entry names the \"run\" (slug) and the \"system\" (rule id as it appears in that run's run.json), optionally \"label\" to name it in the dropdown, and optionally \"districts\"/\"seats\" when one run uses the same rule in more than one contest. Switching systems reloads that run's records and repoints the figures, axes, proportional line, and the parameters card at it.",
   "scenarios": [
     "basic-3-x-3",
+    "basic-3-x-3-2-blocs",
     "city-charter-amendment-proposal",
     {
       "_note": "Every standalone electoral structure lives here rather than in a section of its own: the 9 X 1 rules it was built for, plus the at-large and multi-member STV runs, which are the same question asked with a different districting. Basic and its parameter variations (diverse preferences, low turnout, low availability) keep their own sections, as do the two hybrid runs, whose combined view has no single contest to select.",
@@ -26,7 +27,8 @@
         { "run": "nine-seats-at-large", "system": "FASTSTV", "label": "1 × 9 STV" },
         { "run": "nine-seats-at-large", "system": "CUMULATIVE", "label": "1 × 9 Cumulative" },
         { "run": "nine-seats-at-large", "system": "LIMITED", "label": "1 × 9 Limited" },
-        { "run": "fifteen-seats-at-large-stv", "system": "FASTSTV", "label": "1 × 15 STV" }
+        { "run": "fifteen-seats-at-large-stv", "system": "FASTSTV", "label": "1 × 15 STV" },
+        { "run": "fifteen-seats-at-large-stv-2-blocs", "system": "FASTSTV", "label": "1 × 15 STV (Two Bloc)" }
       ]
     },
     "hybrid-system-3x4-stv-1x3-plurality"

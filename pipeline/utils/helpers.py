@@ -182,6 +182,10 @@ PROFILE_SIGNATURE_KEYS = [
     "cohesion_parameters",
     "alphas",
     "cambridge_truncation",
+    # Which bloc plays Cambridge's historical majority: swapping it hands each
+    # bloc the other's ballot shapes, so profiles generated before the change
+    # are not reusable after it.
+    "cambridge_blocs",
     "num_voters",
     "seed",
     "chain_length",

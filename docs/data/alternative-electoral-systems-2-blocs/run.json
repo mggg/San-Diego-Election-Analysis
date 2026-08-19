@@ -1,0 +1,97 @@
+{
+ "runName": "Alternative Electoral Systems (2 Blocs)",
+ "slug": "alternative-electoral-systems-2-blocs",
+ "focalGroup": "WHI",
+ "focalGroupLabel": "WHI",
+ "totalSeats": 15,
+ "focalVapShare": 0.4588409607434803,
+ "proportionalSeats": 6.882614411152204,
+ "proportionalLabel": "WHI share of VAP: 45.9% (6.9 seats)",
+ "seatMax": 15,
+ "seatTicks": [
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15
+ ],
+ "districtConfigs": [
+  {
+   "numDistricts": 15,
+   "winners": 1,
+   "systems": [
+    {
+     "id": "IRV",
+     "label": "15 X 1 IRV"
+    },
+    {
+     "id": "PLURALITY",
+     "label": "15 X 1 Plurality"
+    },
+    {
+     "id": "TOPTWO",
+     "label": "15 X 1 Top Two"
+    }
+   ],
+   "candidatePoolMax": 5,
+   "candidatePoolMean": 3,
+   "plans": 100,
+   "electionsPerSystem": 37170
+  }
+ ],
+ "voterModels": [
+  {
+   "id": "slate_pl",
+   "label": "Impulsive",
+   "pooled": false
+  },
+  {
+   "id": "slate_bt",
+   "label": "Deliberative",
+   "pooled": false
+  },
+  {
+   "id": "cambridge",
+   "label": "Cambridge",
+   "pooled": false
+  },
+  {
+   "id": "combined",
+   "label": "Combined",
+   "pooled": true
+  }
+ ],
+ "slates": [
+  {
+   "id": "WHI",
+   "label": "WHI",
+   "vapShare": 0.4588409607434803
+  },
+  {
+   "id": "POC",
+   "label": "POC",
+   "vapShare": 0.5411590392565198
+  }
+ ],
+ "turnout": {
+  "WHI": 1,
+  "POC": 0.7
+ },
+ "primaryTurnout": {
+  "WHI": 1,
+  "POC": 0.7
+ },
+ "replicates": 10,
+ "subsamples": 100
+}

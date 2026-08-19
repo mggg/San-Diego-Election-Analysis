@@ -22,7 +22,8 @@ from votekit.ballot_generator import (
     slate_pl_profile_generator,
     slate_bt_profile_generator,
     slate_bt_profile_generator_using_mcmc,
-    name_cumulative_profile_generator
+    name_cumulative_profile_generator,
+    cambridge_profile_generator,
 )
 from votekit.ballot_generator.utils import system_memory
 from joblib import Parallel, delayed
@@ -55,8 +56,67 @@ from pipeline.settings_generator import primary_turnout_map
 generator_name_to_function = {
     "slate_pl": slate_pl_profile_generator,
     "slate_bt": slate_bt_profile_generator,
+    # Ranked ballots drawn from Cambridge, MA's historical RCV elections rather
+    # than from a parametric model: a voter's first choice comes from the
+    # cohesion parameters as usual, and the rest of the ballot is a real ballot
+    # shape observed after that first choice. It works only with two blocs and
+    # two slates, which is what the runs now model.
+    "cambridge": cambridge_profile_generator,
     "name_cumulative": name_cumulative_profile_generator,
 }
+
+
+def _is_cambridge_eligible(settings: dict) -> bool:
+    """
+    Whether this district has enough active slates for Cambridge's model.
+
+    VoteKit's cambridge_profile_generator requires exactly two slates with
+    real candidates (its own _validate_slates_and_blocs rejects anything
+    else, and BlocSlateConfig separately rejects an empty candidate list, so
+    there's no config shape that works for one). A district whose candidate
+    pool drew from only one slate -- common with a small candidate_pool_max
+    -- simply has no Cambridge ballots to generate; see process_settings_file.
+    """
+    return len(settings["slate_to_candidates"]) >= 2
+
+
+def count_cambridge_eligible_districts(run_name: str, district_num: int) -> int:
+    """
+    How many of this district count's settings files are eligible for
+    Cambridge (see _is_cambridge_eligible) -- the real expected profile count
+    for cambridge mode, since process_settings_file skips the rest. Every
+    other voter model's expected count is the plain settings-file count
+    (num_subsamples * district_num); this is cambridge's equivalent, read
+    from disk instead of assumed, because which districts qualify depends on
+    each one's own randomly-drawn candidate pool.
+    """
+    settings_dir = Path("outputs") / run_name / "settings" / str(district_num)
+    return sum(
+        1 for f in settings_dir.glob("*.json")
+        if _is_cambridge_eligible(load_json(f))
+    )
+
+
+def _cambridge_bloc_kwargs(cambridge_cfg):
+    """
+    Which bloc Cambridge's historical majority and minority labels attach to.
+
+    The Cambridge data labels candidates W and C for its historical majority and
+    minority slates, so the generator has to be told which of this run's blocs
+    plays each part. Left unset, votekit infers it from the bloc proportions --
+    per district, which is the wrong basis here: a district where POC voters are
+    the local majority would be generated against the historical *majority*
+    distribution, so the ballot shapes a bloc is given would change from one
+    district to the next according to how the lines happened to fall.
+
+    Naming them in the config fixes each bloc to one side of that mapping for
+    the whole run. An unconfigured run falls back to votekit's inference.
+    """
+    cfg = cambridge_cfg or {}
+    majority, minority = cfg.get("majority"), cfg.get("minority")
+    if majority and minority:
+        return {"majority_bloc": majority, "minority_bloc": minority}
+    return {}
 
 # VoteKit's exact Bradley-Terry generator enumerates every distinct ordering of
 # slate-letters across the ballot before sampling from it, and refuses to run
@@ -206,7 +266,7 @@ def profile_arcname(mode: str, district_num: int, filename: str, budget=None) ->
 
 def process_settings_file(
     settings_file, mode, duplicate_indx, proportions_key="bloc_proportions", total_points=None,
-    truncation_cfg=None
+    truncate_ballots=False, cambridge_cfg=None
 ):
     """
     Generate a voter profile for a single district using the given voter model.
@@ -217,27 +277,33 @@ def process_settings_file(
 
     Args:
         settings_file: Path to a votekit settings json file for one district.
-        mode: Voter model name; one of "slate_pl", "slate_bt", or "name_cumulative".
+        mode: Voter model name; one of "slate_pl", "slate_bt", "cambridge", or
+            "name_cumulative".
         duplicate_indx: Replicate index, appended as _v<n> in the output filename.
         proportions_key: Which electorate to sample from -- "bloc_proportions"
             (the configured turnout) or "primary_bloc_proportions" (the lower
             turnout of a two-round rule's narrowing round).
         total_points: Score-ballot budget, for models that produce score ballots.
             Ignored by the ranked generators, which take no such argument.
-        truncation_cfg: The run config's "cambridge_truncation" block, or None.
-            When set and truncation_cfg["enabled"] is true, a ranked profile's
-            ballots are truncated to a length sampled from the Cambridge
-            historical distribution matching each ballot's first choice (see
-            pipeline.utils.cambridge_truncation). Ignored for score profiles,
-            which have no ranking to truncate.
+        truncate_ballots: The run config's "cambridge_truncation" flag. When
+            True, a ranked profile's ballots are truncated to a length sampled
+            from the Cambridge historical distribution matching each ballot's
+            first choice (see pipeline.utils.cambridge_truncation). Ignored
+            for score profiles, which have no ranking to truncate.
 
     Returns:
-        (filename, csv_text): filename is the profile's zip entry name within its
-        <mode>/<district_num>/ folder (see _expected_profile_filename); csv_text
-        is the profile's CSV content (per votekit's PreferenceProfile.to_csv()).
+        (filename, csv_text, matrix_json): filename is the profile's zip entry
+        name within its <mode>/<district_num>/ folder (see
+        _expected_profile_filename); csv_text is the profile's CSV content
+        (per votekit's PreferenceProfile.to_csv()). All three are None when
+        this (settings_file, mode) combination has nothing to generate -- see
+        the cambridge single-slate case below.
     """
     settings = load_json(settings_file)
     filename = _expected_profile_filename(settings_file, duplicate_indx)
+
+    if mode == "cambridge" and not _is_cambridge_eligible(settings):
+        return None, None, None
 
     config = BlocSlateConfig(
         n_voters = settings['num_voters'],
@@ -254,13 +320,17 @@ def process_settings_file(
         else generator_name_to_function[mode]
     )
 
-    if total_points is not None and generator_accepts_total_points(mode):
-        profile = generator(config, total_points=total_points)
-    else:
-        profile = generator(config)
+    # Only the Cambridge generator takes extra keywords; every other model is
+    # fully described by the district's own config.
+    generator_kwargs = _cambridge_bloc_kwargs(cambridge_cfg) if mode == "cambridge" else {}
 
-    if truncation_cfg and truncation_cfg.get("enabled") and isinstance(profile, RankProfile):
-        profile = apply_cambridge_truncation(profile, config, truncation_cfg)
+    if total_points is not None and generator_accepts_total_points(mode):
+        profile = generator(config, total_points=total_points, **generator_kwargs)
+    else:
+        profile = generator(config, **generator_kwargs)
+
+    if truncate_ballots and isinstance(profile, RankProfile):
+        profile = apply_cambridge_truncation(profile, config)
 
     csv_text = profile.to_csv()
     matrix_json = preference_matrix_json(config)
@@ -300,7 +370,8 @@ def _generate_profile_archive(
     run_name = config['run_name']
 
     voter_models = get_voter_models(config)
-    truncation_cfg = config.get("cambridge_truncation")
+    truncate_ballots = bool(config.get("cambridge_truncation"))
+    cambridge_cfg = config.get("cambridge_blocs")
 
     zip_path.parent.mkdir(exist_ok=True, parents=True)
     track_matrices = matrix_zip_path is not None
@@ -414,11 +485,17 @@ def _generate_profile_archive(
                             results = Parallel(n_jobs=-1, return_as="generator_unordered")(
                                 delayed(process_settings_file)(
                                     settings_file, mode, duplicate_indx, proportions_key, budget,
+                                    truncate_ballots, cambridge_cfg,
                                 )
                                 for settings_file in pending_settings_files
                             )
 
                             for filename, csv_text, matrix_json in results:
+                                if filename is None:
+                                    # Nothing to write -- e.g. cambridge on a
+                                    # single-slate district (see
+                                    # process_settings_file).
+                                    continue
                                 arcname = profile_arcname(mode, district_num, filename, budget)
                                 # Guard against duplicate zip entries when one
                                 # archive had an entry the other lacked.

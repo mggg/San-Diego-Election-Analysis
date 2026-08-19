@@ -582,8 +582,9 @@ def build_manifest(runs: List[Dict[str, Any]]) -> Dict[str, Any]:
     The one file the page fetches first: palette, labels, the run list with
     artifact paths, and the cross-run series.
     """
+    # Straight from MODE_COLORS, the pooled row included: one definition of what
+    # colour a voter model is, shared by the figures and the page.
     palette = {mode: MODE_COLORS.get(mode, DEFAULT_MODE_COLOR) for mode in LEGEND_MAPPING}
-    palette[COMBINED_MODE] = "#898781"  # the pooled row reads as ink, not a model
 
     return {
         "generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),

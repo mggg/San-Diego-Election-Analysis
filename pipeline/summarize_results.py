@@ -40,6 +40,11 @@ MODE_COLORS = {
     "slate_bt": "#AA0000",
     "cambridge": "#2a78d6",
     "name_cumulative": "#2a78d6",
+    # The pooled average, in a hue no single model uses so a reader never has to
+    # check the legend to know whether a bar is one model or all of them. It was
+    # falling through to DEFAULT_MODE_COLOR here, which is slate_bt's red -- the
+    # figures drew the average and one of its inputs in the same colour.
+    "combined": "#6a3d9a",  # COMBINED_MODE, which is defined below this block
 }
 
 # Dark ink outline: the only thing holding the gold bars against the page.
@@ -50,6 +55,11 @@ BAR_EDGE_COLOR = "#52514e"
 # 1.3:1 against the page, so the dark edge below does much of the work of
 # defining those bars. Raise this if the gold ever looks like empty space.
 BAR_ALPHA = 0.7
+
+# How much of one seat tick a group of overlapping bars spans, whatever the
+# number of voter models in it (see _draw_mode_histograms). The gap to the
+# next seat is what keeps neighbouring groups readable as separate.
+BAR_GROUP_SPAN = 0.84
 
 LEGEND_MAPPING = {
     "slate_pl": "Impulsive",
@@ -270,14 +280,32 @@ def _focal_population_share(config, gdf) -> float:
     """
     Focal group's share of the voting-age population.
 
-    Both sides of this ratio must be VAP: pop_of_interest_column is a VAP column,
-    so the denominator is population_vap_column, not the total-population column.
-    No turnout adjustment is applied -- this is the plain demographic share the
-    reference lines are drawn against.
+    Both sides of this ratio must be VAP: the denominator is
+    population_vap_column, not the total-population column. No turnout
+    adjustment is applied -- this is the plain demographic share the reference
+    lines are drawn against.
+
+    The numerator is the focal group's own VAP columns, summed, which is the
+    only definition that survives a change of bloc model: pop_of_interest_column
+    names one column, and a group spanning several (POC = Black + Hispanic +
+    Asian/NHPI, WHI = White + American Indian + other) cannot be expressed as
+    one. Reading it from that field instead drew every reference line at the
+    share of whichever single group the project happened to be configured
+    around, however the run defined its focal group. Falls back to
+    pop_of_interest_column for the legacy two-group model, which has no groups
+    to resolve.
     """
     vap = gdf[config["population_vap_column"]].sum()
-    ivap = gdf[config["pop_of_interest_column"]].sum()
-    return float(ivap / vap) if vap else 0.0
+    if not vap:
+        return 0.0
+
+    focal = config.get("focal_group")
+    try:
+        columns = get_group_vap_columns(config, [focal])[focal]
+    except (KeyError, ValueError):
+        columns = [config["pop_of_interest_column"]]
+    ivap = sum(float(gdf[column].sum()) for column in columns)
+    return float(ivap / vap)
 
 
 def _slate_baselines(config, gdf) -> Dict[str, float]:
@@ -319,8 +347,12 @@ def _draw_mode_histograms(ax, group_distn: pd.DataFrame, seat_col: str = "focal_
         return 0
 
     # Bars overlap each other by 50%: centres are spaced half a bar width apart,
-    # so a group spans 0.84 of a tick and leaves a visible gap to the next seat.
-    bar_width = 0.42
+    # and the width follows from how many there are, so the group always spans
+    # BAR_GROUP_SPAN of a tick and leaves a visible gap to the next seat. Fixing
+    # the width instead makes the group grow with the series count -- four
+    # series at 0.42 would span 1.05 of a tick and collide with the next seat's
+    # group. Three series still come out at exactly 0.42.
+    bar_width = 2 * BAR_GROUP_SPAN / (n_modes + 1)
     step = bar_width / 2
     max_bin_height = 0
 
@@ -750,10 +782,15 @@ def aggregate_hybrid_totals(df_plan: pd.DataFrame, district_configs: List[Distri
 
 def expected_figure_count(df_plan: pd.DataFrame, config: dict) -> int:
     """
-    Number of figures summarize_results should produce for this run's df_plan:
-    one bymode histogram, plus (if slate_to_candidates is configured) one
-    byslate panel, per (district count, seats, election method) group -- plus
-    one bubbles-by-method figure per (district count, seats) pair.
+    Number of figures summarize_results should produce for this run's df_plan.
+
+    Per (district count, seats) shape: one combined bymode histogram and one
+    combined bubbles-by-method figure (both span every method in the shape).
+    When the shape has more than one election method, _plot_method_histogram_panel
+    and _plot_bubbles_for_config each *also* write a standalone bymode/bubbles
+    pair per method -- a single-method shape doesn't duplicate itself. On top
+    of that, slate_to_candidates being configured adds one byslate panel per
+    (shape, method) group, unconditionally (not gated by method count).
 
     A hybrid_election run also gets a pooled bymode histogram and bubble grid
     over its combined seat total (plus a combined byslate panel when
@@ -762,11 +799,15 @@ def expected_figure_count(df_plan: pd.DataFrame, config: dict) -> int:
     Shared with run.py's has_valid_summaries, so both sides agree on what
     "complete" means for the figures/<run_name>/ tree.
     """
-    n_method_groups = df_plan.groupby(["num_districts", "seats_per_district", "election_method"]).ngroups
-    n_district_configs = df_plan.groupby(["num_districts", "seats_per_district"]).ngroups
     has_slate_figs = bool(config.get("slate_to_candidates"))
-    per_method_figs = 2 if has_slate_figs else 1
-    total = n_method_groups * per_method_figs + n_district_configs
+    total = 0
+    for _shape, group in df_plan.groupby(["num_districts", "seats_per_district"]):
+        n_methods = group["election_method"].nunique()
+        total += 2  # combined bymode + combined bubbles_by_method
+        if n_methods > 1:
+            total += n_methods * 2  # per-method standalone bymode + bubbles
+        if has_slate_figs:
+            total += n_methods  # byslate panel per (shape, method), always
     if config.get("hybrid_election"):
         total += 3 if has_slate_figs else 2
     return total
@@ -880,6 +921,12 @@ def summarize_results(config) -> Path:
                     total_pop = settings_data.get(config["population_column"], None)
                     total_vap = settings_data.get(config["population_vap_column"], None)
                     total_ivap = settings_data.get(config["pop_of_interest_column"], None)
+                    # The focal group's own VAP in this district. Every settings
+                    # file records group_vap per demographic group, which is the
+                    # per-district counterpart of _focal_population_share: a
+                    # focal group spanning several columns has no single column
+                    # to read, so pop_of_interest_column is only the fallback.
+                    focal_vap = (settings_data.get("group_vap") or {}).get(focal_group, total_ivap)
                     # partisan has p_prop_census -- add?
 
                     for method_key, winners in result.items():
@@ -906,8 +953,8 @@ def summarize_results(config) -> Path:
                             # Focal share of VAP for this district, the same
                             # (turnout-free) basis the reference lines use.
                             "focal_vap_share": (
-                                total_ivap / total_vap
-                                if total_ivap is not None and total_vap else None
+                                focal_vap / total_vap
+                                if focal_vap is not None and total_vap else None
                             ),
                         }
                         # Per-slate seat counts feed the by-slate representation panel.

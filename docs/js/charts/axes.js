@@ -58,19 +58,28 @@ export function shareTicks(step = 20) {
  * Bar geometry, translated from _plot_method_histogram in summarize_results.py
  * so a bar here lands where its matplotlib counterpart does:
  *
- *     bar_width = 0.42                            # of one seat step
- *     step      = bar_width / 2                   # centres half a bar apart
- *     offset    = (i - (n_modes - 1) / 2) * step  # group centred on the seat
+ *     width  = 2 * GROUP_SPAN / (n_modes + 1)     # of one seat step
+ *     step   = width / 2                          # centres half a bar apart
+ *     offset = (i - (n_modes - 1) / 2) * step     # group centred on the seat
  *
  * The series overlap each other by half a bar rather than being dodged clear or
  * stacked on one centre: enough offset that every bar keeps an exposed edge and
- * its own baseline, enough overlap that the two distributions read as one
- * comparison. A group of three spans 0.84 of a seat, leaving a gap to the next.
+ * its own baseline, enough overlap that the distributions read as one
+ * comparison.
+ *
+ * The width follows from how many series a group holds, so the group always
+ * spans GROUP_SPAN of a seat and leaves a gap to the next one. A fixed width
+ * cannot: three series at 0.42 span 0.84 of a seat, but a fourth -- which is
+ * what adding the Cambridge model makes routine -- would span 1.05 and run into
+ * the neighbouring seat's group, so bars from different seat counts would
+ * overlap and the axis would stop being readable. Three series still come out
+ * at exactly 0.42, so the figures that had three are unchanged.
  */
-const BAR_WIDTH = 0.42;
+const GROUP_SPAN = 0.84;
 
 export function barGeometry(scale, count) {
-  const width = (scale(1) - scale(0)) * BAR_WIDTH;
+  // Solving span = (count - 1) * (width / 2) + width for a fixed span.
+  const width = (scale(1) - scale(0)) * (2 * GROUP_SPAN) / (count + 1);
   const step = width / 2;
   return { width, offset: (index) => (index - (count - 1) / 2) * step };
 }
