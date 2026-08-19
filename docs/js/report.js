@@ -356,7 +356,7 @@ function drawMatrix(mount, title, matrix, fmt, order) {
  */
 function buildControls(mount, context, palette, state, onChange, slates) {
   mount.selectAll('*').remove();
-  const { slug, systems, models, onSystemChange } = context;
+  const { slug, systems, models, onSystemChange, systemLabel } = context;
 
   // A section with one system has nothing to choose between; its name is
   // already in the panel title.
@@ -365,7 +365,11 @@ function buildControls(mount, context, palette, state, onChange, slates) {
     group.append('label')
       .attr('class', 'control-label')
       .attr('for', `sys-${slug}`)
-      .text('Voting system');
+      // Named by the section when its options are not voting systems: a section
+      // offering one contest under two bloc models is choosing an electorate,
+      // and calling that "Voting system" would describe the one thing its
+      // options have in common.
+      .text(systemLabel || 'Voting system');
     group.append('select')
       .attr('id', `sys-${slug}`)
       .attr('class', 'form-select form-select-sm')
@@ -701,7 +705,17 @@ async function mountRun(section, manifest, cache) {
       perDistrict: dc.winners,
       plans: dc.plans,
     })));
-  const slates = entry.slates || [];
+  /*
+   * The blocs a selection puts on the ballot.
+   *
+   * Per source, not per section: a section may offer the same contest under two
+   * bloc models -- four groups against two -- and they do not name the same
+   * slates. Reading them off the section would leave the focal-group dropdown
+   * offering AAPI against a run that has no such slate.
+   */
+  const slatesFor = (selection) => (
+    (selection && selection.source && selection.source.slates) || entry.slates || []
+  );
 
   /** Where a selection's records live, and which system identifies them there. */
   function resolve(selection) {
@@ -756,10 +770,11 @@ async function mountRun(section, manifest, cache) {
     return new Set((real.length ? real : models).map((m) => m.id));
   }
 
+  const initialSlates = slatesFor(systems[0]);
   const state = {
     system: systems[0].id,
     models: defaultModels(modelsFor(systems[0])),
-    slate: (slates.find((s) => s.id === runMeta.focalGroup) || slates[0] || {}).id,
+    slate: (initialSlates.find((s) => s.id === runMeta.focalGroup) || initialSlates[0] || {}).id,
     metric: 'winRate',
     allGroups: false,
     // Which face of the parameters card is open. Kept in state so it survives
@@ -779,6 +794,7 @@ async function mountRun(section, manifest, cache) {
     const systemId = source ? source.system : state.system;
     const viewSystems = [{ ...selected, id: systemId }];
     const winners = selected ? selected.winners : runMeta.totalSeats;
+    const slates = slatesFor(selected);
     const baseSlate = slates.find((s) => s.id === state.slate) || slates[0];
     const view = {
       systems: viewSystems,
@@ -877,7 +893,7 @@ async function mountRun(section, manifest, cache) {
   }
 
   const viewToggle = d3.select(section).select(`[data-view="${slug}"]`);
-  if (!viewToggle.empty() && slates.length > 1) {
+  if (!viewToggle.empty() && slatesFor(systems[0]).length > 1) {
     viewToggle.selectAll('button')
       .data([{ id: false, label: 'Focal group' }, { id: true, label: 'All groups' }])
       .join('button')
@@ -909,6 +925,16 @@ async function mountRun(section, manifest, cache) {
   function refreshControls() {
     const selected = systems.find((s) => s.id === state.system) || systems[0];
     const models = modelsFor(selected);
+    const slates = slatesFor(selected);
+
+    // Keep the chosen focal group across a change of selection when the new one
+    // also has it, so switching bloc model on the same contest does not silently
+    // change which group the figures are about. When it does not -- AAPI has no
+    // counterpart under two blocs -- fall back to that run's own focal group.
+    if (!slates.some((sl) => sl.id === state.slate)) {
+      const fallback = slates.find((sl) => sl.id === runMeta.focalGroup) || slates[0];
+      state.slate = fallback ? fallback.id : state.slate;
+    }
 
     // Reset rather than carry the selection across: the models are a property of
     // the system now on show, so each one opens on its own defaults instead of
@@ -920,7 +946,10 @@ async function mountRun(section, manifest, cache) {
     if (!mount.empty()) {
       buildControls(
         mount,
-        { slug, systems, models, onSystemChange: () => { refreshControls(); draw(); } },
+        {
+          slug, systems, models, systemLabel: entry.selectorLabel,
+          onSystemChange: () => { refreshControls(); draw(); },
+        },
         manifest.palette, state, draw, slates,
       );
     }

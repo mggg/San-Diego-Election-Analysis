@@ -1,43 +1,36 @@
 {
- "runName": "Nine Seats At-Large",
- "slug": "nine-seats-at-large",
- "focalGroup": "AAPI",
- "focalGroupLabel": "AAPI",
- "totalSeats": 9,
+ "runName": "3x5 STV",
+ "slug": "3x5-stv",
+ "focalGroup": "BAIO",
+ "focalGroupLabel": "BAIO",
+ "totalSeats": 15,
  "focalVapShare": 0.20432553215884638,
- "proportionalSeats": 1.8389297894296175,
- "proportionalLabel": "AAPI share of VAP: 20.4% (1.8 seats)",
- "seatMax": 5,
+ "proportionalSeats": 3.064882982382696,
+ "proportionalLabel": "BAIO share of VAP: 20.4% (3.1 seats)",
+ "seatMax": 6,
  "seatTicks": [
   0,
   1,
   2,
   3,
   4,
-  5
+  5,
+  6
  ],
  "districtConfigs": [
   {
-   "numDistricts": 1,
-   "winners": 9,
+   "numDistricts": 3,
+   "winners": 5,
    "systems": [
     {
      "id": "FASTSTV",
-     "label": "1 X 9 STV"
-    },
-    {
-     "id": "CUMULATIVE",
-     "label": "1 X 9 Cumulative"
-    },
-    {
-     "id": "LIMITED",
-     "label": "1 X 9 Limited"
+     "label": "3 X 5 STV"
     }
    ],
-   "candidatePoolMax": 20,
-   "candidatePoolMean": 17,
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7,
    "plans": 100,
-   "electionsPerSystem": 1333
+   "electionsPerSystem": 6000
   }
  ],
  "voterModels": [
@@ -49,11 +42,6 @@
   {
    "id": "slate_bt",
    "label": "Deliberative",
-   "pooled": false
-  },
-  {
-   "id": "name_cumulative",
-   "label": "Name Cumulative",
    "pooled": false
   },
   {
@@ -85,9 +73,9 @@
   }
  ],
  "turnout": {
-  "AAPI": 0.75,
-  "BAIO": 1,
-  "HIS": 0.75,
+  "AAPI": 0.7,
+  "BAIO": 0.9,
+  "HIS": 0.6,
   "WHI": 1
  },
  "primaryTurnout": null,

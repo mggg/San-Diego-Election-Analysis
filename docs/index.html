@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+"
         crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="fonts/fonts.css">
-  <link rel="stylesheet" href="css/report.css?v=1c48273e9f">
+  <link rel="stylesheet" href="css/report.css?v=25c1d2e5bd">
 </head>
 
 <body data-bs-spy="scroll" data-bs-target="#toc-nav" data-bs-offset="90" tabindex="0">
@@ -54,13 +54,13 @@
           <a class="nav-link" href="#conclusion">Conclusion</a>
           <a class="nav-link" href="#results">Results by Scenario</a>
           <nav class="nav flex-column">
-            <a class="nav-link" href="#run-basic-3-x-3">Basic - 3 X 3</a>
             <a class="nav-link" href="#run-basic-3-x-3-2-blocs">Basic - 3 X 3 (2 Blocs)</a>
-            <a class="nav-link" href="#run-alternative-electoral-systems">Alternative Electoral Systems</a>
-            <a class="nav-link" href="#run-city-charter-amendment-proposal">City Charter Amendment Proposal</a>
-            <a class="nav-link" href="#run-diverse-aapi-coalition-preferences">Diverse AAPI Coalition Preferences</a>
-            <a class="nav-link" href="#run-low-aapi-availability">Low AAPI Availability</a>
-            <a class="nav-link" href="#run-low-aapi-turnout">Low AAPI Turnout</a>
+            <a class="nav-link" href="#run-fifteen-seats-at-large-stv-2-blocs">Fifteen Seats At-Large - STV (2 Blocs)</a>
+            <a class="nav-link" href="#run-alternative-electoral-systems-2-blocs">Alternative Electoral Systems (2 Blocs)</a>
+            <a class="nav-link" href="#run-city-charter-amendment-proposal-2-blocs">City Charter Amendment Proposal (2 Blocs)</a>
+            <a class="nav-link" href="#run-diverse-poc-coalition-preferences-2-blocs">Diverse POC Coalition Preferences (2 Blocs)</a>
+            <a class="nav-link" href="#run-low-poc-availability-2-blocs">Low POC Availability (2 Blocs)</a>
+            <a class="nav-link" href="#run-low-poc-turnout-2-blocs">Low POC Turnout (2 Blocs)</a>
           </nav>
           <a class="nav-link" href="#comparison">Cross-Run Comparison</a>
         </nav>
@@ -227,51 +227,6 @@ $$</div>
         <section id="results" class="mb-5">
           <h2>Results by Scenario</h2>
 
-          <section id="run-basic-3-x-3" class="run mb-5" data-run="basic-3-x-3">
-            <div class="run-main">
-            <h3 class="h4 mt-4">Basic - 3 X 3</h3>
-            <div class="run-prose"><p>In this scenario, we explore the expected outcomes of a hypothetical electoral shift that redistricts San Diego into three districts with three elected members in each - running three different elections using Single Transferable Vote (STV), Cumlative, and Limited voting rules. STV uses the deliberative and impulsive models (representing 3000 elections each) while Cumulative and Limited use the &quot;Name Cumulative&quot; model that allows for voters to &quot;plump&quot; their votes on preferred candidates.</p>
-</div>
-
-            <div class="run-controls" data-controls="basic-3-x-3"></div>
-
-            <ul class="nav nav-tabs" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" data-bs-toggle="tab"
-                        data-bs-target="#basic-3-x-3-focal" type="button" role="tab">
-                  Seat outcomes
-                </button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" data-bs-toggle="tab"
-                        data-bs-target="#basic-3-x-3-availability" type="button" role="tab">
-                  Districts by VAP rank
-                </button>
-              </li>
-            </ul>
-            <div class="tab-content pt-3">
-              <div class="tab-pane fade show active" id="basic-3-x-3-focal" role="tabpanel">
-                <div class="metric-toggles" data-view="basic-3-x-3"></div>
-                <div class="row g-4 figure-pair" data-one-group="basic-3-x-3">
-                  <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="bubble" data-run="basic-3-x-3"></div>
-                  </div>
-                  <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="histogram" data-run="basic-3-x-3"></div>
-                  </div>
-                </div>
-                <div data-all-groups="basic-3-x-3" hidden>
-                  <div class="chart" data-chart="slate" data-run="basic-3-x-3"></div>
-                </div>
-              </div>
-              <div class="tab-pane fade" id="basic-3-x-3-availability" role="tabpanel">
-                <div class="metric-toggles" data-metric="basic-3-x-3"></div>
-                <div class="chart" data-chart="availability" data-run="basic-3-x-3"></div>
-              </div>
-            </div>
-            </div>
-            <aside class="run-params" data-params="basic-3-x-3"></aside>
-          </section>
           <section id="run-basic-3-x-3-2-blocs" class="run mb-5" data-run="basic-3-x-3-2-blocs">
             <div class="run-main">
             <h3 class="h4 mt-4">Basic - 3 X 3 (2 Blocs)</h3>
@@ -317,230 +272,275 @@ $$</div>
             </div>
             <aside class="run-params" data-params="basic-3-x-3-2-blocs"></aside>
           </section>
-          <section id="run-alternative-electoral-systems" class="run mb-5" data-run="alternative-electoral-systems">
+          <section id="run-fifteen-seats-at-large-stv-2-blocs" class="run mb-5" data-run="fifteen-seats-at-large-stv-2-blocs">
             <div class="run-main">
-            <h3 class="h4 mt-4">Alternative Electoral Systems</h3>
-            <div class="run-prose"><p>Here, we take San Diego's current 9 X 1 district configuration and explore the expected outcomes of alternative election systems. San Diego's current electoral system is closest to Top Two, where the the top-two vote getters in a primary election advance to a runoff general election. We also look at Alaska, which is similar to Top Two but takes the top four winners in the primary and uses STV in the general election. Plurality is included due to its current popularity and status as the &quot;default&quot; for American elections, while IRV is included due to its rising popularity.</p>
-</div>
-
-            <div class="run-controls" data-controls="alternative-electoral-systems"></div>
-
-            <ul class="nav nav-tabs" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" data-bs-toggle="tab"
-                        data-bs-target="#alternative-electoral-systems-focal" type="button" role="tab">
-                  Seat outcomes
-                </button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" data-bs-toggle="tab"
-                        data-bs-target="#alternative-electoral-systems-availability" type="button" role="tab">
-                  Districts by VAP rank
-                </button>
-              </li>
-            </ul>
-            <div class="tab-content pt-3">
-              <div class="tab-pane fade show active" id="alternative-electoral-systems-focal" role="tabpanel">
-                <div class="metric-toggles" data-view="alternative-electoral-systems"></div>
-                <div class="row g-4 figure-pair" data-one-group="alternative-electoral-systems">
-                  <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="bubble" data-run="alternative-electoral-systems"></div>
-                  </div>
-                  <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="histogram" data-run="alternative-electoral-systems"></div>
-                  </div>
-                </div>
-                <div data-all-groups="alternative-electoral-systems" hidden>
-                  <div class="chart" data-chart="slate" data-run="alternative-electoral-systems"></div>
-                </div>
-              </div>
-              <div class="tab-pane fade" id="alternative-electoral-systems-availability" role="tabpanel">
-                <div class="metric-toggles" data-metric="alternative-electoral-systems"></div>
-                <div class="chart" data-chart="availability" data-run="alternative-electoral-systems"></div>
-              </div>
-            </div>
-            </div>
-            <aside class="run-params" data-params="alternative-electoral-systems"></aside>
-          </section>
-          <section id="run-city-charter-amendment-proposal" class="run mb-5" data-run="city-charter-amendment-proposal">
-            <div class="run-main">
-            <h3 class="h4 mt-4">City Charter Amendment Proposal</h3>
+            <h3 class="h4 mt-4">Fifteen Seats At-Large - STV (2 Blocs)</h3>
             <p class="todo">[Description to be written — edit
-               <code>docs/prose/runs/city-charter-amendment-proposal.md</code>.]</p>
+               <code>docs/prose/runs/fifteen-seats-at-large-stv-2-blocs.md</code>.]</p>
 
-            <div class="run-controls" data-controls="city-charter-amendment-proposal"></div>
+            <div class="run-controls" data-controls="fifteen-seats-at-large-stv-2-blocs"></div>
 
             <ul class="nav nav-tabs" role="tablist">
               <li class="nav-item" role="presentation">
                 <button class="nav-link active" data-bs-toggle="tab"
-                        data-bs-target="#city-charter-amendment-proposal-focal" type="button" role="tab">
+                        data-bs-target="#fifteen-seats-at-large-stv-2-blocs-focal" type="button" role="tab">
                   Seat outcomes
                 </button>
               </li>
               <li class="nav-item" role="presentation">
                 <button class="nav-link" data-bs-toggle="tab"
-                        data-bs-target="#city-charter-amendment-proposal-availability" type="button" role="tab">
+                        data-bs-target="#fifteen-seats-at-large-stv-2-blocs-availability" type="button" role="tab">
                   Districts by VAP rank
                 </button>
               </li>
             </ul>
             <div class="tab-content pt-3">
-              <div class="tab-pane fade show active" id="city-charter-amendment-proposal-focal" role="tabpanel">
-                <div class="metric-toggles" data-view="city-charter-amendment-proposal"></div>
-                <div class="row g-4 figure-pair" data-one-group="city-charter-amendment-proposal">
+              <div class="tab-pane fade show active" id="fifteen-seats-at-large-stv-2-blocs-focal" role="tabpanel">
+                <div class="metric-toggles" data-view="fifteen-seats-at-large-stv-2-blocs"></div>
+                <div class="row g-4 figure-pair" data-one-group="fifteen-seats-at-large-stv-2-blocs">
                   <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="bubble" data-run="city-charter-amendment-proposal"></div>
+                    <div class="chart" data-chart="bubble" data-run="fifteen-seats-at-large-stv-2-blocs"></div>
                   </div>
                   <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="histogram" data-run="city-charter-amendment-proposal"></div>
+                    <div class="chart" data-chart="histogram" data-run="fifteen-seats-at-large-stv-2-blocs"></div>
                   </div>
                 </div>
-                <div data-all-groups="city-charter-amendment-proposal" hidden>
-                  <div class="chart" data-chart="slate" data-run="city-charter-amendment-proposal"></div>
+                <div data-all-groups="fifteen-seats-at-large-stv-2-blocs" hidden>
+                  <div class="chart" data-chart="slate" data-run="fifteen-seats-at-large-stv-2-blocs"></div>
                 </div>
               </div>
-              <div class="tab-pane fade" id="city-charter-amendment-proposal-availability" role="tabpanel">
-                <div class="metric-toggles" data-metric="city-charter-amendment-proposal"></div>
-                <div class="chart" data-chart="availability" data-run="city-charter-amendment-proposal"></div>
+              <div class="tab-pane fade" id="fifteen-seats-at-large-stv-2-blocs-availability" role="tabpanel">
+                <div class="metric-toggles" data-metric="fifteen-seats-at-large-stv-2-blocs"></div>
+                <div class="chart" data-chart="availability" data-run="fifteen-seats-at-large-stv-2-blocs"></div>
               </div>
             </div>
             </div>
-            <aside class="run-params" data-params="city-charter-amendment-proposal"></aside>
+            <aside class="run-params" data-params="fifteen-seats-at-large-stv-2-blocs"></aside>
           </section>
-          <section id="run-diverse-aapi-coalition-preferences" class="run mb-5" data-run="diverse-aapi-coalition-preferences">
+          <section id="run-alternative-electoral-systems-2-blocs" class="run mb-5" data-run="alternative-electoral-systems-2-blocs">
             <div class="run-main">
-            <h3 class="h4 mt-4">Diverse AAPI Coalition Preferences</h3>
-            <div class="run-prose"><p>San Diego has a diverse and varied Asian population, with significant shares of the AAPI coalition belonging to ethnically Filipino, Vietnamese, and Chinese voters - amongst many others. As such, we believe its reasonable to assume that their electoral and candidate preferences vary as well. In this scenario, we simulate this by adjusting the Diriclet alpha value for the AAPI bloc to reflect a more uniform preference distribution amongst available AAPI-preferred candidates. In other words, if we assume that the candidates in the AAPI slate reflect the diversity of the AAPI bloc, we'd expect support to be more evenly divided among them.</p>
-</div>
+            <h3 class="h4 mt-4">Alternative Electoral Systems (2 Blocs)</h3>
+            <p class="todo">[Description to be written — edit
+               <code>docs/prose/runs/alternative-electoral-systems-2-blocs.md</code>.]</p>
 
-            <div class="run-controls" data-controls="diverse-aapi-coalition-preferences"></div>
+            <div class="run-controls" data-controls="alternative-electoral-systems-2-blocs"></div>
 
             <ul class="nav nav-tabs" role="tablist">
               <li class="nav-item" role="presentation">
                 <button class="nav-link active" data-bs-toggle="tab"
-                        data-bs-target="#diverse-aapi-coalition-preferences-focal" type="button" role="tab">
+                        data-bs-target="#alternative-electoral-systems-2-blocs-focal" type="button" role="tab">
                   Seat outcomes
                 </button>
               </li>
               <li class="nav-item" role="presentation">
                 <button class="nav-link" data-bs-toggle="tab"
-                        data-bs-target="#diverse-aapi-coalition-preferences-availability" type="button" role="tab">
+                        data-bs-target="#alternative-electoral-systems-2-blocs-availability" type="button" role="tab">
                   Districts by VAP rank
                 </button>
               </li>
             </ul>
             <div class="tab-content pt-3">
-              <div class="tab-pane fade show active" id="diverse-aapi-coalition-preferences-focal" role="tabpanel">
-                <div class="metric-toggles" data-view="diverse-aapi-coalition-preferences"></div>
-                <div class="row g-4 figure-pair" data-one-group="diverse-aapi-coalition-preferences">
+              <div class="tab-pane fade show active" id="alternative-electoral-systems-2-blocs-focal" role="tabpanel">
+                <div class="metric-toggles" data-view="alternative-electoral-systems-2-blocs"></div>
+                <div class="row g-4 figure-pair" data-one-group="alternative-electoral-systems-2-blocs">
                   <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="bubble" data-run="diverse-aapi-coalition-preferences"></div>
+                    <div class="chart" data-chart="bubble" data-run="alternative-electoral-systems-2-blocs"></div>
                   </div>
                   <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="histogram" data-run="diverse-aapi-coalition-preferences"></div>
+                    <div class="chart" data-chart="histogram" data-run="alternative-electoral-systems-2-blocs"></div>
                   </div>
                 </div>
-                <div data-all-groups="diverse-aapi-coalition-preferences" hidden>
-                  <div class="chart" data-chart="slate" data-run="diverse-aapi-coalition-preferences"></div>
+                <div data-all-groups="alternative-electoral-systems-2-blocs" hidden>
+                  <div class="chart" data-chart="slate" data-run="alternative-electoral-systems-2-blocs"></div>
                 </div>
               </div>
-              <div class="tab-pane fade" id="diverse-aapi-coalition-preferences-availability" role="tabpanel">
-                <div class="metric-toggles" data-metric="diverse-aapi-coalition-preferences"></div>
-                <div class="chart" data-chart="availability" data-run="diverse-aapi-coalition-preferences"></div>
+              <div class="tab-pane fade" id="alternative-electoral-systems-2-blocs-availability" role="tabpanel">
+                <div class="metric-toggles" data-metric="alternative-electoral-systems-2-blocs"></div>
+                <div class="chart" data-chart="availability" data-run="alternative-electoral-systems-2-blocs"></div>
               </div>
             </div>
             </div>
-            <aside class="run-params" data-params="diverse-aapi-coalition-preferences"></aside>
+            <aside class="run-params" data-params="alternative-electoral-systems-2-blocs"></aside>
           </section>
-          <section id="run-low-aapi-availability" class="run mb-5" data-run="low-aapi-availability">
+          <section id="run-city-charter-amendment-proposal-2-blocs" class="run mb-5" data-run="city-charter-amendment-proposal-2-blocs">
             <div class="run-main">
-            <h3 class="h4 mt-4">Low AAPI Availability</h3>
-            <div class="run-prose"><p>Although the AAPI share of the voting age population is relatively high in San Diego, the candidate pools in the last several San Diego city elections do not feature AAPI candidates at a rate proportional to the AAPI electorate. In our Basic 3 X 3 scenario, we assume the candidate availability in each slate is roughly proportional to bloc VAP share. This scenario runs a 3 X 3 STV election to simulate a lower-than-proportional rate of AAPI candidate availability within each district. For comparison, the average per-district AAPI candidate availability within the Basic scenario is 0.98 while here it is 0.32.</p>
-</div>
+            <h3 class="h4 mt-4">City Charter Amendment Proposal (2 Blocs)</h3>
+            <p class="todo">[Description to be written — edit
+               <code>docs/prose/runs/city-charter-amendment-proposal-2-blocs.md</code>.]</p>
 
-            <div class="run-controls" data-controls="low-aapi-availability"></div>
+            <div class="run-controls" data-controls="city-charter-amendment-proposal-2-blocs"></div>
 
             <ul class="nav nav-tabs" role="tablist">
               <li class="nav-item" role="presentation">
                 <button class="nav-link active" data-bs-toggle="tab"
-                        data-bs-target="#low-aapi-availability-focal" type="button" role="tab">
+                        data-bs-target="#city-charter-amendment-proposal-2-blocs-focal" type="button" role="tab">
                   Seat outcomes
                 </button>
               </li>
               <li class="nav-item" role="presentation">
                 <button class="nav-link" data-bs-toggle="tab"
-                        data-bs-target="#low-aapi-availability-availability" type="button" role="tab">
+                        data-bs-target="#city-charter-amendment-proposal-2-blocs-availability" type="button" role="tab">
                   Districts by VAP rank
                 </button>
               </li>
             </ul>
             <div class="tab-content pt-3">
-              <div class="tab-pane fade show active" id="low-aapi-availability-focal" role="tabpanel">
-                <div class="metric-toggles" data-view="low-aapi-availability"></div>
-                <div class="row g-4 figure-pair" data-one-group="low-aapi-availability">
+              <div class="tab-pane fade show active" id="city-charter-amendment-proposal-2-blocs-focal" role="tabpanel">
+                <div class="metric-toggles" data-view="city-charter-amendment-proposal-2-blocs"></div>
+                <div class="row g-4 figure-pair" data-one-group="city-charter-amendment-proposal-2-blocs">
                   <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="bubble" data-run="low-aapi-availability"></div>
+                    <div class="chart" data-chart="bubble" data-run="city-charter-amendment-proposal-2-blocs"></div>
                   </div>
                   <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="histogram" data-run="low-aapi-availability"></div>
+                    <div class="chart" data-chart="histogram" data-run="city-charter-amendment-proposal-2-blocs"></div>
                   </div>
                 </div>
-                <div data-all-groups="low-aapi-availability" hidden>
-                  <div class="chart" data-chart="slate" data-run="low-aapi-availability"></div>
+                <div data-all-groups="city-charter-amendment-proposal-2-blocs" hidden>
+                  <div class="chart" data-chart="slate" data-run="city-charter-amendment-proposal-2-blocs"></div>
                 </div>
               </div>
-              <div class="tab-pane fade" id="low-aapi-availability-availability" role="tabpanel">
-                <div class="metric-toggles" data-metric="low-aapi-availability"></div>
-                <div class="chart" data-chart="availability" data-run="low-aapi-availability"></div>
+              <div class="tab-pane fade" id="city-charter-amendment-proposal-2-blocs-availability" role="tabpanel">
+                <div class="metric-toggles" data-metric="city-charter-amendment-proposal-2-blocs"></div>
+                <div class="chart" data-chart="availability" data-run="city-charter-amendment-proposal-2-blocs"></div>
               </div>
             </div>
             </div>
-            <aside class="run-params" data-params="low-aapi-availability"></aside>
+            <aside class="run-params" data-params="city-charter-amendment-proposal-2-blocs"></aside>
           </section>
-          <section id="run-low-aapi-turnout" class="run mb-5" data-run="low-aapi-turnout">
+          <section id="run-diverse-poc-coalition-preferences-2-blocs" class="run mb-5" data-run="diverse-poc-coalition-preferences-2-blocs">
             <div class="run-main">
-            <h3 class="h4 mt-4">Low AAPI Turnout</h3>
-            <div class="run-prose"><p>Within California in 2024, Asian voters were observed to have voted at rate of 44.4%, while White and Black voters voted at rates of 56.1% and 60.1%, respectively. Low voter turnout among the AAPI coalition has been a consistent concern for civic and community activists in San Diego. In this scenario, we adjust the turnout parameter for the AAPI bloc to be even lower than the default configuration, from 0.75 to 0.5. This means that the relative turnout rate of AAPI voters is half that of White and Black voters. We examine the impacts of low AAPI turnout within a 3 X 3 STV electoral system on proportional representation.</p>
-</div>
+            <h3 class="h4 mt-4">Diverse POC Coalition Preferences (2 Blocs)</h3>
+            <p class="todo">[Description to be written — edit
+               <code>docs/prose/runs/diverse-poc-coalition-preferences-2-blocs.md</code>.]</p>
 
-            <div class="run-controls" data-controls="low-aapi-turnout"></div>
+            <div class="run-controls" data-controls="diverse-poc-coalition-preferences-2-blocs"></div>
 
             <ul class="nav nav-tabs" role="tablist">
               <li class="nav-item" role="presentation">
                 <button class="nav-link active" data-bs-toggle="tab"
-                        data-bs-target="#low-aapi-turnout-focal" type="button" role="tab">
+                        data-bs-target="#diverse-poc-coalition-preferences-2-blocs-focal" type="button" role="tab">
                   Seat outcomes
                 </button>
               </li>
               <li class="nav-item" role="presentation">
                 <button class="nav-link" data-bs-toggle="tab"
-                        data-bs-target="#low-aapi-turnout-availability" type="button" role="tab">
+                        data-bs-target="#diverse-poc-coalition-preferences-2-blocs-availability" type="button" role="tab">
                   Districts by VAP rank
                 </button>
               </li>
             </ul>
             <div class="tab-content pt-3">
-              <div class="tab-pane fade show active" id="low-aapi-turnout-focal" role="tabpanel">
-                <div class="metric-toggles" data-view="low-aapi-turnout"></div>
-                <div class="row g-4 figure-pair" data-one-group="low-aapi-turnout">
+              <div class="tab-pane fade show active" id="diverse-poc-coalition-preferences-2-blocs-focal" role="tabpanel">
+                <div class="metric-toggles" data-view="diverse-poc-coalition-preferences-2-blocs"></div>
+                <div class="row g-4 figure-pair" data-one-group="diverse-poc-coalition-preferences-2-blocs">
                   <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="bubble" data-run="low-aapi-turnout"></div>
+                    <div class="chart" data-chart="bubble" data-run="diverse-poc-coalition-preferences-2-blocs"></div>
                   </div>
                   <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="histogram" data-run="low-aapi-turnout"></div>
+                    <div class="chart" data-chart="histogram" data-run="diverse-poc-coalition-preferences-2-blocs"></div>
                   </div>
                 </div>
-                <div data-all-groups="low-aapi-turnout" hidden>
-                  <div class="chart" data-chart="slate" data-run="low-aapi-turnout"></div>
+                <div data-all-groups="diverse-poc-coalition-preferences-2-blocs" hidden>
+                  <div class="chart" data-chart="slate" data-run="diverse-poc-coalition-preferences-2-blocs"></div>
                 </div>
               </div>
-              <div class="tab-pane fade" id="low-aapi-turnout-availability" role="tabpanel">
-                <div class="metric-toggles" data-metric="low-aapi-turnout"></div>
-                <div class="chart" data-chart="availability" data-run="low-aapi-turnout"></div>
+              <div class="tab-pane fade" id="diverse-poc-coalition-preferences-2-blocs-availability" role="tabpanel">
+                <div class="metric-toggles" data-metric="diverse-poc-coalition-preferences-2-blocs"></div>
+                <div class="chart" data-chart="availability" data-run="diverse-poc-coalition-preferences-2-blocs"></div>
               </div>
             </div>
             </div>
-            <aside class="run-params" data-params="low-aapi-turnout"></aside>
+            <aside class="run-params" data-params="diverse-poc-coalition-preferences-2-blocs"></aside>
+          </section>
+          <section id="run-low-poc-availability-2-blocs" class="run mb-5" data-run="low-poc-availability-2-blocs">
+            <div class="run-main">
+            <h3 class="h4 mt-4">Low POC Availability (2 Blocs)</h3>
+            <p class="todo">[Description to be written — edit
+               <code>docs/prose/runs/low-poc-availability-2-blocs.md</code>.]</p>
+
+            <div class="run-controls" data-controls="low-poc-availability-2-blocs"></div>
+
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="tab"
+                        data-bs-target="#low-poc-availability-2-blocs-focal" type="button" role="tab">
+                  Seat outcomes
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab"
+                        data-bs-target="#low-poc-availability-2-blocs-availability" type="button" role="tab">
+                  Districts by VAP rank
+                </button>
+              </li>
+            </ul>
+            <div class="tab-content pt-3">
+              <div class="tab-pane fade show active" id="low-poc-availability-2-blocs-focal" role="tabpanel">
+                <div class="metric-toggles" data-view="low-poc-availability-2-blocs"></div>
+                <div class="row g-4 figure-pair" data-one-group="low-poc-availability-2-blocs">
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="bubble" data-run="low-poc-availability-2-blocs"></div>
+                  </div>
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="histogram" data-run="low-poc-availability-2-blocs"></div>
+                  </div>
+                </div>
+                <div data-all-groups="low-poc-availability-2-blocs" hidden>
+                  <div class="chart" data-chart="slate" data-run="low-poc-availability-2-blocs"></div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="low-poc-availability-2-blocs-availability" role="tabpanel">
+                <div class="metric-toggles" data-metric="low-poc-availability-2-blocs"></div>
+                <div class="chart" data-chart="availability" data-run="low-poc-availability-2-blocs"></div>
+              </div>
+            </div>
+            </div>
+            <aside class="run-params" data-params="low-poc-availability-2-blocs"></aside>
+          </section>
+          <section id="run-low-poc-turnout-2-blocs" class="run mb-5" data-run="low-poc-turnout-2-blocs">
+            <div class="run-main">
+            <h3 class="h4 mt-4">Low POC Turnout (2 Blocs)</h3>
+            <p class="todo">[Description to be written — edit
+               <code>docs/prose/runs/low-poc-turnout-2-blocs.md</code>.]</p>
+
+            <div class="run-controls" data-controls="low-poc-turnout-2-blocs"></div>
+
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="tab"
+                        data-bs-target="#low-poc-turnout-2-blocs-focal" type="button" role="tab">
+                  Seat outcomes
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab"
+                        data-bs-target="#low-poc-turnout-2-blocs-availability" type="button" role="tab">
+                  Districts by VAP rank
+                </button>
+              </li>
+            </ul>
+            <div class="tab-content pt-3">
+              <div class="tab-pane fade show active" id="low-poc-turnout-2-blocs-focal" role="tabpanel">
+                <div class="metric-toggles" data-view="low-poc-turnout-2-blocs"></div>
+                <div class="row g-4 figure-pair" data-one-group="low-poc-turnout-2-blocs">
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="bubble" data-run="low-poc-turnout-2-blocs"></div>
+                  </div>
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="histogram" data-run="low-poc-turnout-2-blocs"></div>
+                  </div>
+                </div>
+                <div data-all-groups="low-poc-turnout-2-blocs" hidden>
+                  <div class="chart" data-chart="slate" data-run="low-poc-turnout-2-blocs"></div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="low-poc-turnout-2-blocs-availability" role="tabpanel">
+                <div class="metric-toggles" data-metric="low-poc-turnout-2-blocs"></div>
+                <div class="chart" data-chart="availability" data-run="low-poc-turnout-2-blocs"></div>
+              </div>
+            </div>
+            </div>
+            <aside class="run-params" data-params="low-poc-turnout-2-blocs"></aside>
           </section>
         </section>
 
@@ -557,7 +557,7 @@ $$</div>
     <div class="container-xl text-center">
       <p class="mb-1">Metric Geometry &amp; Gerrymandering Group — San Diego City Council Election Analysis</p>
       <p class="mb-1"><a href="https://github.com/mggg/San-Diego-Election-Analysis" target="_blank" rel="noopener">View the repository on GitHub</a></p>
-      <p class="generated mb-0">Generated 2026-08-19T09:36:44+00:00</p>
+      <p class="generated mb-0">Generated 2026-08-19T15:26:52+00:00</p>
     </div>
   </footer>
 
@@ -590,15 +590,15 @@ $$</div>
 
   <script type="importmap">{
  "imports": {
-  "./js/charts/availability.js": "./js/charts/availability.js?v=1c48273e9f",
-  "./js/charts/axes.js": "./js/charts/axes.js?v=1c48273e9f",
-  "./js/charts/bubble.js": "./js/charts/bubble.js?v=1c48273e9f",
-  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=1c48273e9f",
-  "./js/charts/histogram.js": "./js/charts/histogram.js?v=1c48273e9f",
-  "./js/charts/slate.js": "./js/charts/slate.js?v=1c48273e9f",
-  "./js/report.js": "./js/report.js?v=1c48273e9f"
+  "./js/charts/availability.js": "./js/charts/availability.js?v=25c1d2e5bd",
+  "./js/charts/axes.js": "./js/charts/axes.js?v=25c1d2e5bd",
+  "./js/charts/bubble.js": "./js/charts/bubble.js?v=25c1d2e5bd",
+  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=25c1d2e5bd",
+  "./js/charts/histogram.js": "./js/charts/histogram.js?v=25c1d2e5bd",
+  "./js/charts/slate.js": "./js/charts/slate.js?v=25c1d2e5bd",
+  "./js/report.js": "./js/report.js?v=25c1d2e5bd"
  }
 }</script>
-  <script type="module" src="js/report.js?v=1c48273e9f"></script>
+  <script type="module" src="js/report.js?v=25c1d2e5bd"></script>
 </body>
 </html>

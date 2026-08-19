@@ -365,6 +365,10 @@ def attach_compositions(
         target["composition"] = composition
         if entry.get("title"):
             target["name"] = entry["title"]
+        # What the section calls its selector. A composed section whose options
+        # are bloc models rather than voting rules needs to say so.
+        if entry.get("selector_label"):
+            target["selectorLabel"] = entry["selector_label"]
         print(f"[report_generator] {slug}: composed from {len(composition)} system(s) -> "
               f"{', '.join(s['label'] for s in composition)}")
 

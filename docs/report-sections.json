@@ -11,29 +11,40 @@
 
   "_scenarios_comment": "Scenario sections, in page order, by slug (the 'slug' in a run's outputs/<run>/summaries/report/run.json). This is an allow-list: a run with complete artifacts that is not listed here does not appear on the page. To park a scenario without losing the entry, replace the string with { \"slug\": \"...\", \"enabled\": false }. A hidden scenario keeps its data in manifest.json and docs/data/, and stays in the cross-run comparison.",
   "_composed_comment": "A scenario may instead collect systems out of several runs, so one section can compare contests that were simulated separately. Give it a \"systems\" list: each entry names the \"run\" (slug) and the \"system\" (rule id as it appears in that run's run.json), optionally \"label\" to name it in the dropdown, and optionally \"districts\"/\"seats\" when one run uses the same rule in more than one contest. Switching systems reloads that run's records and repoints the figures, axes, proportional line, and the parameters card at it.",
+  "_bloc_model_comment": "The report is built on the two-bloc runs: a White bloc (White with American Indian and other-race VAP) against a POC bloc (Black, Hispanic and Asian/NHPI together). The four-bloc runs that preceded them are still in outputs/ and manifest.json, and any of them can be brought back by listing its slug here -- but they model a different electorate, so a page mixing the two would put two meanings of 'slate' in one cross-run comparison.",
+  "_selector_comment": "A composed section whose options are not voting rules can rename its dropdown with \"selector_label\". Basic and Fifteen Seats At-Large use it to offer the same contest under both bloc models: picking one loads that run's records, and the focal-group dropdown beside it repopulates with the blocs that model actually has.",
   "scenarios": [
-    "basic-3-x-3",
-    "basic-3-x-3-2-blocs",
     {
-      "_note": "Every standalone electoral structure lives here rather than in a section of its own: the 9 X 1 rules it was built for, plus the at-large and multi-member STV runs, which are the same question asked with a different districting. Basic and its parameter variations (diverse preferences, low turnout, low availability) keep their own sections, as do the two hybrid runs, whose combined view has no single contest to select.",
-      "slug": "alternative-electoral-systems",
+      "slug": "basic-3-x-3-2-blocs",
+      "selector_label": "Bloc model",
       "systems": [
-        { "run": "alternative-electoral-systems", "system": "IRV", "label": "9 × 1 IRV" },
-        { "run": "alternative-electoral-systems", "system": "PLURALITY", "label": "9 × 1 Plurality" },
-        { "run": "alternative-electoral-systems", "system": "TOPTWO", "label": "9 × 1 Top Two" },
-        { "run": "alternative-electoral-systems", "system": "ALASKA", "label": "9 × 1 Alaska" },
-        { "run": "3x5-stv", "system": "FASTSTV", "label": "3 × 5 STV" },
-        { "run": "nine-seats-at-large", "system": "FASTSTV", "label": "1 × 9 STV" },
-        { "run": "nine-seats-at-large", "system": "CUMULATIVE", "label": "1 × 9 Cumulative" },
-        { "run": "nine-seats-at-large", "system": "LIMITED", "label": "1 × 9 Limited" },
-        { "run": "fifteen-seats-at-large-stv", "system": "FASTSTV", "label": "1 × 15 STV" },
-        { "run": "fifteen-seats-at-large-stv-2-blocs", "system": "FASTSTV", "label": "1 × 15 STV (Two Bloc)" }
+        { "run": "basic-3-x-3-2-blocs", "system": "FASTSTV", "label": "Two blocs (WHI / POC)" },
+        { "run": "basic-3-x-3", "system": "FASTSTV", "label": "Four blocs (WHI / BAIO / HIS / AAPI)" }
       ]
     },
-    "city-charter-amendment-proposal",
-    "hybrid-system-3x4-stv-1x3-plurality",
-    "diverse-aapi-coalition-preferences",
-    "low-aapi-availability",
-    "low-aapi-turnout"
+    {
+      "slug": "fifteen-seats-at-large-stv-2-blocs",
+      "selector_label": "Bloc model",
+      "systems": [
+        { "run": "fifteen-seats-at-large-stv-2-blocs", "system": "FASTSTV", "label": "Two blocs (WHI / POC)" },
+        { "run": "fifteen-seats-at-large-stv", "system": "FASTSTV", "label": "Four blocs (WHI / BAIO / HIS / AAPI)" }
+      ]
+    },
+    {
+      "_note": "Every standalone electoral structure lives here rather than in a section of its own: the 15 X 1 rules the run was built for, plus the at-large and multi-member STV runs, which are the same question asked with a different districting. Basic and its parameter variations (diverse preferences, low turnout, low availability) keep their own sections, as does the charter proposal, whose combined view has no single contest to select.",
+      "slug": "alternative-electoral-systems-2-blocs",
+      "systems": [
+        { "run": "alternative-electoral-systems-2-blocs", "system": "IRV", "label": "15 × 1 IRV" },
+        { "run": "alternative-electoral-systems-2-blocs", "system": "PLURALITY", "label": "15 × 1 Plurality" },
+        { "run": "alternative-electoral-systems-2-blocs", "system": "TOPTWO", "label": "15 × 1 Top Two" },
+        { "run": "basic-3-x-5-2-blocs", "system": "FASTSTV", "label": "3 × 5 STV" },
+        { "run": "nine-seats-at-large-stv-2-blocs", "system": "FASTSTV", "label": "1 × 9 STV" },
+        { "run": "fifteen-seats-at-large-stv-2-blocs", "system": "FASTSTV", "label": "1 × 15 STV" }
+      ]
+    },
+    "city-charter-amendment-proposal-2-blocs",
+    "diverse-poc-coalition-preferences-2-blocs",
+    "low-poc-availability-2-blocs",
+    "low-poc-turnout-2-blocs"
   ]
 }
