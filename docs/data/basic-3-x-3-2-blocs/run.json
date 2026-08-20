@@ -1,39 +1,37 @@
 {
- "runName": "Basic - 3 X 3 (2 Blocs)",
- "slug": "basic-3-x-3-2-blocs",
- "focalGroup": "WHI",
- "focalGroupLabel": "WHI",
- "totalSeats": 9,
+ "runName": "Basic - 5 X 3 (2 Blocs)",
+ "slug": "basic-5-x-3-2-blocs",
+ "focalGroup": "WAIO",
+ "focalGroupLabel": "WAIO",
+ "totalSeats": 15,
  "focalVapShare": 0.4588409607434803,
- "proportionalSeats": 4.129568646691323,
- "proportionalLabel": "WHI share of VAP: 45.9% (4.1 seats)",
- "seatMax": 9,
+ "proportionalSeats": 6.882614411152204,
+ "proportionalLabel": "WAIO share of VAP: 45.9% (6.9 seats)",
+ "seatMax": 15,
  "seatTicks": [
   0,
-  1,
   2,
-  3,
   4,
-  5,
   6,
-  7,
   8,
-  9
+  10,
+  12,
+  14
  ],
  "districtConfigs": [
   {
-   "numDistricts": 3,
+   "numDistricts": 5,
    "winners": 3,
    "systems": [
     {
      "id": "FASTSTV",
-     "label": "3 X 3 STV"
+     "label": "5 X 3 STV"
     }
    ],
    "candidatePoolMax": 10,
    "candidatePoolMean": 7,
    "plans": 100,
-   "electionsPerSystem": 8150
+   "electionsPerSystem": 14050
   }
  ],
  "voterModels": [
@@ -60,19 +58,19 @@
  ],
  "slates": [
   {
-   "id": "WHI",
-   "label": "WHI",
-   "vapShare": 0.4588409607434803
-  },
-  {
    "id": "POC",
    "label": "POC",
    "vapShare": 0.5411590392565198
+  },
+  {
+   "id": "WAIO",
+   "label": "WAIO",
+   "vapShare": 0.4588409607434803
   }
  ],
  "turnout": {
-  "WHI": 1,
-  "POC": 0.7
+  "POC": 0.7,
+  "WAIO": 1
  },
  "primaryTurnout": null,
  "replicates": 10,

@@ -511,14 +511,14 @@ section { scroll-margin-top: 70px; padding-top: .5rem; }
   color: var(--sd-gray);
 }
 
-/* Figures written into the prose, held to 80% of the column they sit in and
+/* Figures written into the prose, held to half the column they sit in and
    centred there. A bound rather than a fixed width: the histogram is 2060px
-   across and reads as "80% of the measure", while anything already narrower
+   across and reads as "50% of the measure", while anything already narrower
    than that keeps its own size instead of being blown up past its pixels. */
 .prose img,
 .run-prose img {
   display: block;
-  max-width: 80%;
+  max-width: 50%;
   height: auto;
   margin: 1.25rem auto;
 }

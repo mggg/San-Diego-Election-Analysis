@@ -1,28 +1,22 @@
 {
  "runName": "Basic - 3 X 5 (2 Blocs)",
  "slug": "basic-3-x-5-2-blocs",
- "focalGroup": "WHI",
- "focalGroupLabel": "WHI",
+ "focalGroup": "WAIO",
+ "focalGroupLabel": "WAIO",
  "totalSeats": 15,
  "focalVapShare": 0.4588409607434803,
  "proportionalSeats": 6.882614411152204,
- "proportionalLabel": "WHI share of VAP: 45.9% (6.9 seats)",
- "seatMax": 13,
+ "proportionalLabel": "WAIO share of VAP: 45.9% (6.9 seats)",
+ "seatMax": 14,
  "seatTicks": [
   0,
-  1,
   2,
-  3,
   4,
-  5,
   6,
-  7,
   8,
-  9,
   10,
-  11,
   12,
-  13
+  14
  ],
  "districtConfigs": [
   {
@@ -37,7 +31,7 @@
    "candidatePoolMax": 10,
    "candidatePoolMean": 7,
    "plans": 100,
-   "electionsPerSystem": 8610
+   "electionsPerSystem": 8660
   }
  ],
  "voterModels": [
@@ -64,19 +58,19 @@
  ],
  "slates": [
   {
-   "id": "WHI",
-   "label": "WHI",
-   "vapShare": 0.4588409607434803
-  },
-  {
    "id": "POC",
    "label": "POC",
    "vapShare": 0.5411590392565198
+  },
+  {
+   "id": "WAIO",
+   "label": "WAIO",
+   "vapShare": 0.4588409607434803
   }
  ],
  "turnout": {
-  "WHI": 1,
-  "POC": 0.7
+  "POC": 0.7,
+  "WAIO": 1
  },
  "primaryTurnout": null,
  "replicates": 10,

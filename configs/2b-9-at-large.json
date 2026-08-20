@@ -28,7 +28,8 @@
   "voter_models": [
     "slate_pl",
     "slate_bt",
-    "cambridge"
+    "cambridge",
+    "name_cumulative"
   ],
   "blocs": {
     "POC": [

@@ -173,7 +173,7 @@ function renderRunParams(section, entry, runMeta, manifest, source, selected, ta
       row.append('dd').text(value);
     });
 
-  const order = (entry.slates || []).map((sl) => sl.id);
+  const order = ((source && source.slates) || entry.slates || []).map((sl) => sl.id);
   /** Blocs in the run's own order, with anything unlisted kept on the end. */
   const blocOrder = (keys) => [
     ...order.filter((k) => keys.includes(k)),
@@ -354,9 +354,32 @@ function drawMatrix(mount, title, matrix, fmt, order) {
  * Exactly one system is shown at a time; comparing systems is what the cross-run
  * figure is for.
  */
+const BLOC_MODEL_LABELS = { two: 'Two Bloc', four: 'Four Bloc' };
+
 function buildControls(mount, context, palette, state, onChange, slates) {
   mount.selectAll('*').remove();
-  const { slug, systems, models, onSystemChange } = context;
+  const { slug, systems, models, blocModels, onSystemChange, onBlocModelChange } = context;
+
+  // Present only where a section's systems actually span more than one bloc
+  // model (see resolve_composition's "blocModel" tag); an ordinary run has
+  // nothing to toggle. Changing it swaps which systems the dropdown below
+  // offers and repoints Focal Group at the new selection's own run, so both
+  // controls are rebuilt through onBlocModelChange rather than redrawn in
+  // place.
+  if ((blocModels || []).length > 1) {
+    const group = mount.append('div').attr('class', 'control-group');
+    group.append('span').attr('class', 'control-label').text('Bloc model');
+    const toggles = group.append('div').attr('class', 'model-toggles');
+    toggles.selectAll('button').data(blocModels).join('button')
+      .attr('type', 'button')
+      .attr('class', (d) => `model-toggle${state.blocModel === d ? ' on' : ''}`)
+      .attr('aria-pressed', (d) => state.blocModel === d)
+      .text((d) => BLOC_MODEL_LABELS[d] || d)
+      .on('click', (event, d) => {
+        if (state.blocModel === d) return;
+        onBlocModelChange(d);
+      });
+  }
 
   // A section with one system has nothing to choose between; its name is
   // already in the panel title.
@@ -701,7 +724,13 @@ async function mountRun(section, manifest, cache) {
       perDistrict: dc.winners,
       plans: dc.plans,
     })));
-  const slates = entry.slates || [];
+
+  // Every distinct bloc model this section's systems carry (see
+  // resolve_composition's "blocModel" tag). Empty for an ordinary run, which
+  // has nothing to toggle -- it models one bloc count already.
+  const blocModels = [...new Set(
+    systems.map((s) => s.source && s.source.blocModel).filter(Boolean),
+  )];
 
   /** Where a selection's records live, and which system identifies them there. */
   function resolve(selection) {
@@ -711,6 +740,33 @@ async function mountRun(section, manifest, cache) {
       base: source ? bundles.get(source.run) : bundle,
       systemId: source ? source.system : (selection && selection.id),
     };
+  }
+
+  /*
+   * The slates one system's own run defines.
+   *
+   * A composed section's systems can be simulated under different bloc
+   * models -- WAIO/POC in one run, WAIO/BLK/HIS/AAPI in another -- so Focal
+   * Group has to be read off the selected system's own run rather than a
+   * fixed list carried by the section. An ordinary run's systems all share one
+   * run, so this returns the same list regardless of which is selected.
+   */
+  function slatesFor(selection) {
+    const { source, base } = resolve(selection);
+    return (source && source.slates) || (base && base.runMeta.slates) || entry.slates || [];
+  }
+
+  /** The slate a selection's own run marks as focal, or the first it has. */
+  function defaultSlateId(selection, slateList) {
+    const { base } = resolve(selection);
+    const focal = base && base.runMeta.focalGroup;
+    return (slateList.find((s) => s.id === focal) || slateList[0] || {}).id;
+  }
+
+  /** This section's systems narrowed to the bloc model currently on show. */
+  function visibleSystems() {
+    if (!blocModels.length) return systems;
+    return systems.filter((s) => (s.source && s.source.blocModel) === state.blocModel);
   }
 
   /*
@@ -758,14 +814,34 @@ async function mountRun(section, manifest, cache) {
 
   const state = {
     system: systems[0].id,
+    blocModel: systems[0].source && systems[0].source.blocModel,
     models: defaultModels(modelsFor(systems[0])),
-    slate: (slates.find((s) => s.id === runMeta.focalGroup) || slates[0] || {}).id,
+    slate: defaultSlateId(systems[0], slatesFor(systems[0])),
     metric: 'winRate',
     allGroups: false,
     // Which face of the parameters card is open. Kept in state so it survives
     // the redraws that every other control triggers.
     paramsTab: PARAMS_TABS[0].id,
   };
+
+  /*
+   * Switch bloc model: narrow the system list to it, then carry the current
+   * selection across if the new list has a system with the same label (same
+   * shape and rule, simulated under the other bloc model), so toggling reads
+   * as "same contest, different electorate" rather than resetting to
+   * whatever happens to be first. Falls back to the first option when it
+   * doesn't -- a rule that only exists under one bloc model, e.g. Plurality.
+   */
+  function switchBlocModel(model) {
+    if (state.blocModel === model) return;
+    const currentLabel = (systems.find((s) => s.id === state.system) || {}).label;
+    state.blocModel = model;
+    const visible = visibleSystems();
+    const match = visible.find((s) => s.label === currentLabel) || visible[0];
+    state.system = match.id;
+    refreshControls();
+    draw();
+  }
 
   function draw() {
     // Resolve the selection once, so a chart takes plain lists and never has to
@@ -779,7 +855,8 @@ async function mountRun(section, manifest, cache) {
     const systemId = source ? source.system : state.system;
     const viewSystems = [{ ...selected, id: systemId }];
     const winners = selected ? selected.winners : runMeta.totalSeats;
-    const baseSlate = slates.find((s) => s.id === state.slate) || slates[0];
+    const currentSlates = slatesFor(selected);
+    const baseSlate = currentSlates.find((s) => s.id === state.slate) || currentSlates[0];
     const view = {
       systems: viewSystems,
       models: modelsFor(selected).filter((m) => state.models.has(m.id)),
@@ -877,7 +954,7 @@ async function mountRun(section, manifest, cache) {
   }
 
   const viewToggle = d3.select(section).select(`[data-view="${slug}"]`);
-  if (!viewToggle.empty() && slates.length > 1) {
+  if (!viewToggle.empty() && slatesFor(systems[0]).length > 1) {
     viewToggle.selectAll('button')
       .data([{ id: false, label: 'Focal group' }, { id: true, label: 'All groups' }])
       .join('button')
@@ -909,19 +986,34 @@ async function mountRun(section, manifest, cache) {
   function refreshControls() {
     const selected = systems.find((s) => s.id === state.system) || systems[0];
     const models = modelsFor(selected);
+    const currentSlates = slatesFor(selected);
 
-    // Reset rather than carry the selection across: the models are a property of
-    // the system now on show, so each one opens on its own defaults instead of
-    // inheriting a set that may mean something different -- or nothing -- under
-    // it. Toggling a model redraws without coming through here, so a deliberate
-    // choice survives everything except changing system.
+    // The models are a property of the system now on show, so each one opens
+    // on its own defaults rather than inheriting a set that may mean
+    // something different, or nothing at all, under it. The slate is kept
+    // when the new selection still has it -- switching from 15 X 1 IRV to
+    // 9 X 1 IRV under the same bloc model has no reason to forget a deliberate
+    // Focal Group choice -- and reset only when it doesn't, which is exactly
+    // what happens on a bloc-model switch to a run that doesn't define it.
+    // Toggling a model or a focal group redraws without coming through here,
+    // so either choice survives everything that leaves it valid.
     state.models = defaultModels(models);
+    if (!currentSlates.some((s) => s.id === state.slate)) {
+      state.slate = defaultSlateId(selected, currentSlates);
+    }
 
     if (!mount.empty()) {
       buildControls(
         mount,
-        { slug, systems, models, onSystemChange: () => { refreshControls(); draw(); } },
-        manifest.palette, state, draw, slates,
+        {
+          slug,
+          systems: visibleSystems(),
+          models,
+          blocModels,
+          onSystemChange: () => { refreshControls(); draw(); },
+          onBlocModelChange: switchBlocModel,
+        },
+        manifest.palette, state, draw, currentSlates,
       );
     }
 

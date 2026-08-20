@@ -28,7 +28,8 @@
   },
   "voter_models": [
     "slate_pl",
-    "slate_bt"
+    "slate_bt",
+    "name_cumulative"
   ],
   "blocs": {
     "HIS": [

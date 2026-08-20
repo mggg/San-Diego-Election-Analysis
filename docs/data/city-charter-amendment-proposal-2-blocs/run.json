@@ -1,30 +1,22 @@
 {
  "runName": "City Charter Amendment Proposal (2 Blocs)",
  "slug": "city-charter-amendment-proposal-2-blocs",
- "focalGroup": "WHI",
- "focalGroupLabel": "WHI",
+ "focalGroup": "WAIO",
+ "focalGroupLabel": "WAIO",
  "totalSeats": 15,
  "focalVapShare": 0.4588409607434803,
  "proportionalSeats": 6.882614411152204,
- "proportionalLabel": "WHI share of VAP: 45.9% (6.9 seats)",
+ "proportionalLabel": "WAIO share of VAP: 45.9% (6.9 seats)",
  "seatMax": 15,
  "seatTicks": [
   0,
-  1,
   2,
-  3,
   4,
-  5,
   6,
-  7,
   8,
-  9,
   10,
-  11,
   12,
-  13,
-  14,
-  15
+  14
  ],
  "districtConfigs": [
   {
@@ -39,7 +31,7 @@
    "candidatePoolMax": null,
    "candidatePoolMean": null,
    "plans": 50,
-   "electionsPerSystem": 69050
+   "electionsPerSystem": 17212
   },
   {
    "numDistricts": 1,
@@ -53,7 +45,7 @@
    "candidatePoolMax": 15,
    "candidatePoolMean": 12,
    "plans": 50,
-   "electionsPerSystem": 69050
+   "electionsPerSystem": 17212
   },
   {
    "numDistricts": 9,
@@ -67,7 +59,7 @@
    "candidatePoolMax": 10,
    "candidatePoolMean": 7,
    "plans": 50,
-   "electionsPerSystem": 69050
+   "electionsPerSystem": 17212
   }
  ],
  "voterModels": [
@@ -94,21 +86,21 @@
  ],
  "slates": [
   {
-   "id": "WHI",
-   "label": "WHI",
-   "vapShare": 0.4588409607434803
-  },
-  {
    "id": "POC",
    "label": "POC",
    "vapShare": 0.5411590392565198
+  },
+  {
+   "id": "WAIO",
+   "label": "WAIO",
+   "vapShare": 0.4588409607434803
   }
  ],
  "turnout": {
-  "WHI": 1,
-  "POC": 0.7
+  "POC": 0.7,
+  "WAIO": 1
  },
  "primaryTurnout": null,
- "replicates": 100,
+ "replicates": 25,
  "subsamples": 50
 }
