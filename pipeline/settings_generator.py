@@ -60,29 +60,28 @@ from pipeline.utils.helpers import (
 # combine several census categories. Override per-run with a
 # "group_vap_columns" entry if your groups or column names differ.
 #
-# Two groups, not four: WHI is White with American Indian and other-race VAP
-# folded in, and POC is Black, Hispanic and Asian/NHPI together. The earlier
-# four-group split modelled each minority group as voting on its own, which
-# meant a cohesion matrix asserting how each behaved toward the other three;
-# a single POC bloc asks the question these runs are actually about -- whether
-# a system lets a coalition of minority voters elect candidates of its choice --
-# without those assertions.
+# This default describes the two-bloc model: WHI is White with American Indian
+# and other-race VAP folded in, and POC is Black, Hispanic and Asian/NHPI
+# together. The earlier four-group split modelled each minority group as voting
+# on its own, which meant a cohesion matrix asserting how each behaved toward
+# the other three; a single POC bloc asks the question these runs are actually
+# about -- whether a system lets a coalition of minority voters elect candidates
+# of its choice -- without those assertions.
+#
+# WARNING for the four-bloc runs: they use WHI too, but theirs is White *alone*,
+# with American Indian and other-race VAP carried by BAIO. One label, two
+# meanings, so every four-bloc config states its own "group_vap_columns" rather
+# than inheriting this -- a config that forgets to would silently be regrouped,
+# and nothing downstream would notice because both mappings partition the
+# electorate perfectly well. Anything beyond these two models should likewise
+# spell out its own columns.
 #
 # Every VAP column is claimed by exactly one group, so the two partition the
 # electorate; get_group_vap_columns enforces that, and a column left out of both
 # would quietly shrink every share computed from them.
 DEFAULT_GROUP_VAP_COLUMNS = {
-    # Two-bloc runs.
     "WHI": ["white_vap_20", "amin_vap_20", "other_vap_20"],
     "POC": ["bvap_20", "hvap_20", "asian_nhpi_vap_20"],
-    # Four-bloc runs. WAIO holds the same columns WHI does -- both are White
-    # with American Indian and other-race VAP folded in -- and the two names
-    # exist because the runs that use them split the rest differently: POC
-    # against one bloc, BLK/HIS/AAPI against three.
-    "WAIO": ["white_vap_20", "amin_vap_20", "other_vap_20"],
-    "BLK": "bvap_20",
-    "HIS": "hvap_20",
-    "AAPI": "asian_nhpi_vap_20",
 }
 
 

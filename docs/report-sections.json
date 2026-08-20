@@ -14,7 +14,10 @@
   "scenarios": [
     "basic-3-x-3",
     "basic-3-x-3-2-blocs",
+    "3x5-stv",
+    "basic-3-x-5-2-blocs",
     "city-charter-amendment-proposal",
+    "city-charter-amendment-proposal-2-blocs",
     {
       "_note": "Every standalone electoral structure lives here rather than in a section of its own: the 9 X 1 rules it was built for, plus the at-large and multi-member STV runs, which are the same question asked with a different districting. Basic and its parameter variations (diverse preferences, low turnout, low availability) keep their own sections, as do the two hybrid runs, whose combined view has no single contest to select.",
       "slug": "alternative-electoral-systems",
