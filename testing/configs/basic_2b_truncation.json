@@ -1,6 +1,6 @@
 {
-  "run_name": "Basic - 3 X 3 (2 Blocs)",
-  "num_subsamples": 100,
+  "run_name": "Testing - 3 X 3 (2 Blocs) Ballot Truncation",
+  "num_subsamples": 2,
   "total_seats": 9,
   "district_configs": [
     {
@@ -56,13 +56,9 @@
     }
   },
   "num_reps": 10,
-  "cambridge_truncation": {
-    "enabled": false,
-    "majority_slates": [
-      "WHI"
-    ],
-    "minority_slates": [
-      "POC"
-    ]
-  }
+ "cambridge_truncation": {
+        "enabled": true,
+        "majority_slates": ["WHI"],
+        "minority_slates": ["POC"]
+    }
 }

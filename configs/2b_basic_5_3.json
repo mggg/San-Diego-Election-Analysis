@@ -1,10 +1,10 @@
 {
-  "run_name": "Basic - 3 X 3 (2 Blocs)",
+  "run_name": "Basic - 5 X 3 (2 Blocs)",
   "num_subsamples": 100,
-  "total_seats": 9,
+  "total_seats": 15,
   "district_configs": [
     {
-      "num_districts": 3,
+      "num_districts": 5,
       "winners": 3,
       "candidate_pool_max": 10,
       "candidate_pool_mean": 7
@@ -12,7 +12,7 @@
   ],
   "voting_configs": {
     "FastSTV": {
-      "n_seats": 3,
+      "n_seats": 5,
       "tiebreak": "random"
     }
   },

@@ -41,10 +41,10 @@ _MINORITY_BALLOT_PATH = (
 )
 
 # Cambridge's historical data splits ballots by whether the voter's first
-# choice was the White-majority slate or not; this project has no run-level
-# mapping to that, so WHI -- consistently San Diego's largest single slate --
-# stands in for the historical majority, and every other configured slate
-# pools into the minority group.
+# choice was the White-majority slate or not. A run states its own mapping via
+# "cambridge_truncation.majority_slates"/"minority_slates" in its config; WHI --
+# consistently San Diego's largest single slate -- is only a fallback for a run
+# that leaves that mapping unset.
 DEFAULT_MAJORITY_SLATE = "WHI"
 
 
@@ -53,10 +53,13 @@ def _default_majority_minority_slates(slate_to_candidates: dict) -> tuple[list, 
     Split this run's slates into Cambridge's majority/minority groups by the
     DEFAULT_MAJORITY_SLATE convention.
 
-    Every slate lands in exactly one group (DEFAULT_MAJORITY_SLATE in
-    "majority", everything else in "minority"), so truncate_profile never
-    finds an unmapped slate. A run with no DEFAULT_MAJORITY_SLATE candidates
-    at all -- unusual, but not invalid -- pools everything into "minority".
+    Fallback for a run whose config doesn't set
+    "cambridge_truncation.majority_slates"/"minority_slates" (see
+    apply_cambridge_truncation). Every slate lands in exactly one group
+    (DEFAULT_MAJORITY_SLATE in "majority", everything else in "minority"), so
+    truncate_profile never finds an unmapped slate. A run with no
+    DEFAULT_MAJORITY_SLATE candidates at all -- unusual, but not invalid --
+    pools everything into "minority".
 
     Args:
         slate_to_candidates: This run's slate names mapped to candidate lists
@@ -120,6 +123,118 @@ def build_length_distributions(
         "majority": _length_marginal(reduced_majority_pmf),
         "minority": _length_marginal(reduced_minority_pmf),
     }
+
+
+def _clip_and_renormalize(length_pmf: dict, min_length: int, max_length: int) -> dict:
+    """
+    Restrict a length distribution to [min_length, max_length].
+
+    Lengths outside the bounds are dropped outright (not folded into the
+    nearest bound), and the remaining probabilities are rescaled to sum back
+    to 1, preserving their relative proportions.
+
+    Args:
+        length_pmf: {length: probability}, e.g. one group's output of
+            build_length_distributions.
+        min_length: Shortest length kept, inclusive.
+        max_length: Longest length kept, inclusive.
+
+    Returns:
+        {length: probability} restricted to [min_length, max_length].
+
+    Raises:
+        ValueError: If no length in length_pmf falls within the bounds --
+            there is nothing left to renormalize.
+    """
+    clipped = {
+        length: prob for length, prob in length_pmf.items() if min_length <= length <= max_length
+    }
+    total = sum(clipped.values())
+    if total <= 0:
+        raise ValueError(
+            f"No ballot lengths fall within [{min_length}, {max_length}]; "
+            f"the historical distribution only covers {sorted(length_pmf)}."
+        )
+    return {length: prob / total for length, prob in clipped.items()}
+
+
+def build_bounded_length_distributions(
+    config: "BlocSlateConfig",
+    majority_slates: Sequence[str],
+    minority_slates: Sequence[str],
+    min_length: int,
+    max_length: int,
+) -> dict:
+    """
+    Cambridge historical ballot-length distributions, restricted to
+    [min_length, max_length] and renormalized.
+
+    Starts from the same historical majority/minority length marginals as
+    build_length_distributions, then drops every length outside the bounds
+    and rescales what's left (see _clip_and_renormalize) so a bounded run's
+    ballots are still drawn from a real distribution, just confined to a
+    narrower length range than Cambridge's raw history.
+
+    Args:
+        config: This district's BlocSlateConfig (already built from settings).
+        majority_slates: Slate names pooled into the historical "majority" (W) group.
+        minority_slates: Slate names pooled into the historical "minority" (C) group.
+        min_length: Shortest ballot length allowed, inclusive.
+        max_length: Longest ballot length allowed, inclusive.
+
+    Returns:
+        {"majority": {length: probability}, "minority": {length: probability}},
+        each restricted to [min_length, max_length].
+    """
+    length_distributions = build_length_distributions(config, majority_slates, minority_slates)
+    return {
+        group: _clip_and_renormalize(dist, min_length, max_length)
+        for group, dist in length_distributions.items()
+    }
+
+
+def build_length_distributions_for_method(
+    config: "BlocSlateConfig",
+    majority_slates: Sequence[str],
+    minority_slates: Sequence[str],
+    method: str = "historical",
+    min_length: Optional[int] = None,
+    max_length: Optional[int] = None,
+) -> dict:
+    """
+    Dispatch to the length-distribution builder for a run's configured
+    "cambridge_truncation.method", so both callers of truncate_profile
+    (apply_cambridge_truncation and truncate_profiles.truncate_archive) pick
+    the same distribution for the same config.
+
+    Args:
+        config: This district's BlocSlateConfig.
+        majority_slates: Slate names pooled into the "majority" group.
+        minority_slates: Slate names pooled into the "minority" group.
+        method: "historical" (Cambridge's raw historical length distribution,
+            the default) or "bounded" (that same distribution restricted to
+            [min_length, max_length] -- see build_bounded_length_distributions).
+        min_length: Required when method is "bounded".
+        max_length: Required when method is "bounded".
+
+    Returns:
+        {"majority": {length: probability}, "minority": {length: probability}}.
+
+    Raises:
+        ValueError: If method is "bounded" and either bound is missing, or if
+            method is neither "historical" nor "bounded".
+    """
+    if method == "historical":
+        return build_length_distributions(config, majority_slates, minority_slates)
+    if method == "bounded":
+        if min_length is None or max_length is None:
+            raise ValueError(
+                "cambridge_truncation method 'bounded' requires both min_length and max_length."
+            )
+        return build_bounded_length_distributions(
+            config, majority_slates, minority_slates, min_length, max_length
+        )
+    raise ValueError(f"Unknown cambridge_truncation method '{method}'.")
 
 
 def _slate_for_candidate_lookup(slate_to_candidates: dict) -> dict:
@@ -196,30 +311,46 @@ def truncate_profile(
 def apply_cambridge_truncation(
     profile: RankProfile,
     config: "BlocSlateConfig",
+    majority_slates: Optional[Sequence[str]] = None,
+    minority_slates: Optional[Sequence[str]] = None,
+    method: str = "historical",
+    min_length: Optional[int] = None,
+    max_length: Optional[int] = None,
     rng: Optional[np.random.Generator] = None,
 ) -> RankProfile:
     """
     Truncate profile's ballots to Cambridge-derived lengths.
 
-    Single entry point combining build_length_distributions + truncate_profile,
-    for callers that just want a truncated profile. Majority/minority slates
-    are derived from config's own slate_to_candidates by the
-    DEFAULT_MAJORITY_SLATE convention (see _default_majority_minority_slates)
-    -- a run opts into truncation with the plain "cambridge_truncation"
-    boolean, not a per-run slate mapping.
+    Single entry point combining build_length_distributions_for_method +
+    truncate_profile, for callers that just want a truncated profile.
 
     Args:
         profile: A RankProfile already produced by slate_pl/slate_bt.
         config: This district's BlocSlateConfig.
+        majority_slates: Slate names pooled into the historical "majority" (W)
+            group -- normally a run's configured "cambridge_truncation.majority_slates".
+            When omitted (along with minority_slates), falls back to the
+            DEFAULT_MAJORITY_SLATE convention (see _default_majority_minority_slates).
+        minority_slates: Slate names pooled into the historical "minority" (C)
+            group -- normally "cambridge_truncation.minority_slates".
+        method: The run's configured "cambridge_truncation.method" -- "historical"
+            (default) or "bounded" (see build_length_distributions_for_method).
+        min_length: Required when method is "bounded" -- the run's configured
+            "cambridge_truncation.min_length".
+        max_length: Required when method is "bounded" -- the run's configured
+            "cambridge_truncation.max_length".
         rng: Optional numpy Generator, for reproducible sampling in tests.
 
     Returns:
         A new, truncated RankProfile.
     """
-    majority_slates, minority_slates = _default_majority_minority_slates(
-        config.slate_to_candidates.to_dict()
+    if majority_slates is None or minority_slates is None:
+        majority_slates, minority_slates = _default_majority_minority_slates(
+            config.slate_to_candidates.to_dict()
+        )
+    length_distributions = build_length_distributions_for_method(
+        config, majority_slates, minority_slates, method, min_length, max_length
     )
-    length_distributions = build_length_distributions(config, majority_slates, minority_slates)
     return truncate_profile(
         profile, config, majority_slates, minority_slates, length_distributions, rng=rng
     )

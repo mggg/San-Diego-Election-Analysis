@@ -105,5 +105,16 @@
       "AAPI": 1
     }
   },
-  "num_reps": 10
+  "num_reps": 10,
+  "cambridge_truncation": {
+    "enabled": false,
+    "majority_slates": [
+      "WAIO"
+    ],
+    "minority_slates": [
+      "HIS",
+      "AAPI",
+      "BLK"
+    ]
+  }
 }

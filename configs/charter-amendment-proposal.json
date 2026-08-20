@@ -62,7 +62,7 @@
     "WHI": 1
   },
   "num_voters": 10000,
-  "focal_group": "AAPI",
+  "focal_group": "BLK",
   "cohesion_parameters": {
     "WHI": {
       "WHI": 0.8,
@@ -115,5 +115,16 @@
       "AAPI": 1
     }
   },
-  "num_reps": 100
+  "num_reps": 100,
+  "cambridge_truncation": {
+    "enabled": false,
+    "majority_slates": [
+      "WAIO"
+    ],
+    "minority_slates": [
+      "HIS",
+      "AAPI",
+      "BLK"
+    ]
+  }
 }

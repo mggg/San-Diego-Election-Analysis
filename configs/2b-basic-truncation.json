@@ -21,7 +21,6 @@
     "slate_bt",
     "cambridge"
   ],
-  "cambridge_truncation": false,
   "blocs": {
     "WHI": [
       "WHI"
@@ -57,8 +56,12 @@
     }
   },
   "num_reps": 10,
-  "cambridge_blocs": {
-    "majority": "WHI",
-    "minority": "POC"
+"cambridge_truncation": {
+    "enabled": true,
+    "method":"bounded",
+    "majority_slates": ["WHI"],
+    "minority_slates": ["POC"],
+    "min_length":3,
+    "max_length":6
   }
 }
