@@ -1,5 +1,5 @@
 {
- "generated": "2026-08-19T18:03:04+00:00",
+ "generated": "2026-08-20T17:25:12+00:00",
  "palette": {
   "slate_pl": "#FFCC00",
   "slate_bt": "#AA0000",
@@ -886,7 +886,7 @@
       "WHI": 1
      },
      "primaryTurnout": null,
-     "candidatePoolMin": 2,
+     "candidatePoolMin": null,
      "candidatePoolMax": 10,
      "candidatePoolMean": 7,
      "slates": [
@@ -911,58 +911,8 @@
        "vapShare": 0.20432553215884638
       }
      ],
-     "cohesion": {
-      "WHI": {
-       "WHI": 0.8,
-       "HIS": 0.05,
-       "AAPI": 0.1,
-       "BAIO": 0.05
-      },
-      "HIS": {
-       "WHI": 0.1,
-       "HIS": 0.8,
-       "AAPI": 0.05,
-       "BAIO": 0.05
-      },
-      "AAPI": {
-       "WHI": 0.15,
-       "HIS": 0.03,
-       "AAPI": 0.8,
-       "BAIO": 0.02
-      },
-      "BAIO": {
-       "WHI": 0.05,
-       "HIS": 0.1,
-       "AAPI": 0.05,
-       "BAIO": 0.8
-      }
-     },
-     "alphas": {
-      "WHI": {
-       "WHI": 1,
-       "BAIO": 1,
-       "HIS": 1,
-       "AAPI": 1
-      },
-      "HIS": {
-       "WHI": 1,
-       "BAIO": 1,
-       "HIS": 1,
-       "AAPI": 1
-      },
-      "AAPI": {
-       "WHI": 1,
-       "BAIO": 1,
-       "HIS": 1,
-       "AAPI": 1
-      },
-      "BAIO": {
-       "WHI": 1,
-       "BAIO": 1,
-       "HIS": 1,
-       "AAPI": 1
-      }
-     },
+     "cohesion": {},
+     "alphas": {},
      "data": {
       "run": "data/9x1-plurality/run.json",
       "focalSeats": "data/9x1-plurality/focal_seats.json",
@@ -31318,6 +31268,49 @@
    }
   },
   {
+   "run": "Nine Seats At-Large - STV (2 Blocs)",
+   "shape": "1 \u00d7 9",
+   "totalSeats": 9,
+   "rules": [
+    "STV",
+    "Limited",
+    "Cumulative"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative",
+    "Cambridge"
+   ],
+   "turnout": {
+    "WHI": 1,
+    "POC": 0.7
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 10,
+   "candidatePoolMax": 12,
+   "candidatePoolMean": 11,
+   "cohesion": {
+    "WHI": {
+     "WHI": 0.8,
+     "POC": 0.2
+    },
+    "POC": {
+     "WHI": 0.11,
+     "POC": 0.89
+    }
+   },
+   "alphas": {
+    "WHI": {
+     "WHI": 1,
+     "POC": 1
+    },
+    "POC": {
+     "WHI": 1,
+     "POC": 1
+    }
+   }
+  },
+  {
    "run": "Basic - 3 X 3 + Truncation (2 Blocs)",
    "shape": "3 \u00d7 3",
    "totalSeats": 9,
@@ -31655,6 +31648,47 @@
   {
    "run": "Basic - 3 X 5 (2 Blocs)",
    "shape": "3 \u00d7 5",
+   "totalSeats": 15,
+   "rules": [
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative",
+    "Cambridge"
+   ],
+   "turnout": {
+    "WHI": 1,
+    "POC": 0.7
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 6,
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7,
+   "cohesion": {
+    "WHI": {
+     "WHI": 0.8,
+     "POC": 0.2
+    },
+    "POC": {
+     "WHI": 0.11,
+     "POC": 0.89
+    }
+   },
+   "alphas": {
+    "WHI": {
+     "WHI": 1,
+     "POC": 1
+    },
+    "POC": {
+     "WHI": 1,
+     "POC": 1
+    }
+   }
+  },
+  {
+   "run": "Basic - 5 X 3 (2 Blocs)",
+   "shape": "5 \u00d7 3",
    "totalSeats": 15,
    "rules": [
     "STV"
@@ -32300,156 +32334,6 @@
    }
   },
   {
-   "run": "Hybrid System - 3x4 STV + 1x3 Plurality",
-   "shape": "3 \u00d7 4",
-   "totalSeats": 15,
-   "rules": [
-    "STV",
-    "Plurality"
-   ],
-   "voterModels": [
-    "Impulsive",
-    "Deliberative"
-   ],
-   "turnout": {
-    "AAPI": 0.7,
-    "BAIO": 0.9,
-    "HIS": 0.6,
-    "WHI": 1
-   },
-   "primaryTurnout": null,
-   "candidatePoolMin": 5,
-   "candidatePoolMax": 10,
-   "candidatePoolMean": 7,
-   "cohesion": {
-    "WHI": {
-     "WHI": 0.8,
-     "HIS": 0.05,
-     "AAPI": 0.1,
-     "BAIO": 0.05
-    },
-    "HIS": {
-     "WHI": 0.1,
-     "HIS": 0.8,
-     "AAPI": 0.05,
-     "BAIO": 0.05
-    },
-    "AAPI": {
-     "WHI": 0.15,
-     "HIS": 0.03,
-     "AAPI": 0.8,
-     "BAIO": 0.02
-    },
-    "BAIO": {
-     "WHI": 0.05,
-     "HIS": 0.1,
-     "AAPI": 0.05,
-     "BAIO": 0.8
-    }
-   },
-   "alphas": {
-    "WHI": {
-     "WHI": 1,
-     "BAIO": 1,
-     "HIS": 1,
-     "AAPI": 1
-    },
-    "HIS": {
-     "WHI": 1,
-     "BAIO": 1,
-     "HIS": 1,
-     "AAPI": 1
-    },
-    "AAPI": {
-     "WHI": 1,
-     "BAIO": 1,
-     "HIS": 1,
-     "AAPI": 1
-    },
-    "BAIO": {
-     "WHI": 1,
-     "BAIO": 1,
-     "HIS": 1,
-     "AAPI": 1
-    }
-   }
-  },
-  {
-   "run": "Hybrid System - 3x4 STV + 1x3 Plurality",
-   "shape": "1 \u00d7 3",
-   "totalSeats": 15,
-   "rules": [
-    "STV",
-    "Plurality"
-   ],
-   "voterModels": [
-    "Impulsive",
-    "Deliberative"
-   ],
-   "turnout": {
-    "AAPI": 0.7,
-    "BAIO": 0.9,
-    "HIS": 0.6,
-    "WHI": 1
-   },
-   "primaryTurnout": null,
-   "candidatePoolMin": 5,
-   "candidatePoolMax": 15,
-   "candidatePoolMean": 10,
-   "cohesion": {
-    "WHI": {
-     "WHI": 0.8,
-     "HIS": 0.05,
-     "AAPI": 0.1,
-     "BAIO": 0.05
-    },
-    "HIS": {
-     "WHI": 0.1,
-     "HIS": 0.8,
-     "AAPI": 0.05,
-     "BAIO": 0.05
-    },
-    "AAPI": {
-     "WHI": 0.15,
-     "HIS": 0.03,
-     "AAPI": 0.8,
-     "BAIO": 0.02
-    },
-    "BAIO": {
-     "WHI": 0.05,
-     "HIS": 0.1,
-     "AAPI": 0.05,
-     "BAIO": 0.8
-    }
-   },
-   "alphas": {
-    "WHI": {
-     "WHI": 1,
-     "BAIO": 1,
-     "HIS": 1,
-     "AAPI": 1
-    },
-    "HIS": {
-     "WHI": 1,
-     "BAIO": 1,
-     "HIS": 1,
-     "AAPI": 1
-    },
-    "AAPI": {
-     "WHI": 1,
-     "BAIO": 1,
-     "HIS": 1,
-     "AAPI": 1
-    },
-    "BAIO": {
-     "WHI": 1,
-     "BAIO": 1,
-     "HIS": 1,
-     "AAPI": 1
-    }
-   }
-  },
-  {
    "run": "Low AAPI Availability",
    "shape": "3 \u00d7 3",
    "totalSeats": 9,
@@ -32542,80 +32426,6 @@
    },
    "primaryTurnout": null,
    "candidatePoolMin": 4,
-   "candidatePoolMax": 10,
-   "candidatePoolMean": 7,
-   "cohesion": {
-    "WHI": {
-     "WHI": 0.8,
-     "HIS": 0.05,
-     "AAPI": 0.1,
-     "BAIO": 0.05
-    },
-    "HIS": {
-     "WHI": 0.1,
-     "HIS": 0.8,
-     "AAPI": 0.05,
-     "BAIO": 0.05
-    },
-    "AAPI": {
-     "WHI": 0.15,
-     "HIS": 0.03,
-     "AAPI": 0.8,
-     "BAIO": 0.02
-    },
-    "BAIO": {
-     "WHI": 0.05,
-     "HIS": 0.1,
-     "AAPI": 0.05,
-     "BAIO": 0.8
-    }
-   },
-   "alphas": {
-    "WHI": {
-     "WHI": 1,
-     "BAIO": 1,
-     "HIS": 1,
-     "AAPI": 1
-    },
-    "HIS": {
-     "WHI": 1,
-     "BAIO": 1,
-     "HIS": 1,
-     "AAPI": 1
-    },
-    "AAPI": {
-     "WHI": 1,
-     "BAIO": 1,
-     "HIS": 1,
-     "AAPI": 1
-    },
-    "BAIO": {
-     "WHI": 1,
-     "BAIO": 1,
-     "HIS": 1,
-     "AAPI": 1
-    }
-   }
-  },
-  {
-   "run": "9x1 Plurality",
-   "shape": "9 \u00d7 1",
-   "totalSeats": 9,
-   "rules": [
-    "Plurality"
-   ],
-   "voterModels": [
-    "Impulsive",
-    "Deliberative"
-   ],
-   "turnout": {
-    "AAPI": 0.7,
-    "BAIO": 0.9,
-    "HIS": 0.6,
-    "WHI": 1
-   },
-   "primaryTurnout": null,
-   "candidatePoolMin": 2,
    "candidatePoolMax": 10,
    "candidatePoolMean": 7,
    "cohesion": {
