@@ -58,9 +58,10 @@
             <a class="nav-link" href="#run-basic-3-x-3-2-blocs">Basic - 3 X 3 (2 Blocs)</a>
             <a class="nav-link" href="#run-3x5-stv">3x5 STV</a>
             <a class="nav-link" href="#run-basic-3-x-5-2-blocs">Basic - 3 X 5 (2 Blocs)</a>
-            <a class="nav-link" href="#run-5x3-stv">5x3 STV</a>
-            <a class="nav-link" href="#run-basic-5-x-3-2-blocs">Basic - 5 X 3 (2 Blocs)</a>
+            <a class="nav-link" href="#run-city-charter-amendment-proposal">City Charter Amendment Proposal</a>
+            <a class="nav-link" href="#run-city-charter-amendment-proposal-2-blocs">City Charter Amendment Proposal (2 Blocs)</a>
             <a class="nav-link" href="#run-alternative-electoral-systems">Alternative Electoral Systems</a>
+            <a class="nav-link" href="#run-hybrid-system-3x4-stv-1x3-plurality">Hybrid System - 3x4 STV + 1x3 Plurality</a>
           </nav>
           <a class="nav-link" href="#comparison">Cross-Run Comparison</a>
         </nav>
@@ -168,7 +169,7 @@ This report seeks to work with the most recent demographic data from 2020 Census
 <p>Note that while we attempt to maintain consistency in modeling decisions between the two-bloc and four-bloc siulations, these are fundamentally different approaches in the analysis of electoral systems. For instance, it's possible that the combined POC bloc has enough voter share and crossover support to achieve proportional representation within a given electoral system - and the reader might interpret that all constituent groups within achieve their own share of seats by virtue of belonging to the whole, which is not necessarily true. With the four-bloc approach, we do get to see the outcomes for each bloc individually - with the caveat that each bloc has its own cohesion, turnout, and dirichlet parameters set that changes how crossover and within-slate support functions. Additionally, because we take an &quot;exaggerated proportion&quot; approach to per-slate candidate availability, the stochastic generation of candidates in the overall pool may lead to instances in which votes get split between two minority candidates in such a way that leads to a seat being lost in a particular district. We present this (admittedly contrived) example not as a defintiive explanation of the exact differences between two and four-bloc modeling, but as a point of caution when interpreting and comparing simulated election outcomes between the two.</p>
 <h3>3.2.2 Demographic Table</h3>
 <p>The voting bloc variables were constructed using Decennial Census variables from 2020 following the <a href="https://data-democracy.org/VAP-CVAP">bloc classification methodology</a> of MGGG.</p>
-<p>The six census categories below partition San Diego's voting-age population of 1,125,087. Every category is assigned to exactly one bloc, so the blocs sum to the whole electorate and no resident is counted twice or left out.</p>
+<p>The six census categories below partition San Diego's voting-age population of 1,125,087. Every category is assigned to exactly one bloc, so the blocs sum to the whole electorate and no resident is counted twice or left out. Both models carry American Indian and other-race voters with White voters in the WAIO bloc; they differ only in whether the remaining groups vote as one bloc or three.</p>
 <table>
 <thead>
 <tr>
@@ -184,8 +185,8 @@ This report seeks to work with the most recent demographic data from 2020 Census
   <td>White</td>
   <td style="text-align:right">492,810</td>
   <td style="text-align:right">43.80%</td>
-  <td>WHI</td>
-  <td>WHI</td>
+  <td>WAIO</td>
+  <td>WAIO</td>
 </tr>
 <tr>
   <td>Hispanic</td>
@@ -205,22 +206,22 @@ This report seeks to work with the most recent demographic data from 2020 Census
   <td>Black</td>
   <td style="text-align:right">79,988</td>
   <td style="text-align:right">7.11%</td>
-  <td>BAIO</td>
+  <td>BLK</td>
   <td>POC</td>
 </tr>
 <tr>
   <td>Other race</td>
   <td style="text-align:right">14,593</td>
   <td style="text-align:right">1.30%</td>
-  <td>BAIO</td>
-  <td>WHI</td>
+  <td>WAIO</td>
+  <td>WAIO</td>
 </tr>
 <tr>
   <td>American Indian</td>
   <td style="text-align:right">8,833</td>
   <td style="text-align:right">0.79%</td>
-  <td>BAIO</td>
-  <td>WHI</td>
+  <td>WAIO</td>
+  <td>WAIO</td>
 </tr>
 <tr>
   <td><strong>Total</strong></td>
@@ -231,8 +232,8 @@ This report seeks to work with the most recent demographic data from 2020 Census
 </tr>
 </tbody>
 </table>
-<p>Two groupings are used across the study. The <strong>four-bloc model</strong> treats White, Hispanic, and Asian voters as separate blocs and folds the three smallest categories — Black, American Indian, and other race — into a single BAIO bloc, giving bloc shares of 43.80% WHI, 26.57% HIS, 20.43% AAPI, and 9.19% BAIO. The <strong>two-bloc model</strong> instead sets White voters against a combined bloc of Black, Hispanic, and Asian voters, with American Indian and other-race voters carried by the White bloc: 45.88% WHI against 54.12% POC.</p>
-<p>The difference is not only one of labels. Under the four-bloc model, BAIO is a residual category whose cohesion and turnout parameters describe three populations at once; the two-bloc model asks instead whether a coalition of minority voters can elect candidates of its choice, which is the question these simulations are built around.</p>
+<p>Two groupings are used across the study. The <strong>four-bloc model</strong> gives Hispanic, Asian, and Black voters a bloc each alongside WAIO, producing bloc shares of 45.88% WAIO, 26.57% HIS, 20.43% AAPI, and 7.11% BLK. The <strong>two-bloc model</strong> keeps WAIO exactly as it is and combines the other three into a single POC bloc: 45.88% WAIO against 54.12% POC.</p>
+<p>The difference is not only one of labels. The four-bloc model needs a cohesion matrix asserting how each minority bloc behaves toward the other two; the two-bloc model asks instead whether a coalition of minority voters can elect candidates of its choice, which is the question these simulations are built around.</p>
 <h2>3.3 Candidate Availability and Pool Size</h2>
 <p>The decision to simulate candidate availability per-district for each voting bloc relies on evidence found from previous San Diego City council elections. For instance, the last three San Diego City Council Elections had a pattern where candidates representing the Asian and Black community run only in the districts where their own community makes up a larger share of voters across districts (<a href="https://en.wikipedia.org/wiki/2020_San_Diego_elections">2020</a>, <a href="https://en.wikipedia.org/wiki/2022_San_Diego_City_Council_election">2022</a>, <a href="https://en.wikipedia.org/wiki/2024_San_Diego_elections">2024</a>). Analyzing the bloc distribution of San Diego 9-district plan, District 4 and 6 have the highest shares of Black and Asian communities, respectively, and candidates running in those district are predominantly from those same communitities. Likewise, it is not common to find candidates from Asian and Black running on districts with a low share of their own communities.</p>
 <p>Similarly, evidence suggest that the number of candidate or pool size that runs for each district is not homogenous. Last 20 years of elections, the distribution of candidates running per district is diverse. On primaries, the average number of candidate is 3.5, where there has been districts bellow the mean with only 1 candidate running and districts above with 9 candidates.</p>
@@ -264,19 +265,19 @@ $$</div>
 <p>It should be noted that because the Cambridge Sampler voter model is built on historical election data, it only supports two slates of candidates. Therefore, we opt to exclude it from our four-bloc simulations - though it does get included in the two-bloc simulations.</p>
 </blockquote>
 <h3>Cohesion Matrices</h3>
-<p>Rows are voter blocs, columns are candidate slates; each row sums to 1. A cell is the probability that a voter of that bloc gives their support to a candidate of that slate, so the diagonal is within-group cohesion and the off-diagonal entries describe crossover.</p>
-<p><strong>Two-bloc simulations.</strong> White voters against a combined bloc of Black, Hispanic, and Asian/NHPI voters:</p>
+<p>Rows are voter blocs, columns are candidate slates; each row sums to 1. A cell is the probability that a voter of that bloc supports a candidate of that slate, so the diagonal is within-group cohesion and the off-diagonal entries describe crossover.</p>
+<p><strong>Two-bloc simulations.</strong></p>
 <table>
 <thead>
 <tr>
   <th>bloc ↓ / slate →</th>
-  <th>WHI</th>
+  <th>WAIO</th>
   <th>POC</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td><strong>WHI</strong> (White, American Indian, other race)</td>
+  <td><strong>WAIO</strong> (White, American Indian, other race)</td>
   <td>0.80</td>
   <td>0.20</td>
 </tr>
@@ -287,21 +288,21 @@ $$</div>
 </tr>
 </tbody>
 </table>
-<p>The POC bloc is modelled as slightly more cohesive than the White bloc — 0.89 against 0.80 — which is what allows it to win a share of seats above its share of the modelled electorate in several scenarios, despite lower turnout.</p>
-<p><strong>Four-bloc simulations.</strong> Note that BAIO is not the Black bloc alone: it combines Black, American Indian, and other-race voters into one group.</p>
+<p>The POC bloc is modelled as slightly more cohesive than WAIO — 0.89 against 0.80 — which is what lets it win a share of seats above its share of the modelled electorate in several scenarios, despite lower turnout.</p>
+<p><strong>Four-bloc simulations.</strong></p>
 <table>
 <thead>
 <tr>
   <th>bloc ↓ / slate →</th>
-  <th>WHI</th>
+  <th>WAIO</th>
   <th>HIS</th>
   <th>AAPI</th>
-  <th>BAIO</th>
+  <th>BLK</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td><strong>WHI</strong> (White)</td>
+  <td><strong>WAIO</strong> (White, American Indian, other race)</td>
   <td>0.80</td>
   <td>0.05</td>
   <td>0.10</td>
@@ -322,7 +323,7 @@ $$</div>
   <td>0.02</td>
 </tr>
 <tr>
-  <td><strong>BAIO</strong> (Black, American Indian, other race)</td>
+  <td><strong>BLK</strong> (Black)</td>
   <td>0.05</td>
   <td>0.10</td>
   <td>0.05</td>
@@ -330,15 +331,15 @@ $$</div>
 </tr>
 </tbody>
 </table>
-<p>This matrix is used by the Basic scenarios and their variations — Basic 3 × 3, 3 × 5, Truncation, Diverse Preferences, Low Availability, and Low Turnout. The Alternative Electoral Systems, Fifteen Seats At-Large, and City Charter Amendment Proposal scenarios use the same matrix with one row differing: their Hispanic bloc splits its crossover 0.05 to WHI and 0.10 to BAIO, rather than 0.10 and 0.05.</p>
+<p>This matrix is used by the Basic scenarios and their variations — Basic 3 × 3, 3 × 5, 5 × 3, Truncation, Diverse Preferences, Low Availability, and Low Turnout. The Alternative Electoral Systems, At-Large, IRV, and City Charter Amendment Proposal scenarios use the same matrix with one row differing: their Hispanic bloc splits its crossover 0.05 to WAIO and 0.10 to BLK, rather than 0.10 and 0.05.</p>
 <table>
 <thead>
 <tr>
   <th>bloc ↓ / slate →</th>
-  <th>WHI</th>
+  <th>WAIO</th>
   <th>HIS</th>
   <th>AAPI</th>
-  <th>BAIO</th>
+  <th>BLK</th>
 </tr>
 </thead>
 <tbody>
@@ -598,95 +599,95 @@ $$</div>
             </div>
             <aside class="run-params" data-params="basic-3-x-5-2-blocs"></aside>
           </section>
-          <section id="run-5x3-stv" class="run mb-5" data-run="5x3-stv">
+          <section id="run-city-charter-amendment-proposal" class="run mb-5" data-run="city-charter-amendment-proposal">
             <div class="run-main">
-            <h3 class="h4 mt-4">5x3 STV</h3>
+            <h3 class="h4 mt-4">City Charter Amendment Proposal</h3>
             <p class="todo">[Description to be written — edit
-               <code>docs/prose/runs/5x3-stv.md</code>.]</p>
+               <code>docs/prose/runs/city-charter-amendment-proposal.md</code>.]</p>
 
-            <div class="run-controls" data-controls="5x3-stv"></div>
+            <div class="run-controls" data-controls="city-charter-amendment-proposal"></div>
 
             <ul class="nav nav-tabs" role="tablist">
               <li class="nav-item" role="presentation">
                 <button class="nav-link active" data-bs-toggle="tab"
-                        data-bs-target="#5x3-stv-focal" type="button" role="tab">
+                        data-bs-target="#city-charter-amendment-proposal-focal" type="button" role="tab">
                   Seat outcomes
                 </button>
               </li>
               <li class="nav-item" role="presentation">
                 <button class="nav-link" data-bs-toggle="tab"
-                        data-bs-target="#5x3-stv-availability" type="button" role="tab">
+                        data-bs-target="#city-charter-amendment-proposal-availability" type="button" role="tab">
                   Districts by VAP rank
                 </button>
               </li>
             </ul>
             <div class="tab-content pt-3">
-              <div class="tab-pane fade show active" id="5x3-stv-focal" role="tabpanel">
-                <div class="metric-toggles" data-view="5x3-stv"></div>
-                <div class="row g-4 figure-pair" data-one-group="5x3-stv">
+              <div class="tab-pane fade show active" id="city-charter-amendment-proposal-focal" role="tabpanel">
+                <div class="metric-toggles" data-view="city-charter-amendment-proposal"></div>
+                <div class="row g-4 figure-pair" data-one-group="city-charter-amendment-proposal">
                   <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="bubble" data-run="5x3-stv"></div>
+                    <div class="chart" data-chart="bubble" data-run="city-charter-amendment-proposal"></div>
                   </div>
                   <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="histogram" data-run="5x3-stv"></div>
+                    <div class="chart" data-chart="histogram" data-run="city-charter-amendment-proposal"></div>
                   </div>
                 </div>
-                <div data-all-groups="5x3-stv" hidden>
-                  <div class="chart" data-chart="slate" data-run="5x3-stv"></div>
+                <div data-all-groups="city-charter-amendment-proposal" hidden>
+                  <div class="chart" data-chart="slate" data-run="city-charter-amendment-proposal"></div>
                 </div>
               </div>
-              <div class="tab-pane fade" id="5x3-stv-availability" role="tabpanel">
-                <div class="metric-toggles" data-metric="5x3-stv"></div>
-                <div class="chart" data-chart="availability" data-run="5x3-stv"></div>
+              <div class="tab-pane fade" id="city-charter-amendment-proposal-availability" role="tabpanel">
+                <div class="metric-toggles" data-metric="city-charter-amendment-proposal"></div>
+                <div class="chart" data-chart="availability" data-run="city-charter-amendment-proposal"></div>
               </div>
             </div>
             </div>
-            <aside class="run-params" data-params="5x3-stv"></aside>
+            <aside class="run-params" data-params="city-charter-amendment-proposal"></aside>
           </section>
-          <section id="run-basic-5-x-3-2-blocs" class="run mb-5" data-run="basic-5-x-3-2-blocs">
+          <section id="run-city-charter-amendment-proposal-2-blocs" class="run mb-5" data-run="city-charter-amendment-proposal-2-blocs">
             <div class="run-main">
-            <h3 class="h4 mt-4">Basic - 5 X 3 (2 Blocs)</h3>
+            <h3 class="h4 mt-4">City Charter Amendment Proposal (2 Blocs)</h3>
             <p class="todo">[Description to be written — edit
-               <code>docs/prose/runs/basic-5-x-3-2-blocs.md</code>.]</p>
+               <code>docs/prose/runs/city-charter-amendment-proposal-2-blocs.md</code>.]</p>
 
-            <div class="run-controls" data-controls="basic-5-x-3-2-blocs"></div>
+            <div class="run-controls" data-controls="city-charter-amendment-proposal-2-blocs"></div>
 
             <ul class="nav nav-tabs" role="tablist">
               <li class="nav-item" role="presentation">
                 <button class="nav-link active" data-bs-toggle="tab"
-                        data-bs-target="#basic-5-x-3-2-blocs-focal" type="button" role="tab">
+                        data-bs-target="#city-charter-amendment-proposal-2-blocs-focal" type="button" role="tab">
                   Seat outcomes
                 </button>
               </li>
               <li class="nav-item" role="presentation">
                 <button class="nav-link" data-bs-toggle="tab"
-                        data-bs-target="#basic-5-x-3-2-blocs-availability" type="button" role="tab">
+                        data-bs-target="#city-charter-amendment-proposal-2-blocs-availability" type="button" role="tab">
                   Districts by VAP rank
                 </button>
               </li>
             </ul>
             <div class="tab-content pt-3">
-              <div class="tab-pane fade show active" id="basic-5-x-3-2-blocs-focal" role="tabpanel">
-                <div class="metric-toggles" data-view="basic-5-x-3-2-blocs"></div>
-                <div class="row g-4 figure-pair" data-one-group="basic-5-x-3-2-blocs">
+              <div class="tab-pane fade show active" id="city-charter-amendment-proposal-2-blocs-focal" role="tabpanel">
+                <div class="metric-toggles" data-view="city-charter-amendment-proposal-2-blocs"></div>
+                <div class="row g-4 figure-pair" data-one-group="city-charter-amendment-proposal-2-blocs">
                   <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="bubble" data-run="basic-5-x-3-2-blocs"></div>
+                    <div class="chart" data-chart="bubble" data-run="city-charter-amendment-proposal-2-blocs"></div>
                   </div>
                   <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="histogram" data-run="basic-5-x-3-2-blocs"></div>
+                    <div class="chart" data-chart="histogram" data-run="city-charter-amendment-proposal-2-blocs"></div>
                   </div>
                 </div>
-                <div data-all-groups="basic-5-x-3-2-blocs" hidden>
-                  <div class="chart" data-chart="slate" data-run="basic-5-x-3-2-blocs"></div>
+                <div data-all-groups="city-charter-amendment-proposal-2-blocs" hidden>
+                  <div class="chart" data-chart="slate" data-run="city-charter-amendment-proposal-2-blocs"></div>
                 </div>
               </div>
-              <div class="tab-pane fade" id="basic-5-x-3-2-blocs-availability" role="tabpanel">
-                <div class="metric-toggles" data-metric="basic-5-x-3-2-blocs"></div>
-                <div class="chart" data-chart="availability" data-run="basic-5-x-3-2-blocs"></div>
+              <div class="tab-pane fade" id="city-charter-amendment-proposal-2-blocs-availability" role="tabpanel">
+                <div class="metric-toggles" data-metric="city-charter-amendment-proposal-2-blocs"></div>
+                <div class="chart" data-chart="availability" data-run="city-charter-amendment-proposal-2-blocs"></div>
               </div>
             </div>
             </div>
-            <aside class="run-params" data-params="basic-5-x-3-2-blocs"></aside>
+            <aside class="run-params" data-params="city-charter-amendment-proposal-2-blocs"></aside>
           </section>
           <section id="run-alternative-electoral-systems" class="run mb-5" data-run="alternative-electoral-systems">
             <div class="run-main">
@@ -733,6 +734,51 @@ $$</div>
             </div>
             <aside class="run-params" data-params="alternative-electoral-systems"></aside>
           </section>
+          <section id="run-hybrid-system-3x4-stv-1x3-plurality" class="run mb-5" data-run="hybrid-system-3x4-stv-1x3-plurality">
+            <div class="run-main">
+            <h3 class="h4 mt-4">Hybrid System - 3x4 STV + 1x3 Plurality</h3>
+            <p class="todo">[Description to be written — edit
+               <code>docs/prose/runs/hybrid-system-3x4-stv-1x3-plurality.md</code>.]</p>
+
+            <div class="run-controls" data-controls="hybrid-system-3x4-stv-1x3-plurality"></div>
+
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="tab"
+                        data-bs-target="#hybrid-system-3x4-stv-1x3-plurality-focal" type="button" role="tab">
+                  Seat outcomes
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab"
+                        data-bs-target="#hybrid-system-3x4-stv-1x3-plurality-availability" type="button" role="tab">
+                  Districts by VAP rank
+                </button>
+              </li>
+            </ul>
+            <div class="tab-content pt-3">
+              <div class="tab-pane fade show active" id="hybrid-system-3x4-stv-1x3-plurality-focal" role="tabpanel">
+                <div class="metric-toggles" data-view="hybrid-system-3x4-stv-1x3-plurality"></div>
+                <div class="row g-4 figure-pair" data-one-group="hybrid-system-3x4-stv-1x3-plurality">
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="bubble" data-run="hybrid-system-3x4-stv-1x3-plurality"></div>
+                  </div>
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="histogram" data-run="hybrid-system-3x4-stv-1x3-plurality"></div>
+                  </div>
+                </div>
+                <div data-all-groups="hybrid-system-3x4-stv-1x3-plurality" hidden>
+                  <div class="chart" data-chart="slate" data-run="hybrid-system-3x4-stv-1x3-plurality"></div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="hybrid-system-3x4-stv-1x3-plurality-availability" role="tabpanel">
+                <div class="metric-toggles" data-metric="hybrid-system-3x4-stv-1x3-plurality"></div>
+                <div class="chart" data-chart="availability" data-run="hybrid-system-3x4-stv-1x3-plurality"></div>
+              </div>
+            </div>
+            </div>
+            <aside class="run-params" data-params="hybrid-system-3x4-stv-1x3-plurality"></aside>
+          </section>
         </section>
 
         <section id="comparison" class="mb-5">
@@ -748,7 +794,7 @@ $$</div>
     <div class="container-xl text-center">
       <p class="mb-1">Metric Geometry &amp; Gerrymandering Group — San Diego City Council Election Analysis</p>
       <p class="mb-1"><a href="https://github.com/mggg/San-Diego-Election-Analysis" target="_blank" rel="noopener">View the repository on GitHub</a></p>
-      <p class="generated mb-0">Generated 2026-08-20T17:25:12+00:00</p>
+      <p class="generated mb-0">Generated 2026-08-20T17:29:20+00:00</p>
     </div>
   </footer>
 

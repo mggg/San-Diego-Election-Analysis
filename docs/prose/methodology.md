@@ -37,21 +37,21 @@ Note that while we attempt to maintain consistency in modeling decisions between
 
 The voting bloc variables were constructed using Decennial Census variables from 2020 following the [bloc classification methodology](https://data-democracy.org/VAP-CVAP) of MGGG.
 
-The six census categories below partition San Diego's voting-age population of 1,125,087. Every category is assigned to exactly one bloc, so the blocs sum to the whole electorate and no resident is counted twice or left out.
+The six census categories below partition San Diego's voting-age population of 1,125,087. Every category is assigned to exactly one bloc, so the blocs sum to the whole electorate and no resident is counted twice or left out. Both models carry American Indian and other-race voters with White voters in the WAIO bloc; they differ only in whether the remaining groups vote as one bloc or three.
 
 | Demographic group | VAP | Share of VAP | Four-bloc model | Two-bloc model |
 | --- | ---: | ---: | --- | --- |
-| White | 492,810 | 43.80% | WHI | WHI |
+| White | 492,810 | 43.80% | WAIO | WAIO |
 | Hispanic | 298,979 | 26.57% | HIS | POC |
 | Asian / Native Hawaiian & Pacific Islander | 229,884 | 20.43% | AAPI | POC |
-| Black | 79,988 | 7.11% | BAIO | POC |
-| Other race | 14,593 | 1.30% | BAIO | WHI |
-| American Indian | 8,833 | 0.79% | BAIO | WHI |
+| Black | 79,988 | 7.11% | BLK | POC |
+| Other race | 14,593 | 1.30% | WAIO | WAIO |
+| American Indian | 8,833 | 0.79% | WAIO | WAIO |
 | **Total** | **1,125,087** | **100.00%** | | |
 
-Two groupings are used across the study. The **four-bloc model** treats White, Hispanic, and Asian voters as separate blocs and folds the three smallest categories — Black, American Indian, and other race — into a single BAIO bloc, giving bloc shares of 43.80% WHI, 26.57% HIS, 20.43% AAPI, and 9.19% BAIO. The **two-bloc model** instead sets White voters against a combined bloc of Black, Hispanic, and Asian voters, with American Indian and other-race voters carried by the White bloc: 45.88% WHI against 54.12% POC.
+Two groupings are used across the study. The **four-bloc model** gives Hispanic, Asian, and Black voters a bloc each alongside WAIO, producing bloc shares of 45.88% WAIO, 26.57% HIS, 20.43% AAPI, and 7.11% BLK. The **two-bloc model** keeps WAIO exactly as it is and combines the other three into a single POC bloc: 45.88% WAIO against 54.12% POC.
 
-The difference is not only one of labels. Under the four-bloc model, BAIO is a residual category whose cohesion and turnout parameters describe three populations at once; the two-bloc model asks instead whether a coalition of minority voters can elect candidates of its choice, which is the question these simulations are built around.
+The difference is not only one of labels. The four-bloc model needs a cohesion matrix asserting how each minority bloc behaves toward the other two; the two-bloc model asks instead whether a coalition of minority voters can elect candidates of its choice, which is the question these simulations are built around.
 
 ## 3.3 Candidate Availability and Pool Size
 
@@ -103,28 +103,29 @@ Cambridge Sampler utilizes historical ballot data in the form of Cast Vote Recor
 
 ### Cohesion Matrices
 
-Rows are voter blocs, columns are candidate slates; each row sums to 1. A cell is the probability that a voter of that bloc gives their support to a candidate of that slate, so the diagonal is within-group cohesion and the off-diagonal entries describe crossover.
+Rows are voter blocs, columns are candidate slates; each row sums to 1. A cell is the probability that a voter of that bloc supports a candidate of that slate, so the diagonal is within-group cohesion and the off-diagonal entries describe crossover.
 
-**Two-bloc simulations.** White voters against a combined bloc of Black, Hispanic, and Asian/NHPI voters:
+**Two-bloc simulations.**
 
-| bloc ↓ / slate → | WHI | POC |
+| bloc ↓ / slate → | WAIO | POC |
 |---|---|---|
-| **WHI** (White, American Indian, other race) | 0.80 | 0.20 |
+| **WAIO** (White, American Indian, other race) | 0.80 | 0.20 |
 | **POC** (Black, Hispanic, Asian/NHPI) | 0.11 | 0.89 |
 
+The POC bloc is modelled as slightly more cohesive than WAIO — 0.89 against 0.80 — which is what lets it win a share of seats above its share of the modelled electorate in several scenarios, despite lower turnout.
 
-**Four-bloc simulations.** Note that BAIO is not the Black bloc alone: it combines Black, American Indian, and other-race voters into one group.
+**Four-bloc simulations.**
 
-| bloc ↓ / slate → | WHI | HIS | AAPI | BAIO |
+| bloc ↓ / slate → | WAIO | HIS | AAPI | BLK |
 |---|---|---|---|---|
-| **WHI** (White) | 0.80 | 0.05 | 0.10 | 0.05 |
+| **WAIO** (White, American Indian, other race) | 0.80 | 0.05 | 0.10 | 0.05 |
 | **HIS** (Hispanic) | 0.10 | 0.80 | 0.05 | 0.05 |
 | **AAPI** (Asian/NHPI) | 0.15 | 0.03 | 0.80 | 0.02 |
-| **BAIO** (Black, American Indian, other race) | 0.05 | 0.10 | 0.05 | 0.80 |
+| **BLK** (Black) | 0.05 | 0.10 | 0.05 | 0.80 |
 
-This matrix is used by the Basic scenarios and their variations — Basic 3 × 3, 3 × 5, Truncation, Diverse Preferences, Low Availability, and Low Turnout. The Alternative Electoral Systems, Fifteen Seats At-Large, and City Charter Amendment Proposal scenarios use the same matrix with one row differing: their Hispanic bloc splits its crossover 0.05 to WHI and 0.10 to BAIO, rather than 0.10 and 0.05.
+This matrix is used by the Basic scenarios and their variations — Basic 3 × 3, 3 × 5, 5 × 3, Truncation, Diverse Preferences, Low Availability, and Low Turnout. The Alternative Electoral Systems, At-Large, IRV, and City Charter Amendment Proposal scenarios use the same matrix with one row differing: their Hispanic bloc splits its crossover 0.05 to WAIO and 0.10 to BLK, rather than 0.10 and 0.05.
 
-| bloc ↓ / slate → | WHI | HIS | AAPI | BAIO |
+| bloc ↓ / slate → | WAIO | HIS | AAPI | BLK |
 |---|---|---|---|---|
 | **HIS** (Hispanic) — variant row | 0.05 | 0.80 | 0.05 | 0.10 |
 
@@ -139,6 +140,7 @@ To capture this behavior, we introduce a truncation process calibrated to real r
 Finally, the PL and BT preference profiles are truncated to a ballot length sampled from the historical distribution corresponding to each ballot's minority or majority group.
 
 ## 3.6 Voting Rules
+
 Elections for each district are simulated using VoteKit's Elections module. We use the following voting rules with the corresponding district configurations:
 
 | Voting Rule | District Configs | Seats/District | Description |
@@ -146,8 +148,5 @@ Elections for each district are simulated using VoteKit's Elections module. We u
 | **Plurality** | 9 × 1 | 1 (single-winner) | Voters' first choices are tallied and the candidate with the most votes wins outright — no majority required.|
 | **IRV** (Instant-Runoff Voting) | 9 × 1 | 1 (single-winner) | The single-winner case of STV: last-place candidates are eliminated round by round and their ballots transferred to the next-ranked choice until one candidate holds a majority. |
 | **STV** (Single Transferable Vote) | 3 × 3, 1 × 9 (at-large) | 3 or 9 (multi-winner) | Multi-winner ranked-choice rule using the Droop quota: candidates reaching the quota are elected and their surplus is redistributed, while last-place candidates are eliminated and transferred, until all seats are filled. |
-| **Cumulative** | 3 × 3, 1 × 9 (at-large) | 3 or 9 (multi-winner) | Score-based multi-winner rule where each voter receives a budget equal to the number of seats and can distribute those points across candidates however they like, including stacking all of them on a single favorite; the top point-getters win. |
-| **Limited** | 3 × 3, 1 × 9 (at-large) | 3 or 9 (multi-winner) | Score-based multi-winner rule identical to Cumulative except each voter's budget is capped below the number of seats (2 of 3 for the 3 × 3 config, 5 of 9 for at-large), so voters cannot concentrate every point on one candidate. |
-| **Two-round rules** (Alaska- and Top-Two-style) | 9 × 1 | 1 (single-winner) | A PSMD primary narrows the field to a fixed number of finalists ($m_1$ = 4 for the Alaska-style rule, 2 for the Top-Two-style rule), a new ballot profile is resampled over just those finalists, and the general round decides the winner via STV (Alaska-style) or Plurality (Top-Two-style). |
 
 For each system, tiebreaks are performed randomly when needed.

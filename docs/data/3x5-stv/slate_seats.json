@@ -11,7 +11,7 @@
   "slateLabel": "AAPI",
   "slateVapShare": 0.20432553215884638,
   "seats": 0,
-  "plans": 54.5
+  "plans": 39.5
  },
  {
   "system": "FASTSTV",
@@ -25,7 +25,7 @@
   "slateLabel": "AAPI",
   "slateVapShare": 0.20432553215884638,
   "seats": 1,
-  "plans": 342.0
+  "plans": 263.5
  },
  {
   "system": "FASTSTV",
@@ -39,7 +39,7 @@
   "slateLabel": "AAPI",
   "slateVapShare": 0.20432553215884638,
   "seats": 2,
-  "plans": 339.5
+  "plans": 445.0
  },
  {
   "system": "FASTSTV",
@@ -53,7 +53,7 @@
   "slateLabel": "AAPI",
   "slateVapShare": 0.20432553215884638,
   "seats": 3,
-  "plans": 217.0
+  "plans": 198.0
  },
  {
   "system": "FASTSTV",
@@ -67,7 +67,7 @@
   "slateLabel": "AAPI",
   "slateVapShare": 0.20432553215884638,
   "seats": 4,
-  "plans": 44.5
+  "plans": 49.0
  },
  {
   "system": "FASTSTV",
@@ -81,7 +81,7 @@
   "slateLabel": "AAPI",
   "slateVapShare": 0.20432553215884638,
   "seats": 5,
-  "plans": 2.5
+  "plans": 5.0
  },
  {
   "system": "FASTSTV",
@@ -95,8 +95,8 @@
   "slateLabel": "AAPI",
   "slateVapShare": 0.20432553215884638,
   "seats": 0,
-  "plans": 69.0,
-  "share": 0.069
+  "plans": 59.0,
+  "share": 0.059
  },
  {
   "system": "FASTSTV",
@@ -110,8 +110,8 @@
   "slateLabel": "AAPI",
   "slateVapShare": 0.20432553215884638,
   "seats": 1,
-  "plans": 435.0,
-  "share": 0.435
+  "plans": 350.0,
+  "share": 0.35
  },
  {
   "system": "FASTSTV",
@@ -125,8 +125,8 @@
   "slateLabel": "AAPI",
   "slateVapShare": 0.20432553215884638,
   "seats": 2,
-  "plans": 346.0,
-  "share": 0.346
+  "plans": 453.0,
+  "share": 0.453
  },
  {
   "system": "FASTSTV",
@@ -140,8 +140,8 @@
   "slateLabel": "AAPI",
   "slateVapShare": 0.20432553215884638,
   "seats": 3,
-  "plans": 130.0,
-  "share": 0.13
+  "plans": 118.0,
+  "share": 0.118
  },
  {
   "system": "FASTSTV",
@@ -170,8 +170,8 @@
   "slateLabel": "AAPI",
   "slateVapShare": 0.20432553215884638,
   "seats": 0,
-  "plans": 40.0,
-  "share": 0.04
+  "plans": 20.0,
+  "share": 0.02
  },
  {
   "system": "FASTSTV",
@@ -185,8 +185,8 @@
   "slateLabel": "AAPI",
   "slateVapShare": 0.20432553215884638,
   "seats": 1,
-  "plans": 249.0,
-  "share": 0.249
+  "plans": 177.0,
+  "share": 0.177
  },
  {
   "system": "FASTSTV",
@@ -200,8 +200,8 @@
   "slateLabel": "AAPI",
   "slateVapShare": 0.20432553215884638,
   "seats": 2,
-  "plans": 333.0,
-  "share": 0.333
+  "plans": 437.0,
+  "share": 0.437
  },
  {
   "system": "FASTSTV",
@@ -215,8 +215,8 @@
   "slateLabel": "AAPI",
   "slateVapShare": 0.20432553215884638,
   "seats": 3,
-  "plans": 304.0,
-  "share": 0.304
+  "plans": 278.0,
+  "share": 0.278
  },
  {
   "system": "FASTSTV",
@@ -230,8 +230,8 @@
   "slateLabel": "AAPI",
   "slateVapShare": 0.20432553215884638,
   "seats": 4,
-  "plans": 69.0,
-  "share": 0.069
+  "plans": 78.0,
+  "share": 0.078
  },
  {
   "system": "FASTSTV",
@@ -245,8 +245,8 @@
   "slateLabel": "AAPI",
   "slateVapShare": 0.20432553215884638,
   "seats": 5,
-  "plans": 5.0,
-  "share": 0.005
+  "plans": 10.0,
+  "share": 0.01
  },
  {
   "system": "FASTSTV",
@@ -256,11 +256,11 @@
   "mode": "combined",
   "modeLabel": "Combined",
   "pooled": true,
-  "slate": "BLK",
-  "slateLabel": "BLK",
-  "slateVapShare": 0.07109494643525345,
+  "slate": "BAIO",
+  "slateLabel": "BAIO",
+  "slateVapShare": 0.0919164473502938,
   "seats": 0,
-  "plans": 768.0
+  "plans": 651.0
  },
  {
   "system": "FASTSTV",
@@ -270,11 +270,11 @@
   "mode": "combined",
   "modeLabel": "Combined",
   "pooled": true,
-  "slate": "BLK",
-  "slateLabel": "BLK",
-  "slateVapShare": 0.07109494643525345,
+  "slate": "BAIO",
+  "slateLabel": "BAIO",
+  "slateVapShare": 0.0919164473502938,
   "seats": 1,
-  "plans": 216.0
+  "plans": 278.5
  },
  {
   "system": "FASTSTV",
@@ -284,11 +284,11 @@
   "mode": "combined",
   "modeLabel": "Combined",
   "pooled": true,
-  "slate": "BLK",
-  "slateLabel": "BLK",
-  "slateVapShare": 0.07109494643525345,
+  "slate": "BAIO",
+  "slateLabel": "BAIO",
+  "slateVapShare": 0.0919164473502938,
   "seats": 2,
-  "plans": 12.5
+  "plans": 65.5
  },
  {
   "system": "FASTSTV",
@@ -298,11 +298,11 @@
   "mode": "combined",
   "modeLabel": "Combined",
   "pooled": true,
-  "slate": "BLK",
-  "slateLabel": "BLK",
-  "slateVapShare": 0.07109494643525345,
+  "slate": "BAIO",
+  "slateLabel": "BAIO",
+  "slateVapShare": 0.0919164473502938,
   "seats": 3,
-  "plans": 3.5
+  "plans": 5.0
  },
  {
   "system": "FASTSTV",
@@ -312,12 +312,12 @@
   "mode": "slate_bt",
   "modeLabel": "Deliberative",
   "pooled": false,
-  "slate": "BLK",
-  "slateLabel": "BLK",
-  "slateVapShare": 0.07109494643525345,
+  "slate": "BAIO",
+  "slateLabel": "BAIO",
+  "slateVapShare": 0.0919164473502938,
   "seats": 0,
-  "plans": 828.0,
-  "share": 0.828
+  "plans": 734.0,
+  "share": 0.734
  },
  {
   "system": "FASTSTV",
@@ -327,12 +327,12 @@
   "mode": "slate_bt",
   "modeLabel": "Deliberative",
   "pooled": false,
-  "slate": "BLK",
-  "slateLabel": "BLK",
-  "slateVapShare": 0.07109494643525345,
+  "slate": "BAIO",
+  "slateLabel": "BAIO",
+  "slateVapShare": 0.0919164473502938,
   "seats": 1,
-  "plans": 164.0,
-  "share": 0.164
+  "plans": 233.0,
+  "share": 0.233
  },
  {
   "system": "FASTSTV",
@@ -342,70 +342,212 @@
   "mode": "slate_bt",
   "modeLabel": "Deliberative",
   "pooled": false,
-  "slate": "BLK",
-  "slateLabel": "BLK",
-  "slateVapShare": 0.07109494643525345,
+  "slate": "BAIO",
+  "slateLabel": "BAIO",
+  "slateVapShare": 0.0919164473502938,
   "seats": 2,
-  "plans": 7.0,
-  "share": 0.007
+  "plans": 33.0,
+  "share": 0.033
  },
  {
   "system": "FASTSTV",
   "systemLabel": "3 X 5 STV",
   "numDistricts": 3,
   "winners": 5,
-  "mode": "slate_bt",
-  "modeLabel": "Deliberative",
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
   "pooled": false,
-  "slate": "BLK",
-  "slateLabel": "BLK",
-  "slateVapShare": 0.07109494643525345,
+  "slate": "BAIO",
+  "slateLabel": "BAIO",
+  "slateVapShare": 0.0919164473502938,
+  "seats": 0,
+  "plans": 568.0,
+  "share": 0.568
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "3 X 5 STV",
+  "numDistricts": 3,
+  "winners": 5,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "slate": "BAIO",
+  "slateLabel": "BAIO",
+  "slateVapShare": 0.0919164473502938,
+  "seats": 1,
+  "plans": 324.0,
+  "share": 0.324
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "3 X 5 STV",
+  "numDistricts": 3,
+  "winners": 5,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "slate": "BAIO",
+  "slateLabel": "BAIO",
+  "slateVapShare": 0.0919164473502938,
+  "seats": 2,
+  "plans": 98.0,
+  "share": 0.098
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "3 X 5 STV",
+  "numDistricts": 3,
+  "winners": 5,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "slate": "BAIO",
+  "slateLabel": "BAIO",
+  "slateVapShare": 0.0919164473502938,
   "seats": 3,
-  "plans": 1.0,
-  "share": 0.001
+  "plans": 10.0,
+  "share": 0.01
  },
  {
   "system": "FASTSTV",
   "systemLabel": "3 X 5 STV",
   "numDistricts": 3,
   "winners": 5,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
-  "pooled": false,
-  "slate": "BLK",
-  "slateLabel": "BLK",
-  "slateVapShare": 0.07109494643525345,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "slate": "HIS",
+  "slateLabel": "HIS",
+  "slateVapShare": 0.2657385606624199,
   "seats": 0,
-  "plans": 708.0,
-  "share": 0.708
+  "plans": 15.0
  },
  {
   "system": "FASTSTV",
   "systemLabel": "3 X 5 STV",
   "numDistricts": 3,
   "winners": 5,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
-  "pooled": false,
-  "slate": "BLK",
-  "slateLabel": "BLK",
-  "slateVapShare": 0.07109494643525345,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "slate": "HIS",
+  "slateLabel": "HIS",
+  "slateVapShare": 0.2657385606624199,
   "seats": 1,
-  "plans": 268.0,
-  "share": 0.268
+  "plans": 22.0
  },
  {
   "system": "FASTSTV",
   "systemLabel": "3 X 5 STV",
   "numDistricts": 3,
   "winners": 5,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
-  "pooled": false,
-  "slate": "BLK",
-  "slateLabel": "BLK",
-  "slateVapShare": 0.07109494643525345,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "slate": "HIS",
+  "slateLabel": "HIS",
+  "slateVapShare": 0.2657385606624199,
   "seats": 2,
+  "plans": 120.0
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "3 X 5 STV",
+  "numDistricts": 3,
+  "winners": 5,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "slate": "HIS",
+  "slateLabel": "HIS",
+  "slateVapShare": 0.2657385606624199,
+  "seats": 3,
+  "plans": 456.5
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "3 X 5 STV",
+  "numDistricts": 3,
+  "winners": 5,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "slate": "HIS",
+  "slateLabel": "HIS",
+  "slateVapShare": 0.2657385606624199,
+  "seats": 4,
+  "plans": 299.5
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "3 X 5 STV",
+  "numDistricts": 3,
+  "winners": 5,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "slate": "HIS",
+  "slateLabel": "HIS",
+  "slateVapShare": 0.2657385606624199,
+  "seats": 5,
+  "plans": 57.0
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "3 X 5 STV",
+  "numDistricts": 3,
+  "winners": 5,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "slate": "HIS",
+  "slateLabel": "HIS",
+  "slateVapShare": 0.2657385606624199,
+  "seats": 6,
+  "plans": 28.5
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "3 X 5 STV",
+  "numDistricts": 3,
+  "winners": 5,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "slate": "HIS",
+  "slateLabel": "HIS",
+  "slateVapShare": 0.2657385606624199,
+  "seats": 7,
+  "plans": 1.5
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "3 X 5 STV",
+  "numDistricts": 3,
+  "winners": 5,
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
+  "pooled": false,
+  "slate": "HIS",
+  "slateLabel": "HIS",
+  "slateVapShare": 0.2657385606624199,
+  "seats": 0,
+  "plans": 20.0,
+  "share": 0.02
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "3 X 5 STV",
+  "numDistricts": 3,
+  "winners": 5,
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
+  "pooled": false,
+  "slate": "HIS",
+  "slateLabel": "HIS",
+  "slateVapShare": 0.2657385606624199,
+  "seats": 1,
   "plans": 18.0,
   "share": 0.018
  },
@@ -414,120 +556,6 @@
   "systemLabel": "3 X 5 STV",
   "numDistricts": 3,
   "winners": 5,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
-  "pooled": false,
-  "slate": "BLK",
-  "slateLabel": "BLK",
-  "slateVapShare": 0.07109494643525345,
-  "seats": 3,
-  "plans": 6.0,
-  "share": 0.006
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "3 X 5 STV",
-  "numDistricts": 3,
-  "winners": 5,
-  "mode": "combined",
-  "modeLabel": "Combined",
-  "pooled": true,
-  "slate": "HIS",
-  "slateLabel": "HIS",
-  "slateVapShare": 0.2657385606624199,
-  "seats": 1,
-  "plans": 10.0
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "3 X 5 STV",
-  "numDistricts": 3,
-  "winners": 5,
-  "mode": "combined",
-  "modeLabel": "Combined",
-  "pooled": true,
-  "slate": "HIS",
-  "slateLabel": "HIS",
-  "slateVapShare": 0.2657385606624199,
-  "seats": 2,
-  "plans": 152.5
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "3 X 5 STV",
-  "numDistricts": 3,
-  "winners": 5,
-  "mode": "combined",
-  "modeLabel": "Combined",
-  "pooled": true,
-  "slate": "HIS",
-  "slateLabel": "HIS",
-  "slateVapShare": 0.2657385606624199,
-  "seats": 3,
-  "plans": 437.5
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "3 X 5 STV",
-  "numDistricts": 3,
-  "winners": 5,
-  "mode": "combined",
-  "modeLabel": "Combined",
-  "pooled": true,
-  "slate": "HIS",
-  "slateLabel": "HIS",
-  "slateVapShare": 0.2657385606624199,
-  "seats": 4,
-  "plans": 260.0
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "3 X 5 STV",
-  "numDistricts": 3,
-  "winners": 5,
-  "mode": "combined",
-  "modeLabel": "Combined",
-  "pooled": true,
-  "slate": "HIS",
-  "slateLabel": "HIS",
-  "slateVapShare": 0.2657385606624199,
-  "seats": 5,
-  "plans": 127.0
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "3 X 5 STV",
-  "numDistricts": 3,
-  "winners": 5,
-  "mode": "combined",
-  "modeLabel": "Combined",
-  "pooled": true,
-  "slate": "HIS",
-  "slateLabel": "HIS",
-  "slateVapShare": 0.2657385606624199,
-  "seats": 6,
-  "plans": 13.0
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "3 X 5 STV",
-  "numDistricts": 3,
-  "winners": 5,
-  "mode": "slate_bt",
-  "modeLabel": "Deliberative",
-  "pooled": false,
-  "slate": "HIS",
-  "slateLabel": "HIS",
-  "slateVapShare": 0.2657385606624199,
-  "seats": 1,
-  "plans": 10.0,
-  "share": 0.01
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "3 X 5 STV",
-  "numDistricts": 3,
-  "winners": 5,
   "mode": "slate_bt",
   "modeLabel": "Deliberative",
   "pooled": false,
@@ -535,8 +563,8 @@
   "slateLabel": "HIS",
   "slateVapShare": 0.2657385606624199,
   "seats": 2,
-  "plans": 160.0,
-  "share": 0.16
+  "plans": 112.0,
+  "share": 0.112
  },
  {
   "system": "FASTSTV",
@@ -550,8 +578,8 @@
   "slateLabel": "HIS",
   "slateVapShare": 0.2657385606624199,
   "seats": 3,
-  "plans": 461.0,
-  "share": 0.461
+  "plans": 475.0,
+  "share": 0.475
  },
  {
   "system": "FASTSTV",
@@ -565,8 +593,8 @@
   "slateLabel": "HIS",
   "slateVapShare": 0.2657385606624199,
   "seats": 4,
-  "plans": 255.0,
-  "share": 0.255
+  "plans": 298.0,
+  "share": 0.298
  },
  {
   "system": "FASTSTV",
@@ -580,8 +608,8 @@
   "slateLabel": "HIS",
   "slateVapShare": 0.2657385606624199,
   "seats": 5,
-  "plans": 101.0,
-  "share": 0.101
+  "plans": 57.0,
+  "share": 0.057
  },
  {
   "system": "FASTSTV",
@@ -595,8 +623,8 @@
   "slateLabel": "HIS",
   "slateVapShare": 0.2657385606624199,
   "seats": 6,
-  "plans": 13.0,
-  "share": 0.013
+  "plans": 20.0,
+  "share": 0.02
  },
  {
   "system": "FASTSTV",
@@ -609,7 +637,7 @@
   "slate": "HIS",
   "slateLabel": "HIS",
   "slateVapShare": 0.2657385606624199,
-  "seats": 1,
+  "seats": 0,
   "plans": 10.0,
   "share": 0.01
  },
@@ -624,9 +652,24 @@
   "slate": "HIS",
   "slateLabel": "HIS",
   "slateVapShare": 0.2657385606624199,
+  "seats": 1,
+  "plans": 26.0,
+  "share": 0.026
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "3 X 5 STV",
+  "numDistricts": 3,
+  "winners": 5,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "slate": "HIS",
+  "slateLabel": "HIS",
+  "slateVapShare": 0.2657385606624199,
   "seats": 2,
-  "plans": 145.0,
-  "share": 0.145
+  "plans": 128.0,
+  "share": 0.128
  },
  {
   "system": "FASTSTV",
@@ -640,8 +683,8 @@
   "slateLabel": "HIS",
   "slateVapShare": 0.2657385606624199,
   "seats": 3,
-  "plans": 414.0,
-  "share": 0.414
+  "plans": 438.0,
+  "share": 0.438
  },
  {
   "system": "FASTSTV",
@@ -655,8 +698,8 @@
   "slateLabel": "HIS",
   "slateVapShare": 0.2657385606624199,
   "seats": 4,
-  "plans": 265.0,
-  "share": 0.265
+  "plans": 301.0,
+  "share": 0.301
  },
  {
   "system": "FASTSTV",
@@ -670,8 +713,8 @@
   "slateLabel": "HIS",
   "slateVapShare": 0.2657385606624199,
   "seats": 5,
-  "plans": 153.0,
-  "share": 0.153
+  "plans": 57.0,
+  "share": 0.057
  },
  {
   "system": "FASTSTV",
@@ -685,8 +728,23 @@
   "slateLabel": "HIS",
   "slateVapShare": 0.2657385606624199,
   "seats": 6,
-  "plans": 13.0,
-  "share": 0.013
+  "plans": 37.0,
+  "share": 0.037
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "3 X 5 STV",
+  "numDistricts": 3,
+  "winners": 5,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "slate": "HIS",
+  "slateLabel": "HIS",
+  "slateVapShare": 0.2657385606624199,
+  "seats": 7,
+  "plans": 3.0,
+  "share": 0.003
  },
  {
   "system": "FASTSTV",
@@ -696,11 +754,11 @@
   "mode": "combined",
   "modeLabel": "Combined",
   "pooled": true,
-  "slate": "WAIO",
-  "slateLabel": "WAIO",
-  "slateVapShare": 0.4588409607434803,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
   "seats": 5,
-  "plans": 0.5
+  "plans": 5.0
  },
  {
   "system": "FASTSTV",
@@ -710,11 +768,11 @@
   "mode": "combined",
   "modeLabel": "Combined",
   "pooled": true,
-  "slate": "WAIO",
-  "slateLabel": "WAIO",
-  "slateVapShare": 0.4588409607434803,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
   "seats": 6,
-  "plans": 14.5
+  "plans": 8.0
  },
  {
   "system": "FASTSTV",
@@ -724,11 +782,11 @@
   "mode": "combined",
   "modeLabel": "Combined",
   "pooled": true,
-  "slate": "WAIO",
-  "slateLabel": "WAIO",
-  "slateVapShare": 0.4588409607434803,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
   "seats": 7,
-  "plans": 54.0
+  "plans": 87.5
  },
  {
   "system": "FASTSTV",
@@ -738,11 +796,11 @@
   "mode": "combined",
   "modeLabel": "Combined",
   "pooled": true,
-  "slate": "WAIO",
-  "slateLabel": "WAIO",
-  "slateVapShare": 0.4588409607434803,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
   "seats": 8,
-  "plans": 168.5
+  "plans": 166.5
  },
  {
   "system": "FASTSTV",
@@ -752,11 +810,11 @@
   "mode": "combined",
   "modeLabel": "Combined",
   "pooled": true,
-  "slate": "WAIO",
-  "slateLabel": "WAIO",
-  "slateVapShare": 0.4588409607434803,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
   "seats": 9,
-  "plans": 229.0
+  "plans": 298.0
  },
  {
   "system": "FASTSTV",
@@ -766,11 +824,11 @@
   "mode": "combined",
   "modeLabel": "Combined",
   "pooled": true,
-  "slate": "WAIO",
-  "slateLabel": "WAIO",
-  "slateVapShare": 0.4588409607434803,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
   "seats": 10,
-  "plans": 285.5
+  "plans": 226.0
  },
  {
   "system": "FASTSTV",
@@ -780,11 +838,11 @@
   "mode": "combined",
   "modeLabel": "Combined",
   "pooled": true,
-  "slate": "WAIO",
-  "slateLabel": "WAIO",
-  "slateVapShare": 0.4588409607434803,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
   "seats": 11,
-  "plans": 202.0
+  "plans": 171.0
  },
  {
   "system": "FASTSTV",
@@ -794,11 +852,39 @@
   "mode": "combined",
   "modeLabel": "Combined",
   "pooled": true,
-  "slate": "WAIO",
-  "slateLabel": "WAIO",
-  "slateVapShare": 0.4588409607434803,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
   "seats": 12,
-  "plans": 46.0
+  "plans": 28.5
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "3 X 5 STV",
+  "numDistricts": 3,
+  "winners": 5,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
+  "seats": 13,
+  "plans": 4.5
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "3 X 5 STV",
+  "numDistricts": 3,
+  "winners": 5,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
+  "seats": 14,
+  "plans": 5.0
  },
  {
   "system": "FASTSTV",
@@ -808,12 +894,27 @@
   "mode": "slate_bt",
   "modeLabel": "Deliberative",
   "pooled": false,
-  "slate": "WAIO",
-  "slateLabel": "WAIO",
-  "slateVapShare": 0.4588409607434803,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
+  "seats": 6,
+  "plans": 10.0,
+  "share": 0.01
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "3 X 5 STV",
+  "numDistricts": 3,
+  "winners": 5,
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
+  "pooled": false,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
   "seats": 7,
-  "plans": 38.0,
-  "share": 0.038
+  "plans": 63.0,
+  "share": 0.063
  },
  {
   "system": "FASTSTV",
@@ -823,70 +924,10 @@
   "mode": "slate_bt",
   "modeLabel": "Deliberative",
   "pooled": false,
-  "slate": "WAIO",
-  "slateLabel": "WAIO",
-  "slateVapShare": 0.4588409607434803,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
   "seats": 8,
-  "plans": 105.0,
-  "share": 0.105
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "3 X 5 STV",
-  "numDistricts": 3,
-  "winners": 5,
-  "mode": "slate_bt",
-  "modeLabel": "Deliberative",
-  "pooled": false,
-  "slate": "WAIO",
-  "slateLabel": "WAIO",
-  "slateVapShare": 0.4588409607434803,
-  "seats": 9,
-  "plans": 196.0,
-  "share": 0.196
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "3 X 5 STV",
-  "numDistricts": 3,
-  "winners": 5,
-  "mode": "slate_bt",
-  "modeLabel": "Deliberative",
-  "pooled": false,
-  "slate": "WAIO",
-  "slateLabel": "WAIO",
-  "slateVapShare": 0.4588409607434803,
-  "seats": 10,
-  "plans": 304.0,
-  "share": 0.304
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "3 X 5 STV",
-  "numDistricts": 3,
-  "winners": 5,
-  "mode": "slate_bt",
-  "modeLabel": "Deliberative",
-  "pooled": false,
-  "slate": "WAIO",
-  "slateLabel": "WAIO",
-  "slateVapShare": 0.4588409607434803,
-  "seats": 11,
-  "plans": 288.0,
-  "share": 0.288
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "3 X 5 STV",
-  "numDistricts": 3,
-  "winners": 5,
-  "mode": "slate_bt",
-  "modeLabel": "Deliberative",
-  "pooled": false,
-  "slate": "WAIO",
-  "slateLabel": "WAIO",
-  "slateVapShare": 0.4588409607434803,
-  "seats": 12,
   "plans": 69.0,
   "share": 0.069
  },
@@ -895,105 +936,90 @@
   "systemLabel": "3 X 5 STV",
   "numDistricts": 3,
   "winners": 5,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
   "pooled": false,
-  "slate": "WAIO",
-  "slateLabel": "WAIO",
-  "slateVapShare": 0.4588409607434803,
-  "seats": 5,
-  "plans": 1.0,
-  "share": 0.001
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "3 X 5 STV",
-  "numDistricts": 3,
-  "winners": 5,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
-  "pooled": false,
-  "slate": "WAIO",
-  "slateLabel": "WAIO",
-  "slateVapShare": 0.4588409607434803,
-  "seats": 6,
-  "plans": 29.0,
-  "share": 0.029
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "3 X 5 STV",
-  "numDistricts": 3,
-  "winners": 5,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
-  "pooled": false,
-  "slate": "WAIO",
-  "slateLabel": "WAIO",
-  "slateVapShare": 0.4588409607434803,
-  "seats": 7,
-  "plans": 70.0,
-  "share": 0.07
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "3 X 5 STV",
-  "numDistricts": 3,
-  "winners": 5,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
-  "pooled": false,
-  "slate": "WAIO",
-  "slateLabel": "WAIO",
-  "slateVapShare": 0.4588409607434803,
-  "seats": 8,
-  "plans": 232.0,
-  "share": 0.232
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "3 X 5 STV",
-  "numDistricts": 3,
-  "winners": 5,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
-  "pooled": false,
-  "slate": "WAIO",
-  "slateLabel": "WAIO",
-  "slateVapShare": 0.4588409607434803,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
   "seats": 9,
-  "plans": 262.0,
-  "share": 0.262
+  "plans": 298.0,
+  "share": 0.298
  },
  {
   "system": "FASTSTV",
   "systemLabel": "3 X 5 STV",
   "numDistricts": 3,
   "winners": 5,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
   "pooled": false,
-  "slate": "WAIO",
-  "slateLabel": "WAIO",
-  "slateVapShare": 0.4588409607434803,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
   "seats": 10,
-  "plans": 267.0,
-  "share": 0.267
+  "plans": 245.0,
+  "share": 0.245
  },
  {
   "system": "FASTSTV",
   "systemLabel": "3 X 5 STV",
   "numDistricts": 3,
   "winners": 5,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
   "pooled": false,
-  "slate": "WAIO",
-  "slateLabel": "WAIO",
-  "slateVapShare": 0.4588409607434803,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
   "seats": 11,
-  "plans": 116.0,
-  "share": 0.116
+  "plans": 247.0,
+  "share": 0.247
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "3 X 5 STV",
+  "numDistricts": 3,
+  "winners": 5,
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
+  "pooled": false,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
+  "seats": 12,
+  "plans": 49.0,
+  "share": 0.049
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "3 X 5 STV",
+  "numDistricts": 3,
+  "winners": 5,
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
+  "pooled": false,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
+  "seats": 13,
+  "plans": 9.0,
+  "share": 0.009
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "3 X 5 STV",
+  "numDistricts": 3,
+  "winners": 5,
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
+  "pooled": false,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
+  "seats": 14,
+  "plans": 10.0,
+  "share": 0.01
  },
  {
   "system": "FASTSTV",
@@ -1003,11 +1029,116 @@
   "mode": "slate_pl",
   "modeLabel": "Impulsive",
   "pooled": false,
-  "slate": "WAIO",
-  "slateLabel": "WAIO",
-  "slateVapShare": 0.4588409607434803,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
+  "seats": 5,
+  "plans": 10.0,
+  "share": 0.01
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "3 X 5 STV",
+  "numDistricts": 3,
+  "winners": 5,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
+  "seats": 6,
+  "plans": 6.0,
+  "share": 0.006
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "3 X 5 STV",
+  "numDistricts": 3,
+  "winners": 5,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
+  "seats": 7,
+  "plans": 112.0,
+  "share": 0.112
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "3 X 5 STV",
+  "numDistricts": 3,
+  "winners": 5,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
+  "seats": 8,
+  "plans": 264.0,
+  "share": 0.264
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "3 X 5 STV",
+  "numDistricts": 3,
+  "winners": 5,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
+  "seats": 9,
+  "plans": 298.0,
+  "share": 0.298
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "3 X 5 STV",
+  "numDistricts": 3,
+  "winners": 5,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
+  "seats": 10,
+  "plans": 207.0,
+  "share": 0.207
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "3 X 5 STV",
+  "numDistricts": 3,
+  "winners": 5,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
+  "seats": 11,
+  "plans": 95.0,
+  "share": 0.095
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "3 X 5 STV",
+  "numDistricts": 3,
+  "winners": 5,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "slate": "WHI",
+  "slateLabel": "WHI",
+  "slateVapShare": 0.4380194598284399,
   "seats": 12,
-  "plans": 23.0,
-  "share": 0.023
+  "plans": 8.0,
+  "share": 0.008
  }
 ]

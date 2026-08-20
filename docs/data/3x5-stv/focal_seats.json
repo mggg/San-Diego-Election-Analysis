@@ -8,8 +8,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 0,
-  "plans": 768.0,
-  "share": 0.768
+  "plans": 651.0,
+  "share": 0.651
  },
  {
   "system": "FASTSTV",
@@ -20,8 +20,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 1,
-  "plans": 216.0,
-  "share": 0.216
+  "plans": 278.5,
+  "share": 0.2785
  },
  {
   "system": "FASTSTV",
@@ -32,8 +32,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 2,
-  "plans": 12.5,
-  "share": 0.0125
+  "plans": 65.5,
+  "share": 0.0655
  },
  {
   "system": "FASTSTV",
@@ -44,8 +44,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 3,
-  "plans": 3.5,
-  "share": 0.0035
+  "plans": 5.0,
+  "share": 0.005
  },
  {
   "system": "FASTSTV",
@@ -56,8 +56,8 @@
   "modeLabel": "Deliberative",
   "pooled": false,
   "seats": 0,
-  "plans": 828.0,
-  "share": 0.828
+  "plans": 734.0,
+  "share": 0.734
  },
  {
   "system": "FASTSTV",
@@ -68,8 +68,8 @@
   "modeLabel": "Deliberative",
   "pooled": false,
   "seats": 1,
-  "plans": 164.0,
-  "share": 0.164
+  "plans": 233.0,
+  "share": 0.233
  },
  {
   "system": "FASTSTV",
@@ -80,20 +80,8 @@
   "modeLabel": "Deliberative",
   "pooled": false,
   "seats": 2,
-  "plans": 7.0,
-  "share": 0.007
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "3 X 5 STV",
-  "numDistricts": 3,
-  "winners": 5,
-  "mode": "slate_bt",
-  "modeLabel": "Deliberative",
-  "pooled": false,
-  "seats": 3,
-  "plans": 1.0,
-  "share": 0.001
+  "plans": 33.0,
+  "share": 0.033
  },
  {
   "system": "FASTSTV",
@@ -104,8 +92,8 @@
   "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 0,
-  "plans": 708.0,
-  "share": 0.708
+  "plans": 568.0,
+  "share": 0.568
  },
  {
   "system": "FASTSTV",
@@ -116,8 +104,8 @@
   "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 1,
-  "plans": 268.0,
-  "share": 0.268
+  "plans": 324.0,
+  "share": 0.324
  },
  {
   "system": "FASTSTV",
@@ -128,8 +116,8 @@
   "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 2,
-  "plans": 18.0,
-  "share": 0.018
+  "plans": 98.0,
+  "share": 0.098
  },
  {
   "system": "FASTSTV",
@@ -140,7 +128,7 @@
   "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 3,
-  "plans": 6.0,
-  "share": 0.006
+  "plans": 10.0,
+  "share": 0.01
  }
 ]
