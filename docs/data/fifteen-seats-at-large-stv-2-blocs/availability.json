@@ -1,0 +1,182 @@
+{
+ "boxes": [
+  {
+   "slate": "POC",
+   "slateLabel": "POC",
+   "slateVapShare": 0.5411590392565198,
+   "numDistricts": 1,
+   "winners": 15,
+   "restricted": false,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 100,
+     "q1": 54.1159,
+     "median": 54.1159,
+     "q3": 54.1159,
+     "low": 54.1159,
+     "high": 54.1159,
+     "mean": 54.1159,
+     "outliers": []
+    }
+   ],
+   "overallMean": 54.1159,
+   "plans": 100
+  },
+  {
+   "slate": "POC",
+   "slateLabel": "POC",
+   "slateVapShare": 0.5411590392565198,
+   "numDistricts": 1,
+   "winners": 15,
+   "restricted": true,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 100,
+     "q1": 54.1159,
+     "median": 54.1159,
+     "q3": 54.1159,
+     "low": 54.1159,
+     "high": 54.1159,
+     "mean": 54.1159,
+     "outliers": []
+    }
+   ],
+   "overallMean": 54.1159,
+   "plans": 100
+  },
+  {
+   "slate": "WAIO",
+   "slateLabel": "WAIO",
+   "slateVapShare": 0.4588409607434803,
+   "numDistricts": 1,
+   "winners": 15,
+   "restricted": false,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 100,
+     "q1": 45.8841,
+     "median": 45.8841,
+     "q3": 45.8841,
+     "low": 45.8841,
+     "high": 45.8841,
+     "mean": 45.8841,
+     "outliers": []
+    }
+   ],
+   "overallMean": 45.8841,
+   "plans": 100
+  },
+  {
+   "slate": "WAIO",
+   "slateLabel": "WAIO",
+   "slateVapShare": 0.4588409607434803,
+   "numDistricts": 1,
+   "winners": 15,
+   "restricted": true,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 100,
+     "q1": 45.8841,
+     "median": 45.8841,
+     "q3": 45.8841,
+     "low": 45.8841,
+     "high": 45.8841,
+     "mean": 45.8841,
+     "outliers": []
+    }
+   ],
+   "overallMean": 45.8841,
+   "plans": 100
+  }
+ ],
+ "colors": [
+  {
+   "slate": "POC",
+   "slateLabel": "POC",
+   "slateVapShare": 0.5411590392565198,
+   "numDistricts": 1,
+   "winners": 15,
+   "metric": "availability",
+   "label": "Avg. POC candidates per district",
+   "format": "count",
+   "zeroLabel": "No POC candidate at this rank",
+   "restricted": false,
+   "values": [
+    {
+     "rank": 1,
+     "value": 12.73,
+     "candidates": 1273,
+     "districts": 100
+    }
+   ]
+  },
+  {
+   "slate": "POC",
+   "slateLabel": "POC",
+   "slateVapShare": 0.5411590392565198,
+   "numDistricts": 1,
+   "winners": 15,
+   "metric": "winRate",
+   "system": "FASTSTV",
+   "systemLabel": "1 X 15 STV",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No POC winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 1,
+     "value": 100.0,
+     "won": 3000,
+     "contests": 3000
+    }
+   ]
+  },
+  {
+   "slate": "WAIO",
+   "slateLabel": "WAIO",
+   "slateVapShare": 0.4588409607434803,
+   "numDistricts": 1,
+   "winners": 15,
+   "metric": "availability",
+   "label": "Avg. WAIO candidates per district",
+   "format": "count",
+   "zeroLabel": "No WAIO candidate at this rank",
+   "restricted": false,
+   "values": [
+    {
+     "rank": 1,
+     "value": 9.28,
+     "candidates": 928,
+     "districts": 100
+    }
+   ]
+  },
+  {
+   "slate": "WAIO",
+   "slateLabel": "WAIO",
+   "slateVapShare": 0.4588409607434803,
+   "numDistricts": 1,
+   "winners": 15,
+   "metric": "winRate",
+   "system": "FASTSTV",
+   "systemLabel": "1 X 15 STV",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No WAIO winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 1,
+     "value": 100.0,
+     "won": 3000,
+     "contests": 3000
+    }
+   ]
+  }
+ ]
+}

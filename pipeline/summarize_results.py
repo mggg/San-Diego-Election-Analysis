@@ -288,7 +288,7 @@ def _focal_population_share(config, gdf) -> float:
     The numerator is the focal group's own VAP columns, summed, which is the
     only definition that survives a change of bloc model: pop_of_interest_column
     names one column, and a group spanning several (POC = Black + Hispanic +
-    Asian/NHPI, WHI = White + American Indian + other) cannot be expressed as
+    Asian/NHPI, WAIO = White + American Indian + other) cannot be expressed as
     one. Reading it from that field instead drew every reference line at the
     share of whichever single group the project happened to be configured
     around, however the run defined its focal group. Falls back to

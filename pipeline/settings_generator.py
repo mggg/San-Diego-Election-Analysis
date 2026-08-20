@@ -18,7 +18,7 @@ allows more than two blocs and coalitions of groups voting together.
   population_column, and the complement is the single non-focal group.
 * Coalition / multi-bloc model (config has a "blocs" entry): voter blocs and
   candidate slates are independent axes. "blocs" maps each voter bloc to the
-  demographic groups it aggregates (e.g. {"WHI-POC": ["WHI", "POC"]}), each
+  demographic groups it aggregates (e.g. {"WAIO-POC": ["WAIO", "POC"]}), each
   demographic group resolves to one or
   more VAP columns via "group_vap_columns" (or DEFAULT_GROUP_VAP_COLUMNS), and
   each bloc's proportion is its turnout-weighted summed VAP normalized across
@@ -27,7 +27,7 @@ allows more than two blocs and coalitions of groups voting together.
   describe the (independent) candidate slates.
 
 Population is combined at two levels, in this order: a demographic group sums
-its VAP columns (WHI = White + American Indian + other races), then a bloc sums
+its VAP columns (WAIO = White + American Indian + other races), then a bloc sums
 its groups. Both are recorded in every settings file.
 slate_to_candidates is not passed through statically -- each district gets its
 own randomly-sized slate_to_candidates, apportioned across slates in
@@ -60,7 +60,7 @@ from pipeline.utils.helpers import (
 # combine several census categories. Override per-run with a
 # "group_vap_columns" entry if your groups or column names differ.
 #
-# This default describes the two-bloc model: WHI is White with American Indian
+# This default describes the two-bloc model: WAIO is White with American Indian
 # and other-race VAP folded in, and POC is Black, Hispanic and Asian/NHPI
 # together. The earlier four-group split modelled each minority group as voting
 # on its own, which meant a cohesion matrix asserting how each behaved toward
@@ -68,19 +68,19 @@ from pipeline.utils.helpers import (
 # about -- whether a system lets a coalition of minority voters elect candidates
 # of its choice -- without those assertions.
 #
-# WARNING for the four-bloc runs: they use WHI too, but theirs is White *alone*,
-# with American Indian and other-race VAP carried by BAIO. One label, two
-# meanings, so every four-bloc config states its own "group_vap_columns" rather
-# than inheriting this -- a config that forgets to would silently be regrouped,
-# and nothing downstream would notice because both mappings partition the
-# electorate perfectly well. Anything beyond these two models should likewise
-# spell out its own columns.
+# WARNING for the four-bloc runs: they use WAIO too, but theirs folds in only
+# American Indian and other-race VAP -- Black VAP there is its own bloc, BLK,
+# not part of WAIO. One label, two meanings, so every four-bloc config states
+# its own "group_vap_columns" rather than inheriting this -- a config that
+# forgets to would silently be regrouped, and nothing downstream would notice
+# because both mappings partition the electorate perfectly well. Anything
+# beyond these two models should likewise spell out its own columns.
 #
 # Every VAP column is claimed by exactly one group, so the two partition the
 # electorate; get_group_vap_columns enforces that, and a column left out of both
 # would quietly shrink every share computed from them.
 DEFAULT_GROUP_VAP_COLUMNS = {
-    "WHI": ["white_vap_20", "amin_vap_20", "other_vap_20"],
+    "WAIO": ["white_vap_20", "amin_vap_20", "other_vap_20"],
     "POC": ["bvap_20", "hvap_20", "asian_nhpi_vap_20"],
 }
 
@@ -116,7 +116,7 @@ def get_group_vap_columns(config, demographic_groups):
     DEFAULT_GROUP_VAP_COLUMNS. A group's entry may be a single column name or a
     list of columns; either way it is normalized to a list, and a group's VAP is
     the sum over that list. This is what lets one group span several census
-    categories (WHI = White + American Indian + other races).
+    categories (WAIO = White + American Indian + other races).
 
     Args:
         config: Parsed config dict.
@@ -354,7 +354,7 @@ def _build_slate_to_candidates(row, slate_columns, candidate_count, config):
 
     Returns:
         Dict mapping each slate with a nonzero count to a list of candidate ids,
-        e.g. {"WHI": ["WHI1", "WHI2"]}.
+        e.g. {"WAIO": ["WAIO1", "WAIO2"]}.
     """
     slates = list(slate_columns)
     weighted = {s: sum(float(row[column]) for column in slate_columns[s]) for s in slates}
@@ -496,7 +496,7 @@ def _build_district_settings(row, config, group_columns, bloc_definitions):
         the same districts under the narrowing round's lower turnout.
     """
     # A group's VAP is the sum over its columns, so a multi-column group like
-    # WHI (White + American Indian + other) is combined before anything else
+    # WAIO (White + American Indian + other) is combined before anything else
     # uses it.
     group_vap = {
         group: sum(float(row[column]) for column in columns)
@@ -565,7 +565,7 @@ def generate_settings(config):
 
     population_data = gpd.read_file(config['geodata_path'])
     # group_columns / slate_columns map each label to a *list* of columns (a group
-    # like WHI spans several), so flatten before de-duplicating.
+    # like WAIO spans several), so flatten before de-duplicating.
     needed_columns = list(dict.fromkeys(
         [c for columns in group_columns.values() for c in columns]
         + [c for columns in slate_columns.values() for c in columns]
