@@ -58,7 +58,10 @@
   "num_reps": 10,
 "cambridge_truncation": {
     "enabled": true,
+    "method":"bounded",
     "majority_slates": ["WHI"],
-    "minority_slates": ["POC"]
+    "minority_slates": ["POC"],
+    "min_length":3,
+    "max_length":6
   }
 }
