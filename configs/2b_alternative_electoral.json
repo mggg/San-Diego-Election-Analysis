@@ -49,7 +49,7 @@
     "WAIO": 1
   },
   "num_voters": 10000,
-  "focal_group": "WAIO",
+  "focal_group": "POC",
   "cohesion_parameters": {
     "POC": {
       "POC": 0.89,

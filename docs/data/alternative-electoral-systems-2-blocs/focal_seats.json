@@ -7,9 +7,21 @@
   "mode": "cambridge",
   "modeLabel": "Cambridge",
   "pooled": false,
+  "seats": 0,
+  "plans": 56.0,
+  "share": 0.056
+ },
+ {
+  "system": "IRV",
+  "systemLabel": "15 X 1 IRV",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "cambridge",
+  "modeLabel": "Cambridge",
+  "pooled": false,
   "seats": 1,
-  "plans": 20.0,
-  "share": 0.02
+  "plans": 167.0,
+  "share": 0.167
  },
  {
   "system": "IRV",
@@ -20,8 +32,8 @@
   "modeLabel": "Cambridge",
   "pooled": false,
   "seats": 2,
-  "plans": 70.0,
-  "share": 0.07
+  "plans": 230.0,
+  "share": 0.23
  },
  {
   "system": "IRV",
@@ -32,8 +44,8 @@
   "modeLabel": "Cambridge",
   "pooled": false,
   "seats": 3,
-  "plans": 197.0,
-  "share": 0.197
+  "plans": 242.0,
+  "share": 0.242
  },
  {
   "system": "IRV",
@@ -44,8 +56,8 @@
   "modeLabel": "Cambridge",
   "pooled": false,
   "seats": 4,
-  "plans": 206.0,
-  "share": 0.206
+  "plans": 167.0,
+  "share": 0.167
  },
  {
   "system": "IRV",
@@ -56,8 +68,8 @@
   "modeLabel": "Cambridge",
   "pooled": false,
   "seats": 5,
-  "plans": 252.0,
-  "share": 0.252
+  "plans": 84.0,
+  "share": 0.084
  },
  {
   "system": "IRV",
@@ -68,8 +80,8 @@
   "modeLabel": "Cambridge",
   "pooled": false,
   "seats": 6,
-  "plans": 172.0,
-  "share": 0.172
+  "plans": 40.0,
+  "share": 0.04
  },
  {
   "system": "IRV",
@@ -80,8 +92,8 @@
   "modeLabel": "Cambridge",
   "pooled": false,
   "seats": 7,
-  "plans": 54.0,
-  "share": 0.054
+  "plans": 12.0,
+  "share": 0.012
  },
  {
   "system": "IRV",
@@ -92,32 +104,20 @@
   "modeLabel": "Cambridge",
   "pooled": false,
   "seats": 8,
-  "plans": 18.0,
-  "share": 0.018
+  "plans": 2.0,
+  "share": 0.002
  },
  {
   "system": "IRV",
   "systemLabel": "15 X 1 IRV",
   "numDistricts": 15,
   "winners": 1,
-  "mode": "cambridge",
-  "modeLabel": "Cambridge",
-  "pooled": false,
-  "seats": 9,
-  "plans": 10.0,
-  "share": 0.01
- },
- {
-  "system": "IRV",
-  "systemLabel": "15 X 1 IRV",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "cambridge",
-  "modeLabel": "Cambridge",
-  "pooled": false,
-  "seats": 10,
-  "plans": 1.0,
-  "share": 0.001
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "seats": 0,
+  "plans": 18.666666666666668,
+  "share": 0.018666666666666665
  },
  {
   "system": "IRV",
@@ -128,116 +128,116 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 1,
+  "plans": 55.666666666666664,
+  "share": 0.055666666666666656
+ },
+ {
+  "system": "IRV",
+  "systemLabel": "15 X 1 IRV",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "seats": 2,
+  "plans": 76.66666666666667,
+  "share": 0.07666666666666666
+ },
+ {
+  "system": "IRV",
+  "systemLabel": "15 X 1 IRV",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "seats": 3,
+  "plans": 80.66666666666667,
+  "share": 0.08066666666666666
+ },
+ {
+  "system": "IRV",
+  "systemLabel": "15 X 1 IRV",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "seats": 4,
+  "plans": 57.33333333333333,
+  "share": 0.05733333333333332
+ },
+ {
+  "system": "IRV",
+  "systemLabel": "15 X 1 IRV",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "seats": 5,
+  "plans": 55.666666666666664,
+  "share": 0.055666666666666656
+ },
+ {
+  "system": "IRV",
+  "systemLabel": "15 X 1 IRV",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "seats": 6,
+  "plans": 241.33333333333334,
+  "share": 0.24133333333333332
+ },
+ {
+  "system": "IRV",
+  "systemLabel": "15 X 1 IRV",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "seats": 7,
+  "plans": 246.33333333333334,
+  "share": 0.24633333333333332
+ },
+ {
+  "system": "IRV",
+  "systemLabel": "15 X 1 IRV",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "seats": 8,
+  "plans": 122.0,
+  "share": 0.12199999999999998
+ },
+ {
+  "system": "IRV",
+  "systemLabel": "15 X 1 IRV",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "seats": 9,
+  "plans": 38.33333333333333,
+  "share": 0.03833333333333332
+ },
+ {
+  "system": "IRV",
+  "systemLabel": "15 X 1 IRV",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "seats": 10,
   "plans": 6.666666666666667,
-  "share": 0.006666666666666667
- },
- {
-  "system": "IRV",
-  "systemLabel": "15 X 1 IRV",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "combined",
-  "modeLabel": "Combined",
-  "pooled": true,
-  "seats": 2,
-  "plans": 23.333333333333332,
-  "share": 0.02333333333333333
- },
- {
-  "system": "IRV",
-  "systemLabel": "15 X 1 IRV",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "combined",
-  "modeLabel": "Combined",
-  "pooled": true,
-  "seats": 3,
-  "plans": 65.66666666666667,
-  "share": 0.06566666666666666
- },
- {
-  "system": "IRV",
-  "systemLabel": "15 X 1 IRV",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "combined",
-  "modeLabel": "Combined",
-  "pooled": true,
-  "seats": 4,
-  "plans": 69.33333333333334,
-  "share": 0.06933333333333334
- },
- {
-  "system": "IRV",
-  "systemLabel": "15 X 1 IRV",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "combined",
-  "modeLabel": "Combined",
-  "pooled": true,
-  "seats": 5,
-  "plans": 90.66666666666667,
-  "share": 0.09066666666666667
- },
- {
-  "system": "IRV",
-  "systemLabel": "15 X 1 IRV",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "combined",
-  "modeLabel": "Combined",
-  "pooled": true,
-  "seats": 6,
-  "plans": 95.66666666666666,
-  "share": 0.09566666666666666
- },
- {
-  "system": "IRV",
-  "systemLabel": "15 X 1 IRV",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "combined",
-  "modeLabel": "Combined",
-  "pooled": true,
-  "seats": 7,
-  "plans": 139.33333333333334,
-  "share": 0.13933333333333334
- },
- {
-  "system": "IRV",
-  "systemLabel": "15 X 1 IRV",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "combined",
-  "modeLabel": "Combined",
-  "pooled": true,
-  "seats": 8,
-  "plans": 248.33333333333334,
-  "share": 0.24833333333333335
- },
- {
-  "system": "IRV",
-  "systemLabel": "15 X 1 IRV",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "combined",
-  "modeLabel": "Combined",
-  "pooled": true,
-  "seats": 9,
-  "plans": 231.33333333333334,
-  "share": 0.23133333333333334
- },
- {
-  "system": "IRV",
-  "systemLabel": "15 X 1 IRV",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "combined",
-  "modeLabel": "Combined",
-  "pooled": true,
-  "seats": 10,
-  "plans": 28.0,
-  "share": 0.028
+  "share": 0.006666666666666666
  },
  {
   "system": "IRV",
@@ -248,8 +248,20 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 11,
-  "plans": 1.6666666666666667,
-  "share": 0.0016666666666666668
+  "plans": 0.6666666666666666,
+  "share": 0.0006666666666666665
+ },
+ {
+  "system": "IRV",
+  "systemLabel": "15 X 1 IRV",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
+  "pooled": false,
+  "seats": 5,
+  "plans": 45.0,
+  "share": 0.045
  },
  {
   "system": "IRV",
@@ -260,42 +272,6 @@
   "modeLabel": "Deliberative",
   "pooled": false,
   "seats": 6,
-  "plans": 8.0,
-  "share": 0.008
- },
- {
-  "system": "IRV",
-  "systemLabel": "15 X 1 IRV",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "slate_bt",
-  "modeLabel": "Deliberative",
-  "pooled": false,
-  "seats": 7,
-  "plans": 115.0,
-  "share": 0.115
- },
- {
-  "system": "IRV",
-  "systemLabel": "15 X 1 IRV",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "slate_bt",
-  "modeLabel": "Deliberative",
-  "pooled": false,
-  "seats": 8,
-  "plans": 385.0,
-  "share": 0.385
- },
- {
-  "system": "IRV",
-  "systemLabel": "15 X 1 IRV",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "slate_bt",
-  "modeLabel": "Deliberative",
-  "pooled": false,
-  "seats": 9,
   "plans": 447.0,
   "share": 0.447
  },
@@ -307,9 +283,33 @@
   "mode": "slate_bt",
   "modeLabel": "Deliberative",
   "pooled": false,
-  "seats": 10,
-  "plans": 45.0,
-  "share": 0.045
+  "seats": 7,
+  "plans": 385.0,
+  "share": 0.385
+ },
+ {
+  "system": "IRV",
+  "systemLabel": "15 X 1 IRV",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
+  "pooled": false,
+  "seats": 8,
+  "plans": 115.0,
+  "share": 0.115
+ },
+ {
+  "system": "IRV",
+  "systemLabel": "15 X 1 IRV",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
+  "pooled": false,
+  "seats": 9,
+  "plans": 8.0,
+  "share": 0.008
  },
  {
   "system": "IRV",
@@ -320,8 +320,8 @@
   "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 4,
-  "plans": 2.0,
-  "share": 0.002
+  "plans": 5.0,
+  "share": 0.005
  },
  {
   "system": "IRV",
@@ -332,66 +332,6 @@
   "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 5,
-  "plans": 20.0,
-  "share": 0.02
- },
- {
-  "system": "IRV",
-  "systemLabel": "15 X 1 IRV",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
-  "pooled": false,
-  "seats": 6,
-  "plans": 107.0,
-  "share": 0.107
- },
- {
-  "system": "IRV",
-  "systemLabel": "15 X 1 IRV",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
-  "pooled": false,
-  "seats": 7,
-  "plans": 249.0,
-  "share": 0.249
- },
- {
-  "system": "IRV",
-  "systemLabel": "15 X 1 IRV",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
-  "pooled": false,
-  "seats": 8,
-  "plans": 342.0,
-  "share": 0.342
- },
- {
-  "system": "IRV",
-  "systemLabel": "15 X 1 IRV",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
-  "pooled": false,
-  "seats": 9,
-  "plans": 237.0,
-  "share": 0.237
- },
- {
-  "system": "IRV",
-  "systemLabel": "15 X 1 IRV",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
-  "pooled": false,
-  "seats": 10,
   "plans": 38.0,
   "share": 0.038
  },
@@ -403,19 +343,67 @@
   "mode": "slate_pl",
   "modeLabel": "Impulsive",
   "pooled": false,
-  "seats": 11,
-  "plans": 5.0,
-  "share": 0.005
+  "seats": 6,
+  "plans": 237.0,
+  "share": 0.237
  },
  {
-  "system": "PLURALITY",
-  "systemLabel": "15 X 1 Plurality",
+  "system": "IRV",
+  "systemLabel": "15 X 1 IRV",
   "numDistricts": 15,
   "winners": 1,
-  "mode": "cambridge",
-  "modeLabel": "Cambridge",
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
   "pooled": false,
-  "seats": 0,
+  "seats": 7,
+  "plans": 342.0,
+  "share": 0.342
+ },
+ {
+  "system": "IRV",
+  "systemLabel": "15 X 1 IRV",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "seats": 8,
+  "plans": 249.0,
+  "share": 0.249
+ },
+ {
+  "system": "IRV",
+  "systemLabel": "15 X 1 IRV",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "seats": 9,
+  "plans": 107.0,
+  "share": 0.107
+ },
+ {
+  "system": "IRV",
+  "systemLabel": "15 X 1 IRV",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "seats": 10,
+  "plans": 20.0,
+  "share": 0.02
+ },
+ {
+  "system": "IRV",
+  "systemLabel": "15 X 1 IRV",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "seats": 11,
   "plans": 2.0,
   "share": 0.002
  },
@@ -427,79 +415,7 @@
   "mode": "cambridge",
   "modeLabel": "Cambridge",
   "pooled": false,
-  "seats": 1,
-  "plans": 40.0,
-  "share": 0.04
- },
- {
-  "system": "PLURALITY",
-  "systemLabel": "15 X 1 Plurality",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "cambridge",
-  "modeLabel": "Cambridge",
-  "pooled": false,
-  "seats": 2,
-  "plans": 105.0,
-  "share": 0.105
- },
- {
-  "system": "PLURALITY",
-  "systemLabel": "15 X 1 Plurality",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "cambridge",
-  "modeLabel": "Cambridge",
-  "pooled": false,
-  "seats": 3,
-  "plans": 190.0,
-  "share": 0.19
- },
- {
-  "system": "PLURALITY",
-  "systemLabel": "15 X 1 Plurality",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "cambridge",
-  "modeLabel": "Cambridge",
-  "pooled": false,
-  "seats": 4,
-  "plans": 225.0,
-  "share": 0.225
- },
- {
-  "system": "PLURALITY",
-  "systemLabel": "15 X 1 Plurality",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "cambridge",
-  "modeLabel": "Cambridge",
-  "pooled": false,
-  "seats": 5,
-  "plans": 232.0,
-  "share": 0.232
- },
- {
-  "system": "PLURALITY",
-  "systemLabel": "15 X 1 Plurality",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "cambridge",
-  "modeLabel": "Cambridge",
-  "pooled": false,
-  "seats": 6,
-  "plans": 140.0,
-  "share": 0.14
- },
- {
-  "system": "PLURALITY",
-  "systemLabel": "15 X 1 Plurality",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "cambridge",
-  "modeLabel": "Cambridge",
-  "pooled": false,
-  "seats": 7,
+  "seats": 0,
   "plans": 44.0,
   "share": 0.044
  },
@@ -511,7 +427,79 @@
   "mode": "cambridge",
   "modeLabel": "Cambridge",
   "pooled": false,
-  "seats": 8,
+  "seats": 1,
+  "plans": 130.0,
+  "share": 0.13
+ },
+ {
+  "system": "PLURALITY",
+  "systemLabel": "15 X 1 Plurality",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "cambridge",
+  "modeLabel": "Cambridge",
+  "pooled": false,
+  "seats": 2,
+  "plans": 209.0,
+  "share": 0.209
+ },
+ {
+  "system": "PLURALITY",
+  "systemLabel": "15 X 1 Plurality",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "cambridge",
+  "modeLabel": "Cambridge",
+  "pooled": false,
+  "seats": 3,
+  "plans": 240.0,
+  "share": 0.24
+ },
+ {
+  "system": "PLURALITY",
+  "systemLabel": "15 X 1 Plurality",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "cambridge",
+  "modeLabel": "Cambridge",
+  "pooled": false,
+  "seats": 4,
+  "plans": 192.0,
+  "share": 0.192
+ },
+ {
+  "system": "PLURALITY",
+  "systemLabel": "15 X 1 Plurality",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "cambridge",
+  "modeLabel": "Cambridge",
+  "pooled": false,
+  "seats": 5,
+  "plans": 112.0,
+  "share": 0.112
+ },
+ {
+  "system": "PLURALITY",
+  "systemLabel": "15 X 1 Plurality",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "cambridge",
+  "modeLabel": "Cambridge",
+  "pooled": false,
+  "seats": 6,
+  "plans": 52.0,
+  "share": 0.052
+ },
+ {
+  "system": "PLURALITY",
+  "systemLabel": "15 X 1 Plurality",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "cambridge",
+  "modeLabel": "Cambridge",
+  "pooled": false,
+  "seats": 7,
   "plans": 17.0,
   "share": 0.017
  },
@@ -523,21 +511,9 @@
   "mode": "cambridge",
   "modeLabel": "Cambridge",
   "pooled": false,
-  "seats": 9,
-  "plans": 3.0,
-  "share": 0.003
- },
- {
-  "system": "PLURALITY",
-  "systemLabel": "15 X 1 Plurality",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "cambridge",
-  "modeLabel": "Cambridge",
-  "pooled": false,
-  "seats": 10,
-  "plans": 2.0,
-  "share": 0.002
+  "seats": 8,
+  "plans": 4.0,
+  "share": 0.004
  },
  {
   "system": "PLURALITY",
@@ -548,8 +524,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 0,
-  "plans": 0.6666666666666666,
-  "share": 0.0006666666666666666
+  "plans": 14.666666666666666,
+  "share": 0.014666666666666663
  },
  {
   "system": "PLURALITY",
@@ -560,8 +536,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 1,
-  "plans": 13.333333333333334,
-  "share": 0.013333333333333334
+  "plans": 43.333333333333336,
+  "share": 0.04333333333333333
  },
  {
   "system": "PLURALITY",
@@ -572,8 +548,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 2,
-  "plans": 35.333333333333336,
-  "share": 0.035333333333333335
+  "plans": 69.66666666666667,
+  "share": 0.06966666666666665
  },
  {
   "system": "PLURALITY",
@@ -584,8 +560,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 3,
-  "plans": 64.66666666666667,
-  "share": 0.06466666666666668
+  "plans": 80.0,
+  "share": 0.07999999999999999
  },
  {
   "system": "PLURALITY",
@@ -596,8 +572,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 4,
-  "plans": 85.33333333333333,
-  "share": 0.08533333333333333
+  "plans": 68.0,
+  "share": 0.06799999999999999
  },
  {
   "system": "PLURALITY",
@@ -608,8 +584,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 5,
-  "plans": 111.0,
-  "share": 0.111
+  "plans": 79.0,
+  "share": 0.07899999999999999
  },
  {
   "system": "PLURALITY",
@@ -620,8 +596,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 6,
-  "plans": 110.33333333333333,
-  "share": 0.11033333333333332
+  "plans": 214.33333333333334,
+  "share": 0.2143333333333333
  },
  {
   "system": "PLURALITY",
@@ -632,8 +608,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 7,
-  "plans": 143.66666666666666,
-  "share": 0.14366666666666666
+  "plans": 191.33333333333334,
+  "share": 0.1913333333333333
  },
  {
   "system": "PLURALITY",
@@ -644,8 +620,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 8,
-  "plans": 191.33333333333334,
-  "share": 0.19133333333333336
+  "plans": 130.33333333333334,
+  "share": 0.1303333333333333
  },
  {
   "system": "PLURALITY",
@@ -656,8 +632,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 9,
-  "plans": 198.0,
-  "share": 0.198
+  "plans": 63.666666666666664,
+  "share": 0.06366666666666665
  },
  {
   "system": "PLURALITY",
@@ -668,8 +644,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 10,
-  "plans": 42.333333333333336,
-  "share": 0.042333333333333334
+  "plans": 33.66666666666667,
+  "share": 0.033666666666666664
  },
  {
   "system": "PLURALITY",
@@ -680,8 +656,44 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 11,
-  "plans": 4.0,
-  "share": 0.004
+  "plans": 10.333333333333334,
+  "share": 0.010333333333333332
+ },
+ {
+  "system": "PLURALITY",
+  "systemLabel": "15 X 1 Plurality",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "seats": 12,
+  "plans": 1.3333333333333333,
+  "share": 0.0013333333333333329
+ },
+ {
+  "system": "PLURALITY",
+  "systemLabel": "15 X 1 Plurality",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "seats": 13,
+  "plans": 0.3333333333333333,
+  "share": 0.0003333333333333332
+ },
+ {
+  "system": "PLURALITY",
+  "systemLabel": "15 X 1 Plurality",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
+  "pooled": false,
+  "seats": 4,
+  "plans": 7.0,
+  "share": 0.007
  },
  {
   "system": "PLURALITY",
@@ -692,66 +704,6 @@
   "modeLabel": "Deliberative",
   "pooled": false,
   "seats": 5,
-  "plans": 4.0,
-  "share": 0.004
- },
- {
-  "system": "PLURALITY",
-  "systemLabel": "15 X 1 Plurality",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "slate_bt",
-  "modeLabel": "Deliberative",
-  "pooled": false,
-  "seats": 6,
-  "plans": 18.0,
-  "share": 0.018
- },
- {
-  "system": "PLURALITY",
-  "systemLabel": "15 X 1 Plurality",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "slate_bt",
-  "modeLabel": "Deliberative",
-  "pooled": false,
-  "seats": 7,
-  "plans": 126.0,
-  "share": 0.126
- },
- {
-  "system": "PLURALITY",
-  "systemLabel": "15 X 1 Plurality",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "slate_bt",
-  "modeLabel": "Deliberative",
-  "pooled": false,
-  "seats": 8,
-  "plans": 326.0,
-  "share": 0.326
- },
- {
-  "system": "PLURALITY",
-  "systemLabel": "15 X 1 Plurality",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "slate_bt",
-  "modeLabel": "Deliberative",
-  "pooled": false,
-  "seats": 9,
-  "plans": 448.0,
-  "share": 0.448
- },
- {
-  "system": "PLURALITY",
-  "systemLabel": "15 X 1 Plurality",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "slate_bt",
-  "modeLabel": "Deliberative",
-  "pooled": false,
-  "seats": 10,
   "plans": 71.0,
   "share": 0.071
  },
@@ -763,31 +715,55 @@
   "mode": "slate_bt",
   "modeLabel": "Deliberative",
   "pooled": false,
-  "seats": 11,
-  "plans": 7.0,
-  "share": 0.007
+  "seats": 6,
+  "plans": 448.0,
+  "share": 0.448
  },
  {
   "system": "PLURALITY",
   "systemLabel": "15 X 1 Plurality",
   "numDistricts": 15,
   "winners": 1,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
   "pooled": false,
-  "seats": 2,
-  "plans": 1.0,
-  "share": 0.001
+  "seats": 7,
+  "plans": 326.0,
+  "share": 0.326
  },
  {
   "system": "PLURALITY",
   "systemLabel": "15 X 1 Plurality",
   "numDistricts": 15,
   "winners": 1,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
   "pooled": false,
-  "seats": 3,
+  "seats": 8,
+  "plans": 126.0,
+  "share": 0.126
+ },
+ {
+  "system": "PLURALITY",
+  "systemLabel": "15 X 1 Plurality",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
+  "pooled": false,
+  "seats": 9,
+  "plans": 18.0,
+  "share": 0.018
+ },
+ {
+  "system": "PLURALITY",
+  "systemLabel": "15 X 1 Plurality",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
+  "pooled": false,
+  "seats": 10,
   "plans": 4.0,
   "share": 0.004
  },
@@ -800,8 +776,8 @@
   "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 4,
-  "plans": 31.0,
-  "share": 0.031
+  "plans": 5.0,
+  "share": 0.005
  },
  {
   "system": "PLURALITY",
@@ -812,66 +788,6 @@
   "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 5,
-  "plans": 97.0,
-  "share": 0.097
- },
- {
-  "system": "PLURALITY",
-  "systemLabel": "15 X 1 Plurality",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
-  "pooled": false,
-  "seats": 6,
-  "plans": 173.0,
-  "share": 0.173
- },
- {
-  "system": "PLURALITY",
-  "systemLabel": "15 X 1 Plurality",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
-  "pooled": false,
-  "seats": 7,
-  "plans": 261.0,
-  "share": 0.261
- },
- {
-  "system": "PLURALITY",
-  "systemLabel": "15 X 1 Plurality",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
-  "pooled": false,
-  "seats": 8,
-  "plans": 231.0,
-  "share": 0.231
- },
- {
-  "system": "PLURALITY",
-  "systemLabel": "15 X 1 Plurality",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
-  "pooled": false,
-  "seats": 9,
-  "plans": 143.0,
-  "share": 0.143
- },
- {
-  "system": "PLURALITY",
-  "systemLabel": "15 X 1 Plurality",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
-  "pooled": false,
-  "seats": 10,
   "plans": 54.0,
   "share": 0.054
  },
@@ -883,107 +799,179 @@
   "mode": "slate_pl",
   "modeLabel": "Impulsive",
   "pooled": false,
-  "seats": 11,
-  "plans": 5.0,
-  "share": 0.005
- },
- {
-  "system": "TOPTWO",
-  "systemLabel": "15 X 1 Top Two",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "cambridge",
-  "modeLabel": "Cambridge",
-  "pooled": false,
-  "seats": 1,
-  "plans": 4.0,
-  "share": 0.004
- },
- {
-  "system": "TOPTWO",
-  "systemLabel": "15 X 1 Top Two",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "cambridge",
-  "modeLabel": "Cambridge",
-  "pooled": false,
-  "seats": 2,
-  "plans": 15.0,
-  "share": 0.015
- },
- {
-  "system": "TOPTWO",
-  "systemLabel": "15 X 1 Top Two",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "cambridge",
-  "modeLabel": "Cambridge",
-  "pooled": false,
-  "seats": 3,
-  "plans": 101.0,
-  "share": 0.101
- },
- {
-  "system": "TOPTWO",
-  "systemLabel": "15 X 1 Top Two",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "cambridge",
-  "modeLabel": "Cambridge",
-  "pooled": false,
-  "seats": 4,
-  "plans": 180.0,
-  "share": 0.18
- },
- {
-  "system": "TOPTWO",
-  "systemLabel": "15 X 1 Top Two",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "cambridge",
-  "modeLabel": "Cambridge",
-  "pooled": false,
-  "seats": 5,
-  "plans": 230.0,
-  "share": 0.23
- },
- {
-  "system": "TOPTWO",
-  "systemLabel": "15 X 1 Top Two",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "cambridge",
-  "modeLabel": "Cambridge",
-  "pooled": false,
   "seats": 6,
-  "plans": 311.0,
-  "share": 0.311
+  "plans": 143.0,
+  "share": 0.143
  },
  {
-  "system": "TOPTWO",
-  "systemLabel": "15 X 1 Top Two",
+  "system": "PLURALITY",
+  "systemLabel": "15 X 1 Plurality",
   "numDistricts": 15,
   "winners": 1,
-  "mode": "cambridge",
-  "modeLabel": "Cambridge",
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 7,
-  "plans": 128.0,
-  "share": 0.128
+  "plans": 231.0,
+  "share": 0.231
  },
  {
-  "system": "TOPTWO",
-  "systemLabel": "15 X 1 Top Two",
+  "system": "PLURALITY",
+  "systemLabel": "15 X 1 Plurality",
   "numDistricts": 15,
   "winners": 1,
-  "mode": "cambridge",
-  "modeLabel": "Cambridge",
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 8,
+  "plans": 261.0,
+  "share": 0.261
+ },
+ {
+  "system": "PLURALITY",
+  "systemLabel": "15 X 1 Plurality",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "seats": 9,
+  "plans": 173.0,
+  "share": 0.173
+ },
+ {
+  "system": "PLURALITY",
+  "systemLabel": "15 X 1 Plurality",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "seats": 10,
+  "plans": 97.0,
+  "share": 0.097
+ },
+ {
+  "system": "PLURALITY",
+  "systemLabel": "15 X 1 Plurality",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "seats": 11,
   "plans": 31.0,
   "share": 0.031
  },
  {
+  "system": "PLURALITY",
+  "systemLabel": "15 X 1 Plurality",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "seats": 12,
+  "plans": 4.0,
+  "share": 0.004
+ },
+ {
+  "system": "PLURALITY",
+  "systemLabel": "15 X 1 Plurality",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "seats": 13,
+  "plans": 1.0,
+  "share": 0.001
+ },
+ {
+  "system": "TOPTWO",
+  "systemLabel": "15 X 1 Top Two",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "cambridge",
+  "modeLabel": "Cambridge",
+  "pooled": false,
+  "seats": 0,
+  "plans": 93.0,
+  "share": 0.093
+ },
+ {
+  "system": "TOPTWO",
+  "systemLabel": "15 X 1 Top Two",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "cambridge",
+  "modeLabel": "Cambridge",
+  "pooled": false,
+  "seats": 1,
+  "plans": 242.0,
+  "share": 0.242
+ },
+ {
+  "system": "TOPTWO",
+  "systemLabel": "15 X 1 Top Two",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "cambridge",
+  "modeLabel": "Cambridge",
+  "pooled": false,
+  "seats": 2,
+  "plans": 346.0,
+  "share": 0.346
+ },
+ {
+  "system": "TOPTWO",
+  "systemLabel": "15 X 1 Top Two",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "cambridge",
+  "modeLabel": "Cambridge",
+  "pooled": false,
+  "seats": 3,
+  "plans": 192.0,
+  "share": 0.192
+ },
+ {
+  "system": "TOPTWO",
+  "systemLabel": "15 X 1 Top Two",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "cambridge",
+  "modeLabel": "Cambridge",
+  "pooled": false,
+  "seats": 4,
+  "plans": 92.0,
+  "share": 0.092
+ },
+ {
+  "system": "TOPTWO",
+  "systemLabel": "15 X 1 Top Two",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "cambridge",
+  "modeLabel": "Cambridge",
+  "pooled": false,
+  "seats": 5,
+  "plans": 35.0,
+  "share": 0.035
+ },
+ {
+  "system": "TOPTWO",
+  "systemLabel": "15 X 1 Top Two",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "seats": 0,
+  "plans": 31.0,
+  "share": 0.030999999999999996
+ },
+ {
   "system": "TOPTWO",
   "systemLabel": "15 X 1 Top Two",
   "numDistricts": 15,
@@ -992,8 +980,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 1,
-  "plans": 1.3333333333333333,
-  "share": 0.0013333333333333333
+  "plans": 80.66666666666667,
+  "share": 0.08066666666666666
  },
  {
   "system": "TOPTWO",
@@ -1004,8 +992,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 2,
-  "plans": 5.0,
-  "share": 0.005
+  "plans": 115.33333333333333,
+  "share": 0.11533333333333332
  },
  {
   "system": "TOPTWO",
@@ -1016,8 +1004,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 3,
-  "plans": 33.666666666666664,
-  "share": 0.033666666666666664
+  "plans": 64.0,
+  "share": 0.06399999999999999
  },
  {
   "system": "TOPTWO",
@@ -1028,8 +1016,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 4,
-  "plans": 60.0,
-  "share": 0.06
+  "plans": 30.666666666666668,
+  "share": 0.030666666666666665
  },
  {
   "system": "TOPTWO",
@@ -1040,8 +1028,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 5,
-  "plans": 76.66666666666667,
-  "share": 0.07666666666666667
+  "plans": 17.333333333333332,
+  "share": 0.01733333333333333
  },
  {
   "system": "TOPTWO",
@@ -1052,44 +1040,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 6,
-  "plans": 117.0,
-  "share": 0.117
- },
- {
-  "system": "TOPTWO",
-  "systemLabel": "15 X 1 Top Two",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "combined",
-  "modeLabel": "Combined",
-  "pooled": true,
-  "seats": 7,
-  "plans": 128.66666666666666,
-  "share": 0.12866666666666665
- },
- {
-  "system": "TOPTWO",
-  "systemLabel": "15 X 1 Top Two",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "combined",
-  "modeLabel": "Combined",
-  "pooled": true,
-  "seats": 8,
-  "plans": 298.66666666666663,
-  "share": 0.29866666666666664
- },
- {
-  "system": "TOPTWO",
-  "systemLabel": "15 X 1 Top Two",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "combined",
-  "modeLabel": "Combined",
-  "pooled": true,
-  "seats": 9,
   "plans": 273.33333333333337,
-  "share": 0.2733333333333334
+  "share": 0.2733333333333333
  },
  {
   "system": "TOPTWO",
@@ -1099,9 +1051,45 @@
   "mode": "combined",
   "modeLabel": "Combined",
   "pooled": true,
-  "seats": 10,
-  "plans": 5.666666666666666,
-  "share": 0.005666666666666666
+  "seats": 7,
+  "plans": 288.3333333333333,
+  "share": 0.2883333333333333
+ },
+ {
+  "system": "TOPTWO",
+  "systemLabel": "15 X 1 Top Two",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "seats": 8,
+  "plans": 86.0,
+  "share": 0.086
+ },
+ {
+  "system": "TOPTWO",
+  "systemLabel": "15 X 1 Top Two",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "seats": 9,
+  "plans": 13.333333333333334,
+  "share": 0.013333333333333332
+ },
+ {
+  "system": "TOPTWO",
+  "systemLabel": "15 X 1 Top Two",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
+  "pooled": false,
+  "seats": 5,
+  "plans": 6.0,
+  "share": 0.006
  },
  {
   "system": "TOPTWO",
@@ -1112,42 +1100,6 @@
   "modeLabel": "Deliberative",
   "pooled": false,
   "seats": 6,
-  "plans": 20.0,
-  "share": 0.02
- },
- {
-  "system": "TOPTWO",
-  "systemLabel": "15 X 1 Top Two",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "slate_bt",
-  "modeLabel": "Deliberative",
-  "pooled": false,
-  "seats": 7,
-  "plans": 132.0,
-  "share": 0.132
- },
- {
-  "system": "TOPTWO",
-  "systemLabel": "15 X 1 Top Two",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "slate_bt",
-  "modeLabel": "Deliberative",
-  "pooled": false,
-  "seats": 8,
-  "plans": 437.0,
-  "share": 0.437
- },
- {
-  "system": "TOPTWO",
-  "systemLabel": "15 X 1 Top Two",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "slate_bt",
-  "modeLabel": "Deliberative",
-  "pooled": false,
-  "seats": 9,
   "plans": 405.0,
   "share": 0.405
  },
@@ -1159,19 +1111,31 @@
   "mode": "slate_bt",
   "modeLabel": "Deliberative",
   "pooled": false,
-  "seats": 10,
-  "plans": 6.0,
-  "share": 0.006
+  "seats": 7,
+  "plans": 437.0,
+  "share": 0.437
  },
  {
   "system": "TOPTWO",
   "systemLabel": "15 X 1 Top Two",
   "numDistricts": 15,
   "winners": 1,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
   "pooled": false,
-  "seats": 6,
+  "seats": 8,
+  "plans": 132.0,
+  "share": 0.132
+ },
+ {
+  "system": "TOPTWO",
+  "systemLabel": "15 X 1 Top Two",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
+  "pooled": false,
+  "seats": 9,
   "plans": 20.0,
   "share": 0.02
  },
@@ -1183,9 +1147,9 @@
   "mode": "slate_pl",
   "modeLabel": "Impulsive",
   "pooled": false,
-  "seats": 7,
-  "plans": 126.0,
-  "share": 0.126
+  "seats": 5,
+  "plans": 11.0,
+  "share": 0.011
  },
  {
   "system": "TOPTWO",
@@ -1195,19 +1159,7 @@
   "mode": "slate_pl",
   "modeLabel": "Impulsive",
   "pooled": false,
-  "seats": 8,
-  "plans": 428.0,
-  "share": 0.428
- },
- {
-  "system": "TOPTWO",
-  "systemLabel": "15 X 1 Top Two",
-  "numDistricts": 15,
-  "winners": 1,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
-  "pooled": false,
-  "seats": 9,
+  "seats": 6,
   "plans": 415.0,
   "share": 0.415
  },
@@ -1219,8 +1171,32 @@
   "mode": "slate_pl",
   "modeLabel": "Impulsive",
   "pooled": false,
-  "seats": 10,
-  "plans": 11.0,
-  "share": 0.011
+  "seats": 7,
+  "plans": 428.0,
+  "share": 0.428
+ },
+ {
+  "system": "TOPTWO",
+  "systemLabel": "15 X 1 Top Two",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "seats": 8,
+  "plans": 126.0,
+  "share": 0.126
+ },
+ {
+  "system": "TOPTWO",
+  "systemLabel": "15 X 1 Top Two",
+  "numDistricts": 15,
+  "winners": 1,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "seats": 9,
+  "plans": 20.0,
+  "share": 0.02
  }
 ]

@@ -159,7 +159,14 @@ function renderRunParams(section, entry, runMeta, manifest, source, selected, ta
     });
 
   if (activeTab === 'stats') {
-    renderScenarioStats(mount, entry, runMeta, cfg, source, { plans, replicates });
+    // Elections actually simulated, per voter model, for the contest on show.
+    const elections = source
+      ? source.electionsByMode
+      : (runMeta.districtConfigs.find(
+        (dc) => dc.numDistricts === numDistricts && dc.winners === perDistrict,
+      ) || {}).electionsByMode;
+    renderScenarioStats(mount, entry, runMeta, cfg, source,
+      { plans, replicates, elections, modeLabels: manifest.modeLabels });
     return;
   }
 
@@ -304,6 +311,23 @@ function renderScenarioStats(mount, entry, runMeta, cfg, source, sampling) {
     ['Plans sampled', count(sampling && sampling.plans)],
     ['Replicates', count(sampling && sampling.replicates)],
   ]);
+
+  /*
+   * District elections simulated, per voter model.
+   *
+   * Shown per model rather than as one total because the models do not all
+   * cover the same districts: the Cambridge generator skips a district whose
+   * candidate pool drew from only one slate, so its count sits below the
+   * ranked models'. That shortfall changes what its row is averaged over, so
+   * it belongs on the card rather than being left to be inferred.
+   */
+  const elections = (sampling && sampling.elections) || {};
+  const labels = (sampling && sampling.modeLabels) || {};
+  const order = Object.keys(labels).filter((id) => id in elections);
+  const rest = Object.keys(elections).filter((id) => !order.includes(id));
+  list('Elections simulated', [...order, ...rest].map(
+    (id) => [labels[id] || id, count(elections[id])],
+  ));
 }
 
 /**
@@ -469,14 +493,36 @@ function mountCrossRun(section, manifest) {
 
   const selected = new Set();
 
-  // Every slate any selected run defines, focal group first: that is what the
-  // comparison is normally read for, and it is the one every run shares.
-  const focal = manifest.runs[0]?.focalGroup;
-  const slates = [];
-  manifest.runs.forEach((run) => (run.slates || []).forEach((slate) => {
-    if (!slates.some((s) => s.id === slate.id)) slates.push(slate);
-  }));
-  slates.sort((a, b) => (b.id === focal) - (a.id === focal));
+  /*
+   * The comparison shows one bloc model at a time, as the sections do.
+   *
+   * Rows from different bloc models cannot share an axis honestly: their slates
+   * are different populations -- POC against WAIO in one, four groups in the
+   * other -- so a focal group picked for one names nothing in the other, and
+   * two rows stacked together would be answering different questions. The
+   * toggle picks the model; everything below is derived from it.
+   */
+  const blocModels = [...new Set(all.map((s) => s.blocModel).filter(Boolean))]
+    .sort((a, b) => (a === 'two' ? -1 : 0) - (b === 'two' ? -1 : 0));
+  let blocModel = blocModels[0] || null;
+
+  /** The series belonging to the bloc model on show. */
+  const seriesFor = (model) => (model ? all.filter((s) => s.blocModel === model) : all);
+
+  /** Slates defined by the runs of one bloc model, that model's focal group first. */
+  function slatesFor(model) {
+    const runSlugs = new Set(seriesFor(model).map((s) => s.runSlug));
+    const runs = manifest.runs.filter((r) => runSlugs.has(r.slug));
+    const out = [];
+    runs.forEach((run) => (run.slates || []).forEach((sl) => {
+      if (!out.some((x) => x.id === sl.id)) out.push(sl);
+    }));
+    const focal = runs[0]?.focalGroup;
+    out.sort((a, b) => (b.id === focal) - (a.id === focal));
+    return out;
+  }
+
+  let slates = slatesFor(blocModel);
   let slate = slates[0]?.id;
 
   /*
@@ -506,7 +552,7 @@ function mountCrossRun(section, manifest) {
       // Manifest order, not the order they were added: rows stay put as the
       // selection grows, and systems from one run stay together.
       renderCrossRun(container, manifest, {
-        series: all.filter((s) => selected.has(s.id)),
+        series: seriesFor(blocModel).filter((s) => selected.has(s.id)),
         slate,
         mode,
       });
@@ -532,8 +578,9 @@ function mountCrossRun(section, manifest) {
     // The models the rows on show were simulated under. Falls back to the full
     // list while nothing is selected, so the filter is populated rather than
     // empty on first paint.
-    const shown = all.filter((s) => selected.has(s.id));
-    modes = modesFor(shown.length ? shown : all);
+    const available = seriesFor(blocModel);
+    const shown = available.filter((s) => selected.has(s.id));
+    modes = modesFor(shown.length ? shown : available);
     if (!modes.includes(mode)) mode = modes.includes('combined') ? 'combined' : modes[0];
 
     // Two rows: the systems on show, then the filters that apply to all of them.
@@ -542,12 +589,35 @@ function mountCrossRun(section, manifest) {
     const systemsRow = mount.append('div').attr('class', 'control-row');
     const filtersRow = mount.append('div').attr('class', 'control-row');
 
+    // Switching model empties the selection: the rows on show belong to the
+    // model that was active when they were added, and carrying them across
+    // would put two bloc models on one axis.
+    if (blocModels.length > 1) {
+      const blocGroup = systemsRow.append('div').attr('class', 'control-group');
+      blocGroup.append('span').attr('class', 'control-label').text('Bloc model');
+      const toggles = blocGroup.append('div').attr('class', 'model-toggles');
+      toggles.selectAll('button').data(blocModels).join('button')
+        .attr('type', 'button')
+        .attr('class', (d) => `model-toggle${blocModel === d ? ' on' : ''}`)
+        .attr('aria-pressed', (d) => blocModel === d)
+        .text((d) => BLOC_MODEL_LABELS[d] || d)
+        .on('click', (event, d) => {
+          if (blocModel === d) return;
+          blocModel = d;
+          selected.clear();
+          slates = slatesFor(blocModel);
+          slate = slates[0]?.id;
+          controls();
+          draw();
+        });
+    }
+
     const group = systemsRow.append('div').attr('class', 'control-group');
     group.append('span').attr('class', 'control-label').text('Electoral systems');
     const bar = group.append('div').attr('class', 'system-chips');
 
     bar.selectAll('span.system-chip')
-      .data(all.filter((s) => selected.has(s.id)), (d) => d.id)
+      .data(available.filter((s) => selected.has(s.id)), (d) => d.id)
       .join('span')
       .attr('class', 'system-chip')
       .each(function (d) {
@@ -562,7 +632,7 @@ function mountCrossRun(section, manifest) {
       });
 
     // The Add control is present only while something is left to add.
-    const remaining = all.filter((s) => !selected.has(s.id));
+    const remaining = available.filter((s) => !selected.has(s.id));
     if (remaining.length) {
       const dropdown = bar.append('span').attr('class', 'dropdown');
       dropdown.append('button')

@@ -1,12 +1,12 @@
 {
  "runName": "Nine Seats At-Large - STV (2 Blocs)",
  "slug": "nine-seats-at-large-stv-2-blocs",
- "focalGroup": "WAIO",
- "focalGroupLabel": "WAIO",
+ "focalGroup": "POC",
+ "focalGroupLabel": "POC",
  "totalSeats": 9,
- "focalVapShare": 0.4588409607434803,
- "proportionalSeats": 4.129568646691323,
- "proportionalLabel": "WAIO share of VAP: 45.9% (4.1 seats)",
+ "focalVapShare": 0.5411590392565198,
+ "proportionalSeats": 4.870431353308678,
+ "proportionalLabel": "POC share of VAP: 54.1% (4.9 seats)",
  "seatMax": 9,
  "seatTicks": [
   0,
@@ -41,7 +41,13 @@
    "candidatePoolMax": 15,
    "candidatePoolMean": 12,
    "plans": 100,
-   "electionsPerSystem": 1663
+   "electionsPerSystem": 1663,
+   "electionsByMode": {
+    "cambridge": 990,
+    "name_cumulative": 1000,
+    "slate_bt": 1000,
+    "slate_pl": 1000
+   }
   }
  ],
  "voterModels": [

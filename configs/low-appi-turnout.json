@@ -72,7 +72,7 @@
       "BLK2"
     ]
   },
-  "focal_group": "BLK",
+  "focal_group": "AAPI",
   "cohesion_parameters": {
     "HIS": {
       "HIS": 0.8,

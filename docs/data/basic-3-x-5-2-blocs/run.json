@@ -1,13 +1,13 @@
 {
  "runName": "Basic - 3 X 5 (2 Blocs)",
  "slug": "basic-3-x-5-2-blocs",
- "focalGroup": "WAIO",
- "focalGroupLabel": "WAIO",
+ "focalGroup": "POC",
+ "focalGroupLabel": "POC",
  "totalSeats": 15,
- "focalVapShare": 0.4588409607434803,
- "proportionalSeats": 6.882614411152204,
- "proportionalLabel": "WAIO share of VAP: 45.9% (6.9 seats)",
- "seatMax": 14,
+ "focalVapShare": 0.5411590392565198,
+ "proportionalSeats": 8.117385588847796,
+ "proportionalLabel": "POC share of VAP: 54.1% (8.1 seats)",
+ "seatMax": 15,
  "seatTicks": [
   0,
   2,
@@ -31,7 +31,12 @@
    "candidatePoolMax": 10,
    "candidatePoolMean": 7,
    "plans": 100,
-   "electionsPerSystem": 8660
+   "electionsPerSystem": 8660,
+   "electionsByMode": {
+    "cambridge": 2660,
+    "slate_bt": 3000,
+    "slate_pl": 3000
+   }
   }
  ],
  "voterModels": [

@@ -62,7 +62,7 @@
     "BLK": 0.9
   },
   "num_voters": 10000,
-  "focal_group": "BLK",
+  "focal_group": "AAPI",
   "cohesion_parameters": {
     "HIS": {
       "HIS": 0.8,
