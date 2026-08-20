@@ -22,44 +22,44 @@
     "cambridge"
   ],
   "blocs": {
-    "WHI": [
-      "WHI"
-    ],
     "POC": [
       "POC"
+    ],
+    "WAIO": [
+      "WAIO"
     ]
   },
   "turnout": {
-    "WHI": 1,
-    "POC": 0.7
+    "POC": 0.7,
+    "WAIO": 1
   },
   "num_voters": 10000,
-  "focal_group": "WHI",
+  "focal_group": "WAIO",
   "cohesion_parameters": {
-    "WHI": {
-      "WHI": 0.8,
-      "POC": 0.2
-    },
     "POC": {
-      "WHI": 0.11,
-      "POC": 0.89
+      "POC": 0.89,
+      "WAIO": 0.11
+    },
+    "WAIO": {
+      "POC": 0.2,
+      "WAIO": 0.8
     }
   },
   "alphas": {
-    "WHI": {
-      "WHI": 1,
-      "POC": 1
-    },
     "POC": {
-      "WHI": 1,
-      "POC": 2
+      "POC": 2,
+      "WAIO": 1
+    },
+    "WAIO": {
+      "POC": 1,
+      "WAIO": 1
     }
   },
   "num_reps": 10,
   "cambridge_truncation": {
-    "enabled": false,
+    "enabled": true,
     "majority_slates": [
-      "WHI"
+      "WAIO"
     ],
     "minority_slates": [
       "POC"

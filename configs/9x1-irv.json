@@ -1,0 +1,140 @@
+{
+  "run_name": "9 X 1 IRV",
+  "num_subsamples": 100,
+  "candidate_geometric_p": 0.2,
+  "total_seats": 9,
+  "district_configs": [
+    {
+      "num_districts": 9,
+      "winners": 1,
+      "candidate_pool_max": 10,
+      "candidate_pool_mean": 7
+    }
+  ],
+  "voting_configs": {
+    "IRV": {
+      "tiebreak": "random"
+    }
+  },
+  "voter_models": [
+    "slate_pl",
+    "slate_bt"
+  ],
+  "blocs": {
+    "HIS": [
+      "HIS"
+    ],
+    "AAPI": [
+      "AAPI"
+    ],
+    "WAIO": [
+      "WAIO"
+    ],
+    "BLK": [
+      "BLK"
+    ]
+  },
+  "group_vap_columns": {
+    "HIS": "hvap_20",
+    "AAPI": "asian_nhpi_vap_20",
+    "WAIO": [
+      "white_vap_20",
+      "amin_vap_20",
+      "other_vap_20"
+    ],
+    "BLK": "bvap_20"
+  },
+  "turnout": {
+    "AAPI": 0.7,
+    "HIS": 0.6,
+    "WAIO": 1,
+    "BLK": 0.9
+  },
+  "num_voters": 10000,
+  "slate_to_candidates": {
+    "HIS": [
+      "HIS1",
+      "HIS2",
+      "HIS3"
+    ],
+    "AAPI": [
+      "AAPI1",
+      "AAPI2"
+    ],
+    "WAIO": [
+      "WAIO1",
+      "WAIO2",
+      "WAIO3",
+      "WAIO4"
+    ],
+    "BLK": [
+      "BLK1",
+      "BLK2"
+    ]
+  },
+  "focal_group": "BLK",
+  "cohesion_parameters": {
+    "HIS": {
+      "HIS": 0.8,
+      "AAPI": 0.05,
+      "WAIO": 0.05,
+      "BLK": 0.1
+    },
+    "AAPI": {
+      "HIS": 0.03,
+      "AAPI": 0.8,
+      "WAIO": 0.15,
+      "BLK": 0.02
+    },
+    "WAIO": {
+      "HIS": 0.05,
+      "AAPI": 0.1,
+      "WAIO": 0.8,
+      "BLK": 0.05
+    },
+    "BLK": {
+      "HIS": 0.1,
+      "AAPI": 0.05,
+      "WAIO": 0.05,
+      "BLK": 0.8
+    }
+  },
+  "alphas": {
+    "HIS": {
+      "HIS": 1,
+      "AAPI": 1,
+      "WAIO": 1,
+      "BLK": 1
+    },
+    "AAPI": {
+      "HIS": 1,
+      "AAPI": 1,
+      "WAIO": 1,
+      "BLK": 1
+    },
+    "WAIO": {
+      "HIS": 1,
+      "AAPI": 1,
+      "WAIO": 1,
+      "BLK": 1
+    },
+    "BLK": {
+      "HIS": 1,
+      "AAPI": 1,
+      "WAIO": 1,
+      "BLK": 1
+    }
+  },
+  "num_reps": 10,
+  "cambridge_truncation": {
+    "enabled": true,
+    "majority_slates": [
+      "WAIO"
+    ],
+    "minority_slates": [
+      "HIS",
+      "AAPI",
+      "BLK"
+    ]
+  }
+}
