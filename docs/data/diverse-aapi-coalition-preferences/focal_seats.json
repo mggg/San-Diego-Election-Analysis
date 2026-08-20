@@ -8,8 +8,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 0,
-  "plans": 126.5,
-  "share": 0.1265
+  "plans": 806.0,
+  "share": 0.806
  },
  {
   "system": "FASTSTV",
@@ -20,8 +20,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 1,
-  "plans": 535.0,
-  "share": 0.535
+  "plans": 187.5,
+  "share": 0.1875
  },
  {
   "system": "FASTSTV",
@@ -32,20 +32,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 2,
-  "plans": 266.5,
-  "share": 0.2665
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "3 X 3 STV",
-  "numDistricts": 3,
-  "winners": 3,
-  "mode": "combined",
-  "modeLabel": "Combined",
-  "pooled": true,
-  "seats": 3,
-  "plans": 72.0,
-  "share": 0.072
+  "plans": 6.5,
+  "share": 0.0065
  },
  {
   "system": "FASTSTV",
@@ -56,8 +44,8 @@
   "modeLabel": "Deliberative",
   "pooled": false,
   "seats": 0,
-  "plans": 166.0,
-  "share": 0.166
+  "plans": 910.0,
+  "share": 0.91
  },
  {
   "system": "FASTSTV",
@@ -68,20 +56,8 @@
   "modeLabel": "Deliberative",
   "pooled": false,
   "seats": 1,
-  "plans": 607.0,
-  "share": 0.607
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "3 X 3 STV",
-  "numDistricts": 3,
-  "winners": 3,
-  "mode": "slate_bt",
-  "modeLabel": "Deliberative",
-  "pooled": false,
-  "seats": 2,
-  "plans": 196.0,
-  "share": 0.196
+  "plans": 90.0,
+  "share": 0.09
  },
  {
   "system": "FASTSTV",
@@ -104,8 +80,8 @@
   "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 0,
-  "plans": 87.0,
-  "share": 0.087
+  "plans": 702.0,
+  "share": 0.702
  },
  {
   "system": "FASTSTV",
@@ -116,8 +92,8 @@
   "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 1,
-  "plans": 463.0,
-  "share": 0.463
+  "plans": 285.0,
+  "share": 0.285
  },
  {
   "system": "FASTSTV",
@@ -128,19 +104,7 @@
   "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 2,
-  "plans": 337.0,
-  "share": 0.337
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "3 X 3 STV",
-  "numDistricts": 3,
-  "winners": 3,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
-  "pooled": false,
-  "seats": 3,
-  "plans": 113.0,
-  "share": 0.113
+  "plans": 13.0,
+  "share": 0.013
  }
 ]
