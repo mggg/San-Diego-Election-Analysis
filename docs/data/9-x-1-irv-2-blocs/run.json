@@ -1,0 +1,80 @@
+{
+ "runName": "9 X 1 IRV (2 Blocs)",
+ "slug": "9-x-1-irv-2-blocs",
+ "focalGroup": "WAIO",
+ "focalGroupLabel": "WAIO",
+ "totalSeats": 9,
+ "focalVapShare": 0.4588409607434803,
+ "proportionalSeats": 4.129568646691323,
+ "proportionalLabel": "WAIO share of VAP: 45.9% (4.1 seats)",
+ "seatMax": 9,
+ "seatTicks": [
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9
+ ],
+ "districtConfigs": [
+  {
+   "numDistricts": 9,
+   "winners": 1,
+   "systems": [
+    {
+     "id": "IRV",
+     "label": "9 X 1 IRV"
+    }
+   ],
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7,
+   "plans": 100,
+   "electionsPerSystem": 24580
+  }
+ ],
+ "voterModels": [
+  {
+   "id": "slate_pl",
+   "label": "Impulsive",
+   "pooled": false
+  },
+  {
+   "id": "slate_bt",
+   "label": "Deliberative",
+   "pooled": false
+  },
+  {
+   "id": "cambridge",
+   "label": "Cambridge",
+   "pooled": false
+  },
+  {
+   "id": "combined",
+   "label": "Combined",
+   "pooled": true
+  }
+ ],
+ "slates": [
+  {
+   "id": "POC",
+   "label": "POC",
+   "vapShare": 0.5411590392565198
+  },
+  {
+   "id": "WAIO",
+   "label": "WAIO",
+   "vapShare": 0.4588409607434803
+  }
+ ],
+ "turnout": {
+  "POC": 0.7,
+  "WAIO": 1
+ },
+ "primaryTurnout": null,
+ "replicates": 10,
+ "subsamples": 100
+}

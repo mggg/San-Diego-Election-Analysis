@@ -1,12 +1,12 @@
 {
- "runName": "City Charter Amendment Proposal",
- "slug": "city-charter-amendment-proposal",
+ "runName": "9 X 1 IRV",
+ "slug": "9-x-1-irv",
  "focalGroup": "BLK",
  "focalGroupLabel": "BLK",
- "totalSeats": 15,
+ "totalSeats": 9,
  "focalVapShare": 0.07109494643525345,
- "proportionalSeats": 1.0664241965288017,
- "proportionalLabel": "BLK share of VAP: 7.1% (1.1 seats)",
+ "proportionalSeats": 0.6398545179172811,
+ "proportionalLabel": "BLK share of VAP: 7.1% (0.6 seats)",
  "seatMax": 5,
  "seatTicks": [
   0,
@@ -18,34 +18,6 @@
  ],
  "districtConfigs": [
   {
-   "numDistricts": 0,
-   "winners": 15,
-   "systems": [
-    {
-     "id": "Combined",
-     "label": "Combined (15 seats)"
-    }
-   ],
-   "candidatePoolMax": null,
-   "candidatePoolMean": null,
-   "plans": 50,
-   "electionsPerSystem": 12500
-  },
-  {
-   "numDistricts": 1,
-   "winners": 6,
-   "systems": [
-    {
-     "id": "FASTSTV",
-     "label": "1 X 6 STV"
-    }
-   ],
-   "candidatePoolMax": 15,
-   "candidatePoolMean": 12,
-   "plans": 50,
-   "electionsPerSystem": 12500
-  },
-  {
    "numDistricts": 9,
    "winners": 1,
    "systems": [
@@ -56,8 +28,8 @@
    ],
    "candidatePoolMax": 10,
    "candidatePoolMean": 7,
-   "plans": 50,
-   "electionsPerSystem": 12500
+   "plans": 100,
+   "electionsPerSystem": 18000
   }
  ],
  "voterModels": [
@@ -106,6 +78,6 @@
   "BLK": 0.9
  },
  "primaryTurnout": null,
- "replicates": 25,
- "subsamples": 50
+ "replicates": 10,
+ "subsamples": 100
 }
