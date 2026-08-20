@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+"
         crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="fonts/fonts.css">
-  <link rel="stylesheet" href="css/report.css?v=dd1a0620c7">
+  <link rel="stylesheet" href="css/report.css?v=41d05a45f9">
 </head>
 
 <body data-bs-spy="scroll" data-bs-target="#toc-nav" data-bs-offset="90" tabindex="0">
@@ -54,9 +54,10 @@
           <a class="nav-link" href="#conclusion">Conclusion</a>
           <a class="nav-link" href="#results">Results by Scenario</a>
           <nav class="nav flex-column">
-            <a class="nav-link" href="#run-basic-3-x-3">Warmup</a>
+            <a class="nav-link" href="#run-basic-3-x-3">Warmup - 3 X 3 STV</a>
             <a class="nav-link" href="#run-city-charter-amendment-proposal">City Charter Amendment Proposal</a>
             <a class="nav-link" href="#run-alternative-electoral-systems">Alternative Electoral Systems</a>
+            <a class="nav-link" href="#run-hybrid-system-3x4-stv-1x3-plurality">Hybrid System - 3x4 STV + 1x3 Plurality</a>
           </nav>
           <a class="nav-link" href="#comparison">Cross-Run Comparison</a>
         </nav>
@@ -80,20 +81,166 @@ This report seeks to work with the most recent demographic data from 2020 Census
         <section id="methodology" class="prose mb-5">
           <h2>Methodology</h2>
           <h2>3.1 Districting Plan Ensembles</h2>
-<p>To generate a sufficient number of distinct districting plans, we use GerryChain to run a 10,000-step ReCom chain and subsample 100 plans that will be used in our election simulations. We do this a total of two times — once for each of the following configurations:</p>
-<ul>
-<li>3 × 3 ensemble — each plan has 3 single-member districts built from precincts</li>
-<li>9 × 1 ensemble — each plan has 1 multi-member districts built from precincts</li>
-</ul>
-<p>Additionally, we run a election 1 x 9 where San Diego city is represented as one single District. In this scenario, we dont need to run a MC chain as we only going to work with one districting plan but to compensate for a reduction in the number of simulations, we increase the number of profiles from 10 to 100.</p>
+<p>To generate a sufficient number of distinct districting plans, we use GerryChain to run a 10,000-step ReCom chain and subsample 100 plans that will be used in our election simulations. We do this for every set of elections that require a different number of districts.</p>
+<p>An ensemble depends only on how many districts a plan has, not on how many seats each district fills, so every configuration sharing a district count draws on the same set of maps — for exapmle, the 3 × 3 and 3 × 5 configurations both use three-district plans and differ only in district magnitude.</p>
+<p>Additionally, we run elections where San Diego city is represented as one single district. In these scenarios we don't need to run GerryChain, but we do still perform 100 subsamples. The reason for this is that for all subsampled maps we generate random candidate pools of variable size whose slate composition is roughly proportional to bloc VAP share.</p>
+<p>The table below lists every districting configuration used in this study, written as <em>districts × seats per district</em>, and the scenarios built on each.</p>
+<table>
+<thead>
+<tr>
+  <th>Configuration</th>
+  <th style="text-align:right">Seats</th>
+  <th>Ensemble</th>
+  <th>Scenarios</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>1 × 3</td>
+  <td style="text-align:right">3</td>
+  <td>Single plan</td>
+  <td>Hybrid System — 1 × 3 tier</td>
+</tr>
+<tr>
+  <td>1 × 6</td>
+  <td style="text-align:right">6</td>
+  <td>Single plan</td>
+  <td>City Charter Amendment Proposal — 1 × 6 tier, both models</td>
+</tr>
+<tr>
+  <td>1 × 9</td>
+  <td style="text-align:right">9</td>
+  <td>Single plan</td>
+  <td>Nine Seats At-Large — both models</td>
+</tr>
+<tr>
+  <td>1 × 15</td>
+  <td style="text-align:right">15</td>
+  <td>Single plan</td>
+  <td>Fifteen Seats At-Large STV — both models</td>
+</tr>
+<tr>
+  <td>3 × 3</td>
+  <td style="text-align:right">9</td>
+  <td>ReCom, 100 plans</td>
+  <td>Basic, Truncation, Diverse Preferences, Low Availability, Low Turnout — all both models</td>
+</tr>
+<tr>
+  <td>3 × 4</td>
+  <td style="text-align:right">12</td>
+  <td>ReCom, 100 plans</td>
+  <td>Hybrid System — 3 × 4 tier</td>
+</tr>
+<tr>
+  <td>3 × 5</td>
+  <td style="text-align:right">15</td>
+  <td>ReCom, 100 plans</td>
+  <td>3x5 STV (4-bloc); Basic 3 × 5 (2-bloc)</td>
+</tr>
+<tr>
+  <td>5 × 3</td>
+  <td style="text-align:right">15</td>
+  <td>ReCom, 100 plans</td>
+  <td>5x3 STV (4-bloc); Basic 5 × 3 (2-bloc)</td>
+</tr>
+<tr>
+  <td>9 × 1</td>
+  <td style="text-align:right">9</td>
+  <td>ReCom, 100 plans</td>
+  <td>9 × 1 IRV — both models; 9x1 Plurality (4-bloc); City Charter — 9 × 1 tier</td>
+</tr>
+<tr>
+  <td>12 × 1</td>
+  <td style="text-align:right">12</td>
+  <td>ReCom, 100 plans</td>
+  <td>12 × 1 IRV — both models</td>
+</tr>
+<tr>
+  <td>15 × 1</td>
+  <td style="text-align:right">15</td>
+  <td>ReCom, 100 plans</td>
+  <td>Alternative Electoral Systems — both models</td>
+</tr>
+</tbody>
+</table>
+<p>The two hybrid scenarios — the City Charter Amendment Proposal and the Hybrid System — each pair two configurations in one election, filling part of the body from districts and the rest citywide, so they appear in two rows.</p>
 <h2>3.2 Voter Blocs and Candidate Slates</h2>
-<p>Mirroring past reports, we consider the four largest racial demographic groups when identifying blocs of voters with shared preferences and slates of candidates with similar policies and positions. In that sense, Slates and Voters are limited to and delineated as Black, Asian, Hispanic, and White. The voting bloc variables were constructed using Decennial Census variables from 2020 following the <a href="https://data-democracy.org/VAP-CVAP">bloc classification methodology</a> of MGGG.</p>
+<p>Mirroring past reports, we consider the largest communities of interest when identifying blocs of voters with shared preferences and slates of candidates with similar policies and positions. In San Diego, much of the attention in redistricting and electoral reform has been focused on communities and voters of color - particularly the Black, AAPI, and Latino communities. We carry that spirit into this report by choosing to focus on these three groups as distinct voting blocs in addition to the &quot;WAIO (White/American Indian/Other Race)&quot; bloc. The decision to merge White, American Indian, and Other Race voters into a single bloc is in keeping with methodological norms of MGGG electoral analysis.</p>
+<h3>3.2.1 Two Bloc vs. Four Bloc Models</h3>
+<p>In this report, we model voting blocs in two ways. The first is the two-bloc model and has been the standard for this type of electoral analysis in city council elections. In the two-bloc model, we generally designate a bloc for the city-wide majority group (typically White voters) and one for voters of color (POC). Here, our majority group is WAIO and our POC group consists of Black, Latino, and AAPI voters. With the four-bloc model, we provide a more granular view of electoral outcomes for each bloc by modeling them separately. Here we have Black voters (BLK), AAPI voters (AAPI), Latino voters (HIS), and White voters with the additon of Indigigenous American and Other Race voters (WAIO).</p>
+<p>Note that while we attempt to maintain consistency in modeling decisions between the two-bloc and four-bloc siulations, these are fundamentally different approaches in the analysis of electoral systems. For instance, it's possible that the combined POC bloc has enough voter share and crossover support to achieve proportional representation within a given electoral system - and the reader might interpret that all constituent groups within achieve their own share of seats by virtue of belonging to the whole, which is not necessarily true. With the four-bloc approach, we do get to see the outcomes for each bloc individually - with the caveat that each bloc has its own cohesion, turnout, and dirichlet parameters set that changes how crossover and within-slate support functions. Additionally, because we take an &quot;exaggerated proportion&quot; approach to per-slate candidate availability, the stochastic generation of candidates in the overall pool may lead to instances in which votes get split between two minority candidates in such a way that leads to a seat being lost in a particular district. We present this (admittedly contrived) example not as a defintiive explanation of the exact differences between two and four-bloc modeling, but as a point of caution when interpreting and comparing simulated election outcomes between the two.</p>
+<h3>3.2.2 Demographic Table</h3>
+<p>The voting bloc variables were constructed using Decennial Census variables from 2020 following the <a href="https://data-democracy.org/VAP-CVAP">bloc classification methodology</a> of MGGG.</p>
+<p>The six census categories below partition San Diego's voting-age population of 1,125,087. Every category is assigned to exactly one bloc, so the blocs sum to the whole electorate and no resident is counted twice or left out. Both models carry American Indian and other-race voters with White voters in the WAIO bloc; they differ only in whether the remaining groups vote as one bloc or three.</p>
+<table>
+<thead>
+<tr>
+  <th>Demographic group</th>
+  <th style="text-align:right">VAP</th>
+  <th style="text-align:right">Share</th>
+  <th>Four-bloc</th>
+  <th>Two-bloc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>White</td>
+  <td style="text-align:right">492,810</td>
+  <td style="text-align:right">43.80%</td>
+  <td>WAIO</td>
+  <td>WAIO</td>
+</tr>
+<tr>
+  <td>Hispanic</td>
+  <td style="text-align:right">298,979</td>
+  <td style="text-align:right">26.57%</td>
+  <td>HIS</td>
+  <td>POC</td>
+</tr>
+<tr>
+  <td>Asian / NHPI</td>
+  <td style="text-align:right">229,884</td>
+  <td style="text-align:right">20.43%</td>
+  <td>AAPI</td>
+  <td>POC</td>
+</tr>
+<tr>
+  <td>Black</td>
+  <td style="text-align:right">79,988</td>
+  <td style="text-align:right">7.11%</td>
+  <td>BLK</td>
+  <td>POC</td>
+</tr>
+<tr>
+  <td>Other race</td>
+  <td style="text-align:right">14,593</td>
+  <td style="text-align:right">1.30%</td>
+  <td>WAIO</td>
+  <td>WAIO</td>
+</tr>
+<tr>
+  <td>American Indian</td>
+  <td style="text-align:right">8,833</td>
+  <td style="text-align:right">0.79%</td>
+  <td>WAIO</td>
+  <td>WAIO</td>
+</tr>
+<tr>
+  <td><strong>Total</strong></td>
+  <td style="text-align:right"><strong>1,125,087</strong></td>
+  <td style="text-align:right"><strong>100.00%</strong></td>
+  <td></td>
+  <td></td>
+</tr>
+</tbody>
+</table>
+<p>Two groupings are used across the study. The <strong>four-bloc model</strong> gives Hispanic, Asian, and Black voters a bloc each alongside WAIO, producing bloc shares of 45.88% WAIO, 26.57% HIS, 20.43% AAPI, and 7.11% BLK. The <strong>two-bloc model</strong> keeps WAIO exactly as it is and combines the other three into a single POC bloc: 45.88% WAIO against 54.12% POC.</p>
+<p>The difference is not only one of labels. The four-bloc model needs a cohesion matrix asserting how each minority bloc behaves toward the other two; the two-bloc model asks instead whether a coalition of minority voters can elect candidates of its choice, which is the question these simulations are built around.</p>
 <h2>3.3 Candidate Availability and Pool Size</h2>
-<p>The decision to simulate candidate availability per-district for each voting bloc relies on evidence found from previous Sand Diego City council elections. For instance, the last three San Diego City Council Elections had a pattern where candidates representing the Asian and Black community run only in the districts where their own community makes up a larger share of voters across districts (<a href="https://en.wikipedia.org/wiki/2020_San_Diego_elections">2020</a>, <a href="https://en.wikipedia.org/wiki/2022_San_Diego_City_Council_election">2022</a>, <a href="https://en.wikipedia.org/wiki/2024_San_Diego_elections">2024</a>). Analyzing the bloc distribution of San Diego 9-district plan, District 4 and 6 have the highest shares of Black and Asian communities, respectively, and candidates running in those district are predominantly from those same communitities. Likewise, it is not common to find candidates from Asian and Black running on districts with a low share of their own communities.</p>
+<p>The decision to simulate candidate availability per-district for each voting bloc relies on evidence found from previous San Diego City council elections. For instance, the last three San Diego City Council Elections had a pattern where candidates representing the Asian and Black community run only in the districts where their own community makes up a larger share of voters across districts (<a href="https://en.wikipedia.org/wiki/2020_San_Diego_elections">2020</a>, <a href="https://en.wikipedia.org/wiki/2022_San_Diego_City_Council_election">2022</a>, <a href="https://en.wikipedia.org/wiki/2024_San_Diego_elections">2024</a>). Analyzing the bloc distribution of San Diego 9-district plan, District 4 and 6 have the highest shares of Black and Asian communities, respectively, and candidates running in those district are predominantly from those same communitities. Likewise, it is not common to find candidates from Asian and Black running on districts with a low share of their own communities.</p>
 <p>Similarly, evidence suggest that the number of candidate or pool size that runs for each district is not homogenous. Last 20 years of elections, the distribution of candidates running per district is diverse. On primaries, the average number of candidate is 3.5, where there has been districts bellow the mean with only 1 candidate running and districts above with 9 candidates.</p>
 <p><img src="assets/candidate_count_histogram.png" alt="Histogram" /></p>
-<p>Based on the previous analysis, we endogenous determine the pool size and the candidate availability per slate as variables for each district and plan.</p>
-<p>To model the pool size we assume the number of candidates (<span class="math">\(m\)</span>) behaves as a Binomial Distribution with a floor set as the number of winner per district plus one. The floor <span class="math">\(k + 1\)</span> ensures that we never have a scenario where the number of winners is equal to the number of running candidates as they will automatically will declare as winners.</p>
+<p>Based on the previous analysis, we determine the pool size and the candidate availability per slate as variables for each district and plan. To calculate our pool size we assume the number of candidates (<span class="math">\(m\)</span>) behaves as a Binomial Distribution with a floor set as the number of winner per district plus one. The floor <span class="math">\(k + 1\)</span> ensures that we never have a scenario where the number of winners is equal to the number of running candidates as they will automatically will declare as winners.</p>
 <div class="math">$$
 m = k + 1 + x 
 $$</div>
@@ -107,52 +254,103 @@ $$</div>
 <p><span class="math">\(p =  \frac{E(m)-  (k + 1)}{n}\)</span></p>
 <p>Finally, we make an assumption that the racial composition of the slate pool will be roughly proportional to that of the VAP in each district. We use the bloc proportions to create an interval, with the intent of sampling candidates of different slates from it. However, before we do we first square each element, normalizing the “squared interval” over the sum of the squared values. This creates an “exaggeration” effect when we sample slate candidates. In other words, if a district has a large Black VAP, it's even more likely that the Black voter-preferred slate of candidates will be larger than the others. Similarly, if the Asian VAP is small it's much less likely that the Asian voter-preferred slate will have many candidates — if any, since we allow for slates to be empty. This is intended to model how community dynamics, segregation, or lack of institutional support may impact candidate availability across geography with respect to race. Finally, we modeled one scenario with a &quot;cubic interval&quot; for sensitivy results to increase the original scenario.</p>
 <h2>3.4 Voter Profile and Ballot Generation</h2>
-<p>For each district in all 50 district plans of our ensemble, we generate voter preference profiles — a collection of ballots from voters that rank available candidates. These rankings are determined by using VoteKit's Plackett-Luce and Bradley-Terry ballot generators, which model impulsive voter behavior and deliberative voter behavior, respectively. Each assumes that each voter bloc has a preference interval for each slate of candidates, along with a tuple of cohesion parameters — one parameter for each slate.</p>
-<p>Both generators share the same two-stage process, and they only differ in how the first stage plays out. Before any ballots are drawn, each bloc's preference interval is assembled by taking that bloc's cohesion for a given slate and slicing off a sub-interval of that width, then filling it in with the individual candidates of the slate according to their support. We govern the within-slate split with a set of Dirichlet alphas — in this report we hold all alphas at 1, which means that once a voter has decided to reach for a particular slate, every candidate on that slate is treated as equally preferred. The cohesion parameters (the rows of the matrices below) therefore do all the work of ordering slates against one another, while the interval handles the ordering of candidates within a slate. What separates the two models is the story we tell about how a voter walks through that interval to produce a ranking.</p>
+<p>For each district in all 50 district plans of our ensemble, we generate voter preference profiles — a collection of ballots from voters that rank available candidates. These rankings are determined by three of VoteKit's built-in slate ballot generators: Plackett-Luce, Bradley-Terry, and Cambridge Sampler. Plackett-Luce and Bradley-Terry model impulsive voter behavior and deliberative voter behavior respectively, while Cambridge Sampler samples from historical ballot data. Each assumes that each voter bloc has a preference interval for each slate of candidates, along with a tuple of cohesion parameters — one parameter for each slate. All generators feature a two-stage process, and they only differ in how the first stage plays out.</p>
+<p>For PL and BT, before any ballots are drawn each bloc's preference interval is assembled by taking that bloc's cohesion for a given slate and slicing off a sub-interval of that width, then filling it in with the individual candidates of the slate according to their support. We govern the within-slate split with a set of Dirichlet alphas — in this report we hold all alphas at 1, which means that once a voter has decided to reach for a particular slate, every candidate on that slate is treated as equally preferred. The cohesion parameters (the rows of the matrices below) therefore do all the work of ordering slates against one another, while the interval handles the ordering of candidates within a slate. What separates the two models is the story we tell about how a voter walks through that interval to produce a ranking.</p>
+<p>Cambridge Sampler functions similarly in its second stage. It's core difference is that the &quot;slate ordering&quot; achieved in the first stage of PL and BT is dictated by sampling from historical voting records from Cambridge, MA elections.</p>
 <h3>The Impulsive Voter</h3>
 <p>The Plackett-Luce generator builds a ballot from the top down, one position at a time. Starting from the first-place slot, a voter in bloc reaches for a candidate from slate  with probability equal to that bloc's cohesion for the slate, ; whichever slate is chosen then supplies a specific candidate by sampling from that slate's preference interval without replacement. The voter repeats this for the next position, renormalizing over whatever slates still have candidates left, and keeps going until the ballot is full. We call this the impulsive voter because they never look back — each ranking is a snapshot decision made in the moment, with no reconsideration of the choices already committed higher up the ballot. Concretely, a voter picks their favorite, then their next favorite from what remains, and so on, so the probability of a given slate ordering is just the product of these sequential draws.</p>
 <h3>The Deliberative Voter</h3>
 <p>The Bradley-Terry generator instead asks the voter to weigh the ballot as a whole. Rather than filling positions in sequence, the probability of a complete ranking is proportional to the product of the pairwise slate preferences across every pair of slates on the ballot — for a ranking that places slate  above slate , each such head-to-head contributes a factor of . A voter effectively runs every candidate against every other in their head and only then settles on the ordering that is most internally consistent with all of those matchups at once. We call this the deliberative voter, since the ranking reflects a considered comparison of the full field rather than a run of top-down impulses. The candidate-filling stage is identical to Plackett-Luce — once the slate ordering is fixed, specific candidates are drawn from each slate's preference interval — so the two models diverge only in how much of the ballot a voter is imagined to be considering at once.</p>
+<h3>The Cambridge Voter</h3>
+<p>Cambridge Sampler utilizes historical ballot data in the form of Cast Vote Records (CVR) from STV elections in Cambridge, MA. Similar to Slate BT and Slate PL, the voter first makes a weighted coin flip to decide which of two slates they will rank in the first position of their ballot: either a majority or minority candidate. That is, if a voter puts a majorrity candidate first, the rest of their ballot type is sampled in proportion to the number of historical ballots that started with a majority candidate. Once a ballot type is determined, the order of candidates is determined by a PL model.</p>
+<blockquote>
+<p>It should be noted that because the Cambridge Sampler voter model is built on historical election data, it only supports two slates of candidates. Therefore, we opt to exclude it from our four-bloc simulations - though it does get included in the two-bloc simulations.</p>
+</blockquote>
 <h3>Cohesion Matrices</h3>
-<p>Rows are voter blocs, columns are candidate slates; each row sums to 1.</p>
+<p>Rows are voter blocs, columns are candidate slates; each row sums to 1. A cell is the probability that a voter of that bloc supports a candidate of that slate, so the diagonal is within-group cohesion and the off-diagonal entries describe crossover.</p>
+<p><strong>Two-bloc simulations.</strong></p>
 <table>
 <thead>
 <tr>
   <th>bloc ↓ / slate →</th>
-  <th>White</th>
-  <th>Asian</th>
-  <th>Black</th>
-  <th>Hispanic</th>
+  <th>WAIO</th>
+  <th>POC</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td><strong>White</strong></td>
+  <td><strong>WAIO</strong> (White, American Indian, other race)</td>
   <td>0.80</td>
+  <td>0.20</td>
+</tr>
+<tr>
+  <td><strong>POC</strong> (Black, Hispanic, Asian/NHPI)</td>
+  <td>0.11</td>
+  <td>0.89</td>
+</tr>
+</tbody>
+</table>
+<p>The POC bloc is modelled as slightly more cohesive than WAIO — 0.89 against 0.80 — which is what lets it win a share of seats above its share of the modelled electorate in several scenarios, despite lower turnout.</p>
+<p><strong>Four-bloc simulations.</strong></p>
+<table>
+<thead>
+<tr>
+  <th>bloc ↓ / slate →</th>
+  <th>WAIO</th>
+  <th>HIS</th>
+  <th>AAPI</th>
+  <th>BLK</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>WAIO</strong> (White, American Indian, other race)</td>
+  <td>0.80</td>
+  <td>0.05</td>
   <td>0.10</td>
+  <td>0.05</td>
+</tr>
+<tr>
+  <td><strong>HIS</strong> (Hispanic)</td>
+  <td>0.10</td>
+  <td>0.80</td>
   <td>0.05</td>
   <td>0.05</td>
 </tr>
 <tr>
-  <td><strong>Asian</strong></td>
+  <td><strong>AAPI</strong> (Asian/NHPI)</td>
   <td>0.15</td>
+  <td>0.03</td>
   <td>0.80</td>
   <td>0.02</td>
-  <td>0.03</td>
 </tr>
 <tr>
-  <td><strong>Black</strong></td>
+  <td><strong>BLK</strong> (Black)</td>
   <td>0.05</td>
+  <td>0.10</td>
   <td>0.05</td>
   <td>0.80</td>
-  <td>0.10</td>
 </tr>
+</tbody>
+</table>
+<p>This matrix is used by the Basic scenarios and their variations — Basic 3 × 3, 3 × 5, 5 × 3, Truncation, Diverse Preferences, Low Availability, and Low Turnout. The Alternative Electoral Systems, At-Large, IRV, and City Charter Amendment Proposal scenarios use the same matrix with one row differing: their Hispanic bloc splits its crossover 0.05 to WAIO and 0.10 to BLK, rather than 0.10 and 0.05.</p>
+<table>
+<thead>
 <tr>
-  <td><strong>Hispanic</strong></td>
-  <td>0.10</td>
-  <td>0.05</td>
+  <th>bloc ↓ / slate →</th>
+  <th>WAIO</th>
+  <th>HIS</th>
+  <th>AAPI</th>
+  <th>BLK</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>HIS</strong> (Hispanic) — variant row</td>
   <td>0.05</td>
   <td>0.80</td>
+  <td>0.05</td>
+  <td>0.10</td>
 </tr>
 </tbody>
 </table>
@@ -191,24 +389,6 @@ $$</div>
   <td>3 or 9 (multi-winner)</td>
   <td>Multi-winner ranked-choice rule using the Droop quota: candidates reaching the quota are elected and their surplus is redistributed, while last-place candidates are eliminated and transferred, until all seats are filled.</td>
 </tr>
-<tr>
-  <td><strong>Cumulative</strong></td>
-  <td>3 × 3, 1 × 9 (at-large)</td>
-  <td>3 or 9 (multi-winner)</td>
-  <td>Score-based multi-winner rule where each voter receives a budget equal to the number of seats and can distribute those points across candidates however they like, including stacking all of them on a single favorite; the top point-getters win.</td>
-</tr>
-<tr>
-  <td><strong>Limited</strong></td>
-  <td>3 × 3, 1 × 9 (at-large)</td>
-  <td>3 or 9 (multi-winner)</td>
-  <td>Score-based multi-winner rule identical to Cumulative except each voter's budget is capped below the number of seats (2 of 3 for the 3 × 3 config, 5 of 9 for at-large), so voters cannot concentrate every point on one candidate.</td>
-</tr>
-<tr>
-  <td><strong>Two-round rules</strong> (Alaska- and Top-Two-style)</td>
-  <td>9 × 1</td>
-  <td>1 (single-winner)</td>
-  <td>A PSMD primary narrows the field to a fixed number of finalists (<span class="math">\(m_1\)</span> = 4 for the Alaska-style rule, 2 for the Top-Two-style rule), a new ballot profile is resampled over just those finalists, and the general round decides the winner via STV (Alaska-style) or Plurality (Top-Two-style).</td>
-</tr>
 </tbody>
 </table>
 <p>For each system, tiebreaks are performed randomly when needed.</p>
@@ -225,7 +405,7 @@ $$</div>
 
           <section id="run-basic-3-x-3" class="run mb-5" data-run="basic-3-x-3">
             <div class="run-main">
-            <h3 class="h4 mt-4">Warmup</h3>
+            <h3 class="h4 mt-4">Warmup - 3 X 3 STV</h3>
             <div class="run-prose"><p>In this scenario, we explore the expected outcomes of a hypothetical electoral shift that redistricts San Diego into three districts with three elected members in each - running three different elections using Single Transferable Vote (STV), Cumlative, and Limited voting rules. STV uses the deliberative and impulsive models (representing 3000 elections each) while Cumulative and Limited use the &quot;Name Cumulative&quot; model that allows for voters to &quot;plump&quot; their votes on preferred candidates.</p>
 </div>
 
@@ -358,6 +538,51 @@ $$</div>
             </div>
             <aside class="run-params" data-params="alternative-electoral-systems"></aside>
           </section>
+          <section id="run-hybrid-system-3x4-stv-1x3-plurality" class="run mb-5" data-run="hybrid-system-3x4-stv-1x3-plurality">
+            <div class="run-main">
+            <h3 class="h4 mt-4">Hybrid System - 3x4 STV + 1x3 Plurality</h3>
+            <p class="todo">[Description to be written — edit
+               <code>docs/prose/runs/hybrid-system-3x4-stv-1x3-plurality.md</code>.]</p>
+
+            <div class="run-controls" data-controls="hybrid-system-3x4-stv-1x3-plurality"></div>
+
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="tab"
+                        data-bs-target="#hybrid-system-3x4-stv-1x3-plurality-focal" type="button" role="tab">
+                  Seat outcomes
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab"
+                        data-bs-target="#hybrid-system-3x4-stv-1x3-plurality-availability" type="button" role="tab">
+                  Districts by VAP rank
+                </button>
+              </li>
+            </ul>
+            <div class="tab-content pt-3">
+              <div class="tab-pane fade show active" id="hybrid-system-3x4-stv-1x3-plurality-focal" role="tabpanel">
+                <div class="metric-toggles" data-view="hybrid-system-3x4-stv-1x3-plurality"></div>
+                <div class="row g-4 figure-pair" data-one-group="hybrid-system-3x4-stv-1x3-plurality">
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="bubble" data-run="hybrid-system-3x4-stv-1x3-plurality"></div>
+                  </div>
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="histogram" data-run="hybrid-system-3x4-stv-1x3-plurality"></div>
+                  </div>
+                </div>
+                <div data-all-groups="hybrid-system-3x4-stv-1x3-plurality" hidden>
+                  <div class="chart" data-chart="slate" data-run="hybrid-system-3x4-stv-1x3-plurality"></div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="hybrid-system-3x4-stv-1x3-plurality-availability" role="tabpanel">
+                <div class="metric-toggles" data-metric="hybrid-system-3x4-stv-1x3-plurality"></div>
+                <div class="chart" data-chart="availability" data-run="hybrid-system-3x4-stv-1x3-plurality"></div>
+              </div>
+            </div>
+            </div>
+            <aside class="run-params" data-params="hybrid-system-3x4-stv-1x3-plurality"></aside>
+          </section>
         </section>
 
         <section id="comparison" class="mb-5">
@@ -406,15 +631,15 @@ $$</div>
 
   <script type="importmap">{
  "imports": {
-  "./js/charts/availability.js": "./js/charts/availability.js?v=dd1a0620c7",
-  "./js/charts/axes.js": "./js/charts/axes.js?v=dd1a0620c7",
-  "./js/charts/bubble.js": "./js/charts/bubble.js?v=dd1a0620c7",
-  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=dd1a0620c7",
-  "./js/charts/histogram.js": "./js/charts/histogram.js?v=dd1a0620c7",
-  "./js/charts/slate.js": "./js/charts/slate.js?v=dd1a0620c7",
-  "./js/report.js": "./js/report.js?v=dd1a0620c7"
+  "./js/charts/availability.js": "./js/charts/availability.js?v=41d05a45f9",
+  "./js/charts/axes.js": "./js/charts/axes.js?v=41d05a45f9",
+  "./js/charts/bubble.js": "./js/charts/bubble.js?v=41d05a45f9",
+  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=41d05a45f9",
+  "./js/charts/histogram.js": "./js/charts/histogram.js?v=41d05a45f9",
+  "./js/charts/slate.js": "./js/charts/slate.js?v=41d05a45f9",
+  "./js/report.js": "./js/report.js?v=41d05a45f9"
  }
 }</script>
-  <script type="module" src="js/report.js?v=dd1a0620c7"></script>
+  <script type="module" src="js/report.js?v=41d05a45f9"></script>
 </body>
 </html>

@@ -1,0 +1,83 @@
+{
+ "runName": "Low AAPI Availability",
+ "slug": "low-aapi-availability",
+ "focalGroup": "AAPI",
+ "focalGroupLabel": "AAPI",
+ "totalSeats": 9,
+ "focalVapShare": 0.20432553215884638,
+ "proportionalSeats": 1.8389297894296175,
+ "proportionalLabel": "AAPI share of VAP: 20.4% (1.8 seats)",
+ "seatMax": 5,
+ "seatTicks": [
+  0,
+  1,
+  2,
+  3,
+  4,
+  5
+ ],
+ "districtConfigs": [
+  {
+   "numDistricts": 3,
+   "winners": 3,
+   "systems": [
+    {
+     "id": "FASTSTV",
+     "label": "3 X 3 STV"
+    }
+   ],
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7,
+   "plans": 100,
+   "electionsPerSystem": 6000
+  }
+ ],
+ "voterModels": [
+  {
+   "id": "slate_pl",
+   "label": "Impulsive",
+   "pooled": false
+  },
+  {
+   "id": "slate_bt",
+   "label": "Deliberative",
+   "pooled": false
+  },
+  {
+   "id": "combined",
+   "label": "Combined",
+   "pooled": true
+  }
+ ],
+ "slates": [
+  {
+   "id": "WHI",
+   "label": "WHI",
+   "vapShare": 0.4380194598284399
+  },
+  {
+   "id": "BAIO",
+   "label": "BAIO",
+   "vapShare": 0.0919164473502938
+  },
+  {
+   "id": "HIS",
+   "label": "HIS",
+   "vapShare": 0.2657385606624199
+  },
+  {
+   "id": "AAPI",
+   "label": "AAPI",
+   "vapShare": 0.20432553215884638
+  }
+ ],
+ "turnout": {
+  "AAPI": 0.75,
+  "BAIO": 1,
+  "HIS": 0.75,
+  "WHI": 1
+ },
+ "primaryTurnout": null,
+ "replicates": 10,
+ "subsamples": 100
+}

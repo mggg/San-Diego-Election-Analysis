@@ -426,24 +426,40 @@ def _render_markdown(path: Path, docs_dir: Path = DOCS_DIR) -> str:
     return _rebase_relative_srcs(html, path.parent, docs_dir)
 
 
-def _run_prose_path(docs_dir: Path, slug: str) -> Path:
-    """Where a run's own hand-written description lives, if it has one."""
-    return docs_dir / "prose" / "runs" / f"{slug}.md"
-
-
-def _ensure_run_prose_stubs(docs_dir: Path, runs: List[Dict[str, Any]]) -> None:
+def _section_prose_name(slug: str, entries: Dict[str, Dict[str, Any]]) -> str:
     """
-    Touch an empty prose file for any run that doesn't have one yet.
+    The prose file a section reads, without its extension.
+
+    A section's description belongs to the section, not to whichever run
+    supplies its numbers. They coincide by default -- most sections are one run
+    and take its slug -- but the outline can point a section at a file of its
+    own with a "prose" key, which is what keeps the writing attached when the
+    runs beneath it are re-slugged, swapped for a different bloc model, or
+    collected into a composed section that no single run names.
+    """
+    entry = entries.get(slug) or {}
+    name = entry.get("prose") or slug
+    return name[:-3] if name.endswith(".md") else name
+
+
+def _run_prose_path(docs_dir: Path, name: str) -> Path:
+    """Where a section's hand-written description lives, if it has one."""
+    return docs_dir / "prose" / "runs" / f"{name}.md"
+
+
+def _ensure_run_prose_stubs(docs_dir: Path, names: List[str]) -> None:
+    """
+    Touch an empty prose file for any section that doesn't have one yet.
 
     The top-level prose files (abstract.md, background.md, ...) are
     discoverable because they already exist, blank, ready to open and edit --
-    this gives each run's description the same discoverability instead of a
+    this gives each section's description the same discoverability instead of a
     filename convention that's only written down.
     """
     prose_dir = docs_dir / "prose" / "runs"
     prose_dir.mkdir(parents=True, exist_ok=True)
-    for meta in runs:
-        path = _run_prose_path(docs_dir, meta["slug"])
+    for name in names:
+        path = _run_prose_path(docs_dir, name)
         if not path.exists():
             path.touch()
 
@@ -793,10 +809,15 @@ def generate_report(docs_dir: Path = DOCS_DIR, config_dir: Optional[Path] = None
         for section in prose_sections
     }
 
-    _ensure_run_prose_stubs(docs_dir, page_runs)
+    # Keyed by section slug, but read from whichever file the outline assigns --
+    # so two sections may share one description, and renaming a run does not
+    # orphan the writing about it.
+    entries = _scenario_entries(outline["scenarios"])
+    prose_names = {meta["slug"]: _section_prose_name(meta["slug"], entries) for meta in page_runs}
+    _ensure_run_prose_stubs(docs_dir, sorted(set(prose_names.values())))
     run_prose = {
-        meta["slug"]: _render_markdown(_run_prose_path(docs_dir, meta["slug"]), docs_dir)
-        for meta in page_runs
+        slug: _render_markdown(_run_prose_path(docs_dir, name), docs_dir)
+        for slug, name in prose_names.items()
     }
 
     env = Environment(
