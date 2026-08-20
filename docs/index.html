@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+"
         crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="fonts/fonts.css">
-  <link rel="stylesheet" href="css/report.css?v=dd1a0620c7">
+  <link rel="stylesheet" href="css/report.css?v=41d05a45f9">
 </head>
 
 <body data-bs-spy="scroll" data-bs-target="#toc-nav" data-bs-offset="90" tabindex="0">
@@ -54,7 +54,7 @@
           <a class="nav-link" href="#conclusion">Conclusion</a>
           <a class="nav-link" href="#results">Results by Scenario</a>
           <nav class="nav flex-column">
-            <a class="nav-link" href="#run-basic-3-x-3">Warmup</a>
+            <a class="nav-link" href="#run-basic-3-x-3">Warmup - 3 X 3 STV</a>
             <a class="nav-link" href="#run-city-charter-amendment-proposal">City Charter Amendment Proposal</a>
             <a class="nav-link" href="#run-alternative-electoral-systems">Alternative Electoral Systems</a>
             <a class="nav-link" href="#run-hybrid-system-3x4-stv-1x3-plurality">Hybrid System - 3x4 STV + 1x3 Plurality</a>
@@ -89,7 +89,7 @@ This report seeks to work with the most recent demographic data from 2020 Census
 <thead>
 <tr>
   <th>Configuration</th>
-  <th>Total seats</th>
+  <th style="text-align:right">Seats</th>
   <th>Ensemble</th>
   <th>Scenarios</th>
 </tr>
@@ -97,63 +97,69 @@ This report seeks to work with the most recent demographic data from 2020 Census
 <tbody>
 <tr>
   <td>1 × 3</td>
-  <td>3</td>
-  <td>Single citywide plan</td>
-  <td>Hybrid System — 3x4 STV + 1x3 Plurality (lower tier)</td>
+  <td style="text-align:right">3</td>
+  <td>Single plan</td>
+  <td>Hybrid System — 1 × 3 tier</td>
 </tr>
 <tr>
   <td>1 × 6</td>
-  <td>6</td>
-  <td>Single citywide plan</td>
-  <td>City Charter Amendment Proposal (4-bloc and 2-bloc)</td>
+  <td style="text-align:right">6</td>
+  <td>Single plan</td>
+  <td>City Charter Amendment Proposal — 1 × 6 tier, both models</td>
 </tr>
 <tr>
   <td>1 × 9</td>
-  <td>9</td>
-  <td>Single citywide plan</td>
-  <td>Nine Seats At-Large (4-bloc); Nine Seats At-Large — STV (2-bloc)</td>
+  <td style="text-align:right">9</td>
+  <td>Single plan</td>
+  <td>Nine Seats At-Large — both models</td>
 </tr>
 <tr>
   <td>1 × 15</td>
-  <td>15</td>
-  <td>Single citywide plan</td>
-  <td>Fifteen Seats At-Large — STV (4-bloc and 2-bloc)</td>
+  <td style="text-align:right">15</td>
+  <td>Single plan</td>
+  <td>Fifteen Seats At-Large STV — both models</td>
 </tr>
 <tr>
   <td>3 × 3</td>
-  <td>9</td>
+  <td style="text-align:right">9</td>
   <td>ReCom, 100 plans</td>
-  <td>Basic — 3 × 3 (4-bloc and 2-bloc); Basic — 3 × 3 + Truncation (4-bloc and 2-bloc); Diverse AAPI / POC Coalition Preferences; Low AAPI / POC Availability; Low AAPI / POC Turnout</td>
+  <td>Basic, Truncation, Diverse Preferences, Low Availability, Low Turnout — all both models</td>
 </tr>
 <tr>
   <td>3 × 4</td>
-  <td>12</td>
+  <td style="text-align:right">12</td>
   <td>ReCom, 100 plans</td>
-  <td>Hybrid System — 3x4 STV + 1x3 Plurality (upper tier)</td>
+  <td>Hybrid System — 3 × 4 tier</td>
 </tr>
 <tr>
   <td>3 × 5</td>
-  <td>15</td>
+  <td style="text-align:right">15</td>
   <td>ReCom, 100 plans</td>
-  <td>3x5 STV (4-bloc); Basic — 3 × 5 (2-bloc)</td>
+  <td>3x5 STV (4-bloc); Basic 3 × 5 (2-bloc)</td>
 </tr>
 <tr>
   <td>5 × 3</td>
-  <td>15</td>
+  <td style="text-align:right">15</td>
   <td>ReCom, 100 plans</td>
-  <td>Basic — 5 × 3 (2-bloc)</td>
+  <td>5x3 STV (4-bloc); Basic 5 × 3 (2-bloc)</td>
 </tr>
 <tr>
   <td>9 × 1</td>
-  <td>9</td>
+  <td style="text-align:right">9</td>
   <td>ReCom, 100 plans</td>
-  <td>9x1 Plurality; City Charter Amendment Proposal (4-bloc and 2-bloc, lower tier)</td>
+  <td>9 × 1 IRV — both models; 9x1 Plurality (4-bloc); City Charter — 9 × 1 tier</td>
+</tr>
+<tr>
+  <td>12 × 1</td>
+  <td style="text-align:right">12</td>
+  <td>ReCom, 100 plans</td>
+  <td>12 × 1 IRV — both models</td>
 </tr>
 <tr>
   <td>15 × 1</td>
-  <td>15</td>
+  <td style="text-align:right">15</td>
   <td>ReCom, 100 plans</td>
-  <td>Alternative Electoral Systems (4-bloc and 2-bloc)</td>
+  <td>Alternative Electoral Systems — both models</td>
 </tr>
 </tbody>
 </table>
@@ -171,9 +177,9 @@ This report seeks to work with the most recent demographic data from 2020 Census
 <tr>
   <th>Demographic group</th>
   <th style="text-align:right">VAP</th>
-  <th style="text-align:right">Share of VAP</th>
-  <th>Four-bloc model</th>
-  <th>Two-bloc model</th>
+  <th style="text-align:right">Share</th>
+  <th>Four-bloc</th>
+  <th>Two-bloc</th>
 </tr>
 </thead>
 <tbody>
@@ -192,7 +198,7 @@ This report seeks to work with the most recent demographic data from 2020 Census
   <td>POC</td>
 </tr>
 <tr>
-  <td>Asian / Native Hawaiian &amp; Pacific Islander</td>
+  <td>Asian / NHPI</td>
   <td style="text-align:right">229,884</td>
   <td style="text-align:right">20.43%</td>
   <td>AAPI</td>
@@ -383,24 +389,6 @@ $$</div>
   <td>3 or 9 (multi-winner)</td>
   <td>Multi-winner ranked-choice rule using the Droop quota: candidates reaching the quota are elected and their surplus is redistributed, while last-place candidates are eliminated and transferred, until all seats are filled.</td>
 </tr>
-<tr>
-  <td><strong>Cumulative</strong></td>
-  <td>3 × 3, 1 × 9 (at-large)</td>
-  <td>3 or 9 (multi-winner)</td>
-  <td>Score-based multi-winner rule where each voter receives a budget equal to the number of seats and can distribute those points across candidates however they like, including stacking all of them on a single favorite; the top point-getters win.</td>
-</tr>
-<tr>
-  <td><strong>Limited</strong></td>
-  <td>3 × 3, 1 × 9 (at-large)</td>
-  <td>3 or 9 (multi-winner)</td>
-  <td>Score-based multi-winner rule identical to Cumulative except each voter's budget is capped below the number of seats (2 of 3 for the 3 × 3 config, 5 of 9 for at-large), so voters cannot concentrate every point on one candidate.</td>
-</tr>
-<tr>
-  <td><strong>Two-round rules</strong> (Alaska- and Top-Two-style)</td>
-  <td>9 × 1</td>
-  <td>1 (single-winner)</td>
-  <td>A PSMD primary narrows the field to a fixed number of finalists (<span class="math">\(m_1\)</span> = 4 for the Alaska-style rule, 2 for the Top-Two-style rule), a new ballot profile is resampled over just those finalists, and the general round decides the winner via STV (Alaska-style) or Plurality (Top-Two-style).</td>
-</tr>
 </tbody>
 </table>
 <p>For each system, tiebreaks are performed randomly when needed.</p>
@@ -417,7 +405,7 @@ $$</div>
 
           <section id="run-basic-3-x-3" class="run mb-5" data-run="basic-3-x-3">
             <div class="run-main">
-            <h3 class="h4 mt-4">Warmup</h3>
+            <h3 class="h4 mt-4">Warmup - 3 X 3 STV</h3>
             <div class="run-prose"><p>In this scenario, we explore the expected outcomes of a hypothetical electoral shift that redistricts San Diego into three districts with three elected members in each - running three different elections using Single Transferable Vote (STV), Cumlative, and Limited voting rules. STV uses the deliberative and impulsive models (representing 3000 elections each) while Cumulative and Limited use the &quot;Name Cumulative&quot; model that allows for voters to &quot;plump&quot; their votes on preferred candidates.</p>
 </div>
 
@@ -610,7 +598,7 @@ $$</div>
     <div class="container-xl text-center">
       <p class="mb-1">Metric Geometry &amp; Gerrymandering Group — San Diego City Council Election Analysis</p>
       <p class="mb-1"><a href="https://github.com/mggg/San-Diego-Election-Analysis" target="_blank" rel="noopener">View the repository on GitHub</a></p>
-      <p class="generated mb-0">Generated 2026-08-20T17:49:48+00:00</p>
+      <p class="generated mb-0">Generated 2026-08-20T18:47:02+00:00</p>
     </div>
   </footer>
 
@@ -643,15 +631,15 @@ $$</div>
 
   <script type="importmap">{
  "imports": {
-  "./js/charts/availability.js": "./js/charts/availability.js?v=dd1a0620c7",
-  "./js/charts/axes.js": "./js/charts/axes.js?v=dd1a0620c7",
-  "./js/charts/bubble.js": "./js/charts/bubble.js?v=dd1a0620c7",
-  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=dd1a0620c7",
-  "./js/charts/histogram.js": "./js/charts/histogram.js?v=dd1a0620c7",
-  "./js/charts/slate.js": "./js/charts/slate.js?v=dd1a0620c7",
-  "./js/report.js": "./js/report.js?v=dd1a0620c7"
+  "./js/charts/availability.js": "./js/charts/availability.js?v=41d05a45f9",
+  "./js/charts/axes.js": "./js/charts/axes.js?v=41d05a45f9",
+  "./js/charts/bubble.js": "./js/charts/bubble.js?v=41d05a45f9",
+  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=41d05a45f9",
+  "./js/charts/histogram.js": "./js/charts/histogram.js?v=41d05a45f9",
+  "./js/charts/slate.js": "./js/charts/slate.js?v=41d05a45f9",
+  "./js/report.js": "./js/report.js?v=41d05a45f9"
  }
 }</script>
-  <script type="module" src="js/report.js?v=dd1a0620c7"></script>
+  <script type="module" src="js/report.js?v=41d05a45f9"></script>
 </body>
 </html>

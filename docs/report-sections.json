@@ -1,61 +1,193 @@
 {
   "_comment": "The published report's outline: which sections and scenarios docs/index.html renders, and in what order. Hand-edited -- nothing generates or rewrites this file. manifest.json stays complete and is not affected by anything here; this only decides what the page shows.",
-
   "_prose_comment": "Prose sections, in page order. 'file' is relative to docs/prose/. A missing or empty file renders as a placeholder rather than breaking the build, so a section can be listed before it is written.",
   "prose_sections": [
-    { "id": "abstract", "file": "abstract.md", "title": "Abstract" },
-    { "id": "background", "file": "background.md", "title": "Background" },
-    { "id": "methodology", "file": "methodology.md", "title": "Methodology" },
-    { "id": "conclusion", "file": "conclusion.md", "title": "Conclusion" }
+    {
+      "id": "abstract",
+      "file": "abstract.md",
+      "title": "Abstract"
+    },
+    {
+      "id": "background",
+      "file": "background.md",
+      "title": "Background"
+    },
+    {
+      "id": "methodology",
+      "file": "methodology.md",
+      "title": "Methodology"
+    },
+    {
+      "id": "conclusion",
+      "file": "conclusion.md",
+      "title": "Conclusion"
+    }
   ],
-
   "_scenarios_comment": "Scenario sections, in page order, by slug (the 'slug' in a run's outputs/<run>/summaries/report/run.json). This is an allow-list: a run with complete artifacts that is not listed here does not appear on the page. To park a scenario without losing the entry, replace the string with { \"slug\": \"...\", \"enabled\": false }. A hidden scenario keeps its data in manifest.json and docs/data/, and stays in the cross-run comparison.",
   "_composed_comment": "A scenario may instead collect systems out of several runs, so one section can compare contests that were simulated separately. Give it a \"systems\" list: each entry names the \"run\" (slug) and the \"system\" (rule id as it appears in that run's run.json), optionally \"label\" to name it in the dropdown, and optionally \"districts\"/\"seats\" when one run uses the same rule in more than one contest. Switching systems reloads that run's records and repoints the figures, axes, proportional line, and the parameters card at it. An entry may also carry \"blocModel\" (\"two\" or \"four\"): when at least two values appear in one section's systems, the page adds a Two Bloc / Four Bloc toggle beside the voting-system dropdown, filters the dropdown to the selected value, and repopulates Focal Group from that entry's own run -- so switching bloc model never leaves Focal Group holding a bloc the new selection doesn't have.",
   "scenarios": [
     {
       "_note": "The 3 X 3 STV warmup scenario, both bloc models.",
       "slug": "basic-3-x-3",
-      "title": "Warmup",
+      "title": "Warmup - 3 X 3 STV",
       "systems": [
-        { "run": "basic-3-x-3", "system": "FASTSTV", "blocModel": "four" },
-        { "run": "basic-3-x-3-2-blocs", "system": "FASTSTV", "blocModel": "two" }
+        {
+          "run": "basic-3-x-3",
+          "system": "FASTSTV",
+          "blocModel": "four"
+        },
+        {
+          "run": "basic-3-x-3-2-blocs",
+          "system": "FASTSTV",
+          "blocModel": "two"
+        }
       ]
     },
     {
       "_note": "The hybrid charter-amendment run, both bloc models: the combined citywide total, or either component contest on its own.",
       "slug": "city-charter-amendment-proposal",
       "systems": [
-        { "run": "city-charter-amendment-proposal", "system": "Combined", "blocModel": "four" },
-        { "run": "city-charter-amendment-proposal", "system": "IRV", "blocModel": "four" },
-        { "run": "city-charter-amendment-proposal", "system": "FASTSTV", "blocModel": "four" },
-        { "run": "city-charter-amendment-proposal-2-blocs", "system": "Combined", "blocModel": "two" },
-        { "run": "city-charter-amendment-proposal-2-blocs", "system": "IRV", "blocModel": "two" },
-        { "run": "city-charter-amendment-proposal-2-blocs", "system": "FASTSTV", "blocModel": "two" }
+        {
+          "run": "city-charter-amendment-proposal",
+          "system": "Combined",
+          "blocModel": "four"
+        },
+        {
+          "run": "city-charter-amendment-proposal",
+          "system": "IRV",
+          "blocModel": "four"
+        },
+        {
+          "run": "city-charter-amendment-proposal",
+          "system": "FASTSTV",
+          "blocModel": "four"
+        },
+        {
+          "run": "city-charter-amendment-proposal-2-blocs",
+          "system": "Combined",
+          "blocModel": "two"
+        },
+        {
+          "run": "city-charter-amendment-proposal-2-blocs",
+          "system": "IRV",
+          "blocModel": "two"
+        },
+        {
+          "run": "city-charter-amendment-proposal-2-blocs",
+          "system": "FASTSTV",
+          "blocModel": "two"
+        }
       ]
     },
     {
       "_note": "Every standalone electoral structure lives here rather than in a section of its own, both bloc models: the 9/12/15 X 1 IRV shapes, 3 X 5 and 5 X 3 STV, and the at-large and multi-member STV runs. Basic's parameter variations (diverse preferences, low turnout, low availability) keep their own sections, as does the other hybrid run, whose combined view has no single contest to select.",
       "slug": "alternative-electoral-systems",
       "systems": [
-        { "run": "alternative-electoral-systems", "system": "IRV", "label": "15 × 1 IRV", "blocModel": "four" },
-        { "run": "alternative-electoral-systems", "system": "PLURALITY", "label": "15 × 1 Plurality", "blocModel": "four" },
-        { "run": "alternative-electoral-systems", "system": "TOPTWO", "label": "15 × 1 Top Two", "blocModel": "four" },
-        { "run": "alternative-electoral-systems-2-blocs", "system": "IRV", "label": "15 × 1 IRV", "blocModel": "two" },
-        { "run": "12-x-1-irv", "system": "IRV", "label": "12 × 1 IRV", "blocModel": "four" },
-        { "run": "12-x-1-irv-2-blocs", "system": "IRV", "label": "12 × 1 IRV", "blocModel": "two" },
-        { "run": "9x1-plurality", "system": "PLURALITY", "label": "9 × 1 Plurality", "blocModel": "four" },
-        { "run": "9-x-1-irv", "system": "IRV", "label": "9 × 1 IRV", "blocModel": "four" },
-        { "run": "9-x-1-irv-2-blocs", "system": "IRV", "label": "9 × 1 IRV", "blocModel": "two" },
-        { "run": "3x5-stv", "system": "FASTSTV", "label": "3 × 5 STV", "blocModel": "four" },
-        { "run": "basic-3-x-5-2-blocs", "system": "FASTSTV", "label": "3 × 5 STV", "blocModel": "two" },
-        { "run": "5x3-stv", "system": "FASTSTV", "label": "5 × 3 STV", "blocModel": "four" },
-        { "run": "basic-5-x-3-2-blocs", "system": "FASTSTV", "label": "5 × 3 STV", "blocModel": "two" },
-        { "run": "nine-seats-at-large", "system": "FASTSTV", "label": "1 × 9 STV", "blocModel": "four" },
-        { "run": "nine-seats-at-large-stv-2-blocs", "system": "FASTSTV", "label": "1 × 9 STV", "blocModel": "two" },
-        { "run": "fifteen-seats-at-large-stv", "system": "FASTSTV", "label": "1 × 15 STV", "blocModel": "four" },
-        { "run": "fifteen-seats-at-large-stv-2-blocs", "system": "FASTSTV", "label": "1 × 15 STV", "blocModel": "two" }
+        {
+          "run": "alternative-electoral-systems",
+          "system": "IRV",
+          "label": "15 × 1 IRV",
+          "blocModel": "four"
+        },
+        {
+          "run": "alternative-electoral-systems",
+          "system": "PLURALITY",
+          "label": "15 × 1 Plurality",
+          "blocModel": "four"
+        },
+        {
+          "run": "alternative-electoral-systems",
+          "system": "TOPTWO",
+          "label": "15 × 1 Top Two",
+          "blocModel": "four"
+        },
+        {
+          "run": "alternative-electoral-systems-2-blocs",
+          "system": "IRV",
+          "label": "15 × 1 IRV",
+          "blocModel": "two"
+        },
+        {
+          "run": "12-x-1-irv",
+          "system": "IRV",
+          "label": "12 × 1 IRV",
+          "blocModel": "four"
+        },
+        {
+          "run": "12-x-1-irv-2-blocs",
+          "system": "IRV",
+          "label": "12 × 1 IRV",
+          "blocModel": "two"
+        },
+        {
+          "run": "9x1-plurality",
+          "system": "PLURALITY",
+          "label": "9 × 1 Plurality",
+          "blocModel": "four"
+        },
+        {
+          "run": "9-x-1-irv",
+          "system": "IRV",
+          "label": "9 × 1 IRV",
+          "blocModel": "four"
+        },
+        {
+          "run": "9-x-1-irv-2-blocs",
+          "system": "IRV",
+          "label": "9 × 1 IRV",
+          "blocModel": "two"
+        },
+        {
+          "run": "3x5-stv",
+          "system": "FASTSTV",
+          "label": "3 × 5 STV",
+          "blocModel": "four"
+        },
+        {
+          "run": "basic-3-x-5-2-blocs",
+          "system": "FASTSTV",
+          "label": "3 × 5 STV",
+          "blocModel": "two"
+        },
+        {
+          "run": "5x3-stv",
+          "system": "FASTSTV",
+          "label": "5 × 3 STV",
+          "blocModel": "four"
+        },
+        {
+          "run": "basic-5-x-3-2-blocs",
+          "system": "FASTSTV",
+          "label": "5 × 3 STV",
+          "blocModel": "two"
+        },
+        {
+          "run": "nine-seats-at-large",
+          "system": "FASTSTV",
+          "label": "1 × 9 STV",
+          "blocModel": "four"
+        },
+        {
+          "run": "nine-seats-at-large-stv-2-blocs",
+          "system": "FASTSTV",
+          "label": "1 × 9 STV",
+          "blocModel": "two"
+        },
+        {
+          "run": "fifteen-seats-at-large-stv",
+          "system": "FASTSTV",
+          "label": "1 × 15 STV",
+          "blocModel": "four"
+        },
+        {
+          "run": "fifteen-seats-at-large-stv-2-blocs",
+          "system": "FASTSTV",
+          "label": "1 × 15 STV",
+          "blocModel": "two"
+        }
       ]
     },
     "hybrid-system-3x4-stv-1x3-plurality"
-  ]
+  ],
+  "_prose_key_comment": "Each section reads docs/prose/runs/<slug>.md by default. Add a \"prose\" key to point a section at a different file — so a description survives its run being re-slugged, and two sections showing the same scenario under different bloc models can share one write-up."
 }

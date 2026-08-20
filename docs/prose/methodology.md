@@ -8,18 +8,19 @@ Additionally, we run elections where San Diego city is represented as one single
 
 The table below lists every districting configuration used in this study, written as *districts × seats per district*, and the scenarios built on each.
 
-| Configuration | Total seats | Ensemble | Scenarios |
-| --- | --- | --- | --- |
-| 1 × 3 | 3 | Single citywide plan | Hybrid System — 3x4 STV + 1x3 Plurality (lower tier) |
-| 1 × 6 | 6 | Single citywide plan | City Charter Amendment Proposal (4-bloc and 2-bloc) |
-| 1 × 9 | 9 | Single citywide plan | Nine Seats At-Large (4-bloc); Nine Seats At-Large — STV (2-bloc) |
-| 1 × 15 | 15 | Single citywide plan | Fifteen Seats At-Large — STV (4-bloc and 2-bloc) |
-| 3 × 3 | 9 | ReCom, 100 plans | Basic — 3 × 3 (4-bloc and 2-bloc); Basic — 3 × 3 + Truncation (4-bloc and 2-bloc); Diverse AAPI / POC Coalition Preferences; Low AAPI / POC Availability; Low AAPI / POC Turnout |
-| 3 × 4 | 12 | ReCom, 100 plans | Hybrid System — 3x4 STV + 1x3 Plurality (upper tier) |
-| 3 × 5 | 15 | ReCom, 100 plans | 3x5 STV (4-bloc); Basic — 3 × 5 (2-bloc) |
-| 5 × 3 | 15 | ReCom, 100 plans | Basic — 5 × 3 (2-bloc) |
-| 9 × 1 | 9 | ReCom, 100 plans | 9x1 Plurality; City Charter Amendment Proposal (4-bloc and 2-bloc, lower tier) |
-| 15 × 1 | 15 | ReCom, 100 plans | Alternative Electoral Systems (4-bloc and 2-bloc) |
+| Configuration | Seats | Ensemble         | Scenarios                                                                               |
+| ------------- | ----: | ---------------- | --------------------------------------------------------------------------------------- |
+| 1 × 3         |     3 | Single plan      | Hybrid System — 1 × 3 tier                                                              |
+| 1 × 6         |     6 | Single plan      | City Charter Amendment Proposal — 1 × 6 tier, both models                               |
+| 1 × 9         |     9 | Single plan      | Nine Seats At-Large — both models                                                       |
+| 1 × 15        |    15 | Single plan      | Fifteen Seats At-Large STV — both models                                                |
+| 3 × 3         |     9 | ReCom, 100 plans | Basic, Truncation, Diverse Preferences, Low Availability, Low Turnout — all both models |
+| 3 × 4         |    12 | ReCom, 100 plans | Hybrid System — 3 × 4 tier                                                              |
+| 3 × 5         |    15 | ReCom, 100 plans | 3x5 STV (4-bloc); Basic 3 × 5 (2-bloc)                                                  |
+| 5 × 3         |    15 | ReCom, 100 plans | 5x3 STV (4-bloc); Basic 5 × 3 (2-bloc)                                                  |
+| 9 × 1         |     9 | ReCom, 100 plans | 9 × 1 IRV — both models; 9x1 Plurality (4-bloc); City Charter — 9 × 1 tier              |
+| 12 × 1        |    12 | ReCom, 100 plans | 12 × 1 IRV — both models                                                                |
+| 15 × 1        |    15 | ReCom, 100 plans | Alternative Electoral Systems — both models                                             |
 
 The two hybrid scenarios — the City Charter Amendment Proposal and the Hybrid System — each pair two configurations in one election, filling part of the body from districts and the rest citywide, so they appear in two rows.
 
@@ -39,15 +40,15 @@ The voting bloc variables were constructed using Decennial Census variables from
 
 The six census categories below partition San Diego's voting-age population of 1,125,087. Every category is assigned to exactly one bloc, so the blocs sum to the whole electorate and no resident is counted twice or left out. Both models carry American Indian and other-race voters with White voters in the WAIO bloc; they differ only in whether the remaining groups vote as one bloc or three.
 
-| Demographic group | VAP | Share of VAP | Four-bloc model | Two-bloc model |
-| --- | ---: | ---: | --- | --- |
-| White | 492,810 | 43.80% | WAIO | WAIO |
-| Hispanic | 298,979 | 26.57% | HIS | POC |
-| Asian / Native Hawaiian & Pacific Islander | 229,884 | 20.43% | AAPI | POC |
-| Black | 79,988 | 7.11% | BLK | POC |
-| Other race | 14,593 | 1.30% | WAIO | WAIO |
-| American Indian | 8,833 | 0.79% | WAIO | WAIO |
-| **Total** | **1,125,087** | **100.00%** | | |
+| Demographic group |           VAP |       Share | Four-bloc | Two-bloc |
+| ----------------- | ------------: | ----------: | --------- | -------- |
+| White             |       492,810 |      43.80% | WAIO      | WAIO     |
+| Hispanic          |       298,979 |      26.57% | HIS       | POC      |
+| Asian / NHPI      |       229,884 |      20.43% | AAPI      | POC      |
+| Black             |        79,988 |       7.11% | BLK       | POC      |
+| Other race        |        14,593 |       1.30% | WAIO      | WAIO     |
+| American Indian   |         8,833 |       0.79% | WAIO      | WAIO     |
+| **Total**         | **1,125,087** | **100.00%** |           |          |
 
 Two groupings are used across the study. The **four-bloc model** gives Hispanic, Asian, and Black voters a bloc each alongside WAIO, producing bloc shares of 45.88% WAIO, 26.57% HIS, 20.43% AAPI, and 7.11% BLK. The **two-bloc model** keeps WAIO exactly as it is and combines the other three into a single POC bloc: 45.88% WAIO against 54.12% POC.
 

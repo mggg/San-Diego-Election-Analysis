@@ -8,8 +8,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 0,
-  "plans": 106.0,
-  "share": 0.106
+  "plans": 787.5,
+  "share": 0.7875
  },
  {
   "system": "FASTSTV",
@@ -20,8 +20,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 1,
-  "plans": 131.0,
-  "share": 0.131
+  "plans": 196.0,
+  "share": 0.196
  },
  {
   "system": "FASTSTV",
@@ -32,56 +32,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 2,
-  "plans": 280.5,
-  "share": 0.2805
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "1 X 15 STV",
-  "numDistricts": 1,
-  "winners": 15,
-  "mode": "combined",
-  "modeLabel": "Combined",
-  "pooled": true,
-  "seats": 3,
-  "plans": 304.5,
-  "share": 0.3045
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "1 X 15 STV",
-  "numDistricts": 1,
-  "winners": 15,
-  "mode": "combined",
-  "modeLabel": "Combined",
-  "pooled": true,
-  "seats": 4,
-  "plans": 161.5,
-  "share": 0.1615
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "1 X 15 STV",
-  "numDistricts": 1,
-  "winners": 15,
-  "mode": "combined",
-  "modeLabel": "Combined",
-  "pooled": true,
-  "seats": 5,
-  "plans": 14.5,
-  "share": 0.0145
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "1 X 15 STV",
-  "numDistricts": 1,
-  "winners": 15,
-  "mode": "combined",
-  "modeLabel": "Combined",
-  "pooled": true,
-  "seats": 6,
-  "plans": 2.0,
-  "share": 0.002
+  "plans": 16.5,
+  "share": 0.0165
  },
  {
   "system": "FASTSTV",
@@ -92,8 +44,8 @@
   "modeLabel": "Deliberative",
   "pooled": false,
   "seats": 0,
-  "plans": 172.0,
-  "share": 0.172
+  "plans": 855.0,
+  "share": 0.855
  },
  {
   "system": "FASTSTV",
@@ -104,8 +56,8 @@
   "modeLabel": "Deliberative",
   "pooled": false,
   "seats": 1,
-  "plans": 172.0,
-  "share": 0.172
+  "plans": 140.0,
+  "share": 0.14
  },
  {
   "system": "FASTSTV",
@@ -116,56 +68,8 @@
   "modeLabel": "Deliberative",
   "pooled": false,
   "seats": 2,
-  "plans": 320.0,
-  "share": 0.32
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "1 X 15 STV",
-  "numDistricts": 1,
-  "winners": 15,
-  "mode": "slate_bt",
-  "modeLabel": "Deliberative",
-  "pooled": false,
-  "seats": 3,
-  "plans": 242.0,
-  "share": 0.242
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "1 X 15 STV",
-  "numDistricts": 1,
-  "winners": 15,
-  "mode": "slate_bt",
-  "modeLabel": "Deliberative",
-  "pooled": false,
-  "seats": 4,
-  "plans": 74.0,
-  "share": 0.074
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "1 X 15 STV",
-  "numDistricts": 1,
-  "winners": 15,
-  "mode": "slate_bt",
-  "modeLabel": "Deliberative",
-  "pooled": false,
-  "seats": 5,
-  "plans": 16.0,
-  "share": 0.016
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "1 X 15 STV",
-  "numDistricts": 1,
-  "winners": 15,
-  "mode": "slate_bt",
-  "modeLabel": "Deliberative",
-  "pooled": false,
-  "seats": 6,
-  "plans": 4.0,
-  "share": 0.004
+  "plans": 5.0,
+  "share": 0.005
  },
  {
   "system": "FASTSTV",
@@ -176,8 +80,8 @@
   "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 0,
-  "plans": 40.0,
-  "share": 0.04
+  "plans": 720.0,
+  "share": 0.72
  },
  {
   "system": "FASTSTV",
@@ -188,8 +92,8 @@
   "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 1,
-  "plans": 90.0,
-  "share": 0.09
+  "plans": 252.0,
+  "share": 0.252
  },
  {
   "system": "FASTSTV",
@@ -200,43 +104,7 @@
   "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 2,
-  "plans": 241.0,
-  "share": 0.241
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "1 X 15 STV",
-  "numDistricts": 1,
-  "winners": 15,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
-  "pooled": false,
-  "seats": 3,
-  "plans": 367.0,
-  "share": 0.367
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "1 X 15 STV",
-  "numDistricts": 1,
-  "winners": 15,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
-  "pooled": false,
-  "seats": 4,
-  "plans": 249.0,
-  "share": 0.249
- },
- {
-  "system": "FASTSTV",
-  "systemLabel": "1 X 15 STV",
-  "numDistricts": 1,
-  "winners": 15,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
-  "pooled": false,
-  "seats": 5,
-  "plans": 13.0,
-  "share": 0.013
+  "plans": 28.0,
+  "share": 0.028
  }
 ]

@@ -1,21 +1,20 @@
 {
- "runName": "12 X 1 IRV",
- "slug": "12-x-1-irv",
- "focalGroup": "BLK",
- "focalGroupLabel": "BLK",
- "totalSeats": 12,
- "focalVapShare": 0.07109494643525345,
- "proportionalSeats": 0.8531393572230415,
- "proportionalLabel": "BLK share of VAP: 7.1% (0.9 seats)",
- "seatMax": 6,
+ "runName": "9x1 Plurality",
+ "slug": "9x1-plurality",
+ "focalGroup": "BAIO",
+ "focalGroupLabel": "BAIO",
+ "totalSeats": 9,
+ "focalVapShare": 0.20432553215884638,
+ "proportionalSeats": 1.8389297894296175,
+ "proportionalLabel": "BAIO share of VAP: 20.4% (1.8 seats)",
+ "seatMax": 5,
  "seatTicks": [
   0,
   1,
   2,
   3,
   4,
-  5,
-  6
+  5
  ],
  "districtConfigs": [
   {
