@@ -28,12 +28,20 @@
     {
      "id": "FASTSTV",
      "label": "1 X 9 STV"
+    },
+    {
+     "id": "CUMULATIVE",
+     "label": "1 X 9 Cumulative"
+    },
+    {
+     "id": "LIMITED",
+     "label": "1 X 9 Limited"
     }
    ],
    "candidatePoolMax": 15,
    "candidatePoolMean": 12,
    "plans": 100,
-   "electionsPerSystem": 2990
+   "electionsPerSystem": 1663
   }
  ],
  "voterModels": [
@@ -50,6 +58,11 @@
   {
    "id": "cambridge",
    "label": "Cambridge",
+   "pooled": false
+  },
+  {
+   "id": "name_cumulative",
+   "label": "Name Cumulative",
    "pooled": false
   },
   {

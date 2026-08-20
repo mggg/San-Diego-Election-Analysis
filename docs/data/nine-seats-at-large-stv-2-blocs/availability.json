@@ -121,6 +121,28 @@
    "numDistricts": 1,
    "winners": 9,
    "metric": "winRate",
+   "system": "CUMULATIVE",
+   "systemLabel": "1 X 9 Cumulative",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No POC winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 1,
+     "value": 100.0,
+     "won": 1000,
+     "contests": 1000
+    }
+   ]
+  },
+  {
+   "slate": "POC",
+   "slateLabel": "POC",
+   "slateVapShare": 0.5411590392565198,
+   "numDistricts": 1,
+   "winners": 9,
+   "metric": "winRate",
    "system": "FASTSTV",
    "systemLabel": "1 X 9 STV",
    "label": "Win rate",
@@ -133,6 +155,28 @@
      "value": 100.0,
      "won": 2990,
      "contests": 2990
+    }
+   ]
+  },
+  {
+   "slate": "POC",
+   "slateLabel": "POC",
+   "slateVapShare": 0.5411590392565198,
+   "numDistricts": 1,
+   "winners": 9,
+   "metric": "winRate",
+   "system": "LIMITED",
+   "systemLabel": "1 X 9 Limited",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No POC winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 1,
+     "value": 100.0,
+     "won": 1000,
+     "contests": 1000
     }
    ]
   },
@@ -163,6 +207,28 @@
    "numDistricts": 1,
    "winners": 9,
    "metric": "winRate",
+   "system": "CUMULATIVE",
+   "systemLabel": "1 X 9 Cumulative",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No WAIO winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 1,
+     "value": 100.0,
+     "won": 990,
+     "contests": 990
+    }
+   ]
+  },
+  {
+   "slate": "WAIO",
+   "slateLabel": "WAIO",
+   "slateVapShare": 0.4588409607434803,
+   "numDistricts": 1,
+   "winners": 9,
+   "metric": "winRate",
    "system": "FASTSTV",
    "systemLabel": "1 X 9 STV",
    "label": "Win rate",
@@ -175,6 +241,28 @@
      "value": 100.0,
      "won": 2970,
      "contests": 2970
+    }
+   ]
+  },
+  {
+   "slate": "WAIO",
+   "slateLabel": "WAIO",
+   "slateVapShare": 0.4588409607434803,
+   "numDistricts": 1,
+   "winners": 9,
+   "metric": "winRate",
+   "system": "LIMITED",
+   "systemLabel": "1 X 9 Limited",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No WAIO winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 1,
+     "value": 100.0,
+     "won": 990,
+     "contests": 990
     }
    ]
   }

@@ -7,13 +7,14 @@
  "focalVapShare": 0.07109494643525345,
  "proportionalSeats": 0.6398545179172811,
  "proportionalLabel": "BLK share of VAP: 7.1% (0.6 seats)",
- "seatMax": 4,
+ "seatMax": 5,
  "seatTicks": [
   0,
   1,
   2,
   3,
-  4
+  4,
+  5
  ],
  "districtConfigs": [
   {
@@ -23,12 +24,20 @@
     {
      "id": "FASTSTV",
      "label": "1 X 9 STV"
+    },
+    {
+     "id": "CUMULATIVE",
+     "label": "1 X 9 Cumulative"
+    },
+    {
+     "id": "LIMITED",
+     "label": "1 X 9 Limited"
     }
    ],
    "candidatePoolMax": 15,
    "candidatePoolMean": 12,
    "plans": 100,
-   "electionsPerSystem": 2000
+   "electionsPerSystem": 1333
   }
  ],
  "voterModels": [
@@ -40,6 +49,11 @@
   {
    "id": "slate_bt",
    "label": "Deliberative",
+   "pooled": false
+  },
+  {
+   "id": "name_cumulative",
+   "label": "Name Cumulative",
    "pooled": false
   },
   {

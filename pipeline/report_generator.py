@@ -196,8 +196,10 @@ def resolve_composition(
     Args:
         systems: The outline's `systems` list. Each entry names a `run` (slug)
             and a `system` (id), optionally `districts`/`seats` to disambiguate a
-            run that uses one rule in more than one contest, and optionally a
-            `label` to override the name shown in the dropdown.
+            run that uses one rule in more than one contest, optionally a
+            `label` to override the name shown in the dropdown, and optionally a
+            `blocModel` tag the page uses to build its Two Bloc / Four Bloc
+            toggle.
         runs: Run metadata from discover_runs.
         config_reference: Rows from _config_reference, for the parameters card.
 
@@ -255,6 +257,12 @@ def resolve_composition(
             # even when one run contributes two contests under the same rule.
             "id": f"{meta['slug']}::{system['id']}::{dc['numDistricts']}x{dc['winners']}",
             "label": spec.get("label") or system["label"],
+            # Which bloc model this source was simulated under ("two"/"four"), or
+            # None for a section that doesn't distinguish. Purely a pass-through
+            # of the outline's own tag -- resolve_composition doesn't infer it
+            # from the run, since a run's own bloc count isn't otherwise recorded
+            # anywhere the page can read it.
+            "blocModel": spec.get("blocModel"),
             "run": meta["slug"],
             "runName": meta["runName"],
             "system": system["id"],

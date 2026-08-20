@@ -90,11 +90,25 @@ BUBBLE_MIN_AREA = 10
 DEFAULT_MODE_COLOR = "#AA0000"
 PROP_LINE_COLOR = "#52514e"  # focal-group proportional-representation reference line
 
-# Seat-axis tick spacing. Seats are integers and these plans are small, so every
-# seat count gets its own labelled tick and a bar can be read straight off the
-# axis. Raise this for plans with many more seats, where a label per seat would
-# crowd (Chicago's 50-seat runs use 5).
-X_TICK_STEP = 1
+def _tick_step(x_upper: int) -> int:
+    """
+    Seat-axis tick spacing, coarse enough that labels never crowd.
+
+    Seats are integers and a step of 1 labels every one of them, which is
+    exactly right on a small axis -- a 3- or 9-seat plan reads straight off
+    it. It stops being right as the axis grows: 15+ single-digit-wide labels
+    packed across one small panel start touching, and past that, overlapping.
+    A wider axis gets a wider step instead, so two-digit labels keep a margin
+    between them; the axis stays evenly spaced, just labelled less densely.
+    (Chicago's 50-seat runs would land at 5.)
+    """
+    if x_upper <= 10:
+        return 1
+    if x_upper <= 20:
+        return 2
+    if x_upper <= 50:
+        return 5
+    return 10
 X_AXIS_PAD = 3    # seats of headroom past the largest relevant value
 
 # One type scale for every figure, so histograms, bubble grids, and the cross-run
@@ -230,8 +244,9 @@ def _seat_axis_upper(max_seat: float, total_seats: int) -> int:
     plots aren't mostly empty when no group comes close to winning every seat.
     """
     padded = max_seat + X_AXIS_PAD
-    ticks_up = -(-int(padded) // X_TICK_STEP)  # ceil division to next whole tick
-    return min(ticks_up * X_TICK_STEP, total_seats)
+    step = _tick_step(total_seats)
+    ticks_up = -(-int(padded) // step)  # ceil division to next whole tick
+    return min(ticks_up * step, total_seats)
 
 
 def _prop_line_label(group_label: str, iprop: float, total_seats: int) -> str:
@@ -408,8 +423,9 @@ def _style_method_axis(ax, method_label: Optional[str], ylim: float, x_upper: in
     # x-axis spans 0..x_upper (capped near the data); 20% y headroom.
     ax.set_xlim(-1, x_upper + 1)
     ax.set_ylim(0, ylim)
-    ax.set_xticks(range(0, x_upper + 1, X_TICK_STEP))
-    ax.set_xticklabels([str(x) for x in range(0, x_upper + 1, X_TICK_STEP)])
+    ticks = range(0, x_upper + 1, _tick_step(x_upper))
+    ax.set_xticks(ticks)
+    ax.set_xticklabels([str(x) for x in ticks])
     ax.set_xlabel(SEAT_AXIS_LABEL, fontsize=AXIS_LABEL_SIZE)
     if method_label:
         ax.set_title(method_label, fontsize=PANEL_TITLE_SIZE)
@@ -487,8 +503,9 @@ def _style_slate_axis(ax, config, slate: str, ylim: float, x_upper: int) -> None
         spine.set_linewidth(0.5)
     ax.set_xlim(-1, x_upper + 1)
     ax.set_ylim(0, ylim)
-    ax.set_xticks(range(0, x_upper + 1, X_TICK_STEP))
-    ax.set_xticklabels([str(x) for x in range(0, x_upper + 1, X_TICK_STEP)], fontsize=TICK_SIZE)
+    ticks = range(0, x_upper + 1, _tick_step(x_upper))
+    ax.set_xticks(ticks)
+    ax.set_xticklabels([str(x) for x in ticks], fontsize=TICK_SIZE)
     ax.set_xlabel(SEAT_AXIS_LABEL, fontsize=AXIS_LABEL_SIZE)
     ax.set_title(_group_label(slate), fontsize=PANEL_TITLE_SIZE)
     ax.tick_params(axis="both", which="major", labelsize=TICK_SIZE)
@@ -1111,8 +1128,9 @@ def _draw_method_bubbles(ax, method_counts, modes_in_order, size_scale, iprop, c
     ax.axvline(i_share, color=PROP_LINE_COLOR, linestyle=":", linewidth=1.2)
 
     ax.set_xlim(-1, x_upper + 1)
-    ax.set_xticks(range(0, x_upper + 1, X_TICK_STEP))
-    ax.set_xticklabels([str(x) for x in range(0, x_upper + 1, X_TICK_STEP)])
+    ticks = range(0, x_upper + 1, _tick_step(x_upper))
+    ax.set_xticks(ticks)
+    ax.set_xticklabels([str(x) for x in ticks])
     # Inverted so the first mode is the TOP row, matching the cross-run figure and
     # the left-to-right order of the histogram bars and legend.
     ax.set_ylim(len(modes_in_order) - 0.5, -0.5)
@@ -1532,7 +1550,7 @@ def _run_metadata(df: pd.DataFrame, df_plan: pd.DataFrame, config, iprop: float,
             _group_label(config["focal_group"]), iprop, total_seats
         ),
         "seatMax": int(seat_upper),
-        "seatTicks": list(range(0, seat_upper + 1, X_TICK_STEP)),
+        "seatTicks": list(range(0, seat_upper + 1, _tick_step(seat_upper))),
         "districtConfigs": district_configs,
         "voterModels": [
             {"id": m, "label": LEGEND_MAPPING.get(m, m), "pooled": m == COMBINED_MODE}
@@ -1931,7 +1949,7 @@ def plot_combined_bubbles_all_runs(config, output_dir=None, exclude_runs=None) -
     i_share = iprop * total_seats
 
     x_upper = _seat_axis_upper(max(observed_max_seats, i_share), total_seats)
-    x_ticks = range(0, x_upper + 1, X_TICK_STEP)
+    x_ticks = range(0, x_upper + 1, _tick_step(x_upper))
 
     # One column, always: the whole point of this figure is that every panel's
     # seat axis lines up vertically. Panels get shorter once a split run pushes

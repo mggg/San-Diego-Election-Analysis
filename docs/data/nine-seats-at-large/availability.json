@@ -213,6 +213,28 @@
    "numDistricts": 1,
    "winners": 9,
    "metric": "winRate",
+   "system": "CUMULATIVE",
+   "systemLabel": "1 X 9 Cumulative",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No HIS winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 1,
+     "value": 100.0,
+     "won": 990,
+     "contests": 990
+    }
+   ]
+  },
+  {
+   "slate": "HIS",
+   "slateLabel": "HIS",
+   "slateVapShare": 0.2657385606624199,
+   "numDistricts": 1,
+   "winners": 9,
+   "metric": "winRate",
    "system": "FASTSTV",
    "systemLabel": "1 X 9 STV",
    "label": "Win rate",
@@ -225,6 +247,28 @@
      "value": 100.0,
      "won": 1980,
      "contests": 1980
+    }
+   ]
+  },
+  {
+   "slate": "HIS",
+   "slateLabel": "HIS",
+   "slateVapShare": 0.2657385606624199,
+   "numDistricts": 1,
+   "winners": 9,
+   "metric": "winRate",
+   "system": "LIMITED",
+   "systemLabel": "1 X 9 Limited",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No HIS winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 1,
+     "value": 100.0,
+     "won": 990,
+     "contests": 990
     }
    ]
   },
@@ -255,6 +299,28 @@
    "numDistricts": 1,
    "winners": 9,
    "metric": "winRate",
+   "system": "CUMULATIVE",
+   "systemLabel": "1 X 9 Cumulative",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No AAPI winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 1,
+     "value": 100.0,
+     "won": 810,
+     "contests": 810
+    }
+   ]
+  },
+  {
+   "slate": "AAPI",
+   "slateLabel": "AAPI",
+   "slateVapShare": 0.20432553215884638,
+   "numDistricts": 1,
+   "winners": 9,
+   "metric": "winRate",
    "system": "FASTSTV",
    "systemLabel": "1 X 9 STV",
    "label": "Win rate",
@@ -267,6 +333,28 @@
      "value": 100.0,
      "won": 1620,
      "contests": 1620
+    }
+   ]
+  },
+  {
+   "slate": "AAPI",
+   "slateLabel": "AAPI",
+   "slateVapShare": 0.20432553215884638,
+   "numDistricts": 1,
+   "winners": 9,
+   "metric": "winRate",
+   "system": "LIMITED",
+   "systemLabel": "1 X 9 Limited",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No AAPI winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 1,
+     "value": 100.0,
+     "won": 810,
+     "contests": 810
     }
    ]
   },
@@ -297,6 +385,28 @@
    "numDistricts": 1,
    "winners": 9,
    "metric": "winRate",
+   "system": "CUMULATIVE",
+   "systemLabel": "1 X 9 Cumulative",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No WAIO winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 1,
+     "value": 100.0,
+     "won": 1000,
+     "contests": 1000
+    }
+   ]
+  },
+  {
+   "slate": "WAIO",
+   "slateLabel": "WAIO",
+   "slateVapShare": 0.4588409607434803,
+   "numDistricts": 1,
+   "winners": 9,
+   "metric": "winRate",
    "system": "FASTSTV",
    "systemLabel": "1 X 9 STV",
    "label": "Win rate",
@@ -309,6 +419,28 @@
      "value": 100.0,
      "won": 2000,
      "contests": 2000
+    }
+   ]
+  },
+  {
+   "slate": "WAIO",
+   "slateLabel": "WAIO",
+   "slateVapShare": 0.4588409607434803,
+   "numDistricts": 1,
+   "winners": 9,
+   "metric": "winRate",
+   "system": "LIMITED",
+   "systemLabel": "1 X 9 Limited",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No WAIO winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 1,
+     "value": 100.0,
+     "won": 1000,
+     "contests": 1000
     }
    ]
   },
@@ -339,6 +471,28 @@
    "numDistricts": 1,
    "winners": 9,
    "metric": "winRate",
+   "system": "CUMULATIVE",
+   "systemLabel": "1 X 9 Cumulative",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No BLK winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 1,
+     "value": 100.0,
+     "won": 130,
+     "contests": 130
+    }
+   ]
+  },
+  {
+   "slate": "BLK",
+   "slateLabel": "BLK",
+   "slateVapShare": 0.07109494643525345,
+   "numDistricts": 1,
+   "winners": 9,
+   "metric": "winRate",
    "system": "FASTSTV",
    "systemLabel": "1 X 9 STV",
    "label": "Win rate",
@@ -351,6 +505,28 @@
      "value": 88.0769,
      "won": 229,
      "contests": 260
+    }
+   ]
+  },
+  {
+   "slate": "BLK",
+   "slateLabel": "BLK",
+   "slateVapShare": 0.07109494643525345,
+   "numDistricts": 1,
+   "winners": 9,
+   "metric": "winRate",
+   "system": "LIMITED",
+   "systemLabel": "1 X 9 Limited",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No BLK winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 1,
+     "value": 100.0,
+     "won": 130,
+     "contests": 130
     }
    ]
   }

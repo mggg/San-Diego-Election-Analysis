@@ -7,14 +7,15 @@
  "focalVapShare": 0.07109494643525345,
  "proportionalSeats": 1.0664241965288017,
  "proportionalLabel": "BLK share of VAP: 7.1% (1.1 seats)",
- "seatMax": 5,
+ "seatMax": 6,
  "seatTicks": [
   0,
   1,
   2,
   3,
   4,
-  5
+  5,
+  6
  ],
  "districtConfigs": [
   {

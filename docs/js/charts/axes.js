@@ -58,28 +58,36 @@ export function shareTicks(step = 20) {
  * Bar geometry, translated from _plot_method_histogram in summarize_results.py
  * so a bar here lands where its matplotlib counterpart does:
  *
- *     width  = 2 * GROUP_SPAN / (n_modes + 1)     # of one seat step
- *     step   = width / 2                          # centres half a bar apart
- *     offset = (i - (n_modes - 1) / 2) * step     # group centred on the seat
+ *     width  = 2 * groupSpan(n_modes) / (n_modes + 1)   # of one seat step
+ *     step   = width / 2                                # centres half a bar apart
+ *     offset = (i - (n_modes - 1) / 2) * step           # group centred on the seat
  *
  * The series overlap each other by half a bar rather than being dodged clear or
  * stacked on one centre: enough offset that every bar keeps an exposed edge and
  * its own baseline, enough overlap that the distributions read as one
  * comparison.
  *
- * The width follows from how many series a group holds, so the group always
- * spans GROUP_SPAN of a seat and leaves a gap to the next one. A fixed width
- * cannot: three series at 0.42 span 0.84 of a seat, but a fourth -- which is
- * what adding the Cambridge model makes routine -- would span 1.05 and run into
- * the neighbouring seat's group, so bars from different seat counts would
- * overlap and the axis would stop being readable. Three series still come out
- * at exactly 0.42, so the figures that had three are unchanged.
+ * The width follows from how many series a group holds, so a fixed span would
+ * either crowd a three-model group or leave a one-model group looking thin
+ * against the same gap: three series at a span tuned for two would sit
+ * visibly denser than the two-series groups beside them on the same axis, and
+ * a fourth -- which is what adding the Cambridge model makes routine -- would
+ * run the group into its neighbour's if the span didn't shrink to make room.
+ * groupSpan narrows the total span as the group grows past two series and
+ * widens it slightly as it shrinks to one, so the two-series case (its
+ * original tuning) is unchanged and every other count reads at roughly the
+ * same visual density.
  */
 const GROUP_SPAN = 0.84;
 
+function groupSpan(count) {
+  if (count <= 2) return GROUP_SPAN + (2 - count) * 0.06;
+  return GROUP_SPAN - (count - 2) * 0.12;
+}
+
 export function barGeometry(scale, count) {
   // Solving span = (count - 1) * (width / 2) + width for a fixed span.
-  const width = (scale(1) - scale(0)) * (2 * GROUP_SPAN) / (count + 1);
+  const width = (scale(1) - scale(0)) * (2 * groupSpan(count)) / (count + 1);
   const step = width / 2;
   return { width, offset: (index) => (index - (count - 1) / 2) * step };
 }
