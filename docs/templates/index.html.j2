@@ -32,11 +32,14 @@
       </button>
       <div class="collapse navbar-collapse" id="mainNav">
         <ul class="navbar-nav ms-auto">
-          {% for id in prose_order %}
+          {% for id in prose_order if id != "appendix" %}
           <li class="nav-item"><a class="nav-link" href="#{{ id }}">{{ prose[id].title }}</a></li>
           {% endfor %}
           <li class="nav-item"><a class="nav-link" href="#results">Electoral Scenarios and Results</a></li>
           <li class="nav-item"><a class="nav-link" href="#comparison">Cross-Run Comparison</a></li>
+          {% if "appendix" in prose_order %}
+          <li class="nav-item"><a class="nav-link" href="#appendix">{{ prose["appendix"].title }}</a></li>
+          {% endif %}
           <li class="nav-item"><a class="nav-link" href="{{ repo_url }}" target="_blank" rel="noopener">GitHub ↗</a></li>
         </ul>
       </div>
@@ -54,7 +57,7 @@
     <div class="row">
       <div class="col-lg-2 d-none d-lg-block">
         <nav id="toc-nav" class="toc nav flex-column">
-          {% for id in prose_order %}
+          {% for id in prose_order if id != "appendix" %}
           <a class="nav-link" href="#{{ id }}">{{ prose[id].title }}</a>
           {% endfor %}
           <a class="nav-link" href="#results">Results by Scenario</a>
@@ -64,11 +67,14 @@
             {% endfor %}
           </nav>
           <a class="nav-link" href="#comparison">Cross-Run Comparison</a>
+          {% if "appendix" in prose_order %}
+          <a class="nav-link" href="#appendix">{{ prose["appendix"].title }}</a>
+          {% endif %}
         </nav>
       </div>
 
       <main class="col-lg-10">
-        {% for id in prose_order %}
+        {% for id in prose_order if id != "appendix" %}
         <section id="{{ id }}" class="prose mb-5">
           <h2>{{ prose[id].title }}</h2>
           {% if prose[id].html %}
@@ -155,6 +161,20 @@
           <div class="run-controls" data-controls="crossrun"></div>
           <div class="chart" data-chart="crossrun"></div>
         </section>
+
+        {% if "appendix" in prose_order %}
+        {# Appendix reads as back matter, so it renders after the scenario results
+           and cross-run comparison rather than in prose_order's own position. #}
+        <section id="appendix" class="prose mb-5">
+          <h2>{{ prose["appendix"].title }}</h2>
+          {% if prose["appendix"].html %}
+          {{ prose["appendix"].html }}
+          {% else %}
+          <p class="todo">[{{ prose["appendix"].title }} to be written — edit
+             <code>docs/prose/{{ prose["appendix"].file }}</code>.]</p>
+          {% endif %}
+        </section>
+        {% endif %}
       </main>
     </div>
   </div>
