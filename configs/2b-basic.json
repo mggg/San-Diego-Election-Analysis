@@ -57,7 +57,7 @@
   },
   "num_reps": 10,
   "cambridge_truncation": {
-    "enabled": true,
+    "enabled": false,
     "majority_slates": [
       "WAIO"
     ],
