@@ -1,6 +1,6 @@
 {
- "runName": "Basic - 3 X 3 + Truncation (2 Blocs)",
- "slug": "basic-3-x-3-truncation-2-blocs",
+ "runName": "Basic - 3 X 3 (2 Blocs)",
+ "slug": "basic-3-x-3-2-blocs",
  "focalGroup": "WAIO",
  "focalGroupLabel": "WAIO",
  "totalSeats": 9,
@@ -33,7 +33,7 @@
    "candidatePoolMax": 10,
    "candidatePoolMean": 7,
    "plans": 100,
-   "electionsPerSystem": 8680
+   "electionsPerSystem": 8590
   }
  ],
  "voterModels": [

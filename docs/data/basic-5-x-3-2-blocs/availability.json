@@ -391,14 +391,14 @@
    "values": [
     {
      "rank": 1,
-     "value": 100.0,
-     "won": 2610,
+     "value": 99.1954,
+     "won": 2589,
      "contests": 2610
     },
     {
      "rank": 2,
-     "value": 100.0,
-     "won": 2820,
+     "value": 99.9645,
+     "won": 2819,
      "contests": 2820
     },
     {
@@ -481,8 +481,8 @@
    "values": [
     {
      "rank": 1,
-     "value": 99.4624,
-     "won": 925,
+     "value": 94.9462,
+     "won": 883,
      "contests": 930
     },
     {

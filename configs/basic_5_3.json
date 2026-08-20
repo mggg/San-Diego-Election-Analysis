@@ -13,7 +13,7 @@
   ],
   "voting_configs": {
     "FastSTV": {
-      "n_seats": 5,
+      "n_seats": 3,
       "tiebreak": "random"
     }
   },
