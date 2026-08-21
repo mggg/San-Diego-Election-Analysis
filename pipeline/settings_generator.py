@@ -60,28 +60,30 @@ from pipeline.utils.helpers import (
 # combine several census categories. Override per-run with a
 # "group_vap_columns" entry if your groups or column names differ.
 #
-# This default describes the two-bloc model: WAIO is White with American Indian
-# and other-race VAP folded in, and POC is Black, Hispanic and Asian/NHPI
-# together. The earlier four-group split modelled each minority group as voting
-# on its own, which meant a cohesion matrix asserting how each behaved toward
-# the other three; a single POC bloc asks the question these runs are actually
-# about -- whether a system lets a coalition of minority voters elect candidates
-# of its choice -- without those assertions.
+# This default describes the two-bloc model: White voters against everyone else.
+# American Indian and other-race VAP sit with POC here, so POC is every voter of
+# colour rather than the three largest minority groups only. The four-group
+# split modelled each minority group as voting on its own, which meant a
+# cohesion matrix asserting how each behaved toward the other three; a single
+# POC bloc asks the question these runs are actually about -- whether a system
+# lets a coalition of minority voters elect candidates of its choice -- without
+# those assertions.
 #
-# WARNING for the four-bloc runs: they use WAIO too, but theirs folds in only
-# American Indian and other-race VAP -- Black VAP there is its own bloc, BLK,
-# not part of WAIO. One label, two meanings, so every four-bloc config states
-# its own "group_vap_columns" rather than inheriting this -- a config that
-# forgets to would silently be regrouped, and nothing downstream would notice
-# because both mappings partition the electorate perfectly well. Anything
-# beyond these two models should likewise spell out its own columns.
+# The two models name their White bloc differently, because it is a different
+# population in each: WHI here is White alone, while the four-bloc runs use WAIO
+# for White with American Indian and other-race VAP folded in -- there those two
+# categories cannot join BLK/HIS/AAPI without picking one of them arbitrarily.
+# Distinct names mean a config cannot quietly inherit the wrong grouping: a
+# four-bloc config asking for WAIO gets a KeyError from this default rather than
+# a White-only bloc that still partitions the electorate and so would go
+# unnoticed. Every four-bloc config states its own "group_vap_columns" anyway.
 #
 # Every VAP column is claimed by exactly one group, so the two partition the
 # electorate; get_group_vap_columns enforces that, and a column left out of both
 # would quietly shrink every share computed from them.
 DEFAULT_GROUP_VAP_COLUMNS = {
-    "WAIO": ["white_vap_20", "amin_vap_20", "other_vap_20"],
-    "POC": ["bvap_20", "hvap_20", "asian_nhpi_vap_20"],
+    "WHI": ["white_vap_20"],
+    "POC": ["bvap_20", "hvap_20", "asian_nhpi_vap_20", "amin_vap_20", "other_vap_20"],
 }
 
 
@@ -329,6 +331,50 @@ def _sample_slate_counts(proportions, candidate_count):
     return counts
 
 
+def _ensure_every_slate_runs(counts, candidate_count):
+    """
+    Move one candidate to any slate the sampling left empty, taking it from the
+    largest slate.
+
+    Only for a two-slate run. Cambridge's generator needs exactly two slates
+    with candidates (votekit rejects anything else), so a district where one
+    slate drew zero has no Cambridge ballots at all and drops out of that
+    model's results -- which is how a nine-district contest ended up with only
+    six or seven districts elected under Cambridge, and a hybrid run reported a
+    fifteen-seat council filled with ten seats.
+
+    The draw itself is unchanged: slate sizes are still sampled from the
+    exaggerated shares, so the dominant slate still takes most of the pool. This
+    only rescues the degenerate case, and it swaps rather than adds so the pool
+    stays exactly candidate_count.
+
+    Runs with three or more slates are left alone. There a slate drawing zero
+    still leaves enough slates for every generator, and dropping it is the
+    availability model working as intended rather than a failure.
+
+    Args:
+        counts: Dict of slate -> sampled candidate count.
+        candidate_count: Total slots; the counts must still sum to this.
+
+    Returns:
+        The counts, with each slate holding at least one candidate where that
+        is possible without emptying another.
+    """
+    if len(counts) != 2 or candidate_count < len(counts):
+        return counts
+
+    counts = dict(counts)
+    for slate, count in counts.items():
+        if count > 0:
+            continue
+        donor = max(counts, key=lambda s: counts[s])
+        if counts[donor] < 2:
+            break
+        counts[donor] -= 1
+        counts[slate] += 1
+    return counts
+
+
 def _build_slate_to_candidates(row, slate_columns, candidate_count, config):
     """
     Build a district-specific slate_to_candidates mapping sized proportionally
@@ -344,6 +390,10 @@ def _build_slate_to_candidates(row, slate_columns, candidate_count, config):
     Slates apportioned zero candidates by the sampling are omitted entirely —
     VoteKit's BlocSlateConfig rejects a slate with an empty candidate list, so a
     slate with negligible population share simply doesn't run in that district.
+
+    A two-slate run is the exception: an empty slate there leaves one slate
+    standing, which no two-slate generator can work with, so one candidate is
+    swapped over from the other slate (see _ensure_every_slate_runs).
 
     Args:
         row: Row from the district population dataframe.
@@ -366,6 +416,7 @@ def _build_slate_to_candidates(row, slate_columns, candidate_count, config):
 
     exaggerated = _exaggerate(proportions, config.get("availability_exps"))
     counts = _sample_slate_counts(exaggerated, candidate_count)
+    counts = _ensure_every_slate_runs(counts, candidate_count)
     return {
         s: [f"{s}{i}" for i in range(1, counts[s] + 1)]
         for s in slates

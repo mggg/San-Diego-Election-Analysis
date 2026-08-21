@@ -36,45 +36,45 @@
     "POC": [
       "POC"
     ],
-    "WAIO": [
-      "WAIO"
+    "WHI": [
+      "WHI"
     ]
   },
   "turnout": {
     "POC": 0.7,
-    "WAIO": 1
+    "WHI": 1
   },
   "primary_turnout": {
     "POC": 0.7,
-    "WAIO": 1
+    "WHI": 1
   },
   "num_voters": 10000,
   "focal_group": "POC",
   "cohesion_parameters": {
     "POC": {
       "POC": 0.89,
-      "WAIO": 0.11
+      "WHI": 0.11
     },
-    "WAIO": {
+    "WHI": {
       "POC": 0.2,
-      "WAIO": 0.8
+      "WHI": 0.8
     }
   },
   "alphas": {
     "POC": {
       "POC": 1,
-      "WAIO": 1
+      "WHI": 1
     },
-    "WAIO": {
+    "WHI": {
       "POC": 1,
-      "WAIO": 1
+      "WHI": 1
     }
   },
   "num_reps": 10,
   "cambridge_truncation": {
     "enabled": true,
     "majority_slates": [
-      "WAIO"
+      "WHI"
     ],
     "minority_slates": [
       "POC"

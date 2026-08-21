@@ -1,5 +1,5 @@
 {
- "generated": "2026-08-20T19:59:02+00:00",
+ "generated": "2026-08-21T04:05:39+00:00",
  "palette": {
   "slate_pl": "#FFCC00",
   "slate_bt": "#AA0000",
@@ -172,21 +172,21 @@
      "cohesion": {
       "POC": {
        "POC": 0.89,
-       "WAIO": 0.11
+       "WHI": 0.11
       },
-      "WAIO": {
+      "WHI": {
        "POC": 0.2,
-       "WAIO": 0.8
+       "WHI": 0.8
       }
      },
      "alphas": {
       "POC": {
        "POC": 1,
-       "WAIO": 1
+       "WHI": 1
       },
-      "WAIO": {
+      "WHI": {
        "POC": 1,
-       "WAIO": 1
+       "WHI": 1
       }
      },
      "data": {
@@ -531,21 +531,21 @@
      "cohesion": {
       "POC": {
        "POC": 0.89,
-       "WAIO": 0.11
+       "WHI": 0.11
       },
-      "WAIO": {
+      "WHI": {
        "POC": 0.2,
-       "WAIO": 0.8
+       "WHI": 0.8
       }
      },
      "alphas": {
       "POC": {
        "POC": 1,
-       "WAIO": 1
+       "WHI": 1
       },
-      "WAIO": {
+      "WHI": {
        "POC": 1,
-       "WAIO": 1
+       "WHI": 1
       }
      },
      "data": {
@@ -1435,21 +1435,21 @@
      "cohesion": {
       "POC": {
        "POC": 0.89,
-       "WAIO": 0.11
+       "WHI": 0.11
       },
-      "WAIO": {
+      "WHI": {
        "POC": 0.2,
-       "WAIO": 0.8
+       "WHI": 0.8
       }
      },
      "alphas": {
       "POC": {
        "POC": 1,
-       "WAIO": 1
+       "WHI": 1
       },
-      "WAIO": {
+      "WHI": {
        "POC": 1,
-       "WAIO": 1
+       "WHI": 1
       }
      },
      "data": {
@@ -1532,21 +1532,21 @@
      "cohesion": {
       "POC": {
        "POC": 0.89,
-       "WAIO": 0.11
+       "WHI": 0.11
       },
-      "WAIO": {
+      "WHI": {
        "POC": 0.2,
-       "WAIO": 0.8
+       "WHI": 0.8
       }
      },
      "alphas": {
       "POC": {
        "POC": 1,
-       "WAIO": 1
+       "WHI": 1
       },
-      "WAIO": {
+      "WHI": {
        "POC": 1,
-       "WAIO": 1
+       "WHI": 1
       }
      },
      "data": {
@@ -1632,21 +1632,21 @@
      "cohesion": {
       "POC": {
        "POC": 0.89,
-       "WAIO": 0.11
+       "WHI": 0.11
       },
-      "WAIO": {
+      "WHI": {
        "POC": 0.2,
-       "WAIO": 0.8
+       "WHI": 0.8
       }
      },
      "alphas": {
       "POC": {
        "POC": 1,
-       "WAIO": 1
+       "WHI": 1
       },
-      "WAIO": {
+      "WHI": {
        "POC": 1,
-       "WAIO": 1
+       "WHI": 1
       }
      },
      "data": {
@@ -1730,21 +1730,21 @@
      "cohesion": {
       "POC": {
        "POC": 0.89,
-       "WAIO": 0.11
+       "WHI": 0.11
       },
-      "WAIO": {
+      "WHI": {
        "POC": 0.2,
-       "WAIO": 0.8
+       "WHI": 0.8
       }
      },
      "alphas": {
       "POC": {
        "POC": 1,
-       "WAIO": 1
+       "WHI": 1
       },
-      "WAIO": {
+      "WHI": {
        "POC": 1,
-       "WAIO": 1
+       "WHI": 1
       }
      },
      "data": {
@@ -1828,21 +1828,21 @@
      "cohesion": {
       "POC": {
        "POC": 0.89,
-       "WAIO": 0.11
+       "WHI": 0.11
       },
-      "WAIO": {
+      "WHI": {
        "POC": 0.2,
-       "WAIO": 0.8
+       "WHI": 0.8
       }
      },
      "alphas": {
       "POC": {
        "POC": 1,
-       "WAIO": 1
+       "WHI": 1
       },
-      "WAIO": {
+      "WHI": {
        "POC": 1,
-       "WAIO": 1
+       "WHI": 1
       }
      },
      "data": {
@@ -1929,21 +1929,21 @@
      "cohesion": {
       "POC": {
        "POC": 0.89,
-       "WAIO": 0.11
+       "WHI": 0.11
       },
-      "WAIO": {
+      "WHI": {
        "POC": 0.2,
-       "WAIO": 0.8
+       "WHI": 0.8
       }
      },
      "alphas": {
       "POC": {
        "POC": 1,
-       "WAIO": 1
+       "WHI": 1
       },
-      "WAIO": {
+      "WHI": {
        "POC": 1,
-       "WAIO": 1
+       "WHI": 1
       }
      },
      "data": {
@@ -2027,21 +2027,21 @@
      "cohesion": {
       "POC": {
        "POC": 0.89,
-       "WAIO": 0.11
+       "WHI": 0.11
       },
-      "WAIO": {
+      "WHI": {
        "POC": 0.2,
-       "WAIO": 0.8
+       "WHI": 0.8
       }
      },
      "alphas": {
       "POC": {
        "POC": 1,
-       "WAIO": 1
+       "WHI": 1
       },
-      "WAIO": {
+      "WHI": {
        "POC": 1,
-       "WAIO": 1
+       "WHI": 1
       }
      },
      "data": {
@@ -3535,21 +3535,21 @@
      "cohesion": {
       "POC": {
        "POC": 0.89,
-       "WAIO": 0.11
+       "WHI": 0.11
       },
-      "WAIO": {
+      "WHI": {
        "POC": 0.2,
-       "WAIO": 0.8
+       "WHI": 0.8
       }
      },
      "alphas": {
       "POC": {
        "POC": 1,
-       "WAIO": 1
+       "WHI": 1
       },
-      "WAIO": {
+      "WHI": {
        "POC": 1,
-       "WAIO": 1
+       "WHI": 1
       }
      },
      "data": {
@@ -3633,21 +3633,21 @@
      "cohesion": {
       "POC": {
        "POC": 0.89,
-       "WAIO": 0.11
+       "WHI": 0.11
       },
-      "WAIO": {
+      "WHI": {
        "POC": 0.2,
-       "WAIO": 0.8
+       "WHI": 0.8
       }
      },
      "alphas": {
       "POC": {
        "POC": 1,
-       "WAIO": 1
+       "WHI": 1
       },
-      "WAIO": {
+      "WHI": {
        "POC": 1,
-       "WAIO": 1
+       "WHI": 1
       }
      },
      "data": {
@@ -3731,21 +3731,21 @@
      "cohesion": {
       "POC": {
        "POC": 0.89,
-       "WAIO": 0.11
+       "WHI": 0.11
       },
-      "WAIO": {
+      "WHI": {
        "POC": 0.2,
-       "WAIO": 0.8
+       "WHI": 0.8
       }
      },
      "alphas": {
       "POC": {
        "POC": 1,
-       "WAIO": 1
+       "WHI": 1
       },
-      "WAIO": {
+      "WHI": {
        "POC": 1,
-       "WAIO": 1
+       "WHI": 1
       }
      },
      "data": {
@@ -27026,7 +27026,7 @@
    ],
    "turnout": {
     "POC": 0.7,
-    "WAIO": 1
+    "WHI": 1
    },
    "primaryTurnout": null,
    "candidatePoolMin": 2,
@@ -27035,21 +27035,21 @@
    "cohesion": {
     "POC": {
      "POC": 0.89,
-     "WAIO": 0.11
+     "WHI": 0.11
     },
-    "WAIO": {
+    "WHI": {
      "POC": 0.2,
-     "WAIO": 0.8
+     "WHI": 0.8
     }
    },
    "alphas": {
     "POC": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     },
-    "WAIO": {
+    "WHI": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     }
    }
   },
@@ -27067,7 +27067,7 @@
    ],
    "turnout": {
     "POC": 0.7,
-    "WAIO": 1
+    "WHI": 1
    },
    "primaryTurnout": null,
    "candidatePoolMin": 16,
@@ -27076,21 +27076,21 @@
    "cohesion": {
     "POC": {
      "POC": 0.89,
-     "WAIO": 0.11
+     "WHI": 0.11
     },
-    "WAIO": {
+    "WHI": {
      "POC": 0.2,
-     "WAIO": 0.8
+     "WHI": 0.8
     }
    },
    "alphas": {
     "POC": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     },
-    "WAIO": {
+    "WHI": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     }
    }
   },
@@ -27111,7 +27111,7 @@
    ],
    "turnout": {
     "POC": 0.7,
-    "WAIO": 1
+    "WHI": 1
    },
    "primaryTurnout": null,
    "candidatePoolMin": 10,
@@ -27120,21 +27120,21 @@
    "cohesion": {
     "POC": {
      "POC": 0.89,
-     "WAIO": 0.11
+     "WHI": 0.11
     },
-    "WAIO": {
+    "WHI": {
      "POC": 0.2,
-     "WAIO": 0.8
+     "WHI": 0.8
     }
    },
    "alphas": {
     "POC": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     },
-    "WAIO": {
+    "WHI": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     }
    }
   },
@@ -27152,7 +27152,7 @@
    ],
    "turnout": {
     "POC": 0.7,
-    "WAIO": 1
+    "WHI": 1
    },
    "primaryTurnout": null,
    "candidatePoolMin": 2,
@@ -27161,21 +27161,21 @@
    "cohesion": {
     "POC": {
      "POC": 0.89,
-     "WAIO": 0.11
+     "WHI": 0.11
     },
-    "WAIO": {
+    "WHI": {
      "POC": 0.2,
-     "WAIO": 0.8
+     "WHI": 0.8
     }
    },
    "alphas": {
     "POC": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     },
-    "WAIO": {
+    "WHI": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     }
    }
   },
@@ -27193,7 +27193,7 @@
    ],
    "turnout": {
     "POC": 0.7,
-    "WAIO": 1
+    "WHI": 1
    },
    "primaryTurnout": null,
    "candidatePoolMin": 4,
@@ -27202,21 +27202,21 @@
    "cohesion": {
     "POC": {
      "POC": 0.89,
-     "WAIO": 0.11
+     "WHI": 0.11
     },
-    "WAIO": {
+    "WHI": {
      "POC": 0.2,
-     "WAIO": 0.8
+     "WHI": 0.8
     }
    },
    "alphas": {
     "POC": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     },
-    "WAIO": {
+    "WHI": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     }
    }
   },
@@ -27234,7 +27234,7 @@
    ],
    "turnout": {
     "POC": 0.7,
-    "WAIO": 1
+    "WHI": 1
    },
    "primaryTurnout": null,
    "candidatePoolMin": 4,
@@ -27243,21 +27243,21 @@
    "cohesion": {
     "POC": {
      "POC": 0.89,
-     "WAIO": 0.11
+     "WHI": 0.11
     },
-    "WAIO": {
+    "WHI": {
      "POC": 0.2,
-     "WAIO": 0.8
+     "WHI": 0.8
     }
    },
    "alphas": {
     "POC": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     },
-    "WAIO": {
+    "WHI": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     }
    }
   },
@@ -27276,7 +27276,7 @@
    ],
    "turnout": {
     "POC": 0.7,
-    "WAIO": 1
+    "WHI": 1
    },
    "primaryTurnout": null,
    "candidatePoolMin": 7,
@@ -27285,21 +27285,21 @@
    "cohesion": {
     "POC": {
      "POC": 0.89,
-     "WAIO": 0.11
+     "WHI": 0.11
     },
-    "WAIO": {
+    "WHI": {
      "POC": 0.2,
-     "WAIO": 0.8
+     "WHI": 0.8
     }
    },
    "alphas": {
     "POC": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     },
-    "WAIO": {
+    "WHI": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     }
    }
   },
@@ -27318,7 +27318,7 @@
    ],
    "turnout": {
     "POC": 0.7,
-    "WAIO": 1
+    "WHI": 1
    },
    "primaryTurnout": null,
    "candidatePoolMin": 7,
@@ -27327,21 +27327,21 @@
    "cohesion": {
     "POC": {
      "POC": 0.89,
-     "WAIO": 0.11
+     "WHI": 0.11
     },
-    "WAIO": {
+    "WHI": {
      "POC": 0.2,
-     "WAIO": 0.8
+     "WHI": 0.8
     }
    },
    "alphas": {
     "POC": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     },
-    "WAIO": {
+    "WHI": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     }
    }
   },
@@ -27359,7 +27359,7 @@
    ],
    "turnout": {
     "POC": 0.7,
-    "WAIO": 1
+    "WHI": 1
    },
    "primaryTurnout": null,
    "candidatePoolMin": 4,
@@ -27368,21 +27368,21 @@
    "cohesion": {
     "POC": {
      "POC": 0.89,
-     "WAIO": 0.11
+     "WHI": 0.11
     },
-    "WAIO": {
+    "WHI": {
      "POC": 0.2,
-     "WAIO": 0.8
+     "WHI": 0.8
     }
    },
    "alphas": {
     "POC": {
      "POC": 2,
-     "WAIO": 1
+     "WHI": 1
     },
-    "WAIO": {
+    "WHI": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     }
    }
   },
@@ -27400,7 +27400,7 @@
    ],
    "turnout": {
     "POC": 0.7,
-    "WAIO": 1
+    "WHI": 1
    },
    "primaryTurnout": null,
    "candidatePoolMin": 4,
@@ -27409,21 +27409,21 @@
    "cohesion": {
     "POC": {
      "POC": 0.89,
-     "WAIO": 0.11
+     "WHI": 0.11
     },
-    "WAIO": {
+    "WHI": {
      "POC": 0.2,
-     "WAIO": 0.8
+     "WHI": 0.8
     }
    },
    "alphas": {
     "POC": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     },
-    "WAIO": {
+    "WHI": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     }
    }
   },
@@ -27441,7 +27441,7 @@
    ],
    "turnout": {
     "POC": 0.5,
-    "WAIO": 1
+    "WHI": 1
    },
    "primaryTurnout": null,
    "candidatePoolMin": 4,
@@ -27450,21 +27450,21 @@
    "cohesion": {
     "POC": {
      "POC": 0.89,
-     "WAIO": 0.11
+     "WHI": 0.11
     },
-    "WAIO": {
+    "WHI": {
      "POC": 0.2,
-     "WAIO": 0.8
+     "WHI": 0.8
     }
    },
    "alphas": {
     "POC": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     },
-    "WAIO": {
+    "WHI": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     }
    }
   },
@@ -27484,11 +27484,11 @@
    ],
    "turnout": {
     "POC": 0.7,
-    "WAIO": 1
+    "WHI": 1
    },
    "primaryTurnout": {
     "POC": 0.7,
-    "WAIO": 1
+    "WHI": 1
    },
    "candidatePoolMin": 3,
    "candidatePoolMax": 5,
@@ -27496,21 +27496,21 @@
    "cohesion": {
     "POC": {
      "POC": 0.89,
-     "WAIO": 0.11
+     "WHI": 0.11
     },
-    "WAIO": {
+    "WHI": {
      "POC": 0.2,
-     "WAIO": 0.8
+     "WHI": 0.8
     }
    },
    "alphas": {
     "POC": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     },
-    "WAIO": {
+    "WHI": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     }
    }
   },
@@ -27528,7 +27528,7 @@
    ],
    "turnout": {
     "POC": 0.7,
-    "WAIO": 1
+    "WHI": 1
    },
    "primaryTurnout": null,
    "candidatePoolMin": 6,
@@ -27537,21 +27537,21 @@
    "cohesion": {
     "POC": {
      "POC": 0.89,
-     "WAIO": 0.11
+     "WHI": 0.11
     },
-    "WAIO": {
+    "WHI": {
      "POC": 0.2,
-     "WAIO": 0.8
+     "WHI": 0.8
     }
    },
    "alphas": {
     "POC": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     },
-    "WAIO": {
+    "WHI": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     }
    }
   },
@@ -27569,7 +27569,7 @@
    ],
    "turnout": {
     "POC": 0.7,
-    "WAIO": 1
+    "WHI": 1
    },
    "primaryTurnout": null,
    "candidatePoolMin": 4,
@@ -27578,21 +27578,21 @@
    "cohesion": {
     "POC": {
      "POC": 0.89,
-     "WAIO": 0.11
+     "WHI": 0.11
     },
-    "WAIO": {
+    "WHI": {
      "POC": 0.2,
-     "WAIO": 0.8
+     "WHI": 0.8
     }
    },
    "alphas": {
     "POC": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     },
-    "WAIO": {
+    "WHI": {
      "POC": 1,
-     "WAIO": 1
+     "WHI": 1
     }
    }
   },
