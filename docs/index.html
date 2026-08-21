@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+"
         crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="fonts/fonts.css">
-  <link rel="stylesheet" href="css/report.css?v=898ae7cf71">
+  <link rel="stylesheet" href="css/report.css?v=c08849570a">
 </head>
 
 <body data-bs-spy="scroll" data-bs-target="#toc-nav" data-bs-offset="90" tabindex="0">
@@ -56,8 +56,8 @@
             <a class="nav-link" href="#run-basic-3-x-3">Warmup - 3 X 3 STV</a>
             <a class="nav-link" href="#run-city-charter-amendment-proposal">City Charter Amendment Proposal</a>
             <a class="nav-link" href="#run-alternative-electoral-systems">Alternative Electoral Systems</a>
-            <a class="nav-link" href="#run-basic-3-x-3-truncation">Warmup - 3 X 3 STV, Truncation</a>
-            <a class="nav-link" href="#run-basic-3-x-3-waio-low-polarization">Warmup - 3 X 3 STV, Low Polarization</a>
+            <a class="nav-link" href="#run-basic-3-x-3-truncation">3 X 3 STV, Truncation</a>
+            <a class="nav-link" href="#run-basic-3-x-3-waio-low-polarization">3 X 3 STV, Low Polarization</a>
             <a class="nav-link" href="#run-city-charter-amendment-proposal-waio-low-polarization">City Charter Amendment Proposal, Low Polarization</a>
             <a class="nav-link" href="#run-city-charter-amendment-proposal-truncation">City Charter Amendment Proposal, Truncation</a>
           </nav>
@@ -358,14 +358,14 @@ $$</div>
 </tbody>
 </table>
 <h2>3.5 Cambridge Ballot Truncation</h2>
-<p>The ballots generated in Section 3.4 are, by default, full rankings—every voter ranks every candidate on the slate. However, we introduce a new scenario where voters don't all behave the same way, allowing for incomplete and bullet ballots.
-Cambridge has run ranked-choice elections continuously since 1941, and a subset of those elections from 2009–2017 shows real dispersion in ballot length. Moreover, this distribution differs between the historical majority and minority slates.</p>
-<p>To capture this behavior, we introduce a truncation process calibrated to real ranked-choice ballots from Cambridge, MA's 2009–2017 municipal elections. Using the same structure as VoteKit, we work with two empirical distributions over ballot length: one for ballots that started with a candidate from the historical majority (White) slate, and one for ballots that started with a candidate from the historical minority (Black, Asian, or Hispanic) slate.</p>
-<p>Finally, the PL and BT preference profiles are truncated to a ballot length uniformly sampled from the historical distribution, with the corresponding majority or minority group.</p>
+<p>The ballots generated in Section 3.4 are, by default, full rankings—every voter ranks every candidate on the slate. However, we introduce a new scenario where voters don't all behave the same way, allowing for incomplete and bullet ballots. We are interested in ballot truncation to measure its impact on minority and majority representation.</p>
+<p>It is worth noting that Cambridge has run ranked-choice elections continuously since 1941. Analyzing elections from 2009–2017, we identified a small dispersion in ballot length that varies by community: voters whose first choice was a minority-slate candidate bullet-voted (ranked only one candidate) at a rate of 8.44%, compared to 8.59% for voters whose first choice was a majority-slate candidate. Average ballot length follows a different pattern (5.84 for majority-first ballots versus 6.24 for minority-first ballots). Although these differences are modest, we chose to model the two groups with separate distributions rather than pooling them.</p>
+<p>To capture this behavior, we introduce a truncation process calibrated to real ranked-choice ballots from Cambridge, MA's 2009–2017 municipal elections. Using the same structure as VoteKit, we work with two empirical distributions over ballot length: one for ballots that started with a candidate from the historical majority (White) slate, and one for ballots that started with a candidate from the historical minority (Black, Asian, or Hispanic) slate. Finally, the PL and BT preference profiles are truncated to a ballot length uniformly sampled from these empirical distributions.</p>
+<p>This process was applied to all scenarios including the Charter Amendment proposal at four and bloc configuration.</p>
 <h2>3.6 Bounded Ballot Truncation</h2>
-<p>Additionally, this report explores a scenario where voters are not allowed to rank all candidates, but only within a fixed range. We are interested in ballot truncation to measure its impact on minority and majority representation in RCV.</p>
-<p>For that reason, we added a variant to the truncation methodology named &quot;Bounded.&quot; This methodology subsets the historical Cambridge distribution using a defined lower and upper bound. After this truncation, we sample uniformly from that subset to truncate the ballots.</p>
-<p>This process was applied to the Charter Amendment proposal, specifically to the 1×9 STV elections and the 3×3 STV elections, to understand its impact on minority groups. For the 3×3 STV, we defined the range as k to 2k, where k is the number of winners. For the 1×9 STV elections, we defined a range of 6 to 7 for ballot length.</p>
+<p>Additionally, this report explores a scenario where voters are not allowed to rank all candidates, but only within a fixed range. To simulate it, we added a variant to the truncation methodology named &quot;Bounded&quot;. This methodology subsets the historical Cambridge distribution using a defined lower and upper bound. Using the subset distribution, we sample uniformly to truncates the ballots.</p>
+<p>This process was applied to the Charter Amendment proposal, specifically to the 1×9 STV elections and the 3×3 STV elections, to understand its impact on the electoral results. For the 3×3 STV, we defined the range as k to 2k, where k is the number of winners. For the 1×9 STV elections, since the k-to-2k rule does not apply to a single 9-winner district, we instead tested two manually chosen ranges: a bounded range of 6 to 10, and a fixed ballot length of exactly 6.</p>
+<p>Additional details of Truncation methodology can be found in the Appendix.</p>
 <h2>3.7 Voting Rules</h2>
 <p>Elections for each district are simulated using VoteKit's Elections module. We use the following voting rules with the corresponding district configurations:</p>
 <table>
@@ -542,8 +542,8 @@ Cambridge has run ranked-choice elections continuously since 1941, and a subset 
           </section>
           <section id="run-basic-3-x-3-truncation" class="run mb-5" data-run="basic-3-x-3-truncation">
             <div class="run-main">
-            <h3 class="h4 mt-4">Warmup - 3 X 3 STV, Truncation</h3>
-            <div class="run-prose"><p>Often times, elections using a form of RCV limit the number of candidates that voters can rank on their ballots - even for elections with large candidate pools. In this scenario, we ask how the electoral system modeled in the Basic scenario would be impacted if we set a minimum and maximum ballot length - specifically in the 3 X 3 STV district contests. We set the maximum ballot length to six ranked candidates, and enforce a minimum ballot length of three since each district has three seats available.</p>
+            <h3 class="h4 mt-4">3 X 3 STV, Truncation</h3>
+            <div class="run-prose"><p>Often times, elections using a form of RCV limit the number of candidates that voters can rank on their ballots - even for elections with large candidate pools. In this scenario, we ask how the electoral system modeled in the Basic scenario would be impacted if we set a minimum and maximum ballot length in each of the 3 X 3 STV district contests. We run two different simulations; one of them sets the maximum ballot length to six, and the other pins it to 10 ranked candidates. In each simulation, we enforce a minimum ballot length of three since each district has three seats available.</p>
 </div>
 
             <div class="run-controls" data-controls="basic-3-x-3-truncation"></div>
@@ -587,7 +587,7 @@ Cambridge has run ranked-choice elections continuously since 1941, and a subset 
           </section>
           <section id="run-basic-3-x-3-waio-low-polarization" class="run mb-5" data-run="basic-3-x-3-waio-low-polarization">
             <div class="run-main">
-            <h3 class="h4 mt-4">Warmup - 3 X 3 STV, Low Polarization</h3>
+            <h3 class="h4 mt-4">3 X 3 STV, Low Polarization</h3>
             <div class="run-prose"><p>This scenario supposes that in San Diego, candidates of color (particularly Black candidates) may receive a higher level of crossover support from the White voter bloc. As such, we take the existing Basic simulation configuration and modify only our cohesion parameters such that voters from the White bloc are more likely to support POC candidates in two-bloc simulations and Black, Latino, and AAPI candidates in four-bloc simulations.</p>
 </div>
 
@@ -731,22 +731,24 @@ Cambridge has run ranked-choice elections continuously since 1941, and a subset 
         <section id="appendix" class="prose mb-5">
           <h2>Appendix</h2>
           <h2>A. Ballot Truncation Methodology</h2>
-<p>Both truncation methods described below act as a second pass over an already-generated PL or BT profile (Section 3.4): they never change which candidates a voter prefers or in what order, only how far down that ranking the ballot is cut off. Both also classify a ballot by its <em>first-ranked candidate's</em> slate rather than by the voter's bloc — a minority-bloc voter whose cohesion draw happened to put a majority candidate first is truncated using the majority distribution, matching how the underlying Cambridge data itself was split. A run's config pools every candidate slate into two groups, <code>majority_slates</code> and <code>minority_slates</code> (San Diego's default is WAIO vs. HIS/AAPI/BLK), and each ballot's truncation length is then drawn independently for every voter who cast it — a ballot cast by 40 identical voters produces 40 independent length draws, not one length applied to all 40.</p>
+<p>Both truncation methods described below act as a second pass over an already-generated PL or BT profile (Section 3.4): they never change which candidates a voter prefers or in what order, only how far down that ranking the ballot is cut off. Both also classify a ballot by its <em>first-ranked candidate's</em> slate rather than by the voter's bloc — a minority-bloc voter whose cohesion draw happened to put a majority candidate first is truncated using the majority distribution, matching how the underlying Cambridge data itself was split. A run's config pools every candidate slate into two groups, <code>majority_slates</code> and <code>minority_slates</code>, and each ballot's truncation length is then drawn independently for every voter who cast it. For instance, a ballot cast by 40 identical voters produces 40 independent length draws, not one length applied to all 40.</p>
 <h3>A.1 Cambridge Historical Truncation</h3>
 <p>This is the default method (<code>cambridge_truncation.method = &quot;historical&quot;</code>), used for the Section 3.5 scenarios.</p>
 <ol>
-<li><strong>Reduce the historical shapes to this district.</strong> Cambridge's 2009–2017 municipal elections recorded, as Cast Vote Records, the full <em>shape</em> of each ballot — not just its length, but which slate occupied each position — separately for ballots that started with the historical majority (&quot;W&quot;) slate and ballots that started with the historical minority (&quot;C&quot;) slate. VoteKit ships these two shape distributions and a reduction routine (<code>_reduce_ballot_pmfs</code>) that rescales a shape distribution to a target candidate count. We call that routine against a stand-in two-slate config whose &quot;majority&quot; and &quot;minority&quot; slates are this district's actual pooled candidate lists, so the reduced distribution reflects how many candidates each side really has here rather than Cambridge's original slate sizes.</li>
-<li><strong>Collapse to a length marginal.</strong> Truncation only needs to know how many candidates a ballot ranks, not which slate occupied which position, so each reduced shape distribution is collapsed to <code>{length: probability}</code> by summing the probability of every shape of a given length. This yields two distributions, one for majority-first ballots and one for minority-first ballots.</li>
-<li><strong>Sample a length per voter.</strong> For each already-generated ballot, its first choice determines whether it draws from the majority or minority distribution. Every voter who cast that exact ranking (the ballot's weight) draws an independent length from that distribution, and the ranking is cut to that length — or left at its full length if the sampled length is longer than the ballot already is. The truncated ballots are then re-grouped into a new profile with the same candidate set.</li>
+<li><p><strong>Reduce the historical shapes to this district.</strong> Cambridge's 2009–2017 municipal elections recorded, as Cast Vote Records, the full <em>shape</em> of each ballot — not just its length, but which slate occupied each position — separately for ballots that started with the historical majority (&quot;W&quot;) slate and ballots that started with the historical minority (&quot;C&quot;) slate. VoteKit ships these two shape distributions and a reduction routine (<code>_reduce_ballot_pmfs</code>) that rescales a shape distribution to a target candidate count. We call that routine against a stand-in two-slate config whose &quot;majority&quot; and &quot;minority&quot; slates are this district's actual pooled candidate lists.</p>
+</li>
+<li><p><strong>Collapse to a length marginal.</strong> Truncation only needs to know how many candidates a ballot ranks, so each reduced shape distribution is collapsed to <code>{length: probability}</code> by summing the probability of every shape of a given length. This generates two distributions, one for majority-first ballots and one for minority-first ballots, where we are going to sample.</p>
+</li>
+<li><p><strong>Sample a length per voter.</strong> For each already-generated ballot (PL and BT), its first choice determines whether it draws from the majority or minority distribution. Every voter who cast that exact ranking (the ballot's weight) draws an independent length from that distribution, and the ranking is cut to that length—or left at its full length if the sampled length is longer than the ballot already is. The truncated ballots are then re-grouped into a new profile with the same candidate set.</p>
+</li>
 </ol>
 <h3>A.2 Bounded Truncation</h3>
 <p>This method (<code>cambridge_truncation.method = &quot;bounded&quot;</code>) is used for the Truncation scenarios, where we additionally want no ballot shorter or longer than a chosen range — for example, the Basic 3 × 3 Truncation scenario sets <code>min_length = k</code> and <code>max_length = 2k</code>, where <em>k</em> is the number of winners per district (3 and 6 for a 3-seat district), so every ballot ranks at least as many candidates as there are seats to fill and never more than twice that.</p>
 <ol>
 <li><strong>Start from the same two historical length distributions built in A.1</strong> — this method does not change how those distributions are derived, only how they're used.</li>
-<li><strong>Restrict and renormalize.</strong> For each of the majority and minority distributions independently, every length outside <code>[min_length, max_length]</code> is dropped outright — not folded into the nearest surviving bound — and the remaining probabilities are rescaled so they sum back to 1, preserving their relative proportions. If a distribution has no length left inside the window, this step raises rather than silently truncating every ballot to zero.</li>
+<li><strong>Restrict and renormalize.</strong> For each of the majority and minority distributions independently, every length outside <code>[min_length, max_length]</code> is dropped outright — not folded into the nearest surviving bound. The remaining probabilities are rescaled so they sum back to 1, preserving their relative proportions. If a distribution has no length left inside the window, this step raises rather than silently truncating every ballot to zero.</li>
 <li><strong>Sample and truncate exactly as in A.1</strong>, drawing each voter's length from their ballot's bounded, renormalized distribution instead of the raw historical one.</li>
 </ol>
-<p>Because both methods share steps 1 and 3, a run can switch between &quot;historical&quot; and &quot;bounded&quot; by changing only <code>min_length</code>/<code>max_length</code> in its config — the classification logic and the per-voter sampling never differ between the two.</p>
 
         </section>
       </main>
@@ -757,7 +759,7 @@ Cambridge has run ranked-choice elections continuously since 1941, and a subset 
     <div class="container-xl text-center">
       <p class="mb-1">Metric Geometry &amp; Gerrymandering Group — San Diego City Council Election Analysis</p>
       <p class="mb-1"><a href="https://github.com/mggg/San-Diego-Election-Analysis" target="_blank" rel="noopener">View the repository on GitHub</a></p>
-      <p class="generated mb-0">Generated 2026-08-21T20:21:33+00:00</p>
+      <p class="generated mb-0">Generated 2026-08-21T21:06:14+00:00</p>
     </div>
   </footer>
 
@@ -790,15 +792,15 @@ Cambridge has run ranked-choice elections continuously since 1941, and a subset 
 
   <script type="importmap">{
  "imports": {
-  "./js/charts/availability.js": "./js/charts/availability.js?v=898ae7cf71",
-  "./js/charts/axes.js": "./js/charts/axes.js?v=898ae7cf71",
-  "./js/charts/bubble.js": "./js/charts/bubble.js?v=898ae7cf71",
-  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=898ae7cf71",
-  "./js/charts/histogram.js": "./js/charts/histogram.js?v=898ae7cf71",
-  "./js/charts/slate.js": "./js/charts/slate.js?v=898ae7cf71",
-  "./js/report.js": "./js/report.js?v=898ae7cf71"
+  "./js/charts/availability.js": "./js/charts/availability.js?v=c08849570a",
+  "./js/charts/axes.js": "./js/charts/axes.js?v=c08849570a",
+  "./js/charts/bubble.js": "./js/charts/bubble.js?v=c08849570a",
+  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=c08849570a",
+  "./js/charts/histogram.js": "./js/charts/histogram.js?v=c08849570a",
+  "./js/charts/slate.js": "./js/charts/slate.js?v=c08849570a",
+  "./js/report.js": "./js/report.js?v=c08849570a"
  }
 }</script>
-  <script type="module" src="js/report.js?v=898ae7cf71"></script>
+  <script type="module" src="js/report.js?v=c08849570a"></script>
 </body>
 </html>

@@ -30,17 +30,33 @@ export const FOCAL_MARGIN = { top: 26, right: 14, bottom: 38, left: 78 };
 /*
  * Seat-axis tick spacing, coarse enough that labels never crowd.
  *
- * The mirror of summarize_results._tick_step, so a web chart and its PNG
- * counterpart label the same seats. A step of 1 is right on a small axis -- a
- * 3- or 9-seat body reads straight off it -- and stops being right as the axis
- * grows: sixteen labels across a 300px panel start touching. A wider axis gets
- * a wider step, so the axis still spans every seat while labelling fewer.
+ * Follows summarize_results._tick_step, so a web chart and its PNG counterpart
+ * label the same seats. A step of 1 is right on a small axis -- a 3- or 9-seat
+ * body reads straight off it -- and stops being right as the axis grows:
+ * sixteen labels across a 300px panel start touching. A wider axis gets a
+ * wider step, so the axis still spans every seat while labelling fewer.
+ *
+ * Where the legible step doesn't divide the body, the next one up that does is
+ * preferred: seatTicks always labels the last seat, so a 15-seat axis stepping
+ * by 2 runs 0, 2 ... 12, 15 and ends on a gap half again as wide as the rest,
+ * which reads as a mistake in the drawing rather than as the end of the axis.
+ * Stepping by 3 gives 0, 3, 6, 9, 12, 15 -- evenly spaced, and still only six
+ * labels. Capped at twice the legible step so the search can't thin the axis
+ * to a label or two, and left alone for a body no larger step divides (a
+ * 11-seat one, say), where the uneven last gap is unavoidable.
  */
 export function seatTickStep(seatMax) {
-  if (seatMax <= 10) return 1;
-  if (seatMax <= 20) return 2;
-  if (seatMax <= 50) return 5;
-  return 10;
+  const legible = (() => {
+    if (seatMax <= 10) return 1;
+    if (seatMax <= 20) return 2;
+    if (seatMax <= 50) return 5;
+    return 10;
+  })();
+  if (seatMax % legible === 0) return legible;
+  for (let step = legible + 1; step <= legible * 2; step += 1) {
+    if (seatMax % step === 0) return step;
+  }
+  return legible;
 }
 
 /**

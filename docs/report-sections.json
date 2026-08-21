@@ -97,116 +97,141 @@
         {
           "run": "alternative-electoral-systems-2-blocs",
           "system": "IRV",
-          "label": "15 × 1 IRV",
+          "label": "15 \u00d7 1 IRV",
           "blocModel": "two"
         },
         {
           "run": "12-x-1-irv-2-blocs",
           "system": "IRV",
-          "label": "12 × 1 IRV",
+          "label": "12 \u00d7 1 IRV",
           "blocModel": "two"
         },
         {
           "run": "9-x-1-irv-2-blocs",
           "system": "IRV",
-          "label": "9 × 1 IRV",
+          "label": "9 \u00d7 1 IRV",
           "blocModel": "two"
         },
         {
           "run": "basic-3-x-5-2-blocs",
           "system": "FASTSTV",
-          "label": "3 × 5 STV",
+          "label": "3 \u00d7 5 STV",
           "blocModel": "two"
         },
         {
           "run": "basic-5-x-3-2-blocs",
           "system": "FASTSTV",
-          "label": "5 × 3 STV",
+          "label": "5 \u00d7 3 STV",
           "blocModel": "two"
         },
         {
           "run": "nine-seats-at-large-stv-2-blocs",
           "system": "FASTSTV",
-          "label": "1 × 9 STV",
+          "label": "1 \u00d7 9 STV",
           "blocModel": "two"
         },
         {
           "run": "fifteen-seats-at-large-stv-2-blocs",
           "system": "FASTSTV",
-          "label": "1 × 15 STV",
+          "label": "1 \u00d7 15 STV",
           "blocModel": "two"
         },
         {
           "run": "alternative-electoral-systems",
           "system": "IRV",
-          "label": "15 × 1 IRV",
+          "label": "15 \u00d7 1 IRV",
           "blocModel": "four"
         },
         {
           "run": "alternative-electoral-systems",
           "system": "PLURALITY",
-          "label": "15 × 1 Plurality",
+          "label": "15 \u00d7 1 Plurality",
           "blocModel": "four"
         },
         {
           "run": "alternative-electoral-systems",
           "system": "TOPTWO",
-          "label": "15 × 1 Top Two",
+          "label": "15 \u00d7 1 Top Two",
           "blocModel": "four"
         },
         {
           "run": "12-x-1-irv",
           "system": "IRV",
-          "label": "12 × 1 IRV",
+          "label": "12 \u00d7 1 IRV",
           "blocModel": "four"
         },
         {
           "run": "9-x-1-irv",
           "system": "IRV",
-          "label": "9 × 1 IRV",
+          "label": "9 \u00d7 1 IRV",
           "blocModel": "four"
         },
         {
           "run": "3x5-stv",
           "system": "FASTSTV",
-          "label": "3 × 5 STV",
+          "label": "3 \u00d7 5 STV",
           "blocModel": "four"
         },
         {
           "run": "5x3-stv",
           "system": "FASTSTV",
-          "label": "5 × 3 STV",
+          "label": "5 \u00d7 3 STV",
           "blocModel": "four"
         },
         {
           "run": "nine-seats-at-large",
           "system": "FASTSTV",
-          "label": "1 × 9 STV",
+          "label": "1 \u00d7 9 STV",
           "blocModel": "four"
         },
         {
           "run": "fifteen-seats-at-large-stv",
           "system": "FASTSTV",
-          "label": "1 × 15 STV",
+          "label": "1 \u00d7 15 STV",
           "blocModel": "four"
         }
       ]
     },
     {
-      "_note": "Every standalone electoral structure lives here rather than in a section of its own, both bloc models: the 9/12/15 X 1 IRV shapes, 3 X 5 and 5 X 3 STV, and the at-large and multi-member STV runs. Basic's parameter variations (diverse preferences, low turnout, low availability) keep their own sections, as does the other hybrid run, whose combined view has no single contest to select.",
+      "_note": "Warmup 3 X 3 STV with Cambridge ballot truncation, both bloc models and both ballot-length caps. The cap is a toggle rather than a dropdown entry: each pair is the same contest under a different simulation, not a different contest.",
       "slug": "basic-3-x-3-truncation",
-  "title": "Warmup - 3 X 3 STV, Truncation",
+      "title": "3 X 3 STV, Truncation",
       "prose": "basic-truncation.md",
       "systems": [
         {
           "run": "basic-3-x-3-truncation-2-blocs",
           "system": "FASTSTV",
-          "blocModel": "two"
+          "blocModel": "two",
+          "variant": "max6"
         },
         {
           "run": "basic-3-x-3-truncation",
           "system": "FASTSTV",
-          "blocModel": "four"
+          "blocModel": "four",
+          "variant": "max6"
+        },
+        {
+          "run": "basic-3-x-3-truncation-10-2-blocs",
+          "system": "FASTSTV",
+          "blocModel": "two",
+          "variant": "max10"
+        },
+        {
+          "run": "basic-3-x-3-truncation-10",
+          "system": "FASTSTV",
+          "blocModel": "four",
+          "variant": "max10"
+        }
+      ],
+      "variant_label": "Max ballot length",
+      "variants": [
+        {
+          "id": "max6",
+          "label": "6"
+        },
+        {
+          "id": "max10",
+          "label": "10"
         }
       ]
     },
@@ -214,7 +239,7 @@
       "_note": "Basic - 3 X 3 with the majority bloc's own cohesion lowered, both bloc models.",
       "slug": "basic-3-x-3-waio-low-polarization",
       "prose": "basic-low-polarization.md",
-      "title": "Warmup - 3 X 3 STV, Low Polarization",
+      "title": "3 X 3 STV, Low Polarization",
       "systems": [
         {
           "run": "basic-3-x-3-2-blocs-waio-low-polarization",
@@ -273,49 +298,109 @@
       ]
     },
     {
-      "_note": "The hybrid charter-amendment run with Cambridge ballot truncation, both bloc models: the combined citywide total, or either component contest on its own.",
+      "_note": "The hybrid charter-amendment run with Cambridge ballot truncation: the combined citywide total or either component contest, under both bloc models and both ballot-length caps. Only the 1 X 6 STV component is truncated (tier_overrides \"1\"), so the cap moves the STV and combined views and leaves 9 X 1 IRV alone.",
       "slug": "city-charter-amendment-proposal-truncation",
       "prose": "city-charter-truncation.md",
       "title": "City Charter Amendment Proposal, Truncation",
       "systems": [
         {
+          "run": "city-charter-amendment-proposal-2-blocs-truncation-6",
+          "system": "Combined",
+          "blocModel": "two",
+          "variant": "max6",
+          "label": "Combined (15 seats)"
+        },
+        {
+          "run": "city-charter-amendment-proposal-2-blocs-truncation-6",
+          "system": "IRV",
+          "blocModel": "two",
+          "variant": "max6",
+          "label": "9 X 1 IRV"
+        },
+        {
+          "run": "city-charter-amendment-proposal-2-blocs-truncation-6",
+          "system": "FASTSTV",
+          "blocModel": "two",
+          "variant": "max6",
+          "label": "1 X 6 STV"
+        },
+        {
+          "run": "city-charter-amendment-proposal-truncation-6",
+          "system": "Combined",
+          "blocModel": "four",
+          "variant": "max6",
+          "label": "Combined (15 seats)"
+        },
+        {
+          "run": "city-charter-amendment-proposal-truncation-6",
+          "system": "IRV",
+          "blocModel": "four",
+          "variant": "max6",
+          "label": "9 X 1 IRV"
+        },
+        {
+          "run": "city-charter-amendment-proposal-truncation-6",
+          "system": "FASTSTV",
+          "blocModel": "four",
+          "variant": "max6",
+          "label": "1 X 6 STV"
+        },
+        {
           "run": "city-charter-amendment-proposal-2-blocs-truncation",
           "system": "Combined",
           "blocModel": "two",
+          "variant": "max10",
           "label": "Combined (15 seats)"
         },
         {
           "run": "city-charter-amendment-proposal-2-blocs-truncation",
           "system": "IRV",
           "blocModel": "two",
+          "variant": "max10",
           "label": "9 X 1 IRV"
         },
         {
           "run": "city-charter-amendment-proposal-2-blocs-truncation",
           "system": "FASTSTV",
           "blocModel": "two",
+          "variant": "max10",
           "label": "1 X 6 STV"
         },
         {
           "run": "city-charter-amendment-proposal-truncation",
           "system": "Combined",
           "blocModel": "four",
+          "variant": "max10",
           "label": "Combined (15 seats)"
         },
         {
           "run": "city-charter-amendment-proposal-truncation",
           "system": "IRV",
           "blocModel": "four",
+          "variant": "max10",
           "label": "9 X 1 IRV"
         },
         {
           "run": "city-charter-amendment-proposal-truncation",
           "system": "FASTSTV",
           "blocModel": "four",
+          "variant": "max10",
           "label": "1 X 6 STV"
+        }
+      ],
+      "variant_label": "Max ballot length",
+      "variants": [
+        {
+          "id": "max6",
+          "label": "6"
+        },
+        {
+          "id": "max10",
+          "label": "10"
         }
       ]
     }
   ],
-  "_prose_key_comment": "Each scenario names its write-up with \"prose\", a file in docs/prose/scenarios/ -- one file per scenario. The truncation and low-polarization scenarios are written separately for Basic and for the City Charter proposal, since each describes the configuration it was derived from. Two scenarios may still share a file by naming it twice; omit the key and a scenario falls back to <slug>.md."
+  "_prose_key_comment": "Each scenario names its write-up with \"prose\", a file in docs/prose/scenarios/ -- one file per scenario. The truncation and low-polarization scenarios are written separately for Basic and for the City Charter proposal, since each describes the configuration it was derived from. Two scenarios may still share a file by naming it twice; omit the key and a scenario falls back to <slug>.md.",
+  "_variant_comment": "A scenario may declare \"variants\": [{\"id\", \"label\"}, ...] and tag each of its systems with one. The page renders them as a toggle beside Bloc model, carrying the current contest across, so the same election under two simulation settings is one selection rather than two dropdown entries. Variants whose runs have no results yet are dropped at build time; the toggle appears once at least two resolve."
 }

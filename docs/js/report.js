@@ -391,7 +391,10 @@ const BLOC_MODEL_LABELS = { two: 'Two Bloc', four: 'Four Bloc' };
 
 function buildControls(mount, context, palette, state, onChange, slates) {
   mount.selectAll('*').remove();
-  const { slug, systems, models, blocModels, onSystemChange, onBlocModelChange } = context;
+  const {
+    slug, systems, models, blocModels, variants, variantLabel,
+    onSystemChange, onBlocModelChange, onVariantChange,
+  } = context;
 
   // Present only where a section's systems actually span more than one bloc
   // model (see resolve_composition's "blocModel" tag); an ordinary run has
@@ -411,6 +414,27 @@ function buildControls(mount, context, palette, state, onChange, slates) {
       .on('click', (event, d) => {
         if (state.blocModel === d) return;
         onBlocModelChange(d);
+      });
+  }
+
+  // The second run-level axis, sitting beside Bloc model because it asks the
+  // same kind of question: not which contest to look at, but which simulation
+  // of it. Present only where the section resolved more than one variant under
+  // the bloc model on show -- see _variant_vocabulary. Like the bloc toggle it
+  // rebuilds rather than redraws, since moving it repoints every chart at a
+  // different run.
+  if ((variants || []).length > 1) {
+    const group = mount.append('div').attr('class', 'control-group');
+    group.append('span').attr('class', 'control-label').text(variantLabel || 'Variant');
+    const toggles = group.append('div').attr('class', 'model-toggles');
+    toggles.selectAll('button').data(variants).join('button')
+      .attr('type', 'button')
+      .attr('class', (d) => `model-toggle${state.variant === d.id ? ' on' : ''}`)
+      .attr('aria-pressed', (d) => state.variant === d.id)
+      .text((d) => d.label)
+      .on('click', (event, d) => {
+        if (state.variant === d.id) return;
+        onVariantChange(d.id);
       });
   }
 
@@ -811,6 +835,16 @@ async function mountRun(section, manifest, cache) {
     systems.map((s) => s.source && s.source.blocModel).filter(Boolean),
   )];
 
+  /*
+   * The variants this section offers, in the order the outline declared them
+   * (see _variant_vocabulary). Empty for a section whose systems are all one
+   * simulation of their contest, which is every section but the truncation
+   * ones -- there is nothing to switch between.
+   */
+  const variants = (entry.variants || []).filter(
+    (v) => systems.some((s) => s.source && s.source.variant === v.id),
+  );
+
   /** Where a selection's records live, and which system identifies them there. */
   function resolve(selection) {
     const source = selection && selection.source;
@@ -842,10 +876,53 @@ async function mountRun(section, manifest, cache) {
     return (slateList.find((s) => s.id === focal) || slateList[0] || {}).id;
   }
 
-  /** This section's systems narrowed to the bloc model currently on show. */
+  /** This section's systems narrowed to the bloc model and variant on show. */
   function visibleSystems() {
-    if (!blocModels.length) return systems;
-    return systems.filter((s) => (s.source && s.source.blocModel) === state.blocModel);
+    let list = systems;
+    if (blocModels.length) {
+      list = list.filter((s) => (s.source && s.source.blocModel) === state.blocModel);
+    }
+    if (variants.length) {
+      list = list.filter((s) => (s.source && s.source.variant) === state.variant);
+    }
+    return list;
+  }
+
+  /** The variants available under the bloc model on show. */
+  function visibleVariants() {
+    if (!variants.length) return [];
+    const here = new Set(systems
+      .filter((s) => !blocModels.length
+        || (s.source && s.source.blocModel) === state.blocModel)
+      .map((s) => s.source && s.source.variant));
+    return variants.filter((v) => here.has(v.id));
+  }
+
+  /*
+   * Move the selection to the closest match under whatever the toggles now say.
+   *
+   * Prefers the contest that was already on show, so toggling either axis reads
+   * as "same contest, different simulation" rather than resetting to whatever
+   * happens to be first. Where the new combination holds nothing at all -- a
+   * bloc model simulated under only one of the variants, which is the state
+   * this section sits in until every run has finished -- the variant gives way
+   * rather than the bloc model, since the bloc model is the one the reader just
+   * asked for.
+   */
+  function reselect(preferredLabel) {
+    let visible = visibleSystems();
+    if (!visible.length && variants.length) {
+      const relaxed = blocModels.length
+        ? systems.filter((s) => (s.source && s.source.blocModel) === state.blocModel)
+        : systems;
+      if (relaxed.length) {
+        state.variant = relaxed[0].source && relaxed[0].source.variant;
+        visible = visibleSystems();
+      }
+    }
+    if (!visible.length) visible = systems;
+    const match = visible.find((s) => s.label === preferredLabel) || visible[0];
+    state.system = match.id;
   }
 
   /*
@@ -894,6 +971,7 @@ async function mountRun(section, manifest, cache) {
   const state = {
     system: systems[0].id,
     blocModel: systems[0].source && systems[0].source.blocModel,
+    variant: systems[0].source && systems[0].source.variant,
     models: defaultModels(modelsFor(systems[0])),
     slate: defaultSlateId(systems[0], slatesFor(systems[0])),
     metric: 'winRate',
@@ -915,9 +993,23 @@ async function mountRun(section, manifest, cache) {
     if (state.blocModel === model) return;
     const currentLabel = (systems.find((s) => s.id === state.system) || {}).label;
     state.blocModel = model;
-    const visible = visibleSystems();
-    const match = visible.find((s) => s.label === currentLabel) || visible[0];
-    state.system = match.id;
+    reselect(currentLabel);
+    refreshControls();
+    draw();
+  }
+
+  /*
+   * Switch variant: the same contest under the other simulation, so the
+   * dropdown selection is carried across by label exactly as a bloc-model
+   * switch carries it. The charts are then reading a different run, which is
+   * why this goes through refreshControls -- the models on offer belong to the
+   * run, not to the section.
+   */
+  function switchVariant(variant) {
+    if (state.variant === variant) return;
+    const currentLabel = (systems.find((s) => s.id === state.system) || {}).label;
+    state.variant = variant;
+    reselect(currentLabel);
     refreshControls();
     draw();
   }
@@ -1098,8 +1190,11 @@ async function mountRun(section, manifest, cache) {
           systems: visibleSystems(),
           models,
           blocModels,
+          variants: visibleVariants(),
+          variantLabel: entry.variantLabel,
           onSystemChange: () => { refreshControls(); draw(); },
           onBlocModelChange: switchBlocModel,
+          onVariantChange: switchVariant,
         },
         manifest.palette, state, draw, currentSlates,
       );

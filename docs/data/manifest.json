@@ -1,5 +1,5 @@
 {
- "generated": "2026-08-21T20:21:33+00:00",
+ "generated": "2026-08-21T21:06:14+00:00",
  "palette": {
   "slate_pl": "#FFCC00",
   "slate_bt": "#AA0000",
@@ -88,6 +88,7 @@
      "id": "basic-3-x-3-2-blocs::FASTSTV::3x3",
      "label": "3 X 3 STV",
      "blocModel": "two",
+     "variant": null,
      "run": "basic-3-x-3-2-blocs",
      "runName": "Basic - 3 X 3 (2 Blocs)",
      "system": "FASTSTV",
@@ -188,6 +189,7 @@
      "id": "basic-3-x-3::FASTSTV::3x3",
      "label": "3 X 3 STV",
      "blocModel": "four",
+     "variant": null,
      "run": "basic-3-x-3",
      "runName": "Basic - 3 X 3",
      "system": "FASTSTV",
@@ -430,7 +432,7 @@
   },
   {
    "slug": "basic-3-x-3-truncation",
-   "name": "Warmup - 3 X 3 STV, Truncation",
+   "name": "3 X 3 STV, Truncation",
    "focalGroup": "AAPI",
    "focalGroupLabel": "AAPI",
    "totalSeats": 9,
@@ -498,6 +500,7 @@
      "id": "basic-3-x-3-truncation-2-blocs::FASTSTV::3x3",
      "label": "3 X 3 STV",
      "blocModel": "two",
+     "variant": "max6",
      "run": "basic-3-x-3-truncation-2-blocs",
      "runName": "Basic - 3 X 3 + Truncation (2 Blocs)",
      "system": "FASTSTV",
@@ -598,6 +601,7 @@
      "id": "basic-3-x-3-truncation::FASTSTV::3x3",
      "label": "3 X 3 STV",
      "blocModel": "four",
+     "variant": "max6",
      "run": "basic-3-x-3-truncation",
      "runName": "Basic - 3 X 3 + Truncation",
      "system": "FASTSTV",
@@ -786,7 +790,7 @@
   },
   {
    "slug": "basic-3-x-3-waio-low-polarization",
-   "name": "Warmup - 3 X 3 STV, Low Polarization",
+   "name": "3 X 3 STV, Low Polarization",
    "focalGroup": "BLK",
    "focalGroupLabel": "BLK",
    "totalSeats": 9,
@@ -854,6 +858,7 @@
      "id": "basic-3-x-3-2-blocs-waio-low-polarization::FASTSTV::3x3",
      "label": "3 X 3 STV",
      "blocModel": "two",
+     "variant": null,
      "run": "basic-3-x-3-2-blocs-waio-low-polarization",
      "runName": "Basic - 3 X 3 (2 Blocs) - WAIO Low Polarization",
      "system": "FASTSTV",
@@ -954,6 +959,7 @@
      "id": "basic-3-x-3-waio-low-polarization::FASTSTV::3x3",
      "label": "3 X 3 STV",
      "blocModel": "four",
+     "variant": null,
      "run": "basic-3-x-3-waio-low-polarization",
      "runName": "Basic - 3 X 3 - WAIO Low Polarization",
      "system": "FASTSTV",
@@ -1703,6 +1709,7 @@
      "id": "alternative-electoral-systems-2-blocs::IRV::15x1",
      "label": "15 \u00d7 1 IRV",
      "blocModel": "two",
+     "variant": null,
      "run": "alternative-electoral-systems-2-blocs",
      "runName": "Alternative Electoral Systems (2 Blocs)",
      "system": "IRV",
@@ -1804,6 +1811,7 @@
      "id": "12-x-1-irv-2-blocs::IRV::12x1",
      "label": "12 \u00d7 1 IRV",
      "blocModel": "two",
+     "variant": null,
      "run": "12-x-1-irv-2-blocs",
      "runName": "12 X 1 IRV (2 Blocs)",
      "system": "IRV",
@@ -1901,6 +1909,7 @@
      "id": "9-x-1-irv-2-blocs::IRV::9x1",
      "label": "9 \u00d7 1 IRV",
      "blocModel": "two",
+     "variant": null,
      "run": "9-x-1-irv-2-blocs",
      "runName": "9 X 1 IRV (2 Blocs)",
      "system": "IRV",
@@ -2001,6 +2010,7 @@
      "id": "basic-3-x-5-2-blocs::FASTSTV::3x5",
      "label": "3 \u00d7 5 STV",
      "blocModel": "two",
+     "variant": null,
      "run": "basic-3-x-5-2-blocs",
      "runName": "Basic - 3 X 5 (2 Blocs)",
      "system": "FASTSTV",
@@ -2099,6 +2109,7 @@
      "id": "basic-5-x-3-2-blocs::FASTSTV::5x3",
      "label": "5 \u00d7 3 STV",
      "blocModel": "two",
+     "variant": null,
      "run": "basic-5-x-3-2-blocs",
      "runName": "Basic - 5 X 3 (2 Blocs)",
      "system": "FASTSTV",
@@ -2197,6 +2208,7 @@
      "id": "nine-seats-at-large-stv-2-blocs::FASTSTV::1x9",
      "label": "1 \u00d7 9 STV",
      "blocModel": "two",
+     "variant": null,
      "run": "nine-seats-at-large-stv-2-blocs",
      "runName": "Nine Seats At-Large - STV (2 Blocs)",
      "system": "FASTSTV",
@@ -2297,6 +2309,7 @@
      "id": "fifteen-seats-at-large-stv-2-blocs::FASTSTV::1x15",
      "label": "1 \u00d7 15 STV",
      "blocModel": "two",
+     "variant": null,
      "run": "fifteen-seats-at-large-stv-2-blocs",
      "runName": "Fifteen Seats At-Large - STV (2 Blocs)",
      "system": "FASTSTV",
@@ -2395,6 +2408,7 @@
      "id": "alternative-electoral-systems::IRV::15x1",
      "label": "15 \u00d7 1 IRV",
      "blocModel": "four",
+     "variant": null,
      "run": "alternative-electoral-systems",
      "runName": "Alternative Electoral Systems",
      "system": "IRV",
@@ -2537,6 +2551,7 @@
      "id": "alternative-electoral-systems::PLURALITY::15x1",
      "label": "15 \u00d7 1 Plurality",
      "blocModel": "four",
+     "variant": null,
      "run": "alternative-electoral-systems",
      "runName": "Alternative Electoral Systems",
      "system": "PLURALITY",
@@ -2679,6 +2694,7 @@
      "id": "alternative-electoral-systems::TOPTWO::15x1",
      "label": "15 \u00d7 1 Top Two",
      "blocModel": "four",
+     "variant": null,
      "run": "alternative-electoral-systems",
      "runName": "Alternative Electoral Systems",
      "system": "TOPTWO",
@@ -2821,6 +2837,7 @@
      "id": "12-x-1-irv::IRV::12x1",
      "label": "12 \u00d7 1 IRV",
      "blocModel": "four",
+     "variant": null,
      "run": "12-x-1-irv",
      "runName": "12 X 1 IRV",
      "system": "IRV",
@@ -2956,6 +2973,7 @@
      "id": "9-x-1-irv::IRV::9x1",
      "label": "9 \u00d7 1 IRV",
      "blocModel": "four",
+     "variant": null,
      "run": "9-x-1-irv",
      "runName": "9 X 1 IRV",
      "system": "IRV",
@@ -3092,6 +3110,7 @@
      "id": "3x5-stv::FASTSTV::3x5",
      "label": "3 \u00d7 5 STV",
      "blocModel": "four",
+     "variant": null,
      "run": "3x5-stv",
      "runName": "3x5 STV",
      "system": "FASTSTV",
@@ -3230,6 +3249,7 @@
      "id": "5x3-stv::FASTSTV::5x3",
      "label": "5 \u00d7 3 STV",
      "blocModel": "four",
+     "variant": null,
      "run": "5x3-stv",
      "runName": "5x3 STV",
      "system": "FASTSTV",
@@ -3367,6 +3387,7 @@
      "id": "nine-seats-at-large::FASTSTV::1x9",
      "label": "1 \u00d7 9 STV",
      "blocModel": "four",
+     "variant": null,
      "run": "nine-seats-at-large",
      "runName": "Nine Seats At-Large",
      "system": "FASTSTV",
@@ -3502,6 +3523,7 @@
      "id": "fifteen-seats-at-large-stv::FASTSTV::1x15",
      "label": "1 \u00d7 15 STV",
      "blocModel": "four",
+     "variant": null,
      "run": "fifteen-seats-at-large-stv",
      "runName": "Fifteen Seats At-Large - STV",
      "system": "FASTSTV",
@@ -3805,6 +3827,7 @@
      "id": "city-charter-amendment-proposal-2-blocs::Combined::0x15",
      "label": "Combined (15 seats)",
      "blocModel": "two",
+     "variant": null,
      "run": "city-charter-amendment-proposal-2-blocs",
      "runName": "City Charter Amendment Proposal (2 Blocs)",
      "system": "Combined",
@@ -3899,6 +3922,7 @@
      "id": "city-charter-amendment-proposal-2-blocs::IRV::9x1",
      "label": "9 X 1 IRV",
      "blocModel": "two",
+     "variant": null,
      "run": "city-charter-amendment-proposal-2-blocs",
      "runName": "City Charter Amendment Proposal (2 Blocs)",
      "system": "IRV",
@@ -3997,6 +4021,7 @@
      "id": "city-charter-amendment-proposal-2-blocs::FASTSTV::1x6",
      "label": "1 X 6 STV",
      "blocModel": "two",
+     "variant": null,
      "run": "city-charter-amendment-proposal-2-blocs",
      "runName": "City Charter Amendment Proposal (2 Blocs)",
      "system": "FASTSTV",
@@ -4095,6 +4120,7 @@
      "id": "city-charter-amendment-proposal::Combined::0x15",
      "label": "Combined (15 seats)",
      "blocModel": "four",
+     "variant": null,
      "run": "city-charter-amendment-proposal",
      "runName": "City Charter Amendment Proposal",
      "system": "Combined",
@@ -4232,6 +4258,7 @@
      "id": "city-charter-amendment-proposal::IRV::9x1",
      "label": "9 X 1 IRV",
      "blocModel": "four",
+     "variant": null,
      "run": "city-charter-amendment-proposal",
      "runName": "City Charter Amendment Proposal",
      "system": "IRV",
@@ -4372,6 +4399,7 @@
      "id": "city-charter-amendment-proposal::FASTSTV::1x6",
      "label": "1 X 6 STV",
      "blocModel": "four",
+     "variant": null,
      "run": "city-charter-amendment-proposal",
      "runName": "City Charter Amendment Proposal",
      "system": "FASTSTV",
@@ -4787,6 +4815,7 @@
      "id": "city-charter-amendment-proposal-2-blocs-truncation::Combined::0x15",
      "label": "Combined (15 seats)",
      "blocModel": "two",
+     "variant": "max10",
      "run": "city-charter-amendment-proposal-2-blocs-truncation",
      "runName": "City Charter Amendment Proposal (2 Blocs) - Truncation",
      "system": "Combined",
@@ -4881,6 +4910,7 @@
      "id": "city-charter-amendment-proposal-2-blocs-truncation::IRV::9x1",
      "label": "9 X 1 IRV",
      "blocModel": "two",
+     "variant": "max10",
      "run": "city-charter-amendment-proposal-2-blocs-truncation",
      "runName": "City Charter Amendment Proposal (2 Blocs) - Truncation",
      "system": "IRV",
@@ -4979,6 +5009,7 @@
      "id": "city-charter-amendment-proposal-2-blocs-truncation::FASTSTV::1x6",
      "label": "1 X 6 STV",
      "blocModel": "two",
+     "variant": "max10",
      "run": "city-charter-amendment-proposal-2-blocs-truncation",
      "runName": "City Charter Amendment Proposal (2 Blocs) - Truncation",
      "system": "FASTSTV",
@@ -5077,6 +5108,7 @@
      "id": "city-charter-amendment-proposal-truncation::Combined::0x15",
      "label": "Combined (15 seats)",
      "blocModel": "four",
+     "variant": "max10",
      "run": "city-charter-amendment-proposal-truncation",
      "runName": "City Charter Amendment Proposal - Truncation",
      "system": "Combined",
@@ -5209,6 +5241,7 @@
      "id": "city-charter-amendment-proposal-truncation::IRV::9x1",
      "label": "9 X 1 IRV",
      "blocModel": "four",
+     "variant": "max10",
      "run": "city-charter-amendment-proposal-truncation",
      "runName": "City Charter Amendment Proposal - Truncation",
      "system": "IRV",
@@ -5344,6 +5377,7 @@
      "id": "city-charter-amendment-proposal-truncation::FASTSTV::1x6",
      "label": "1 X 6 STV",
      "blocModel": "four",
+     "variant": "max10",
      "run": "city-charter-amendment-proposal-truncation",
      "runName": "City Charter Amendment Proposal - Truncation",
      "system": "FASTSTV",
@@ -5580,6 +5614,7 @@
      "id": "city-charter-amendment-proposal-waio-low-polarization-2-blocs::Combined::0x15",
      "label": "Combined (15 seats)",
      "blocModel": "two",
+     "variant": null,
      "run": "city-charter-amendment-proposal-waio-low-polarization-2-blocs",
      "runName": "City Charter Amendment Proposal - WAIO Low Polarization (2 Blocs)",
      "system": "Combined",
@@ -5674,6 +5709,7 @@
      "id": "city-charter-amendment-proposal-waio-low-polarization-2-blocs::IRV::9x1",
      "label": "9 X 1 IRV",
      "blocModel": "two",
+     "variant": null,
      "run": "city-charter-amendment-proposal-waio-low-polarization-2-blocs",
      "runName": "City Charter Amendment Proposal - WAIO Low Polarization (2 Blocs)",
      "system": "IRV",
@@ -5772,6 +5808,7 @@
      "id": "city-charter-amendment-proposal-waio-low-polarization-2-blocs::FASTSTV::1x6",
      "label": "1 X 6 STV",
      "blocModel": "two",
+     "variant": null,
      "run": "city-charter-amendment-proposal-waio-low-polarization-2-blocs",
      "runName": "City Charter Amendment Proposal - WAIO Low Polarization (2 Blocs)",
      "system": "FASTSTV",
@@ -5870,6 +5907,7 @@
      "id": "city-charter-amendment-proposal-waio-low-polarization::Combined::0x15",
      "label": "Combined (15 seats)",
      "blocModel": "four",
+     "variant": null,
      "run": "city-charter-amendment-proposal-waio-low-polarization",
      "runName": "City Charter Amendment Proposal - WAIO Low Polarization",
      "system": "Combined",
@@ -6002,6 +6040,7 @@
      "id": "city-charter-amendment-proposal-waio-low-polarization::IRV::9x1",
      "label": "9 X 1 IRV",
      "blocModel": "four",
+     "variant": null,
      "run": "city-charter-amendment-proposal-waio-low-polarization",
      "runName": "City Charter Amendment Proposal - WAIO Low Polarization",
      "system": "IRV",
@@ -6137,6 +6176,7 @@
      "id": "city-charter-amendment-proposal-waio-low-polarization::FASTSTV::1x6",
      "label": "1 X 6 STV",
      "blocModel": "four",
+     "variant": null,
      "run": "city-charter-amendment-proposal-waio-low-polarization",
      "runName": "City Charter Amendment Proposal - WAIO Low Polarization",
      "system": "FASTSTV",
@@ -38541,6 +38581,47 @@
    }
   },
   {
+   "run": "Basic - 3 X 3 + Truncation 10 (2 Blocs)",
+   "shape": "3 \u00d7 3",
+   "totalSeats": 9,
+   "rules": [
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative",
+    "Cambridge"
+   ],
+   "turnout": {
+    "POC": 0.7,
+    "WHI": 1
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 4,
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7,
+   "cohesion": {
+    "POC": {
+     "POC": 0.89,
+     "WHI": 0.11
+    },
+    "WHI": {
+     "POC": 0.2,
+     "WHI": 0.8
+    }
+   },
+   "alphas": {
+    "POC": {
+     "POC": 1,
+     "WHI": 1
+    },
+    "WHI": {
+     "POC": 1,
+     "WHI": 1
+    }
+   }
+  },
+  {
    "run": "Basic - 3 X 3 + Truncation (2 Blocs)",
    "shape": "3 \u00d7 3",
    "totalSeats": 9,
@@ -38693,6 +38774,90 @@
     "WHI": {
      "POC": 0.3,
      "WHI": 0.7
+    }
+   },
+   "alphas": {
+    "POC": {
+     "POC": 1,
+     "WHI": 1
+    },
+    "WHI": {
+     "POC": 1,
+     "WHI": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal (2 Blocs) - Truncation 6",
+   "shape": "9 \u00d7 1",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative",
+    "Cambridge"
+   ],
+   "turnout": {
+    "POC": 0.7,
+    "WHI": 1
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 7,
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7,
+   "cohesion": {
+    "POC": {
+     "POC": 0.89,
+     "WHI": 0.11
+    },
+    "WHI": {
+     "POC": 0.2,
+     "WHI": 0.8
+    }
+   },
+   "alphas": {
+    "POC": {
+     "POC": 1,
+     "WHI": 1
+    },
+    "WHI": {
+     "POC": 1,
+     "WHI": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal (2 Blocs) - Truncation 6",
+   "shape": "1 \u00d7 6",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative",
+    "Cambridge"
+   ],
+   "turnout": {
+    "POC": 0.7,
+    "WHI": 1
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 7,
+   "candidatePoolMax": 15,
+   "candidatePoolMean": 12,
+   "cohesion": {
+    "POC": {
+     "POC": 0.89,
+     "WHI": 0.11
+    },
+    "WHI": {
+     "POC": 0.2,
+     "WHI": 0.8
     }
    },
    "alphas": {
@@ -39503,6 +39668,80 @@
    }
   },
   {
+   "run": "Basic - 3 X 3 + Truncation 10",
+   "shape": "3 \u00d7 3",
+   "totalSeats": 9,
+   "rules": [
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative"
+   ],
+   "turnout": {
+    "AAPI": 0.75,
+    "HIS": 0.75,
+    "WAIO": 1,
+    "BLK": 1
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 4,
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7,
+   "cohesion": {
+    "HIS": {
+     "HIS": 0.8,
+     "AAPI": 0.05,
+     "WAIO": 0.1,
+     "BLK": 0.05
+    },
+    "AAPI": {
+     "HIS": 0.03,
+     "AAPI": 0.8,
+     "WAIO": 0.15,
+     "BLK": 0.02
+    },
+    "WAIO": {
+     "HIS": 0.05,
+     "AAPI": 0.1,
+     "WAIO": 0.8,
+     "BLK": 0.05
+    },
+    "BLK": {
+     "HIS": 0.1,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.8
+    }
+   },
+   "alphas": {
+    "HIS": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "AAPI": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "WAIO": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "BLK": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    }
+   }
+  },
+  {
    "run": "Basic - 3 X 3 + Truncation",
    "shape": "3 \u00d7 3",
    "totalSeats": 9,
@@ -39913,6 +40152,156 @@
      "AAPI": 0.1,
      "WAIO": 0.7,
      "BLK": 0.15
+    },
+    "BLK": {
+     "HIS": 0.1,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.8
+    }
+   },
+   "alphas": {
+    "HIS": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "AAPI": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "WAIO": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "BLK": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal - Truncation 6",
+   "shape": "9 \u00d7 1",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative"
+   ],
+   "turnout": {
+    "AAPI": 0.7,
+    "HIS": 0.6,
+    "WAIO": 1,
+    "BLK": 0.9
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 7,
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7,
+   "cohesion": {
+    "HIS": {
+     "HIS": 0.8,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.1
+    },
+    "AAPI": {
+     "HIS": 0.03,
+     "AAPI": 0.8,
+     "WAIO": 0.15,
+     "BLK": 0.02
+    },
+    "WAIO": {
+     "HIS": 0.05,
+     "AAPI": 0.1,
+     "WAIO": 0.8,
+     "BLK": 0.05
+    },
+    "BLK": {
+     "HIS": 0.1,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.8
+    }
+   },
+   "alphas": {
+    "HIS": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "AAPI": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "WAIO": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "BLK": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal - Truncation 6",
+   "shape": "1 \u00d7 6",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative"
+   ],
+   "turnout": {
+    "AAPI": 0.7,
+    "HIS": 0.6,
+    "WAIO": 1,
+    "BLK": 0.9
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 7,
+   "candidatePoolMax": 15,
+   "candidatePoolMean": 12,
+   "cohesion": {
+    "HIS": {
+     "HIS": 0.8,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.1
+    },
+    "AAPI": {
+     "HIS": 0.03,
+     "AAPI": 0.8,
+     "WAIO": 0.15,
+     "BLK": 0.02
+    },
+    "WAIO": {
+     "HIS": 0.05,
+     "AAPI": 0.1,
+     "WAIO": 0.8,
+     "BLK": 0.05
     },
     "BLK": {
      "HIS": 0.1,

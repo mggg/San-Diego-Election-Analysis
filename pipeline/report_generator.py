@@ -199,9 +199,10 @@ def resolve_composition(
         systems: The outline's `systems` list. Each entry names a `run` (slug)
             and a `system` (id), optionally `districts`/`seats` to disambiguate a
             run that uses one rule in more than one contest, optionally a
-            `label` to override the name shown in the dropdown, and optionally a
+            `label` to override the name shown in the dropdown, optionally a
             `blocModel` tag the page uses to build its Two Bloc / Four Bloc
-            toggle.
+            toggle, and optionally a `variant` tag it uses to build a second
+            toggle across otherwise-identical contests.
         runs: Run metadata from discover_runs.
         config_reference: Rows from _config_reference, for the parameters card.
 
@@ -265,6 +266,12 @@ def resolve_composition(
             # from the run, since a run's own bloc count isn't otherwise recorded
             # anywhere the page can read it.
             "blocModel": spec.get("blocModel"),
+            # Which variant of the same contest this source is -- the outline's
+            # own tag, like blocModel above. Two sources that share a label and
+            # bloc model but differ here are the same election simulated under
+            # different settings (a ballot-length cap, say), which the page
+            # offers as a toggle rather than as two dropdown entries.
+            "variant": spec.get("variant"),
             "run": meta["slug"],
             "runName": meta["runName"],
             "system": system["id"],
@@ -347,6 +354,42 @@ def _shape_suffix(spec: Dict[str, Any]) -> str:
     return f" at {spec.get('districts', '*')} × {spec.get('seats', '*')}"
 
 
+def _variant_vocabulary(
+    entry: Dict[str, Any],
+    composition: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """
+    The variants a composed section actually resolved to, in configured order.
+
+    A section declares `variants` as [{"id", "label"}, ...] and tags each of its
+    `systems` with one. Only the ids that survived resolution are returned, so a
+    variant whose runs haven't been simulated yet costs a toggle button rather
+    than putting a dead one on the page -- which is what lets the outline name a
+    run before its results exist. Ids used by the systems but missing from
+    `variants` are appended under their own id, so the tag alone is enough to
+    get a working toggle.
+
+    Returns an empty list where fewer than two variants resolved: one variant is
+    not a choice, and a toggle with a single button is noise.
+    """
+    present = [s.get("variant") for s in composition if s.get("variant")]
+    if len(set(present)) < 2:
+        return []
+
+    declared = entry.get("variants") or []
+    ordered = [
+        {"id": v["id"], "label": v.get("label") or v["id"]}
+        for v in declared
+        if isinstance(v, dict) and v.get("id") in set(present)
+    ]
+    known = {v["id"] for v in ordered}
+    for vid in present:
+        if vid not in known:
+            ordered.append({"id": vid, "label": vid})
+            known.add(vid)
+    return ordered
+
+
 def attach_compositions(
     manifest: Dict[str, Any],
     runs: List[Dict[str, Any]],
@@ -374,6 +417,14 @@ def attach_compositions(
                   "leaving it as its own run.")
             continue
         target["composition"] = composition
+        # The variant toggle's vocabulary: what to call the control, and the
+        # order and display name of each variant. Order comes from the outline
+        # rather than from first appearance in `systems`, so the buttons read
+        # left to right the way the section means them to.
+        variants = _variant_vocabulary(entry, composition)
+        if variants:
+            target["variants"] = variants
+            target["variantLabel"] = entry.get("variant_label") or "Variant"
         if entry.get("title"):
             target["name"] = entry["title"]
         print(f"[report_generator] {slug}: composed from {len(composition)} system(s) -> "
