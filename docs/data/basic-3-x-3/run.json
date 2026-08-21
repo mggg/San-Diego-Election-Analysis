@@ -1,20 +1,21 @@
 {
  "runName": "Basic - 3 X 3",
  "slug": "basic-3-x-3",
- "focalGroup": "BLK",
- "focalGroupLabel": "BLK",
+ "focalGroup": "AAPI",
+ "focalGroupLabel": "AAPI",
  "totalSeats": 9,
- "focalVapShare": 0.07109494643525345,
- "proportionalSeats": 0.6398545179172811,
- "proportionalLabel": "BLK share of VAP: 7.1% (0.6 seats)",
- "seatMax": 5,
+ "focalVapShare": 0.20432553215884638,
+ "proportionalSeats": 1.8389297894296175,
+ "proportionalLabel": "AAPI share of VAP: 20.4% (1.8 seats)",
+ "seatMax": 6,
  "seatTicks": [
   0,
   1,
   2,
   3,
   4,
-  5
+  5,
+  6
  ],
  "districtConfigs": [
   {
@@ -24,20 +25,16 @@
     {
      "id": "FASTSTV",
      "label": "3 X 3 STV"
-    },
-    {
-     "id": "CUMULATIVE",
-     "label": "3 X 3 Cumulative"
-    },
-    {
-     "id": "LIMITED",
-     "label": "3 X 3 Limited"
     }
    ],
    "candidatePoolMax": 10,
    "candidatePoolMean": 7,
    "plans": 100,
-   "electionsPerSystem": 4000
+   "electionsPerSystem": 6000,
+   "electionsByMode": {
+    "slate_bt": 1000,
+    "slate_pl": 1000
+   }
   }
  ],
  "voterModels": [
@@ -49,11 +46,6 @@
   {
    "id": "slate_bt",
    "label": "Deliberative",
-   "pooled": false
-  },
-  {
-   "id": "name_cumulative",
-   "label": "Name Cumulative",
    "pooled": false
   },
   {

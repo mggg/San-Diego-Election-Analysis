@@ -275,31 +275,41 @@ function renderScenarioStats(mount, entry, runMeta, cfg, source, sampling) {
     });
 
   /*
-   * The floor of the candidate-pool draw, which is the one figure of the three
-   * nobody chose: it is the smallest ballot every rule in the run can actually
-   * be run on (settings_generator.minimum_candidates), so it follows from the
-   * rules rather than from the config. The mean and maximum that complete the
-   * distribution are configured, and are reported as parameters.
+   * Every block below is a label column against a figures column, so the
+   * numbers line up down the card however many rows a block has. The
+   * voting-age table above is the same shape, which is what lets the card read
+   * as one thing rather than a table followed by a list of loose pairs.
    */
-  const pool = [
-    ['Minimum on ballot', cfg.candidatePoolMin],
-  ].filter(([, v]) => v != null);
-
-  const list = (title, items) => {
+  const block = (title, rows) => {
+    const items = rows.filter(([, v]) => v != null && v !== '');
     if (!items.length) return;
     mount.append('div').attr('class', 'matrix-title mt').text(title);
-    mount.append('dl').attr('class', 'params-list')
-      .selectAll('div')
-      .data(items)
-      .join('div')
+    const table = mount.append('div').attr('class', 'params-matrix')
+      .append('table').attr('class', 'stats-table stat-block');
+    table.append('tbody').selectAll('tr').data(items).join('tr')
       .each(function ([term, value]) {
         const row = d3.select(this);
-        row.append('dt').text(term);
-        row.append('dd').text(value);
+        row.append('th').attr('scope', 'row').text(term);
+        row.append('td').attr('class', 'num').text(value);
       });
   };
 
-  list('Candidates per district', pool);
+  /*
+   * The fewest candidates a district ballot can carry.
+   *
+   * This is a count of candidates, not of how many a voter ranks -- the label
+   * "minimum on ballot" read as a ranking depth, which it never was. It is the
+   * floor of the candidate-pool draw: the smallest field every rule in the run
+   * can be run on (settings_generator.minimum_candidates), so it follows from
+   * the rules rather than from the config. A run whose rules include Top Two
+   * inherits that rule's need for two advancers even in the contests decided by
+   * IRV, which is why a single-winner contest can floor at three. The mean and
+   * maximum that complete the distribution are configured, and are reported
+   * among the parameters.
+   */
+  block('Candidates per district', [
+    ['Fewest on a ballot', cfg.candidatePoolMin],
+  ]);
 
   /*
    * How much was simulated: districting plans drawn from the chain, and how
@@ -307,25 +317,24 @@ function renderScenarioStats(mount, entry, runMeta, cfg, source, sampling) {
    * settings that shape an outcome, which is why they sit here with the pool
    * rather than among the parameters.
    */
-  list('Sampling', [
+  block('Sampling', [
     ['Plans sampled', count(sampling && sampling.plans)],
     ['Replicates', count(sampling && sampling.replicates)],
   ]);
 
   /*
-   * District elections simulated, per voter model.
+   * Citywide elections simulated, per voter model -- one per (plan, replicate),
+   * the number of times this contest filled the whole body.
    *
-   * Shown per model rather than as one total because the models do not all
-   * cover the same districts: the Cambridge generator skips a district whose
-   * candidate pool drew from only one slate, so its count sits below the
-   * ranked models'. That shortfall changes what its row is averaged over, so
-   * it belongs on the card rather than being left to be inferred.
+   * Per model rather than one figure because the models need not cover the same
+   * ground: the Cambridge generator skips a district whose candidate pool drew
+   * from only one slate, so it can reach fewer plans than the ranked models.
    */
   const elections = (sampling && sampling.elections) || {};
   const labels = (sampling && sampling.modeLabels) || {};
   const order = Object.keys(labels).filter((id) => id in elections);
   const rest = Object.keys(elections).filter((id) => !order.includes(id));
-  list('Elections simulated', [...order, ...rest].map(
+  block('Citywide elections', [...order, ...rest].map(
     (id) => [labels[id] || id, count(elections[id])],
   ));
 }

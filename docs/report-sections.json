@@ -18,11 +18,6 @@
       "title": "Methodology"
     },
     {
-      "id": "conclusion",
-      "file": "conclusion.md",
-      "title": "Conclusion"
-    },
-    {
       "id": "appendix",
       "file": "appendix.md",
       "title": "Appendix"
@@ -34,6 +29,7 @@
     {
       "_note": "The 3 X 3 STV warmup scenario, both bloc models.",
       "slug": "basic-3-x-3",
+      "prose": "basic.md",
       "title": "Warmup - 3 X 3 STV",
       "systems": [
         {
@@ -53,6 +49,7 @@
     {
       "_note": "The hybrid charter-amendment run, both bloc models: the combined citywide total, or either component contest on its own.",
       "slug": "city-charter-amendment-proposal",
+      "prose": "city-charter-amendment-proposal.md",
       "systems": [
         {
           "run": "city-charter-amendment-proposal-2-blocs",
@@ -95,6 +92,7 @@
     {
       "_note": "Every standalone electoral structure lives here rather than in a section of its own, both bloc models: the 9/12/15 X 1 IRV shapes, 3 X 5 and 5 X 3 STV, and the at-large and multi-member STV runs. Basic's parameter variations (diverse preferences, low turnout, low availability) keep their own sections, as does the other hybrid run, whose combined view has no single contest to select.",
       "slug": "alternative-electoral-systems",
+      "prose": "alternative-electoral-systems.md",
       "systems": [
         {
           "run": "alternative-electoral-systems-2-blocs",
@@ -197,6 +195,8 @@
     {
       "_note": "Every standalone electoral structure lives here rather than in a section of its own, both bloc models: the 9/12/15 X 1 IRV shapes, 3 X 5 and 5 X 3 STV, and the at-large and multi-member STV runs. Basic's parameter variations (diverse preferences, low turnout, low availability) keep their own sections, as does the other hybrid run, whose combined view has no single contest to select.",
       "slug": "basic-3-x-3-truncation",
+  "title": "Warmup - 3 X 3 STV, Truncation",
+      "prose": "basic-truncation.md",
       "systems": [
         {
           "run": "basic-3-x-3-truncation-2-blocs",
@@ -213,7 +213,8 @@
     {
       "_note": "Basic - 3 X 3 with the majority bloc's own cohesion lowered, both bloc models.",
       "slug": "basic-3-x-3-waio-low-polarization",
-      "title": "Basic - 3 X 3, Low Polarization",
+      "prose": "basic-low-polarization.md",
+      "title": "Warmup - 3 X 3 STV, Low Polarization",
       "systems": [
         {
           "run": "basic-3-x-3-2-blocs-waio-low-polarization",
@@ -230,6 +231,7 @@
     {
       "_note": "The hybrid charter-amendment run with the majority bloc's own cohesion lowered, both bloc models: the combined citywide total, or either component contest on its own.",
       "slug": "city-charter-amendment-proposal-waio-low-polarization",
+      "prose": "city-charter-low-polarization.md",
       "title": "City Charter Amendment Proposal, Low Polarization",
       "systems": [
         {
@@ -273,6 +275,7 @@
     {
       "_note": "The hybrid charter-amendment run with Cambridge ballot truncation, both bloc models: the combined citywide total, or either component contest on its own.",
       "slug": "city-charter-amendment-proposal-truncation",
+      "prose": "city-charter-truncation.md",
       "title": "City Charter Amendment Proposal, Truncation",
       "systems": [
         {
@@ -314,5 +317,5 @@
       ]
     }
   ],
-  "_prose_key_comment": "Each section reads docs/prose/runs/<slug>.md by default. Add a \"prose\" key to point a section at a different file — so a description survives its run being re-slugged, and two sections showing the same scenario under different bloc models can share one write-up."
+  "_prose_key_comment": "Each scenario names its write-up with \"prose\", a file in docs/prose/scenarios/ -- one file per scenario. The truncation and low-polarization scenarios are written separately for Basic and for the City Charter proposal, since each describes the configuration it was derived from. Two scenarios may still share a file by naming it twice; omit the key and a scenario falls back to <slug>.md."
 }

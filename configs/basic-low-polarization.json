@@ -14,21 +14,11 @@
     "FastSTV": {
       "n_seats": 3,
       "tiebreak": "random"
-    },
-    "Limited": {
-      "n_seats": 3,
-      "budget": 2,
-      "tiebreak": "random"
-    },
-    "Cumulative": {
-      "n_seats": 3,
-      "tiebreak": "random"
     }
   },
   "voter_models": [
     "slate_pl",
-    "slate_bt",
-    "name_cumulative"
+    "slate_bt"
   ],
   "blocs": {
     "HIS": [
@@ -98,7 +88,7 @@
     },
     "WAIO": {
       "HIS": 0.05,
-      "AAPI": 0.10,
+      "AAPI": 0.1,
       "WAIO": 0.7,
       "BLK": 0.15
     },

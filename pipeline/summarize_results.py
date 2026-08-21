@@ -39,7 +39,6 @@ MODE_COLORS = {
     "slate_pl": "#FFCC00",
     "slate_bt": "#AA0000",
     "cambridge": "#2a78d6",
-    "name_cumulative": "#2a78d6",
     # The pooled average, in a hue no single model uses so a reader never has to
     # check the legend to know whether a bar is one model or all of them. It was
     # falling through to DEFAULT_MODE_COLOR here, which is slate_bt's red -- the
@@ -65,7 +64,6 @@ LEGEND_MAPPING = {
     "slate_pl": "Impulsive",
     "slate_bt": "Deliberative",
     "cambridge": "Cambridge",
-    "name_cumulative": "Name Cumulative",
 }
 
 # Pseudo-mode pooling occurrences across every voter model into one row.
@@ -79,7 +77,7 @@ LEGEND_MAPPING[COMBINED_MODE] = "Combined"
 HYBRID_COMBINED_METHOD = "Combined"
 
 # Preferred display order for the known voter models; any others sort after.
-DESIRED_ORDER = ["slate_pl", "slate_bt", "cambridge", "name_cumulative"]
+DESIRED_ORDER = ["slate_pl", "slate_bt", "cambridge"]
 
 # Bubble marker areas (points^2): most-frequent cell uses the max, a floor keeps
 # rare cells visible.
@@ -1574,13 +1572,19 @@ def _run_metadata(df: pd.DataFrame, df_plan: pd.DataFrame, config, iprop: float,
             "candidatePoolMean": source.get("candidate_pool_mean"),
             "plans": int(group["plan"].nunique()),
             "electionsPerSystem": int(len(df) / max(df["election_method"].nunique(), 1)),
-            # District elections actually simulated, per voter model. Not a
-            # constant across models: the Cambridge generator skips districts
-            # whose candidate pool drew from only one slate, so its count runs
-            # below the ranked models' and the difference is worth seeing rather
-            # than inferring from a gap in a chart.
+            # Citywide elections simulated, per voter model: one per (plan,
+            # replicate), the number of times this contest filled the whole
+            # body. Counting district elections instead multiplied that by the
+            # district count -- a 9 X 1 contest read as 11,250 elections where
+            # 1,250 councils were actually seated, which is the number a reader
+            # is trying to judge the distribution against.
+            #
+            # Still per voter model rather than one figure: the Cambridge
+            # generator skips districts whose candidate pool drew from only one
+            # slate, so a model can cover fewer (plan, replicate) pairs than the
+            # others even at the same plan count.
             "electionsByMode": {
-                str(mode): int(rows.groupby(["plan", "district_id", "rep"]).ngroups)
+                str(mode): int(rows.groupby(["plan", "rep"]).ngroups)
                 for mode, rows in df[
                     (df["num_districts"] == num_dist)
                     & (df["seats_per_district"] == winners)

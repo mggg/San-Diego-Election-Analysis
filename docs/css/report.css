@@ -157,6 +157,21 @@ section { scroll-margin-top: 70px; padding-top: .5rem; }
   color: var(--sd-gray);
 }
 .matrix-title.mt { margin-top: .9rem; }
+/* The label/figure blocks under Scenario Stats. No header row of their own --
+   the block title above them names the pair -- so they need the top hairline
+   the voting-age table gets from its <thead>, and a little room under the
+   title so a block reads as one unit rather than as loose rows. */
+.stat-block { margin-top: .1rem; }
+.stat-block tbody tr:first-child th,
+.stat-block tbody tr:first-child td { padding-top: .22rem; }
+.stat-block tbody th {
+  font-weight: 400;
+  color: var(--sd-gray);
+  padding-right: .5rem;
+}
+.stat-block tbody td.num { color: #23211d; font-weight: 600; }
+/* Blocks sit closer to their own title than to the block above. */
+.run-params .params-matrix + .matrix-title.mt { margin-top: 1rem; }
 /* Label and value on one line, so the table stays well short of the section it
    has to travel within -- a table as tall as its section has nowhere to stick. */
 .params-list { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: .3rem .5rem; }
@@ -535,6 +550,72 @@ thead th {
   border-bottom-color: var(--sd-gray-light) !important;
 }
 tbody th { color: var(--sd-ink); }
+
+/*
+ * Tables written in the prose.
+ *
+ * Markdown emits a bare <table> with no classes, which left these with no cell
+ * padding at all: a right-aligned number sat flush against the word beside it,
+ * so "9" and "ReCom, 100 plans" read as one string. These give the columns room,
+ * a rule under the header, and a hairline per row so a long row can be tracked
+ * across. Scoped to prose because the parameters card's own tables are
+ * deliberately dense and set their own spacing.
+ *
+ * Alignment is left to the markdown: a column written as ---: emits
+ * style="text-align:right" on each cell, and an inline style outranks anything
+ * here, so numeric columns keep their alignment while text columns stay left.
+ */
+.prose table,
+.run-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.1rem 0 1.5rem;
+  font-size: .82rem;
+  line-height: 1.45;
+  font-variant-numeric: tabular-nums;
+}
+.prose thead th,
+.run-prose thead th {
+  padding: .5rem .85rem;
+  text-align: left;
+  font-weight: 600;
+  letter-spacing: .02em;
+  white-space: nowrap;
+  background: var(--sd-light) !important;
+  border-bottom: 2px solid var(--sd-gold) !important;
+}
+.prose tbody td,
+.prose tbody th,
+.run-prose tbody td,
+.run-prose tbody th {
+  padding: .45rem .85rem;
+  vertical-align: top;
+  border-bottom: 1px solid var(--sd-gray-light);
+}
+/* Zebra banding, kept far lighter than the header so the head still reads as
+   the top of the table rather than as one more stripe. */
+.prose tbody tr:nth-child(even),
+.run-prose tbody tr:nth-child(even) { background: rgba(82, 81, 78, .035); }
+.prose tbody tr:last-child td,
+.prose tbody tr:last-child th,
+.run-prose tbody tr:last-child td,
+.run-prose tbody tr:last-child th { border-bottom: 0; }
+/* The label column names the row and should never fold onto two lines; every
+   other column may wrap, which is what keeps a long list of scenarios readable
+   instead of forcing the table wider than its measure. */
+.prose tbody tr > :first-child,
+.run-prose tbody tr > :first-child { white-space: nowrap; color: #23211d; }
+/* A totals row, which markdown marks by bolding its cells. */
+.prose tbody tr:has(strong) td,
+.prose tbody tr:has(strong) th {
+  border-top: 1px solid var(--sd-gray-light);
+  background: none;
+}
+/* Narrow screens scroll the table rather than squeezing the page. */
+@media (max-width: 767.98px) {
+  .prose table,
+  .run-prose table { display: block; overflow-x: auto; white-space: nowrap; }
+}
 
 footer {
   background: var(--sd-light);

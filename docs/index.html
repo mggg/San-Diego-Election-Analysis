@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+"
         crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="fonts/fonts.css">
-  <link rel="stylesheet" href="css/report.css?v=501b927811">
+  <link rel="stylesheet" href="css/report.css?v=898ae7cf71">
 </head>
 
 <body data-bs-spy="scroll" data-bs-target="#toc-nav" data-bs-offset="90" tabindex="0">
@@ -28,7 +28,6 @@
           <li class="nav-item"><a class="nav-link" href="#abstract">Abstract</a></li>
           <li class="nav-item"><a class="nav-link" href="#background">Background</a></li>
           <li class="nav-item"><a class="nav-link" href="#methodology">Methodology</a></li>
-          <li class="nav-item"><a class="nav-link" href="#conclusion">Conclusion</a></li>
           <li class="nav-item"><a class="nav-link" href="#results">Electoral Scenarios and Results</a></li>
           <li class="nav-item"><a class="nav-link" href="#comparison">Cross-Run Comparison</a></li>
           <li class="nav-item"><a class="nav-link" href="#appendix">Appendix</a></li>
@@ -52,14 +51,13 @@
           <a class="nav-link" href="#abstract">Abstract</a>
           <a class="nav-link" href="#background">Background</a>
           <a class="nav-link" href="#methodology">Methodology</a>
-          <a class="nav-link" href="#conclusion">Conclusion</a>
           <a class="nav-link" href="#results">Results by Scenario</a>
           <nav class="nav flex-column">
             <a class="nav-link" href="#run-basic-3-x-3">Warmup - 3 X 3 STV</a>
             <a class="nav-link" href="#run-city-charter-amendment-proposal">City Charter Amendment Proposal</a>
             <a class="nav-link" href="#run-alternative-electoral-systems">Alternative Electoral Systems</a>
-            <a class="nav-link" href="#run-basic-3-x-3-truncation">Basic - 3 X 3 + Truncation</a>
-            <a class="nav-link" href="#run-basic-3-x-3-waio-low-polarization">Basic - 3 X 3, Low Polarization</a>
+            <a class="nav-link" href="#run-basic-3-x-3-truncation">Warmup - 3 X 3 STV, Truncation</a>
+            <a class="nav-link" href="#run-basic-3-x-3-waio-low-polarization">Warmup - 3 X 3 STV, Low Polarization</a>
             <a class="nav-link" href="#run-city-charter-amendment-proposal-waio-low-polarization">City Charter Amendment Proposal, Low Polarization</a>
             <a class="nav-link" href="#run-city-charter-amendment-proposal-truncation">City Charter Amendment Proposal, Truncation</a>
           </nav>
@@ -403,11 +401,6 @@ Cambridge has run ranked-choice elections continuously since 1941, and a subset 
 <p>For each system, tiebreaks are performed randomly when needed.</p>
 
         </section>
-        <section id="conclusion" class="prose mb-5">
-          <h2>Conclusion</h2>
-          <p class="todo">[Conclusion to be written — edit
-             <code>docs/prose/conclusion.md</code>.]</p>
-        </section>
 
         <section id="results" class="mb-5">
           <h2>Results by Scenario</h2>
@@ -415,7 +408,7 @@ Cambridge has run ranked-choice elections continuously since 1941, and a subset 
           <section id="run-basic-3-x-3" class="run mb-5" data-run="basic-3-x-3">
             <div class="run-main">
             <h3 class="h4 mt-4">Warmup - 3 X 3 STV</h3>
-            <div class="run-prose"><p>In this scenario, we explore the expected outcomes of a hypothetical electoral shift that redistricts San Diego into three districts with three elected members in each - running three different elections using Single Transferable Vote (STV), Cumlative, and Limited voting rules. STV uses the deliberative and impulsive models (representing 3000 elections each) while Cumulative and Limited use the &quot;Name Cumulative&quot; model that allows for voters to &quot;plump&quot; their votes on preferred candidates.</p>
+            <div class="run-prose"><p>In this scenario, we explore the expected outcomes of a hypothetical electoral shift that redistricts San Diego into three districts with three elected members in each - running three different sets of elections using the Impulsive, Deliberative, and Cambridge voter models in two-bloc simulations, and solely Impulsive and Deliberative in four-bloc configurations. Adjust the filters and toggles below to explore the results.</p>
 </div>
 
             <div class="run-controls" data-controls="basic-3-x-3"></div>
@@ -460,8 +453,8 @@ Cambridge has run ranked-choice elections continuously since 1941, and a subset 
           <section id="run-city-charter-amendment-proposal" class="run mb-5" data-run="city-charter-amendment-proposal">
             <div class="run-main">
             <h3 class="h4 mt-4">City Charter Amendment Proposal</h3>
-            <p class="todo">[Description to be written — edit
-               <code>docs/prose/runs/city-charter-amendment-proposal.md</code>.]</p>
+            <div class="run-prose"><p>This scenario models a potential reform to San Diego's electoral system that would transition the city from a 9 X 1 SMD system using the Top Two voting rule to 9 X 1 SMD using IRV - plus six at-large seats elected using STV. Here, you may look at a combined results of the election as a whole, or examine the components individually. Adjust the filters and toggles below to explore the results.</p>
+</div>
 
             <div class="run-controls" data-controls="city-charter-amendment-proposal"></div>
 
@@ -505,7 +498,7 @@ Cambridge has run ranked-choice elections continuously since 1941, and a subset 
           <section id="run-alternative-electoral-systems" class="run mb-5" data-run="alternative-electoral-systems">
             <div class="run-main">
             <h3 class="h4 mt-4">Alternative Electoral Systems</h3>
-            <div class="run-prose"><p>Here, we take San Diego's current 9 X 1 district configuration and explore the expected outcomes of alternative election systems. San Diego's current electoral system is closest to Top Two, where the the top-two vote getters in a primary election advance to a runoff general election. We also look at Alaska, which is similar to Top Two but takes the top four winners in the primary and uses STV in the general election. Plurality is included due to its current popularity and status as the &quot;default&quot; for American elections, while IRV is included due to its rising popularity.</p>
+            <div class="run-prose"><p>Here we explore a variety of electoral systems and simulate election results using the methodology described in this report. Since these system configurations vary in district number and electable seats, we have opted to modify variables like candidate pool size to more realistically model district contests. When toggling between voting systems, you will see information about each within the Parameters and Scenario Stats card associated with this section. Note the changing values for Candidate Availability and Candidates per District.</p>
 </div>
 
             <div class="run-controls" data-controls="alternative-electoral-systems"></div>
@@ -549,9 +542,9 @@ Cambridge has run ranked-choice elections continuously since 1941, and a subset 
           </section>
           <section id="run-basic-3-x-3-truncation" class="run mb-5" data-run="basic-3-x-3-truncation">
             <div class="run-main">
-            <h3 class="h4 mt-4">Basic - 3 X 3 + Truncation</h3>
-            <p class="todo">[Description to be written — edit
-               <code>docs/prose/runs/basic-3-x-3-truncation.md</code>.]</p>
+            <h3 class="h4 mt-4">Warmup - 3 X 3 STV, Truncation</h3>
+            <div class="run-prose"><p>Often times, elections using a form of RCV limit the number of candidates that voters can rank on their ballots - even for elections with large candidate pools. In this scenario, we ask how the electoral system modeled in the Basic scenario would be impacted if we set a minimum and maximum ballot length - specifically in the 3 X 3 STV district contests. We set the maximum ballot length to six ranked candidates, and enforce a minimum ballot length of three since each district has three seats available.</p>
+</div>
 
             <div class="run-controls" data-controls="basic-3-x-3-truncation"></div>
 
@@ -594,9 +587,9 @@ Cambridge has run ranked-choice elections continuously since 1941, and a subset 
           </section>
           <section id="run-basic-3-x-3-waio-low-polarization" class="run mb-5" data-run="basic-3-x-3-waio-low-polarization">
             <div class="run-main">
-            <h3 class="h4 mt-4">Basic - 3 X 3, Low Polarization</h3>
-            <p class="todo">[Description to be written — edit
-               <code>docs/prose/runs/basic-3-x-3-waio-low-polarization.md</code>.]</p>
+            <h3 class="h4 mt-4">Warmup - 3 X 3 STV, Low Polarization</h3>
+            <div class="run-prose"><p>This scenario supposes that in San Diego, candidates of color (particularly Black candidates) may receive a higher level of crossover support from the White voter bloc. As such, we take the existing Basic simulation configuration and modify only our cohesion parameters such that voters from the White bloc are more likely to support POC candidates in two-bloc simulations and Black, Latino, and AAPI candidates in four-bloc simulations.</p>
+</div>
 
             <div class="run-controls" data-controls="basic-3-x-3-waio-low-polarization"></div>
 
@@ -640,8 +633,8 @@ Cambridge has run ranked-choice elections continuously since 1941, and a subset 
           <section id="run-city-charter-amendment-proposal-waio-low-polarization" class="run mb-5" data-run="city-charter-amendment-proposal-waio-low-polarization">
             <div class="run-main">
             <h3 class="h4 mt-4">City Charter Amendment Proposal, Low Polarization</h3>
-            <p class="todo">[Description to be written — edit
-               <code>docs/prose/runs/city-charter-amendment-proposal-waio-low-polarization.md</code>.]</p>
+            <div class="run-prose"><p>This scenario supposes that in San Diego, candidates of color (particularly Black candidates) may receive a higher level of crossover support from the White voter bloc. As such, we take the existing City Charter Proposal simulation configuration and modify only our cohesion parameters such that voters from the White bloc are more likely to support POC candidates in two-bloc simulations and Black, Latino, and AAPI candidates in four-bloc simulations. We</p>
+</div>
 
             <div class="run-controls" data-controls="city-charter-amendment-proposal-waio-low-polarization"></div>
 
@@ -685,8 +678,8 @@ Cambridge has run ranked-choice elections continuously since 1941, and a subset 
           <section id="run-city-charter-amendment-proposal-truncation" class="run mb-5" data-run="city-charter-amendment-proposal-truncation">
             <div class="run-main">
             <h3 class="h4 mt-4">City Charter Amendment Proposal, Truncation</h3>
-            <p class="todo">[Description to be written — edit
-               <code>docs/prose/runs/city-charter-amendment-proposal-truncation.md</code>.]</p>
+            <div class="run-prose"><p>Often times, elections using a form of RCV limit the number of candidates that voters can rank on their ballots - even for elections with large candidate pools. In this scenario, we ask how the electoral system modeled in the City Charter Amendment Proposal would be impacted if we set a minimum and maximum ballot length - specifically in the 1 X 6 STV component of the election. We run two different simulations; one of them sets the maximum ballot length to six, and the other pins it to 10 ranked candidates. In each simulation, we enforce a minimum ballot length of six since we have six at-large seats available.</p>
+</div>
 
             <div class="run-controls" data-controls="city-charter-amendment-proposal-truncation"></div>
 
@@ -764,7 +757,7 @@ Cambridge has run ranked-choice elections continuously since 1941, and a subset 
     <div class="container-xl text-center">
       <p class="mb-1">Metric Geometry &amp; Gerrymandering Group — San Diego City Council Election Analysis</p>
       <p class="mb-1"><a href="https://github.com/mggg/San-Diego-Election-Analysis" target="_blank" rel="noopener">View the repository on GitHub</a></p>
-      <p class="generated mb-0">Generated 2026-08-21T17:57:44+00:00</p>
+      <p class="generated mb-0">Generated 2026-08-21T20:21:33+00:00</p>
     </div>
   </footer>
 
@@ -797,15 +790,15 @@ Cambridge has run ranked-choice elections continuously since 1941, and a subset 
 
   <script type="importmap">{
  "imports": {
-  "./js/charts/availability.js": "./js/charts/availability.js?v=501b927811",
-  "./js/charts/axes.js": "./js/charts/axes.js?v=501b927811",
-  "./js/charts/bubble.js": "./js/charts/bubble.js?v=501b927811",
-  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=501b927811",
-  "./js/charts/histogram.js": "./js/charts/histogram.js?v=501b927811",
-  "./js/charts/slate.js": "./js/charts/slate.js?v=501b927811",
-  "./js/report.js": "./js/report.js?v=501b927811"
+  "./js/charts/availability.js": "./js/charts/availability.js?v=898ae7cf71",
+  "./js/charts/axes.js": "./js/charts/axes.js?v=898ae7cf71",
+  "./js/charts/bubble.js": "./js/charts/bubble.js?v=898ae7cf71",
+  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=898ae7cf71",
+  "./js/charts/histogram.js": "./js/charts/histogram.js?v=898ae7cf71",
+  "./js/charts/slate.js": "./js/charts/slate.js?v=898ae7cf71",
+  "./js/report.js": "./js/report.js?v=898ae7cf71"
  }
 }</script>
-  <script type="module" src="js/report.js?v=501b927811"></script>
+  <script type="module" src="js/report.js?v=898ae7cf71"></script>
 </body>
 </html>

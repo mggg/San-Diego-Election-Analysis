@@ -8,8 +8,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 0,
-  "plans": 787.5,
-  "share": 0.7875
+  "plans": 122.5,
+  "share": 0.1225
  },
  {
   "system": "FASTSTV",
@@ -20,8 +20,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 1,
-  "plans": 196.0,
-  "share": 0.196
+  "plans": 258.0,
+  "share": 0.258
  },
  {
   "system": "FASTSTV",
@@ -32,8 +32,56 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 2,
-  "plans": 16.5,
-  "share": 0.0165
+  "plans": 238.5,
+  "share": 0.2385
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "1 X 15 STV",
+  "numDistricts": 1,
+  "winners": 15,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "seats": 3,
+  "plans": 228.5,
+  "share": 0.2285
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "1 X 15 STV",
+  "numDistricts": 1,
+  "winners": 15,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "seats": 4,
+  "plans": 133.5,
+  "share": 0.1335
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "1 X 15 STV",
+  "numDistricts": 1,
+  "winners": 15,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "seats": 5,
+  "plans": 16.0,
+  "share": 0.016
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "1 X 15 STV",
+  "numDistricts": 1,
+  "winners": 15,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "seats": 6,
+  "plans": 3.0,
+  "share": 0.003
  },
  {
   "system": "FASTSTV",
@@ -44,8 +92,8 @@
   "modeLabel": "Deliberative",
   "pooled": false,
   "seats": 0,
-  "plans": 855.0,
-  "share": 0.855
+  "plans": 185.0,
+  "share": 0.185
  },
  {
   "system": "FASTSTV",
@@ -56,8 +104,8 @@
   "modeLabel": "Deliberative",
   "pooled": false,
   "seats": 1,
-  "plans": 140.0,
-  "share": 0.14
+  "plans": 316.0,
+  "share": 0.316
  },
  {
   "system": "FASTSTV",
@@ -68,8 +116,56 @@
   "modeLabel": "Deliberative",
   "pooled": false,
   "seats": 2,
-  "plans": 5.0,
-  "share": 0.005
+  "plans": 286.0,
+  "share": 0.286
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "1 X 15 STV",
+  "numDistricts": 1,
+  "winners": 15,
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
+  "pooled": false,
+  "seats": 3,
+  "plans": 154.0,
+  "share": 0.154
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "1 X 15 STV",
+  "numDistricts": 1,
+  "winners": 15,
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
+  "pooled": false,
+  "seats": 4,
+  "plans": 44.0,
+  "share": 0.044
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "1 X 15 STV",
+  "numDistricts": 1,
+  "winners": 15,
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
+  "pooled": false,
+  "seats": 5,
+  "plans": 13.0,
+  "share": 0.013
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "1 X 15 STV",
+  "numDistricts": 1,
+  "winners": 15,
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
+  "pooled": false,
+  "seats": 6,
+  "plans": 2.0,
+  "share": 0.002
  },
  {
   "system": "FASTSTV",
@@ -80,8 +176,8 @@
   "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 0,
-  "plans": 720.0,
-  "share": 0.72
+  "plans": 60.0,
+  "share": 0.06
  },
  {
   "system": "FASTSTV",
@@ -92,8 +188,8 @@
   "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 1,
-  "plans": 252.0,
-  "share": 0.252
+  "plans": 200.0,
+  "share": 0.2
  },
  {
   "system": "FASTSTV",
@@ -104,7 +200,55 @@
   "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 2,
-  "plans": 28.0,
-  "share": 0.028
+  "plans": 191.0,
+  "share": 0.191
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "1 X 15 STV",
+  "numDistricts": 1,
+  "winners": 15,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "seats": 3,
+  "plans": 303.0,
+  "share": 0.303
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "1 X 15 STV",
+  "numDistricts": 1,
+  "winners": 15,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "seats": 4,
+  "plans": 223.0,
+  "share": 0.223
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "1 X 15 STV",
+  "numDistricts": 1,
+  "winners": 15,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "seats": 5,
+  "plans": 19.0,
+  "share": 0.019
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "1 X 15 STV",
+  "numDistricts": 1,
+  "winners": 15,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "seats": 6,
+  "plans": 4.0,
+  "share": 0.004
  }
 ]

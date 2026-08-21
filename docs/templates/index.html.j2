@@ -100,7 +100,7 @@
             <div class="run-prose">{{ run_prose[run.slug] }}</div>
             {% else %}
             <p class="todo">[Description to be written — edit
-               <code>docs/prose/runs/{{ run.slug }}.md</code>.]</p>
+               <code>docs/prose/scenarios/{{ run.prose | default(run.slug) }}.md</code>.]</p>
             {% endif %}
 
             {# Every chart in this run reads the same selection; js/report.js fills this

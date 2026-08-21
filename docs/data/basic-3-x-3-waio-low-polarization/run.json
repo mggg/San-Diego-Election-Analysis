@@ -24,24 +24,15 @@
     {
      "id": "FASTSTV",
      "label": "3 X 3 STV"
-    },
-    {
-     "id": "CUMULATIVE",
-     "label": "3 X 3 Cumulative"
-    },
-    {
-     "id": "LIMITED",
-     "label": "3 X 3 Limited"
     }
    ],
    "candidatePoolMax": 10,
    "candidatePoolMean": 7,
    "plans": 100,
-   "electionsPerSystem": 4000,
+   "electionsPerSystem": 6000,
    "electionsByMode": {
-    "name_cumulative": 3000,
-    "slate_bt": 3000,
-    "slate_pl": 3000
+    "slate_bt": 1000,
+    "slate_pl": 1000
    }
   }
  ],
@@ -54,11 +45,6 @@
   {
    "id": "slate_bt",
    "label": "Deliberative",
-   "pooled": false
-  },
-  {
-   "id": "name_cumulative",
-   "label": "Name Cumulative",
    "pooled": false
   },
   {

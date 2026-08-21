@@ -1,17 +1,15 @@
 {
- "generated": "2026-08-21T17:57:44+00:00",
+ "generated": "2026-08-21T20:21:33+00:00",
  "palette": {
   "slate_pl": "#FFCC00",
   "slate_bt": "#AA0000",
   "cambridge": "#2a78d6",
-  "name_cumulative": "#2a78d6",
   "combined": "#6a3d9a"
  },
  "modeLabels": {
   "slate_pl": "Impulsive",
   "slate_bt": "Deliberative",
   "cambridge": "Cambridge",
-  "name_cumulative": "Name Cumulative",
   "combined": "Combined"
  },
  "colors": {
@@ -22,13 +20,13 @@
   {
    "slug": "basic-3-x-3",
    "name": "Warmup - 3 X 3 STV",
-   "focalGroup": "BLK",
-   "focalGroupLabel": "BLK",
+   "focalGroup": "AAPI",
+   "focalGroupLabel": "AAPI",
    "totalSeats": 9,
-   "seatMax": 5,
-   "focalVapShare": 0.07109494643525345,
-   "proportionalSeats": 0.6398545179172811,
-   "proportionalLabel": "BLK share of VAP: 7.1% (0.6 seats)",
+   "seatMax": 6,
+   "focalVapShare": 0.20432553215884638,
+   "proportionalSeats": 1.8389297894296175,
+   "proportionalLabel": "AAPI share of VAP: 20.4% (1.8 seats)",
    "districtConfigs": [
     {
      "numDistricts": 3,
@@ -37,20 +35,16 @@
       {
        "id": "FASTSTV",
        "label": "3 X 3 STV"
-      },
-      {
-       "id": "CUMULATIVE",
-       "label": "3 X 3 Cumulative"
-      },
-      {
-       "id": "LIMITED",
-       "label": "3 X 3 Limited"
       }
      ],
      "candidatePoolMax": 10,
      "candidatePoolMean": 7,
      "plans": 100,
-     "electionsPerSystem": 4000
+     "electionsPerSystem": 6000,
+     "electionsByMode": {
+      "slate_bt": 1000,
+      "slate_pl": 1000
+     }
     }
    ],
    "slates": [
@@ -139,9 +133,9 @@
      ],
      "plans": 100,
      "electionsByMode": {
-      "cambridge": 3000,
-      "slate_bt": 3000,
-      "slate_pl": 3000
+      "cambridge": 1000,
+      "slate_bt": 1000,
+      "slate_pl": 1000
      },
      "replicates": 10,
      "turnout": {
@@ -187,8 +181,7 @@
      "data": {
       "run": "data/basic-3-x-3-2-blocs/run.json",
       "focalSeats": "data/basic-3-x-3-2-blocs/focal_seats.json",
-      "slateSeats": "data/basic-3-x-3-2-blocs/slate_seats.json",
-      "availability": "data/basic-3-x-3-2-blocs/availability.json"
+      "slateSeats": "data/basic-3-x-3-2-blocs/slate_seats.json"
      }
     },
     {
@@ -203,14 +196,15 @@
      "winners": 3,
      "seats": 9,
      "shape": "3 \u00d7 3",
-     "seatMax": 5,
+     "seatMax": 6,
      "seatTicks": [
       0,
       1,
       2,
       3,
       4,
-      5
+      5,
+      6
      ],
      "voterModels": [
       {
@@ -230,7 +224,10 @@
       }
      ],
      "plans": 100,
-     "electionsByMode": {},
+     "electionsByMode": {
+      "slate_bt": 1000,
+      "slate_pl": 1000
+     },
      "replicates": 10,
      "turnout": {
       "AAPI": 0.75,
@@ -350,9 +347,9 @@
      "plans": 100,
      "electionsPerSystem": 9000,
      "electionsByMode": {
-      "cambridge": 3000,
-      "slate_bt": 3000,
-      "slate_pl": 3000
+      "cambridge": 1000,
+      "slate_bt": 1000,
+      "slate_pl": 1000
      }
     }
    ],
@@ -375,8 +372,7 @@
    "data": {
     "run": "data/basic-3-x-3-2-blocs/run.json",
     "focalSeats": "data/basic-3-x-3-2-blocs/focal_seats.json",
-    "slateSeats": "data/basic-3-x-3-2-blocs/slate_seats.json",
-    "availability": "data/basic-3-x-3-2-blocs/availability.json"
+    "slateSeats": "data/basic-3-x-3-2-blocs/slate_seats.json"
    }
   },
   {
@@ -404,9 +400,9 @@
      "plans": 100,
      "electionsPerSystem": 9000,
      "electionsByMode": {
-      "cambridge": 3000,
-      "slate_bt": 3000,
-      "slate_pl": 3000
+      "cambridge": 1000,
+      "slate_bt": 1000,
+      "slate_pl": 1000
      }
     }
    ],
@@ -429,13 +425,12 @@
    "data": {
     "run": "data/basic-3-x-3-2-blocs-waio-low-polarization/run.json",
     "focalSeats": "data/basic-3-x-3-2-blocs-waio-low-polarization/focal_seats.json",
-    "slateSeats": "data/basic-3-x-3-2-blocs-waio-low-polarization/slate_seats.json",
-    "availability": "data/basic-3-x-3-2-blocs-waio-low-polarization/availability.json"
+    "slateSeats": "data/basic-3-x-3-2-blocs-waio-low-polarization/slate_seats.json"
    }
   },
   {
    "slug": "basic-3-x-3-truncation",
-   "name": "Basic - 3 X 3 + Truncation",
+   "name": "Warmup - 3 X 3 STV, Truncation",
    "focalGroup": "AAPI",
    "focalGroupLabel": "AAPI",
    "totalSeats": 9,
@@ -458,8 +453,8 @@
      "plans": 100,
      "electionsPerSystem": 6000,
      "electionsByMode": {
-      "slate_bt": 3000,
-      "slate_pl": 3000
+      "slate_bt": 1000,
+      "slate_pl": 1000
      }
     }
    ],
@@ -496,8 +491,7 @@
    "data": {
     "run": "data/basic-3-x-3-truncation/run.json",
     "focalSeats": "data/basic-3-x-3-truncation/focal_seats.json",
-    "slateSeats": "data/basic-3-x-3-truncation/slate_seats.json",
-    "availability": "data/basic-3-x-3-truncation/availability.json"
+    "slateSeats": "data/basic-3-x-3-truncation/slate_seats.json"
    },
    "composition": [
     {
@@ -549,9 +543,9 @@
      ],
      "plans": 100,
      "electionsByMode": {
-      "cambridge": 3000,
-      "slate_bt": 3000,
-      "slate_pl": 3000
+      "cambridge": 1000,
+      "slate_bt": 1000,
+      "slate_pl": 1000
      },
      "replicates": 10,
      "turnout": {
@@ -597,8 +591,7 @@
      "data": {
       "run": "data/basic-3-x-3-truncation-2-blocs/run.json",
       "focalSeats": "data/basic-3-x-3-truncation-2-blocs/focal_seats.json",
-      "slateSeats": "data/basic-3-x-3-truncation-2-blocs/slate_seats.json",
-      "availability": "data/basic-3-x-3-truncation-2-blocs/availability.json"
+      "slateSeats": "data/basic-3-x-3-truncation-2-blocs/slate_seats.json"
      }
     },
     {
@@ -642,8 +635,8 @@
      ],
      "plans": 100,
      "electionsByMode": {
-      "slate_bt": 3000,
-      "slate_pl": 3000
+      "slate_bt": 1000,
+      "slate_pl": 1000
      },
      "replicates": 10,
      "turnout": {
@@ -733,8 +726,7 @@
      "data": {
       "run": "data/basic-3-x-3-truncation/run.json",
       "focalSeats": "data/basic-3-x-3-truncation/focal_seats.json",
-      "slateSeats": "data/basic-3-x-3-truncation/slate_seats.json",
-      "availability": "data/basic-3-x-3-truncation/availability.json"
+      "slateSeats": "data/basic-3-x-3-truncation/slate_seats.json"
      }
     }
    ]
@@ -764,9 +756,9 @@
      "plans": 100,
      "electionsPerSystem": 9000,
      "electionsByMode": {
-      "cambridge": 3000,
-      "slate_bt": 3000,
-      "slate_pl": 3000
+      "cambridge": 1000,
+      "slate_bt": 1000,
+      "slate_pl": 1000
      }
     }
    ],
@@ -789,13 +781,12 @@
    "data": {
     "run": "data/basic-3-x-3-truncation-2-blocs/run.json",
     "focalSeats": "data/basic-3-x-3-truncation-2-blocs/focal_seats.json",
-    "slateSeats": "data/basic-3-x-3-truncation-2-blocs/slate_seats.json",
-    "availability": "data/basic-3-x-3-truncation-2-blocs/availability.json"
+    "slateSeats": "data/basic-3-x-3-truncation-2-blocs/slate_seats.json"
    }
   },
   {
    "slug": "basic-3-x-3-waio-low-polarization",
-   "name": "Basic - 3 X 3, Low Polarization",
+   "name": "Warmup - 3 X 3 STV, Low Polarization",
    "focalGroup": "BLK",
    "focalGroupLabel": "BLK",
    "totalSeats": 9,
@@ -811,24 +802,15 @@
       {
        "id": "FASTSTV",
        "label": "3 X 3 STV"
-      },
-      {
-       "id": "CUMULATIVE",
-       "label": "3 X 3 Cumulative"
-      },
-      {
-       "id": "LIMITED",
-       "label": "3 X 3 Limited"
       }
      ],
      "candidatePoolMax": 10,
      "candidatePoolMean": 7,
      "plans": 100,
-     "electionsPerSystem": 4000,
+     "electionsPerSystem": 6000,
      "electionsByMode": {
-      "name_cumulative": 3000,
-      "slate_bt": 3000,
-      "slate_pl": 3000
+      "slate_bt": 1000,
+      "slate_pl": 1000
      }
     }
    ],
@@ -865,8 +847,7 @@
    "data": {
     "run": "data/basic-3-x-3-waio-low-polarization/run.json",
     "focalSeats": "data/basic-3-x-3-waio-low-polarization/focal_seats.json",
-    "slateSeats": "data/basic-3-x-3-waio-low-polarization/slate_seats.json",
-    "availability": "data/basic-3-x-3-waio-low-polarization/availability.json"
+    "slateSeats": "data/basic-3-x-3-waio-low-polarization/slate_seats.json"
    },
    "composition": [
     {
@@ -918,9 +899,9 @@
      ],
      "plans": 100,
      "electionsByMode": {
-      "cambridge": 3000,
-      "slate_bt": 3000,
-      "slate_pl": 3000
+      "cambridge": 1000,
+      "slate_bt": 1000,
+      "slate_pl": 1000
      },
      "replicates": 10,
      "turnout": {
@@ -966,8 +947,7 @@
      "data": {
       "run": "data/basic-3-x-3-2-blocs-waio-low-polarization/run.json",
       "focalSeats": "data/basic-3-x-3-2-blocs-waio-low-polarization/focal_seats.json",
-      "slateSeats": "data/basic-3-x-3-2-blocs-waio-low-polarization/slate_seats.json",
-      "availability": "data/basic-3-x-3-2-blocs-waio-low-polarization/availability.json"
+      "slateSeats": "data/basic-3-x-3-2-blocs-waio-low-polarization/slate_seats.json"
      }
     },
     {
@@ -1010,9 +990,8 @@
      ],
      "plans": 100,
      "electionsByMode": {
-      "name_cumulative": 3000,
-      "slate_bt": 3000,
-      "slate_pl": 3000
+      "slate_bt": 1000,
+      "slate_pl": 1000
      },
      "replicates": 10,
      "turnout": {
@@ -1102,8 +1081,7 @@
      "data": {
       "run": "data/basic-3-x-3-waio-low-polarization/run.json",
       "focalSeats": "data/basic-3-x-3-waio-low-polarization/focal_seats.json",
-      "slateSeats": "data/basic-3-x-3-waio-low-polarization/slate_seats.json",
-      "availability": "data/basic-3-x-3-waio-low-polarization/availability.json"
+      "slateSeats": "data/basic-3-x-3-waio-low-polarization/slate_seats.json"
      }
     }
    ]
@@ -1133,9 +1111,9 @@
      "plans": 100,
      "electionsPerSystem": 9000,
      "electionsByMode": {
-      "cambridge": 3000,
-      "slate_bt": 3000,
-      "slate_pl": 3000
+      "cambridge": 1000,
+      "slate_bt": 1000,
+      "slate_pl": 1000
      }
     }
    ],
@@ -1158,8 +1136,7 @@
    "data": {
     "run": "data/basic-3-x-5-2-blocs/run.json",
     "focalSeats": "data/basic-3-x-5-2-blocs/focal_seats.json",
-    "slateSeats": "data/basic-3-x-5-2-blocs/slate_seats.json",
-    "availability": "data/basic-3-x-5-2-blocs/availability.json"
+    "slateSeats": "data/basic-3-x-5-2-blocs/slate_seats.json"
    }
   },
   {
@@ -1187,9 +1164,9 @@
      "plans": 100,
      "electionsPerSystem": 15000,
      "electionsByMode": {
-      "cambridge": 5000,
-      "slate_bt": 5000,
-      "slate_pl": 5000
+      "cambridge": 1000,
+      "slate_bt": 1000,
+      "slate_pl": 1000
      }
     }
    ],
@@ -1212,20 +1189,19 @@
    "data": {
     "run": "data/basic-5-x-3-2-blocs/run.json",
     "focalSeats": "data/basic-5-x-3-2-blocs/focal_seats.json",
-    "slateSeats": "data/basic-5-x-3-2-blocs/slate_seats.json",
-    "availability": "data/basic-5-x-3-2-blocs/availability.json"
+    "slateSeats": "data/basic-5-x-3-2-blocs/slate_seats.json"
    }
   },
   {
    "slug": "12-x-1-irv",
    "name": "12 X 1 IRV",
-   "focalGroup": "BLK",
-   "focalGroupLabel": "BLK",
+   "focalGroup": "AAPI",
+   "focalGroupLabel": "AAPI",
    "totalSeats": 12,
    "seatMax": 6,
-   "focalVapShare": 0.07109494643525345,
-   "proportionalSeats": 0.8531393572230415,
-   "proportionalLabel": "BLK share of VAP: 7.1% (0.9 seats)",
+   "focalVapShare": 0.20432553215884638,
+   "proportionalSeats": 2.4519063859061565,
+   "proportionalLabel": "AAPI share of VAP: 20.4% (2.5 seats)",
    "districtConfigs": [
     {
      "numDistricts": 12,
@@ -1239,7 +1215,11 @@
      "candidatePoolMax": 7,
      "candidatePoolMean": 5,
      "plans": 100,
-     "electionsPerSystem": 24000
+     "electionsPerSystem": 24000,
+     "electionsByMode": {
+      "slate_bt": 1000,
+      "slate_pl": 1000
+     }
     }
    ],
    "slates": [
@@ -1275,8 +1255,7 @@
    "data": {
     "run": "data/12-x-1-irv/run.json",
     "focalSeats": "data/12-x-1-irv/focal_seats.json",
-    "slateSeats": "data/12-x-1-irv/slate_seats.json",
-    "availability": "data/12-x-1-irv/availability.json"
+    "slateSeats": "data/12-x-1-irv/slate_seats.json"
    }
   },
   {
@@ -1304,9 +1283,9 @@
      "plans": 100,
      "electionsPerSystem": 36000,
      "electionsByMode": {
-      "cambridge": 12000,
-      "slate_bt": 12000,
-      "slate_pl": 12000
+      "cambridge": 1000,
+      "slate_bt": 1000,
+      "slate_pl": 1000
      }
     }
    ],
@@ -1329,20 +1308,19 @@
    "data": {
     "run": "data/12-x-1-irv-2-blocs/run.json",
     "focalSeats": "data/12-x-1-irv-2-blocs/focal_seats.json",
-    "slateSeats": "data/12-x-1-irv-2-blocs/slate_seats.json",
-    "availability": "data/12-x-1-irv-2-blocs/availability.json"
+    "slateSeats": "data/12-x-1-irv-2-blocs/slate_seats.json"
    }
   },
   {
    "slug": "3x5-stv",
    "name": "3x5 STV",
-   "focalGroup": "BLK",
-   "focalGroupLabel": "BLK",
+   "focalGroup": "AAPI",
+   "focalGroupLabel": "AAPI",
    "totalSeats": 15,
-   "seatMax": 6,
-   "focalVapShare": 0.07109494643525345,
-   "proportionalSeats": 1.0664241965288017,
-   "proportionalLabel": "BLK share of VAP: 7.1% (1.1 seats)",
+   "seatMax": 8,
+   "focalVapShare": 0.20432553215884638,
+   "proportionalSeats": 3.064882982382696,
+   "proportionalLabel": "AAPI share of VAP: 20.4% (3.1 seats)",
    "districtConfigs": [
     {
      "numDistricts": 3,
@@ -1356,7 +1334,11 @@
      "candidatePoolMax": 10,
      "candidatePoolMean": 7,
      "plans": 100,
-     "electionsPerSystem": 6000
+     "electionsPerSystem": 6000,
+     "electionsByMode": {
+      "slate_bt": 1000,
+      "slate_pl": 1000
+     }
     }
    ],
    "slates": [
@@ -1399,13 +1381,13 @@
   {
    "slug": "5x3-stv",
    "name": "5x3 STV",
-   "focalGroup": "BLK",
-   "focalGroupLabel": "BLK",
+   "focalGroup": "AAPI",
+   "focalGroupLabel": "AAPI",
    "totalSeats": 15,
-   "seatMax": 6,
-   "focalVapShare": 0.07109494643525345,
-   "proportionalSeats": 1.0664241965288017,
-   "proportionalLabel": "BLK share of VAP: 7.1% (1.1 seats)",
+   "seatMax": 8,
+   "focalVapShare": 0.20432553215884638,
+   "proportionalSeats": 3.064882982382696,
+   "proportionalLabel": "AAPI share of VAP: 20.4% (3.1 seats)",
    "districtConfigs": [
     {
      "numDistricts": 5,
@@ -1419,7 +1401,11 @@
      "candidatePoolMax": 10,
      "candidatePoolMean": 7,
      "plans": 100,
-     "electionsPerSystem": 10000
+     "electionsPerSystem": 10000,
+     "electionsByMode": {
+      "slate_bt": 1000,
+      "slate_pl": 1000
+     }
     }
    ],
    "slates": [
@@ -1455,20 +1441,19 @@
    "data": {
     "run": "data/5x3-stv/run.json",
     "focalSeats": "data/5x3-stv/focal_seats.json",
-    "slateSeats": "data/5x3-stv/slate_seats.json",
-    "availability": "data/5x3-stv/availability.json"
+    "slateSeats": "data/5x3-stv/slate_seats.json"
    }
   },
   {
    "slug": "9-x-1-irv",
    "name": "9 X 1 IRV",
-   "focalGroup": "BLK",
-   "focalGroupLabel": "BLK",
+   "focalGroup": "AAPI",
+   "focalGroupLabel": "AAPI",
    "totalSeats": 9,
-   "seatMax": 5,
-   "focalVapShare": 0.07109494643525345,
-   "proportionalSeats": 0.6398545179172811,
-   "proportionalLabel": "BLK share of VAP: 7.1% (0.6 seats)",
+   "seatMax": 7,
+   "focalVapShare": 0.20432553215884638,
+   "proportionalSeats": 1.8389297894296175,
+   "proportionalLabel": "AAPI share of VAP: 20.4% (1.8 seats)",
    "districtConfigs": [
     {
      "numDistricts": 9,
@@ -1482,7 +1467,11 @@
      "candidatePoolMax": 10,
      "candidatePoolMean": 7,
      "plans": 100,
-     "electionsPerSystem": 18000
+     "electionsPerSystem": 18000,
+     "electionsByMode": {
+      "slate_bt": 1000,
+      "slate_pl": 1000
+     }
     }
    ],
    "slates": [
@@ -1518,8 +1507,7 @@
    "data": {
     "run": "data/9-x-1-irv/run.json",
     "focalSeats": "data/9-x-1-irv/focal_seats.json",
-    "slateSeats": "data/9-x-1-irv/slate_seats.json",
-    "availability": "data/9-x-1-irv/availability.json"
+    "slateSeats": "data/9-x-1-irv/slate_seats.json"
    }
   },
   {
@@ -1547,9 +1535,9 @@
      "plans": 100,
      "electionsPerSystem": 27000,
      "electionsByMode": {
-      "cambridge": 9000,
-      "slate_bt": 9000,
-      "slate_pl": 9000
+      "cambridge": 1000,
+      "slate_bt": 1000,
+      "slate_pl": 1000
      }
     }
    ],
@@ -1572,20 +1560,81 @@
    "data": {
     "run": "data/9-x-1-irv-2-blocs/run.json",
     "focalSeats": "data/9-x-1-irv-2-blocs/focal_seats.json",
-    "slateSeats": "data/9-x-1-irv-2-blocs/slate_seats.json",
-    "availability": "data/9-x-1-irv-2-blocs/availability.json"
+    "slateSeats": "data/9-x-1-irv-2-blocs/slate_seats.json"
+   }
+  },
+  {
+   "slug": "9x1-plurality",
+   "name": "9x1 Plurality",
+   "focalGroup": "BAIO",
+   "focalGroupLabel": "BAIO",
+   "totalSeats": 9,
+   "seatMax": 5,
+   "focalVapShare": 0.20432553215884638,
+   "proportionalSeats": 1.8389297894296175,
+   "proportionalLabel": "BAIO share of VAP: 20.4% (1.8 seats)",
+   "districtConfigs": [
+    {
+     "numDistricts": 9,
+     "winners": 1,
+     "systems": [
+      {
+       "id": "PLURALITY",
+       "label": "9 X 1 Plurality"
+      }
+     ],
+     "candidatePoolMax": 10,
+     "candidatePoolMean": 7,
+     "plans": 100,
+     "electionsPerSystem": 18000
+    }
+   ],
+   "slates": [
+    {
+     "id": "WHI",
+     "label": "WHI",
+     "vapShare": 0.4380194598284399,
+     "proportionalSeats": 3.9421751384559593,
+     "proportionalLabel": "WHI share of VAP: 43.8% (3.9 seats)"
+    },
+    {
+     "id": "BAIO",
+     "label": "BAIO",
+     "vapShare": 0.0919164473502938,
+     "proportionalSeats": 0.8272480261526443,
+     "proportionalLabel": "BAIO share of VAP: 9.2% (0.8 seats)"
+    },
+    {
+     "id": "HIS",
+     "label": "HIS",
+     "vapShare": 0.2657385606624199,
+     "proportionalSeats": 2.391647045961779,
+     "proportionalLabel": "HIS share of VAP: 26.6% (2.4 seats)"
+    },
+    {
+     "id": "AAPI",
+     "label": "AAPI",
+     "vapShare": 0.20432553215884638,
+     "proportionalSeats": 1.8389297894296175,
+     "proportionalLabel": "AAPI share of VAP: 20.4% (1.8 seats)"
+    }
+   ],
+   "data": {
+    "run": "data/9x1-plurality/run.json",
+    "focalSeats": "data/9x1-plurality/focal_seats.json",
+    "slateSeats": "data/9x1-plurality/slate_seats.json"
    }
   },
   {
    "slug": "alternative-electoral-systems",
    "name": "Alternative Electoral Systems",
-   "focalGroup": "BLK",
-   "focalGroupLabel": "BLK",
+   "focalGroup": "AAPI",
+   "focalGroupLabel": "AAPI",
    "totalSeats": 15,
-   "seatMax": 6,
-   "focalVapShare": 0.07109494643525345,
-   "proportionalSeats": 1.0664241965288017,
-   "proportionalLabel": "BLK share of VAP: 7.1% (1.1 seats)",
+   "seatMax": 8,
+   "focalVapShare": 0.20432553215884638,
+   "proportionalSeats": 3.064882982382696,
+   "proportionalLabel": "AAPI share of VAP: 20.4% (3.1 seats)",
    "districtConfigs": [
     {
      "numDistricts": 15,
@@ -1607,7 +1656,11 @@
      "candidatePoolMax": 5,
      "candidatePoolMean": 3,
      "plans": 100,
-     "electionsPerSystem": 30000
+     "electionsPerSystem": 30000,
+     "electionsByMode": {
+      "slate_bt": 1000,
+      "slate_pl": 1000
+     }
     }
    ],
    "slates": [
@@ -1643,8 +1696,7 @@
    "data": {
     "run": "data/alternative-electoral-systems/run.json",
     "focalSeats": "data/alternative-electoral-systems/focal_seats.json",
-    "slateSeats": "data/alternative-electoral-systems/slate_seats.json",
-    "availability": "data/alternative-electoral-systems/availability.json"
+    "slateSeats": "data/alternative-electoral-systems/slate_seats.json"
    },
    "composition": [
     {
@@ -1694,9 +1746,9 @@
      ],
      "plans": 100,
      "electionsByMode": {
-      "cambridge": 15000,
-      "slate_bt": 15000,
-      "slate_pl": 15000
+      "cambridge": 1000,
+      "slate_bt": 1000,
+      "slate_pl": 1000
      },
      "replicates": 10,
      "turnout": {
@@ -1745,8 +1797,7 @@
      "data": {
       "run": "data/alternative-electoral-systems-2-blocs/run.json",
       "focalSeats": "data/alternative-electoral-systems-2-blocs/focal_seats.json",
-      "slateSeats": "data/alternative-electoral-systems-2-blocs/slate_seats.json",
-      "availability": "data/alternative-electoral-systems-2-blocs/availability.json"
+      "slateSeats": "data/alternative-electoral-systems-2-blocs/slate_seats.json"
      }
     },
     {
@@ -1795,9 +1846,9 @@
      ],
      "plans": 100,
      "electionsByMode": {
-      "cambridge": 12000,
-      "slate_bt": 12000,
-      "slate_pl": 12000
+      "cambridge": 1000,
+      "slate_bt": 1000,
+      "slate_pl": 1000
      },
      "replicates": 10,
      "turnout": {
@@ -1843,8 +1894,7 @@
      "data": {
       "run": "data/12-x-1-irv-2-blocs/run.json",
       "focalSeats": "data/12-x-1-irv-2-blocs/focal_seats.json",
-      "slateSeats": "data/12-x-1-irv-2-blocs/slate_seats.json",
-      "availability": "data/12-x-1-irv-2-blocs/availability.json"
+      "slateSeats": "data/12-x-1-irv-2-blocs/slate_seats.json"
      }
     },
     {
@@ -1896,9 +1946,9 @@
      ],
      "plans": 100,
      "electionsByMode": {
-      "cambridge": 9000,
-      "slate_bt": 9000,
-      "slate_pl": 9000
+      "cambridge": 1000,
+      "slate_bt": 1000,
+      "slate_pl": 1000
      },
      "replicates": 10,
      "turnout": {
@@ -1944,8 +1994,7 @@
      "data": {
       "run": "data/9-x-1-irv-2-blocs/run.json",
       "focalSeats": "data/9-x-1-irv-2-blocs/focal_seats.json",
-      "slateSeats": "data/9-x-1-irv-2-blocs/slate_seats.json",
-      "availability": "data/9-x-1-irv-2-blocs/availability.json"
+      "slateSeats": "data/9-x-1-irv-2-blocs/slate_seats.json"
      }
     },
     {
@@ -1995,9 +2044,9 @@
      ],
      "plans": 100,
      "electionsByMode": {
-      "cambridge": 3000,
-      "slate_bt": 3000,
-      "slate_pl": 3000
+      "cambridge": 1000,
+      "slate_bt": 1000,
+      "slate_pl": 1000
      },
      "replicates": 10,
      "turnout": {
@@ -2043,8 +2092,7 @@
      "data": {
       "run": "data/basic-3-x-5-2-blocs/run.json",
       "focalSeats": "data/basic-3-x-5-2-blocs/focal_seats.json",
-      "slateSeats": "data/basic-3-x-5-2-blocs/slate_seats.json",
-      "availability": "data/basic-3-x-5-2-blocs/availability.json"
+      "slateSeats": "data/basic-3-x-5-2-blocs/slate_seats.json"
      }
     },
     {
@@ -2094,9 +2142,9 @@
      ],
      "plans": 100,
      "electionsByMode": {
-      "cambridge": 5000,
-      "slate_bt": 5000,
-      "slate_pl": 5000
+      "cambridge": 1000,
+      "slate_bt": 1000,
+      "slate_pl": 1000
      },
      "replicates": 10,
      "turnout": {
@@ -2142,8 +2190,7 @@
      "data": {
       "run": "data/basic-5-x-3-2-blocs/run.json",
       "focalSeats": "data/basic-5-x-3-2-blocs/focal_seats.json",
-      "slateSeats": "data/basic-5-x-3-2-blocs/slate_seats.json",
-      "availability": "data/basic-5-x-3-2-blocs/availability.json"
+      "slateSeats": "data/basic-5-x-3-2-blocs/slate_seats.json"
      }
     },
     {
@@ -2196,7 +2243,6 @@
      "plans": 100,
      "electionsByMode": {
       "cambridge": 1000,
-      "name_cumulative": 1000,
       "slate_bt": 1000,
       "slate_pl": 1000
      },
@@ -2244,8 +2290,7 @@
      "data": {
       "run": "data/nine-seats-at-large-stv-2-blocs/run.json",
       "focalSeats": "data/nine-seats-at-large-stv-2-blocs/focal_seats.json",
-      "slateSeats": "data/nine-seats-at-large-stv-2-blocs/slate_seats.json",
-      "availability": "data/nine-seats-at-large-stv-2-blocs/availability.json"
+      "slateSeats": "data/nine-seats-at-large-stv-2-blocs/slate_seats.json"
      }
     },
     {
@@ -2343,8 +2388,7 @@
      "data": {
       "run": "data/fifteen-seats-at-large-stv-2-blocs/run.json",
       "focalSeats": "data/fifteen-seats-at-large-stv-2-blocs/focal_seats.json",
-      "slateSeats": "data/fifteen-seats-at-large-stv-2-blocs/slate_seats.json",
-      "availability": "data/fifteen-seats-at-large-stv-2-blocs/availability.json"
+      "slateSeats": "data/fifteen-seats-at-large-stv-2-blocs/slate_seats.json"
      }
     },
     {
@@ -2359,7 +2403,7 @@
      "winners": 1,
      "seats": 15,
      "shape": "15 \u00d7 1",
-     "seatMax": 6,
+     "seatMax": 8,
      "seatTicks": [
       0,
       1,
@@ -2367,7 +2411,9 @@
       3,
       4,
       5,
-      6
+      6,
+      7,
+      8
      ],
      "voterModels": [
       {
@@ -2387,7 +2433,10 @@
       }
      ],
      "plans": 100,
-     "electionsByMode": {},
+     "electionsByMode": {
+      "slate_bt": 1000,
+      "slate_pl": 1000
+     },
      "replicates": 10,
      "turnout": {
       "AAPI": 0.7,
@@ -2481,8 +2530,7 @@
      "data": {
       "run": "data/alternative-electoral-systems/run.json",
       "focalSeats": "data/alternative-electoral-systems/focal_seats.json",
-      "slateSeats": "data/alternative-electoral-systems/slate_seats.json",
-      "availability": "data/alternative-electoral-systems/availability.json"
+      "slateSeats": "data/alternative-electoral-systems/slate_seats.json"
      }
     },
     {
@@ -2497,7 +2545,7 @@
      "winners": 1,
      "seats": 15,
      "shape": "15 \u00d7 1",
-     "seatMax": 6,
+     "seatMax": 8,
      "seatTicks": [
       0,
       1,
@@ -2505,7 +2553,9 @@
       3,
       4,
       5,
-      6
+      6,
+      7,
+      8
      ],
      "voterModels": [
       {
@@ -2525,7 +2575,10 @@
       }
      ],
      "plans": 100,
-     "electionsByMode": {},
+     "electionsByMode": {
+      "slate_bt": 1000,
+      "slate_pl": 1000
+     },
      "replicates": 10,
      "turnout": {
       "AAPI": 0.7,
@@ -2619,8 +2672,7 @@
      "data": {
       "run": "data/alternative-electoral-systems/run.json",
       "focalSeats": "data/alternative-electoral-systems/focal_seats.json",
-      "slateSeats": "data/alternative-electoral-systems/slate_seats.json",
-      "availability": "data/alternative-electoral-systems/availability.json"
+      "slateSeats": "data/alternative-electoral-systems/slate_seats.json"
      }
     },
     {
@@ -2635,7 +2687,7 @@
      "winners": 1,
      "seats": 15,
      "shape": "15 \u00d7 1",
-     "seatMax": 6,
+     "seatMax": 8,
      "seatTicks": [
       0,
       1,
@@ -2643,7 +2695,9 @@
       3,
       4,
       5,
-      6
+      6,
+      7,
+      8
      ],
      "voterModels": [
       {
@@ -2663,7 +2717,10 @@
       }
      ],
      "plans": 100,
-     "electionsByMode": {},
+     "electionsByMode": {
+      "slate_bt": 1000,
+      "slate_pl": 1000
+     },
      "replicates": 10,
      "turnout": {
       "AAPI": 0.7,
@@ -2757,8 +2814,7 @@
      "data": {
       "run": "data/alternative-electoral-systems/run.json",
       "focalSeats": "data/alternative-electoral-systems/focal_seats.json",
-      "slateSeats": "data/alternative-electoral-systems/slate_seats.json",
-      "availability": "data/alternative-electoral-systems/availability.json"
+      "slateSeats": "data/alternative-electoral-systems/slate_seats.json"
      }
     },
     {
@@ -2801,7 +2857,10 @@
       }
      ],
      "plans": 100,
-     "electionsByMode": {},
+     "electionsByMode": {
+      "slate_bt": 1000,
+      "slate_pl": 1000
+     },
      "replicates": 10,
      "turnout": {
       "AAPI": 0.7,
@@ -2890,8 +2949,7 @@
      "data": {
       "run": "data/12-x-1-irv/run.json",
       "focalSeats": "data/12-x-1-irv/focal_seats.json",
-      "slateSeats": "data/12-x-1-irv/slate_seats.json",
-      "availability": "data/12-x-1-irv/availability.json"
+      "slateSeats": "data/12-x-1-irv/slate_seats.json"
      }
     },
     {
@@ -2906,14 +2964,16 @@
      "winners": 1,
      "seats": 9,
      "shape": "9 \u00d7 1",
-     "seatMax": 5,
+     "seatMax": 7,
      "seatTicks": [
       0,
       1,
       2,
       3,
       4,
-      5
+      5,
+      6,
+      7
      ],
      "voterModels": [
       {
@@ -2933,7 +2993,10 @@
       }
      ],
      "plans": 100,
-     "electionsByMode": {},
+     "electionsByMode": {
+      "slate_bt": 1000,
+      "slate_pl": 1000
+     },
      "replicates": 10,
      "turnout": {
       "AAPI": 0.7,
@@ -3022,8 +3085,7 @@
      "data": {
       "run": "data/9-x-1-irv/run.json",
       "focalSeats": "data/9-x-1-irv/focal_seats.json",
-      "slateSeats": "data/9-x-1-irv/slate_seats.json",
-      "availability": "data/9-x-1-irv/availability.json"
+      "slateSeats": "data/9-x-1-irv/slate_seats.json"
      }
     },
     {
@@ -3038,7 +3100,7 @@
      "winners": 5,
      "seats": 15,
      "shape": "3 \u00d7 5",
-     "seatMax": 6,
+     "seatMax": 8,
      "seatTicks": [
       0,
       1,
@@ -3046,7 +3108,9 @@
       3,
       4,
       5,
-      6
+      6,
+      7,
+      8
      ],
      "voterModels": [
       {
@@ -3066,7 +3130,10 @@
       }
      ],
      "plans": 100,
-     "electionsByMode": {},
+     "electionsByMode": {
+      "slate_bt": 1000,
+      "slate_pl": 1000
+     },
      "replicates": 10,
      "turnout": {
       "AAPI": 0.7,
@@ -3171,7 +3238,7 @@
      "winners": 3,
      "seats": 15,
      "shape": "5 \u00d7 3",
-     "seatMax": 6,
+     "seatMax": 8,
      "seatTicks": [
       0,
       1,
@@ -3179,7 +3246,9 @@
       3,
       4,
       5,
-      6
+      6,
+      7,
+      8
      ],
      "voterModels": [
       {
@@ -3199,7 +3268,10 @@
       }
      ],
      "plans": 100,
-     "electionsByMode": {},
+     "electionsByMode": {
+      "slate_bt": 1000,
+      "slate_pl": 1000
+     },
      "replicates": 10,
      "turnout": {
       "AAPI": 0.7,
@@ -3288,8 +3360,7 @@
      "data": {
       "run": "data/5x3-stv/run.json",
       "focalSeats": "data/5x3-stv/focal_seats.json",
-      "slateSeats": "data/5x3-stv/slate_seats.json",
-      "availability": "data/5x3-stv/availability.json"
+      "slateSeats": "data/5x3-stv/slate_seats.json"
      }
     },
     {
@@ -3304,14 +3375,15 @@
      "winners": 9,
      "seats": 9,
      "shape": "1 \u00d7 9",
-     "seatMax": 5,
+     "seatMax": 6,
      "seatTicks": [
       0,
       1,
       2,
       3,
       4,
-      5
+      5,
+      6
      ],
      "voterModels": [
       {
@@ -3331,7 +3403,10 @@
       }
      ],
      "plans": 100,
-     "electionsByMode": {},
+     "electionsByMode": {
+      "slate_bt": 1000,
+      "slate_pl": 1000
+     },
      "replicates": 10,
      "turnout": {
       "AAPI": 0.7,
@@ -3420,8 +3495,7 @@
      "data": {
       "run": "data/nine-seats-at-large/run.json",
       "focalSeats": "data/nine-seats-at-large/focal_seats.json",
-      "slateSeats": "data/nine-seats-at-large/slate_seats.json",
-      "availability": "data/nine-seats-at-large/availability.json"
+      "slateSeats": "data/nine-seats-at-large/slate_seats.json"
      }
     },
     {
@@ -3436,7 +3510,7 @@
      "winners": 15,
      "seats": 15,
      "shape": "1 \u00d7 15",
-     "seatMax": 6,
+     "seatMax": 10,
      "seatTicks": [
       0,
       1,
@@ -3444,7 +3518,11 @@
       3,
       4,
       5,
-      6
+      6,
+      7,
+      8,
+      9,
+      10
      ],
      "voterModels": [
       {
@@ -3464,7 +3542,10 @@
       }
      ],
      "plans": 100,
-     "electionsByMode": {},
+     "electionsByMode": {
+      "slate_bt": 1000,
+      "slate_pl": 1000
+     },
      "replicates": 10,
      "turnout": {
       "AAPI": 0.7,
@@ -3592,9 +3673,9 @@
      "plans": 100,
      "electionsPerSystem": 45000,
      "electionsByMode": {
-      "cambridge": 15000,
-      "slate_bt": 15000,
-      "slate_pl": 15000
+      "cambridge": 1000,
+      "slate_bt": 1000,
+      "slate_pl": 1000
      }
     }
    ],
@@ -3617,20 +3698,19 @@
    "data": {
     "run": "data/alternative-electoral-systems-2-blocs/run.json",
     "focalSeats": "data/alternative-electoral-systems-2-blocs/focal_seats.json",
-    "slateSeats": "data/alternative-electoral-systems-2-blocs/slate_seats.json",
-    "availability": "data/alternative-electoral-systems-2-blocs/availability.json"
+    "slateSeats": "data/alternative-electoral-systems-2-blocs/slate_seats.json"
    }
   },
   {
    "slug": "city-charter-amendment-proposal",
    "name": "City Charter Amendment Proposal",
-   "focalGroup": "BLK",
-   "focalGroupLabel": "BLK",
+   "focalGroup": "AAPI",
+   "focalGroupLabel": "AAPI",
    "totalSeats": 15,
-   "seatMax": 5,
-   "focalVapShare": 0.07109494643525345,
-   "proportionalSeats": 1.0664241965288017,
-   "proportionalLabel": "BLK share of VAP: 7.1% (1.1 seats)",
+   "seatMax": 10,
+   "focalVapShare": 0.20432553215884638,
+   "proportionalSeats": 3.064882982382696,
+   "proportionalLabel": "AAPI share of VAP: 20.4% (3.1 seats)",
    "districtConfigs": [
     {
      "numDistricts": 0,
@@ -3644,7 +3724,8 @@
      "candidatePoolMax": null,
      "candidatePoolMean": null,
      "plans": 50,
-     "electionsPerSystem": 12500
+     "electionsPerSystem": 12500,
+     "electionsByMode": {}
     },
     {
      "numDistricts": 1,
@@ -3658,7 +3739,11 @@
      "candidatePoolMax": 15,
      "candidatePoolMean": 12,
      "plans": 50,
-     "electionsPerSystem": 12500
+     "electionsPerSystem": 12500,
+     "electionsByMode": {
+      "slate_bt": 1250,
+      "slate_pl": 1250
+     }
     },
     {
      "numDistricts": 9,
@@ -3672,7 +3757,11 @@
      "candidatePoolMax": 10,
      "candidatePoolMean": 7,
      "plans": 50,
-     "electionsPerSystem": 12500
+     "electionsPerSystem": 12500,
+     "electionsByMode": {
+      "slate_bt": 1250,
+      "slate_pl": 1250
+     }
     }
    ],
    "slates": [
@@ -3803,8 +3892,7 @@
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs/focal_seats.json",
-      "slateSeats": "data/city-charter-amendment-proposal-2-blocs/slate_seats.json",
-      "availability": "data/city-charter-amendment-proposal-2-blocs/availability.json"
+      "slateSeats": "data/city-charter-amendment-proposal-2-blocs/slate_seats.json"
      }
     },
     {
@@ -3854,9 +3942,9 @@
      ],
      "plans": 50,
      "electionsByMode": {
-      "cambridge": 11250,
-      "slate_bt": 11250,
-      "slate_pl": 11250
+      "cambridge": 1250,
+      "slate_bt": 1250,
+      "slate_pl": 1250
      },
      "replicates": 25,
      "turnout": {
@@ -3902,8 +3990,7 @@
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs/focal_seats.json",
-      "slateSeats": "data/city-charter-amendment-proposal-2-blocs/slate_seats.json",
-      "availability": "data/city-charter-amendment-proposal-2-blocs/availability.json"
+      "slateSeats": "data/city-charter-amendment-proposal-2-blocs/slate_seats.json"
      }
     },
     {
@@ -4001,8 +4088,7 @@
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs/focal_seats.json",
-      "slateSeats": "data/city-charter-amendment-proposal-2-blocs/slate_seats.json",
-      "availability": "data/city-charter-amendment-proposal-2-blocs/availability.json"
+      "slateSeats": "data/city-charter-amendment-proposal-2-blocs/slate_seats.json"
      }
     },
     {
@@ -4017,14 +4103,19 @@
      "winners": 15,
      "seats": 15,
      "shape": "0 \u00d7 15",
-     "seatMax": 5,
+     "seatMax": 10,
      "seatTicks": [
       0,
       1,
       2,
       3,
       4,
-      5
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
      ],
      "voterModels": [
       {
@@ -4149,14 +4240,19 @@
      "winners": 1,
      "seats": 9,
      "shape": "9 \u00d7 1",
-     "seatMax": 5,
+     "seatMax": 10,
      "seatTicks": [
       0,
       1,
       2,
       3,
       4,
-      5
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
      ],
      "voterModels": [
       {
@@ -4176,7 +4272,10 @@
       }
      ],
      "plans": 50,
-     "electionsByMode": {},
+     "electionsByMode": {
+      "slate_bt": 1250,
+      "slate_pl": 1250
+     },
      "replicates": 25,
      "turnout": {
       "AAPI": 0.7,
@@ -4281,14 +4380,19 @@
      "winners": 6,
      "seats": 6,
      "shape": "1 \u00d7 6",
-     "seatMax": 5,
+     "seatMax": 10,
      "seatTicks": [
       0,
       1,
       2,
       3,
       4,
-      5
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
      ],
      "voterModels": [
       {
@@ -4308,7 +4412,10 @@
       }
      ],
      "plans": 50,
-     "electionsByMode": {},
+     "electionsByMode": {
+      "slate_bt": 1250,
+      "slate_pl": 1250
+     },
      "replicates": 25,
      "turnout": {
       "AAPI": 0.7,
@@ -4462,9 +4569,9 @@
      "plans": 50,
      "electionsPerSystem": 18750,
      "electionsByMode": {
-      "cambridge": 11250,
-      "slate_bt": 11250,
-      "slate_pl": 11250
+      "cambridge": 1250,
+      "slate_bt": 1250,
+      "slate_pl": 1250
      }
     }
    ],
@@ -4487,8 +4594,7 @@
    "data": {
     "run": "data/city-charter-amendment-proposal-2-blocs/run.json",
     "focalSeats": "data/city-charter-amendment-proposal-2-blocs/focal_seats.json",
-    "slateSeats": "data/city-charter-amendment-proposal-2-blocs/slate_seats.json",
-    "availability": "data/city-charter-amendment-proposal-2-blocs/availability.json"
+    "slateSeats": "data/city-charter-amendment-proposal-2-blocs/slate_seats.json"
    }
   },
   {
@@ -4550,9 +4656,9 @@
      "plans": 50,
      "electionsPerSystem": 18750,
      "electionsByMode": {
-      "cambridge": 11250,
-      "slate_bt": 11250,
-      "slate_pl": 11250
+      "cambridge": 1250,
+      "slate_bt": 1250,
+      "slate_pl": 1250
      }
     }
    ],
@@ -4575,8 +4681,7 @@
    "data": {
     "run": "data/city-charter-amendment-proposal-2-blocs-truncation/run.json",
     "focalSeats": "data/city-charter-amendment-proposal-2-blocs-truncation/focal_seats.json",
-    "slateSeats": "data/city-charter-amendment-proposal-2-blocs-truncation/slate_seats.json",
-    "availability": "data/city-charter-amendment-proposal-2-blocs-truncation/availability.json"
+    "slateSeats": "data/city-charter-amendment-proposal-2-blocs-truncation/slate_seats.json"
    }
   },
   {
@@ -4637,8 +4742,8 @@
      "plans": 50,
      "electionsPerSystem": 12500,
      "electionsByMode": {
-      "slate_bt": 11250,
-      "slate_pl": 11250
+      "slate_bt": 1250,
+      "slate_pl": 1250
      }
     }
    ],
@@ -4675,8 +4780,7 @@
    "data": {
     "run": "data/city-charter-amendment-proposal-truncation/run.json",
     "focalSeats": "data/city-charter-amendment-proposal-truncation/focal_seats.json",
-    "slateSeats": "data/city-charter-amendment-proposal-truncation/slate_seats.json",
-    "availability": "data/city-charter-amendment-proposal-truncation/availability.json"
+    "slateSeats": "data/city-charter-amendment-proposal-truncation/slate_seats.json"
    },
    "composition": [
     {
@@ -4770,8 +4874,7 @@
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs-truncation/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs-truncation/focal_seats.json",
-      "slateSeats": "data/city-charter-amendment-proposal-2-blocs-truncation/slate_seats.json",
-      "availability": "data/city-charter-amendment-proposal-2-blocs-truncation/availability.json"
+      "slateSeats": "data/city-charter-amendment-proposal-2-blocs-truncation/slate_seats.json"
      }
     },
     {
@@ -4821,9 +4924,9 @@
      ],
      "plans": 50,
      "electionsByMode": {
-      "cambridge": 11250,
-      "slate_bt": 11250,
-      "slate_pl": 11250
+      "cambridge": 1250,
+      "slate_bt": 1250,
+      "slate_pl": 1250
      },
      "replicates": 25,
      "turnout": {
@@ -4869,8 +4972,7 @@
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs-truncation/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs-truncation/focal_seats.json",
-      "slateSeats": "data/city-charter-amendment-proposal-2-blocs-truncation/slate_seats.json",
-      "availability": "data/city-charter-amendment-proposal-2-blocs-truncation/availability.json"
+      "slateSeats": "data/city-charter-amendment-proposal-2-blocs-truncation/slate_seats.json"
      }
     },
     {
@@ -4968,8 +5070,7 @@
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs-truncation/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs-truncation/focal_seats.json",
-      "slateSeats": "data/city-charter-amendment-proposal-2-blocs-truncation/slate_seats.json",
-      "availability": "data/city-charter-amendment-proposal-2-blocs-truncation/availability.json"
+      "slateSeats": "data/city-charter-amendment-proposal-2-blocs-truncation/slate_seats.json"
      }
     },
     {
@@ -5101,8 +5202,7 @@
      "data": {
       "run": "data/city-charter-amendment-proposal-truncation/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-truncation/focal_seats.json",
-      "slateSeats": "data/city-charter-amendment-proposal-truncation/slate_seats.json",
-      "availability": "data/city-charter-amendment-proposal-truncation/availability.json"
+      "slateSeats": "data/city-charter-amendment-proposal-truncation/slate_seats.json"
      }
     },
     {
@@ -5146,8 +5246,8 @@
      ],
      "plans": 50,
      "electionsByMode": {
-      "slate_bt": 11250,
-      "slate_pl": 11250
+      "slate_bt": 1250,
+      "slate_pl": 1250
      },
      "replicates": 25,
      "turnout": {
@@ -5237,8 +5337,7 @@
      "data": {
       "run": "data/city-charter-amendment-proposal-truncation/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-truncation/focal_seats.json",
-      "slateSeats": "data/city-charter-amendment-proposal-truncation/slate_seats.json",
-      "availability": "data/city-charter-amendment-proposal-truncation/availability.json"
+      "slateSeats": "data/city-charter-amendment-proposal-truncation/slate_seats.json"
      }
     },
     {
@@ -5373,8 +5472,7 @@
      "data": {
       "run": "data/city-charter-amendment-proposal-truncation/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-truncation/focal_seats.json",
-      "slateSeats": "data/city-charter-amendment-proposal-truncation/slate_seats.json",
-      "availability": "data/city-charter-amendment-proposal-truncation/availability.json"
+      "slateSeats": "data/city-charter-amendment-proposal-truncation/slate_seats.json"
      }
     }
    ]
@@ -5437,8 +5535,8 @@
      "plans": 50,
      "electionsPerSystem": 12500,
      "electionsByMode": {
-      "slate_bt": 11250,
-      "slate_pl": 11250
+      "slate_bt": 1250,
+      "slate_pl": 1250
      }
     }
    ],
@@ -5475,8 +5573,7 @@
    "data": {
     "run": "data/city-charter-amendment-proposal-waio-low-polarization/run.json",
     "focalSeats": "data/city-charter-amendment-proposal-waio-low-polarization/focal_seats.json",
-    "slateSeats": "data/city-charter-amendment-proposal-waio-low-polarization/slate_seats.json",
-    "availability": "data/city-charter-amendment-proposal-waio-low-polarization/availability.json"
+    "slateSeats": "data/city-charter-amendment-proposal-waio-low-polarization/slate_seats.json"
    },
    "composition": [
     {
@@ -5570,8 +5667,7 @@
      "data": {
       "run": "data/city-charter-amendment-proposal-waio-low-polarization-2-blocs/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-waio-low-polarization-2-blocs/focal_seats.json",
-      "slateSeats": "data/city-charter-amendment-proposal-waio-low-polarization-2-blocs/slate_seats.json",
-      "availability": "data/city-charter-amendment-proposal-waio-low-polarization-2-blocs/availability.json"
+      "slateSeats": "data/city-charter-amendment-proposal-waio-low-polarization-2-blocs/slate_seats.json"
      }
     },
     {
@@ -5621,9 +5717,9 @@
      ],
      "plans": 50,
      "electionsByMode": {
-      "cambridge": 11250,
-      "slate_bt": 11250,
-      "slate_pl": 11250
+      "cambridge": 1250,
+      "slate_bt": 1250,
+      "slate_pl": 1250
      },
      "replicates": 25,
      "turnout": {
@@ -5669,8 +5765,7 @@
      "data": {
       "run": "data/city-charter-amendment-proposal-waio-low-polarization-2-blocs/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-waio-low-polarization-2-blocs/focal_seats.json",
-      "slateSeats": "data/city-charter-amendment-proposal-waio-low-polarization-2-blocs/slate_seats.json",
-      "availability": "data/city-charter-amendment-proposal-waio-low-polarization-2-blocs/availability.json"
+      "slateSeats": "data/city-charter-amendment-proposal-waio-low-polarization-2-blocs/slate_seats.json"
      }
     },
     {
@@ -5768,8 +5863,7 @@
      "data": {
       "run": "data/city-charter-amendment-proposal-waio-low-polarization-2-blocs/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-waio-low-polarization-2-blocs/focal_seats.json",
-      "slateSeats": "data/city-charter-amendment-proposal-waio-low-polarization-2-blocs/slate_seats.json",
-      "availability": "data/city-charter-amendment-proposal-waio-low-polarization-2-blocs/availability.json"
+      "slateSeats": "data/city-charter-amendment-proposal-waio-low-polarization-2-blocs/slate_seats.json"
      }
     },
     {
@@ -5901,8 +5995,7 @@
      "data": {
       "run": "data/city-charter-amendment-proposal-waio-low-polarization/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-waio-low-polarization/focal_seats.json",
-      "slateSeats": "data/city-charter-amendment-proposal-waio-low-polarization/slate_seats.json",
-      "availability": "data/city-charter-amendment-proposal-waio-low-polarization/availability.json"
+      "slateSeats": "data/city-charter-amendment-proposal-waio-low-polarization/slate_seats.json"
      }
     },
     {
@@ -5946,8 +6039,8 @@
      ],
      "plans": 50,
      "electionsByMode": {
-      "slate_bt": 11250,
-      "slate_pl": 11250
+      "slate_bt": 1250,
+      "slate_pl": 1250
      },
      "replicates": 25,
      "turnout": {
@@ -6037,8 +6130,7 @@
      "data": {
       "run": "data/city-charter-amendment-proposal-waio-low-polarization/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-waio-low-polarization/focal_seats.json",
-      "slateSeats": "data/city-charter-amendment-proposal-waio-low-polarization/slate_seats.json",
-      "availability": "data/city-charter-amendment-proposal-waio-low-polarization/availability.json"
+      "slateSeats": "data/city-charter-amendment-proposal-waio-low-polarization/slate_seats.json"
      }
     },
     {
@@ -6173,8 +6265,7 @@
      "data": {
       "run": "data/city-charter-amendment-proposal-waio-low-polarization/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-waio-low-polarization/focal_seats.json",
-      "slateSeats": "data/city-charter-amendment-proposal-waio-low-polarization/slate_seats.json",
-      "availability": "data/city-charter-amendment-proposal-waio-low-polarization/availability.json"
+      "slateSeats": "data/city-charter-amendment-proposal-waio-low-polarization/slate_seats.json"
      }
     }
    ]
@@ -6238,9 +6329,9 @@
      "plans": 50,
      "electionsPerSystem": 18750,
      "electionsByMode": {
-      "cambridge": 11250,
-      "slate_bt": 11250,
-      "slate_pl": 11250
+      "cambridge": 1250,
+      "slate_bt": 1250,
+      "slate_pl": 1250
      }
     }
    ],
@@ -6263,20 +6354,130 @@
    "data": {
     "run": "data/city-charter-amendment-proposal-waio-low-polarization-2-blocs/run.json",
     "focalSeats": "data/city-charter-amendment-proposal-waio-low-polarization-2-blocs/focal_seats.json",
-    "slateSeats": "data/city-charter-amendment-proposal-waio-low-polarization-2-blocs/slate_seats.json",
-    "availability": "data/city-charter-amendment-proposal-waio-low-polarization-2-blocs/availability.json"
+    "slateSeats": "data/city-charter-amendment-proposal-waio-low-polarization-2-blocs/slate_seats.json"
+   }
+  },
+  {
+   "slug": "diverse-aapi-coalition-preferences",
+   "name": "Diverse AAPI Coalition Preferences",
+   "focalGroup": "AAPI",
+   "focalGroupLabel": "AAPI",
+   "totalSeats": 9,
+   "seatMax": 6,
+   "focalVapShare": 0.20432553215884638,
+   "proportionalSeats": 1.8389297894296175,
+   "proportionalLabel": "AAPI share of VAP: 20.4% (1.8 seats)",
+   "districtConfigs": [
+    {
+     "numDistricts": 3,
+     "winners": 3,
+     "systems": [
+      {
+       "id": "FASTSTV",
+       "label": "3 X 3 STV"
+      }
+     ],
+     "candidatePoolMax": 10,
+     "candidatePoolMean": 7,
+     "plans": 100,
+     "electionsPerSystem": 6000
+    }
+   ],
+   "slates": [
+    {
+     "id": "WHI",
+     "label": "WHI",
+     "vapShare": 0.4380194598284399,
+     "proportionalSeats": 3.9421751384559593,
+     "proportionalLabel": "WHI share of VAP: 43.8% (3.9 seats)"
+    },
+    {
+     "id": "BAIO",
+     "label": "BAIO",
+     "vapShare": 0.0919164473502938,
+     "proportionalSeats": 0.8272480261526443,
+     "proportionalLabel": "BAIO share of VAP: 9.2% (0.8 seats)"
+    },
+    {
+     "id": "HIS",
+     "label": "HIS",
+     "vapShare": 0.2657385606624199,
+     "proportionalSeats": 2.391647045961779,
+     "proportionalLabel": "HIS share of VAP: 26.6% (2.4 seats)"
+    },
+    {
+     "id": "AAPI",
+     "label": "AAPI",
+     "vapShare": 0.20432553215884638,
+     "proportionalSeats": 1.8389297894296175,
+     "proportionalLabel": "AAPI share of VAP: 20.4% (1.8 seats)"
+    }
+   ],
+   "data": {
+    "run": "data/diverse-aapi-coalition-preferences/run.json",
+    "focalSeats": "data/diverse-aapi-coalition-preferences/focal_seats.json",
+    "slateSeats": "data/diverse-aapi-coalition-preferences/slate_seats.json",
+    "availability": "data/diverse-aapi-coalition-preferences/availability.json"
+   }
+  },
+  {
+   "slug": "diverse-poc-coalition-preferences-2-blocs",
+   "name": "Diverse POC Coalition Preferences (2 Blocs)",
+   "focalGroup": "WHI",
+   "focalGroupLabel": "WHI",
+   "totalSeats": 9,
+   "seatMax": 9,
+   "focalVapShare": 0.4588409607434803,
+   "proportionalSeats": 4.129568646691323,
+   "proportionalLabel": "WHI share of VAP: 45.9% (4.1 seats)",
+   "districtConfigs": [
+    {
+     "numDistricts": 3,
+     "winners": 3,
+     "systems": [
+      {
+       "id": "FASTSTV",
+       "label": "3 X 3 STV"
+      }
+     ],
+     "candidatePoolMax": 10,
+     "candidatePoolMean": 7,
+     "plans": 100,
+     "electionsPerSystem": 8680
+    }
+   ],
+   "slates": [
+    {
+     "id": "WHI",
+     "label": "WHI",
+     "vapShare": 0.4588409607434803,
+     "proportionalSeats": 4.129568646691323,
+     "proportionalLabel": "WHI share of VAP: 45.9% (4.1 seats)"
+    },
+    {
+     "id": "POC",
+     "label": "POC",
+     "vapShare": 0.5411590392565198,
+     "proportionalSeats": 4.870431353308678,
+     "proportionalLabel": "POC share of VAP: 54.1% (4.9 seats)"
+    }
+   ],
+   "data": {
+    "run": "data/diverse-poc-coalition-preferences-2-blocs/run.json",
+    "focalSeats": "data/diverse-poc-coalition-preferences-2-blocs/focal_seats.json",
+    "slateSeats": "data/diverse-poc-coalition-preferences-2-blocs/slate_seats.json"
    }
   },
   {
    "slug": "fifteen-seats-at-large-stv",
    "name": "Fifteen Seats At-Large - STV",
-   "focalGroup": "BLK",
-   "focalGroupLabel": "BLK",
+   "focalGroup": "AAPI",
+   "focalGroupLabel": "AAPI",
    "totalSeats": 15,
-   "seatMax": 6,
-   "focalVapShare": 0.07109494643525345,
-   "proportionalSeats": 1.0664241965288017,
-   "proportionalLabel": "BLK share of VAP: 7.1% (1.1 seats)",
+   "seatMax": 10,
+   "focalVapShare": 0.20432553215884638,
+   "proportionalSeats": 3.064882982382696,
+   "proportionalLabel": "AAPI share of VAP: 20.4% (3.1 seats)",
    "districtConfigs": [
     {
      "numDistricts": 1,
@@ -6290,7 +6491,11 @@
      "candidatePoolMax": 25,
      "candidatePoolMean": 22,
      "plans": 100,
-     "electionsPerSystem": 2000
+     "electionsPerSystem": 2000,
+     "electionsByMode": {
+      "slate_bt": 1000,
+      "slate_pl": 1000
+     }
     }
    ],
    "slates": [
@@ -6380,20 +6585,332 @@
    "data": {
     "run": "data/fifteen-seats-at-large-stv-2-blocs/run.json",
     "focalSeats": "data/fifteen-seats-at-large-stv-2-blocs/focal_seats.json",
-    "slateSeats": "data/fifteen-seats-at-large-stv-2-blocs/slate_seats.json",
-    "availability": "data/fifteen-seats-at-large-stv-2-blocs/availability.json"
+    "slateSeats": "data/fifteen-seats-at-large-stv-2-blocs/slate_seats.json"
+   }
+  },
+  {
+   "slug": "hybrid-system-3x4-stv-1x3-plurality",
+   "name": "Hybrid System - 3x4 STV + 1x3 Plurality",
+   "focalGroup": "BAIO",
+   "focalGroupLabel": "BAIO",
+   "totalSeats": 15,
+   "seatMax": 6,
+   "focalVapShare": 0.20432553215884638,
+   "proportionalSeats": 3.064882982382696,
+   "proportionalLabel": "BAIO share of VAP: 20.4% (3.1 seats)",
+   "districtConfigs": [
+    {
+     "numDistricts": 0,
+     "winners": 15,
+     "systems": [
+      {
+       "id": "Combined",
+       "label": "Combined (15 seats)"
+      }
+     ],
+     "candidatePoolMax": null,
+     "candidatePoolMean": null,
+     "plans": 100,
+     "electionsPerSystem": 4000
+    },
+    {
+     "numDistricts": 1,
+     "winners": 3,
+     "systems": [
+      {
+       "id": "PLURALITY",
+       "label": "1 X 3 Plurality"
+      }
+     ],
+     "candidatePoolMax": 15,
+     "candidatePoolMean": 10,
+     "plans": 100,
+     "electionsPerSystem": 4000
+    },
+    {
+     "numDistricts": 3,
+     "winners": 4,
+     "systems": [
+      {
+       "id": "FASTSTV",
+       "label": "3 X 4 STV"
+      }
+     ],
+     "candidatePoolMax": 10,
+     "candidatePoolMean": 7,
+     "plans": 100,
+     "electionsPerSystem": 4000
+    }
+   ],
+   "slates": [
+    {
+     "id": "WHI",
+     "label": "WHI",
+     "vapShare": 0.4380194598284399,
+     "proportionalSeats": 6.570291897426599,
+     "proportionalLabel": "WHI share of VAP: 43.8% (6.6 seats)"
+    },
+    {
+     "id": "BAIO",
+     "label": "BAIO",
+     "vapShare": 0.0919164473502938,
+     "proportionalSeats": 1.378746710254407,
+     "proportionalLabel": "BAIO share of VAP: 9.2% (1.4 seats)"
+    },
+    {
+     "id": "HIS",
+     "label": "HIS",
+     "vapShare": 0.2657385606624199,
+     "proportionalSeats": 3.9860784099362987,
+     "proportionalLabel": "HIS share of VAP: 26.6% (4.0 seats)"
+    },
+    {
+     "id": "AAPI",
+     "label": "AAPI",
+     "vapShare": 0.20432553215884638,
+     "proportionalSeats": 3.064882982382696,
+     "proportionalLabel": "AAPI share of VAP: 20.4% (3.1 seats)"
+    }
+   ],
+   "data": {
+    "run": "data/hybrid-system-3x4-stv-1x3-plurality/run.json",
+    "focalSeats": "data/hybrid-system-3x4-stv-1x3-plurality/focal_seats.json",
+    "slateSeats": "data/hybrid-system-3x4-stv-1x3-plurality/slate_seats.json",
+    "availability": "data/hybrid-system-3x4-stv-1x3-plurality/availability.json"
+   }
+  },
+  {
+   "slug": "low-aapi-availability",
+   "name": "Low AAPI Availability",
+   "focalGroup": "AAPI",
+   "focalGroupLabel": "AAPI",
+   "totalSeats": 9,
+   "seatMax": 5,
+   "focalVapShare": 0.20432553215884638,
+   "proportionalSeats": 1.8389297894296175,
+   "proportionalLabel": "AAPI share of VAP: 20.4% (1.8 seats)",
+   "districtConfigs": [
+    {
+     "numDistricts": 3,
+     "winners": 3,
+     "systems": [
+      {
+       "id": "FASTSTV",
+       "label": "3 X 3 STV"
+      }
+     ],
+     "candidatePoolMax": 10,
+     "candidatePoolMean": 7,
+     "plans": 100,
+     "electionsPerSystem": 6000
+    }
+   ],
+   "slates": [
+    {
+     "id": "WHI",
+     "label": "WHI",
+     "vapShare": 0.4380194598284399,
+     "proportionalSeats": 3.9421751384559593,
+     "proportionalLabel": "WHI share of VAP: 43.8% (3.9 seats)"
+    },
+    {
+     "id": "BAIO",
+     "label": "BAIO",
+     "vapShare": 0.0919164473502938,
+     "proportionalSeats": 0.8272480261526443,
+     "proportionalLabel": "BAIO share of VAP: 9.2% (0.8 seats)"
+    },
+    {
+     "id": "HIS",
+     "label": "HIS",
+     "vapShare": 0.2657385606624199,
+     "proportionalSeats": 2.391647045961779,
+     "proportionalLabel": "HIS share of VAP: 26.6% (2.4 seats)"
+    },
+    {
+     "id": "AAPI",
+     "label": "AAPI",
+     "vapShare": 0.20432553215884638,
+     "proportionalSeats": 1.8389297894296175,
+     "proportionalLabel": "AAPI share of VAP: 20.4% (1.8 seats)"
+    }
+   ],
+   "data": {
+    "run": "data/low-aapi-availability/run.json",
+    "focalSeats": "data/low-aapi-availability/focal_seats.json",
+    "slateSeats": "data/low-aapi-availability/slate_seats.json",
+    "availability": "data/low-aapi-availability/availability.json"
+   }
+  },
+  {
+   "slug": "low-aapi-turnout",
+   "name": "Low AAPI Turnout",
+   "focalGroup": "AAPI",
+   "focalGroupLabel": "AAPI",
+   "totalSeats": 9,
+   "seatMax": 7,
+   "focalVapShare": 0.20432553215884638,
+   "proportionalSeats": 1.8389297894296175,
+   "proportionalLabel": "AAPI share of VAP: 20.4% (1.8 seats)",
+   "districtConfigs": [
+    {
+     "numDistricts": 3,
+     "winners": 3,
+     "systems": [
+      {
+       "id": "FASTSTV",
+       "label": "3 X 3 STV"
+      }
+     ],
+     "candidatePoolMax": 10,
+     "candidatePoolMean": 7,
+     "plans": 100,
+     "electionsPerSystem": 6000
+    }
+   ],
+   "slates": [
+    {
+     "id": "WHI",
+     "label": "WHI",
+     "vapShare": 0.4380194598284399,
+     "proportionalSeats": 3.9421751384559593,
+     "proportionalLabel": "WHI share of VAP: 43.8% (3.9 seats)"
+    },
+    {
+     "id": "BAIO",
+     "label": "BAIO",
+     "vapShare": 0.0919164473502938,
+     "proportionalSeats": 0.8272480261526443,
+     "proportionalLabel": "BAIO share of VAP: 9.2% (0.8 seats)"
+    },
+    {
+     "id": "HIS",
+     "label": "HIS",
+     "vapShare": 0.2657385606624199,
+     "proportionalSeats": 2.391647045961779,
+     "proportionalLabel": "HIS share of VAP: 26.6% (2.4 seats)"
+    },
+    {
+     "id": "AAPI",
+     "label": "AAPI",
+     "vapShare": 0.20432553215884638,
+     "proportionalSeats": 1.8389297894296175,
+     "proportionalLabel": "AAPI share of VAP: 20.4% (1.8 seats)"
+    }
+   ],
+   "data": {
+    "run": "data/low-aapi-turnout/run.json",
+    "focalSeats": "data/low-aapi-turnout/focal_seats.json",
+    "slateSeats": "data/low-aapi-turnout/slate_seats.json",
+    "availability": "data/low-aapi-turnout/availability.json"
+   }
+  },
+  {
+   "slug": "low-poc-availability-2-blocs",
+   "name": "Low POC Availability (2 Blocs)",
+   "focalGroup": "WHI",
+   "focalGroupLabel": "WHI",
+   "totalSeats": 9,
+   "seatMax": 9,
+   "focalVapShare": 0.4588409607434803,
+   "proportionalSeats": 4.129568646691323,
+   "proportionalLabel": "WHI share of VAP: 45.9% (4.1 seats)",
+   "districtConfigs": [
+    {
+     "numDistricts": 3,
+     "winners": 3,
+     "systems": [
+      {
+       "id": "FASTSTV",
+       "label": "3 X 3 STV"
+      }
+     ],
+     "candidatePoolMax": 10,
+     "candidatePoolMean": 7,
+     "plans": 100,
+     "electionsPerSystem": 8460
+    }
+   ],
+   "slates": [
+    {
+     "id": "WHI",
+     "label": "WHI",
+     "vapShare": 0.4588409607434803,
+     "proportionalSeats": 4.129568646691323,
+     "proportionalLabel": "WHI share of VAP: 45.9% (4.1 seats)"
+    },
+    {
+     "id": "POC",
+     "label": "POC",
+     "vapShare": 0.5411590392565198,
+     "proportionalSeats": 4.870431353308678,
+     "proportionalLabel": "POC share of VAP: 54.1% (4.9 seats)"
+    }
+   ],
+   "data": {
+    "run": "data/low-poc-availability-2-blocs/run.json",
+    "focalSeats": "data/low-poc-availability-2-blocs/focal_seats.json",
+    "slateSeats": "data/low-poc-availability-2-blocs/slate_seats.json"
+   }
+  },
+  {
+   "slug": "low-poc-turnout-2-blocs",
+   "name": "Low POC Turnout (2 Blocs)",
+   "focalGroup": "WHI",
+   "focalGroupLabel": "WHI",
+   "totalSeats": 9,
+   "seatMax": 9,
+   "focalVapShare": 0.4588409607434803,
+   "proportionalSeats": 4.129568646691323,
+   "proportionalLabel": "WHI share of VAP: 45.9% (4.1 seats)",
+   "districtConfigs": [
+    {
+     "numDistricts": 3,
+     "winners": 3,
+     "systems": [
+      {
+       "id": "FASTSTV",
+       "label": "3 X 3 STV"
+      }
+     ],
+     "candidatePoolMax": 10,
+     "candidatePoolMean": 7,
+     "plans": 100,
+     "electionsPerSystem": 8570
+    }
+   ],
+   "slates": [
+    {
+     "id": "WHI",
+     "label": "WHI",
+     "vapShare": 0.4588409607434803,
+     "proportionalSeats": 4.129568646691323,
+     "proportionalLabel": "WHI share of VAP: 45.9% (4.1 seats)"
+    },
+    {
+     "id": "POC",
+     "label": "POC",
+     "vapShare": 0.5411590392565198,
+     "proportionalSeats": 4.870431353308678,
+     "proportionalLabel": "POC share of VAP: 54.1% (4.9 seats)"
+    }
+   ],
+   "data": {
+    "run": "data/low-poc-turnout-2-blocs/run.json",
+    "focalSeats": "data/low-poc-turnout-2-blocs/focal_seats.json",
+    "slateSeats": "data/low-poc-turnout-2-blocs/slate_seats.json"
    }
   },
   {
    "slug": "nine-seats-at-large",
    "name": "Nine Seats At-Large",
-   "focalGroup": "BLK",
-   "focalGroupLabel": "BLK",
+   "focalGroup": "AAPI",
+   "focalGroupLabel": "AAPI",
    "totalSeats": 9,
-   "seatMax": 5,
-   "focalVapShare": 0.07109494643525345,
-   "proportionalSeats": 0.6398545179172811,
-   "proportionalLabel": "BLK share of VAP: 7.1% (0.6 seats)",
+   "seatMax": 6,
+   "focalVapShare": 0.20432553215884638,
+   "proportionalSeats": 1.8389297894296175,
+   "proportionalLabel": "AAPI share of VAP: 20.4% (1.8 seats)",
    "districtConfigs": [
     {
      "numDistricts": 1,
@@ -6402,20 +6919,16 @@
       {
        "id": "FASTSTV",
        "label": "1 X 9 STV"
-      },
-      {
-       "id": "CUMULATIVE",
-       "label": "1 X 9 Cumulative"
-      },
-      {
-       "id": "LIMITED",
-       "label": "1 X 9 Limited"
       }
      ],
      "candidatePoolMax": 15,
      "candidatePoolMean": 12,
      "plans": 100,
-     "electionsPerSystem": 1333
+     "electionsPerSystem": 2000,
+     "electionsByMode": {
+      "slate_bt": 1000,
+      "slate_pl": 1000
+     }
     }
    ],
    "slates": [
@@ -6451,8 +6964,7 @@
    "data": {
     "run": "data/nine-seats-at-large/run.json",
     "focalSeats": "data/nine-seats-at-large/focal_seats.json",
-    "slateSeats": "data/nine-seats-at-large/slate_seats.json",
-    "availability": "data/nine-seats-at-large/availability.json"
+    "slateSeats": "data/nine-seats-at-large/slate_seats.json"
    }
   },
   {
@@ -6473,23 +6985,14 @@
       {
        "id": "FASTSTV",
        "label": "1 X 9 STV"
-      },
-      {
-       "id": "CUMULATIVE",
-       "label": "1 X 9 Cumulative"
-      },
-      {
-       "id": "LIMITED",
-       "label": "1 X 9 Limited"
       }
      ],
      "candidatePoolMax": 15,
      "candidatePoolMean": 12,
      "plans": 100,
-     "electionsPerSystem": 1666,
+     "electionsPerSystem": 3000,
      "electionsByMode": {
       "cambridge": 1000,
-      "name_cumulative": 1000,
       "slate_bt": 1000,
       "slate_pl": 1000
      }
@@ -6514,8 +7017,7 @@
    "data": {
     "run": "data/nine-seats-at-large-stv-2-blocs/run.json",
     "focalSeats": "data/nine-seats-at-large-stv-2-blocs/focal_seats.json",
-    "slateSeats": "data/nine-seats-at-large-stv-2-blocs/slate_seats.json",
-    "availability": "data/nine-seats-at-large-stv-2-blocs/availability.json"
+    "slateSeats": "data/nine-seats-at-large-stv-2-blocs/slate_seats.json"
    }
   }
  ],
@@ -6541,7 +7043,7 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 0,
-     "plans": 59.666666666666664
+     "plans": 89.5
     },
     {
      "system": "FASTSTV",
@@ -6555,7 +7057,7 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 1,
-     "plans": 444.0
+     "plans": 666.0
     },
     {
      "system": "FASTSTV",
@@ -6569,7 +7071,7 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 2,
-     "plans": 148.0
+     "plans": 222.0
     },
     {
      "system": "FASTSTV",
@@ -6583,7 +7085,7 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 3,
-     "plans": 15.0
+     "plans": 22.5
     },
     {
      "system": "FASTSTV",
@@ -6702,7 +7204,7 @@
      "slateLabel": "BLK",
      "slateVapShare": 0.07109494643525345,
      "seats": 0,
-     "plans": 628.0
+     "plans": 942.0
     },
     {
      "system": "FASTSTV",
@@ -6716,7 +7218,7 @@
      "slateLabel": "BLK",
      "slateVapShare": 0.07109494643525345,
      "seats": 1,
-     "plans": 38.666666666666664
+     "plans": 58.0
     },
     {
      "system": "FASTSTV",
@@ -6790,7 +7292,7 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 0,
-     "plans": 0.3333333333333333
+     "plans": 0.5
     },
     {
      "system": "FASTSTV",
@@ -6804,7 +7306,7 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 1,
-     "plans": 110.0
+     "plans": 165.0
     },
     {
      "system": "FASTSTV",
@@ -6818,7 +7320,7 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 2,
-     "plans": 440.0
+     "plans": 660.0
     },
     {
      "system": "FASTSTV",
@@ -6832,7 +7334,7 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 3,
-     "plans": 98.0
+     "plans": 147.0
     },
     {
      "system": "FASTSTV",
@@ -6846,7 +7348,7 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 4,
-     "plans": 18.333333333333332
+     "plans": 27.5
     },
     {
      "system": "FASTSTV",
@@ -6995,7 +7497,7 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 3,
-     "plans": 4.333333333333333
+     "plans": 6.5
     },
     {
      "system": "FASTSTV",
@@ -7009,7 +7511,7 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 4,
-     "plans": 35.0
+     "plans": 52.5
     },
     {
      "system": "FASTSTV",
@@ -7023,7 +7525,7 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 5,
-     "plans": 192.66666666666666
+     "plans": 289.0
     },
     {
      "system": "FASTSTV",
@@ -7037,7 +7539,7 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 6,
-     "plans": 344.0
+     "plans": 516.0
     },
     {
      "system": "FASTSTV",
@@ -7051,7 +7553,7 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 7,
-     "plans": 86.66666666666667
+     "plans": 130.0
     },
     {
      "system": "FASTSTV",
@@ -7065,7 +7567,7 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 8,
-     "plans": 4.0
+     "plans": 6.0
     },
     {
      "system": "FASTSTV",
@@ -9332,7 +9834,7 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 0,
-     "plans": 98.0
+     "plans": 147.0
     },
     {
      "system": "FASTSTV",
@@ -9346,7 +9848,7 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 1,
-     "plans": 371.3333333333333
+     "plans": 557.0
     },
     {
      "system": "FASTSTV",
@@ -9360,7 +9862,7 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 2,
-     "plans": 167.66666666666666
+     "plans": 251.5
     },
     {
      "system": "FASTSTV",
@@ -9374,7 +9876,7 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 3,
-     "plans": 29.666666666666668
+     "plans": 44.5
     },
     {
      "system": "FASTSTV",
@@ -9508,7 +10010,7 @@
      "slateLabel": "BLK",
      "slateVapShare": 0.07109494643525345,
      "seats": 0,
-     "plans": 515.3333333333334
+     "plans": 773.0
     },
     {
      "system": "FASTSTV",
@@ -9522,7 +10024,7 @@
      "slateLabel": "BLK",
      "slateVapShare": 0.07109494643525345,
      "seats": 1,
-     "plans": 138.66666666666666
+     "plans": 208.0
     },
     {
      "system": "FASTSTV",
@@ -9536,7 +10038,7 @@
      "slateLabel": "BLK",
      "slateVapShare": 0.07109494643525345,
      "seats": 2,
-     "plans": 12.666666666666666
+     "plans": 19.0
     },
     {
      "system": "FASTSTV",
@@ -9640,7 +10142,7 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 0,
-     "plans": 1.0
+     "plans": 1.5
     },
     {
      "system": "FASTSTV",
@@ -9654,7 +10156,7 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 1,
-     "plans": 102.33333333333333
+     "plans": 153.5
     },
     {
      "system": "FASTSTV",
@@ -9668,7 +10170,7 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 2,
-     "plans": 481.3333333333333
+     "plans": 722.0
     },
     {
      "system": "FASTSTV",
@@ -9682,7 +10184,7 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 3,
-     "plans": 73.0
+     "plans": 109.5
     },
     {
      "system": "FASTSTV",
@@ -9696,7 +10198,7 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 4,
-     "plans": 9.0
+     "plans": 13.5
     },
     {
      "system": "FASTSTV",
@@ -9845,7 +10347,7 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 3,
-     "plans": 4.666666666666667
+     "plans": 7.0
     },
     {
      "system": "FASTSTV",
@@ -9859,7 +10361,7 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 4,
-     "plans": 63.333333333333336
+     "plans": 95.0
     },
     {
      "system": "FASTSTV",
@@ -9873,7 +10375,7 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 5,
-     "plans": 231.0
+     "plans": 346.5
     },
     {
      "system": "FASTSTV",
@@ -9887,7 +10389,7 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 6,
-     "plans": 278.6666666666667
+     "plans": 418.0
     },
     {
      "system": "FASTSTV",
@@ -9901,7 +10403,7 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 7,
-     "plans": 86.0
+     "plans": 129.0
     },
     {
      "system": "FASTSTV",
@@ -9915,7 +10417,7 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 8,
-     "plans": 3.0
+     "plans": 4.5
     },
     {
      "system": "FASTSTV",
@@ -20068,7 +20570,7 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 0,
-     "plans": 8585.5
+     "plans": 172.5
     },
     {
      "system": "Combined",
@@ -20082,7 +20584,7 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 1,
-     "plans": 30659.5
+     "plans": 622.5
     },
     {
      "system": "Combined",
@@ -20096,7 +20598,7 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 2,
-     "plans": 14033.0
+     "plans": 253.5
     },
     {
      "system": "Combined",
@@ -20110,7 +20612,7 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 3,
-     "plans": 6807.0
+     "plans": 160.0
     },
     {
      "system": "Combined",
@@ -20124,7 +20626,7 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 4,
-     "plans": 2061.0
+     "plans": 34.5
     },
     {
      "system": "Combined",
@@ -20138,7 +20640,7 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 5,
-     "plans": 315.0
+     "plans": 5.5
     },
     {
      "system": "Combined",
@@ -20152,21 +20654,7 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 6,
-     "plans": 38.5
-    },
-    {
-     "system": "Combined",
-     "systemLabel": "Combined (15 seats)",
-     "numDistricts": 0,
-     "winners": 15,
-     "mode": "combined",
-     "modeLabel": "Combined",
-     "pooled": true,
-     "slate": "AAPI",
-     "slateLabel": "AAPI",
-     "slateVapShare": 0.20432553215884638,
-     "seats": 7,
-     "plans": 0.5
+     "plans": 1.5
     },
     {
      "system": "Combined",
@@ -20180,8 +20668,8 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 0,
-     "plans": 12210.0,
-     "share": 0.19536
+     "plans": 262.0,
+     "share": 0.2096
     },
     {
      "system": "Combined",
@@ -20195,8 +20683,8 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 1,
-     "plans": 44282.0,
-     "share": 0.708512
+     "plans": 852.0,
+     "share": 0.6816
     },
     {
      "system": "Combined",
@@ -20210,8 +20698,8 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 2,
-     "plans": 5908.0,
-     "share": 0.094528
+     "plans": 132.0,
+     "share": 0.1056
     },
     {
      "system": "Combined",
@@ -20225,23 +20713,8 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 3,
-     "plans": 98.0,
-     "share": 0.001568
-    },
-    {
-     "system": "Combined",
-     "systemLabel": "Combined (15 seats)",
-     "numDistricts": 0,
-     "winners": 15,
-     "mode": "slate_bt",
-     "modeLabel": "Deliberative",
-     "pooled": false,
-     "slate": "AAPI",
-     "slateLabel": "AAPI",
-     "slateVapShare": 0.20432553215884638,
-     "seats": 4,
-     "plans": 2.0,
-     "share": 3.2e-05
+     "plans": 4.0,
+     "share": 0.0032
     },
     {
      "system": "Combined",
@@ -20255,8 +20728,8 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 0,
-     "plans": 4961.0,
-     "share": 0.079376
+     "plans": 83.0,
+     "share": 0.0664
     },
     {
      "system": "Combined",
@@ -20270,8 +20743,8 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 1,
-     "plans": 17037.0,
-     "share": 0.272592
+     "plans": 393.0,
+     "share": 0.3144
     },
     {
      "system": "Combined",
@@ -20285,8 +20758,8 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 2,
-     "plans": 22158.0,
-     "share": 0.354528
+     "plans": 375.0,
+     "share": 0.3
     },
     {
      "system": "Combined",
@@ -20300,8 +20773,8 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 3,
-     "plans": 13516.0,
-     "share": 0.216256
+     "plans": 316.0,
+     "share": 0.2528
     },
     {
      "system": "Combined",
@@ -20315,8 +20788,8 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 4,
-     "plans": 4120.0,
-     "share": 0.06592
+     "plans": 69.0,
+     "share": 0.0552
     },
     {
      "system": "Combined",
@@ -20330,8 +20803,8 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 5,
-     "plans": 630.0,
-     "share": 0.01008
+     "plans": 11.0,
+     "share": 0.0088
     },
     {
      "system": "Combined",
@@ -20345,23 +20818,8 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 6,
-     "plans": 77.0,
-     "share": 0.001232
-    },
-    {
-     "system": "Combined",
-     "systemLabel": "Combined (15 seats)",
-     "numDistricts": 0,
-     "winners": 15,
-     "mode": "slate_pl",
-     "modeLabel": "Impulsive",
-     "pooled": false,
-     "slate": "AAPI",
-     "slateLabel": "AAPI",
-     "slateVapShare": 0.20432553215884638,
-     "seats": 7,
-     "plans": 1.0,
-     "share": 1.6e-05
+     "plans": 3.0,
+     "share": 0.0024
     },
     {
      "system": "Combined",
@@ -20375,7 +20833,7 @@
      "slateLabel": "BLK",
      "slateVapShare": 0.07109494643525345,
      "seats": 0,
-     "plans": 52857.0
+     "plans": 1055.5
     },
     {
      "system": "Combined",
@@ -20389,7 +20847,7 @@
      "slateLabel": "BLK",
      "slateVapShare": 0.07109494643525345,
      "seats": 1,
-     "plans": 8936.0
+     "plans": 182.0
     },
     {
      "system": "Combined",
@@ -20403,7 +20861,7 @@
      "slateLabel": "BLK",
      "slateVapShare": 0.07109494643525345,
      "seats": 2,
-     "plans": 707.0
+     "plans": 12.5
     },
     {
      "system": "Combined",
@@ -20417,7 +20875,7 @@
      "slateLabel": "BLK",
      "slateVapShare": 0.07109494643525345,
      "seats": 0,
-     "plans": 60650.0,
+     "plans": 1213.0,
      "share": 0.9704
     },
     {
@@ -20432,7 +20890,7 @@
      "slateLabel": "BLK",
      "slateVapShare": 0.07109494643525345,
      "seats": 1,
-     "plans": 1850.0,
+     "plans": 37.0,
      "share": 0.0296
     },
     {
@@ -20447,8 +20905,8 @@
      "slateLabel": "BLK",
      "slateVapShare": 0.07109494643525345,
      "seats": 0,
-     "plans": 45064.0,
-     "share": 0.721024
+     "plans": 898.0,
+     "share": 0.7184
     },
     {
      "system": "Combined",
@@ -20462,8 +20920,8 @@
      "slateLabel": "BLK",
      "slateVapShare": 0.07109494643525345,
      "seats": 1,
-     "plans": 16022.0,
-     "share": 0.256352
+     "plans": 327.0,
+     "share": 0.2616
     },
     {
      "system": "Combined",
@@ -20477,8 +20935,8 @@
      "slateLabel": "BLK",
      "slateVapShare": 0.07109494643525345,
      "seats": 2,
-     "plans": 1414.0,
-     "share": 0.022624
+     "plans": 25.0,
+     "share": 0.02
     },
     {
      "system": "Combined",
@@ -20492,7 +20950,7 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 0,
-     "plans": 486.0
+     "plans": 14.5
     },
     {
      "system": "Combined",
@@ -20506,7 +20964,7 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 1,
-     "plans": 5701.5
+     "plans": 151.0
     },
     {
      "system": "Combined",
@@ -20520,7 +20978,7 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 2,
-     "plans": 19869.0
+     "plans": 324.5
     },
     {
      "system": "Combined",
@@ -20534,7 +20992,7 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 3,
-     "plans": 29941.5
+     "plans": 614.5
     },
     {
      "system": "Combined",
@@ -20548,7 +21006,7 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 4,
-     "plans": 6374.0
+     "plans": 143.0
     },
     {
      "system": "Combined",
@@ -20562,22 +21020,7 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 5,
-     "plans": 128.0
-    },
-    {
-     "system": "Combined",
-     "systemLabel": "Combined (15 seats)",
-     "numDistricts": 0,
-     "winners": 15,
-     "mode": "slate_bt",
-     "modeLabel": "Deliberative",
-     "pooled": false,
-     "slate": "HIS",
-     "slateLabel": "HIS",
-     "slateVapShare": 0.2657385606624199,
-     "seats": 0,
-     "plans": 24.0,
-     "share": 0.000384
+     "plans": 2.5
     },
     {
      "system": "Combined",
@@ -20591,8 +21034,8 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 1,
-     "plans": 1195.0,
-     "share": 0.01912
+     "plans": 62.0,
+     "share": 0.0496
     },
     {
      "system": "Combined",
@@ -20606,8 +21049,8 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 2,
-     "plans": 13308.0,
-     "share": 0.212928
+     "plans": 203.0,
+     "share": 0.1624
     },
     {
      "system": "Combined",
@@ -20621,8 +21064,8 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 3,
-     "plans": 40076.0,
-     "share": 0.641216
+     "plans": 818.0,
+     "share": 0.6544
     },
     {
      "system": "Combined",
@@ -20636,8 +21079,8 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 4,
-     "plans": 7824.0,
-     "share": 0.125184
+     "plans": 163.0,
+     "share": 0.1304
     },
     {
      "system": "Combined",
@@ -20651,8 +21094,8 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 5,
-     "plans": 73.0,
-     "share": 0.001168
+     "plans": 4.0,
+     "share": 0.0032
     },
     {
      "system": "Combined",
@@ -20666,8 +21109,8 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 0,
-     "plans": 948.0,
-     "share": 0.015168
+     "plans": 29.0,
+     "share": 0.0232
     },
     {
      "system": "Combined",
@@ -20681,8 +21124,8 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 1,
-     "plans": 10208.0,
-     "share": 0.163328
+     "plans": 240.0,
+     "share": 0.192
     },
     {
      "system": "Combined",
@@ -20696,8 +21139,8 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 2,
-     "plans": 26430.0,
-     "share": 0.42288
+     "plans": 446.0,
+     "share": 0.3568
     },
     {
      "system": "Combined",
@@ -20711,8 +21154,8 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 3,
-     "plans": 19807.0,
-     "share": 0.316912
+     "plans": 411.0,
+     "share": 0.3288
     },
     {
      "system": "Combined",
@@ -20726,8 +21169,8 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 4,
-     "plans": 4924.0,
-     "share": 0.078784
+     "plans": 123.0,
+     "share": 0.0984
     },
     {
      "system": "Combined",
@@ -20740,239 +21183,196 @@
      "slate": "HIS",
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
-     "seats": 5,
-     "plans": 183.0,
-     "share": 0.002928
-    },
-    {
-     "system": "Combined",
-     "systemLabel": "Combined (15 seats)",
-     "numDistricts": 0,
-     "winners": 15,
-     "mode": "combined",
-     "modeLabel": "Combined",
-     "pooled": true,
-     "slate": "WAIO",
-     "slateLabel": "WAIO",
-     "slateVapShare": 0.4588409607434803,
-     "seats": 5,
-     "plans": 0.5
-    },
-    {
-     "system": "Combined",
-     "systemLabel": "Combined (15 seats)",
-     "numDistricts": 0,
-     "winners": 15,
-     "mode": "combined",
-     "modeLabel": "Combined",
-     "pooled": true,
-     "slate": "WAIO",
-     "slateLabel": "WAIO",
-     "slateVapShare": 0.4588409607434803,
-     "seats": 6,
-     "plans": 27.5
-    },
-    {
-     "system": "Combined",
-     "systemLabel": "Combined (15 seats)",
-     "numDistricts": 0,
-     "winners": 15,
-     "mode": "combined",
-     "modeLabel": "Combined",
-     "pooled": true,
-     "slate": "WAIO",
-     "slateLabel": "WAIO",
-     "slateVapShare": 0.4588409607434803,
-     "seats": 7,
-     "plans": 246.5
-    },
-    {
-     "system": "Combined",
-     "systemLabel": "Combined (15 seats)",
-     "numDistricts": 0,
-     "winners": 15,
-     "mode": "combined",
-     "modeLabel": "Combined",
-     "pooled": true,
-     "slate": "WAIO",
-     "slateLabel": "WAIO",
-     "slateVapShare": 0.4588409607434803,
-     "seats": 8,
-     "plans": 1122.5
-    },
-    {
-     "system": "Combined",
-     "systemLabel": "Combined (15 seats)",
-     "numDistricts": 0,
-     "winners": 15,
-     "mode": "combined",
-     "modeLabel": "Combined",
-     "pooled": true,
-     "slate": "WAIO",
-     "slateLabel": "WAIO",
-     "slateVapShare": 0.4588409607434803,
-     "seats": 9,
-     "plans": 4316.0
-    },
-    {
-     "system": "Combined",
-     "systemLabel": "Combined (15 seats)",
-     "numDistricts": 0,
-     "winners": 15,
-     "mode": "combined",
-     "modeLabel": "Combined",
-     "pooled": true,
-     "slate": "WAIO",
-     "slateLabel": "WAIO",
-     "slateVapShare": 0.4588409607434803,
-     "seats": 10,
-     "plans": 14572.0
-    },
-    {
-     "system": "Combined",
-     "systemLabel": "Combined (15 seats)",
-     "numDistricts": 0,
-     "winners": 15,
-     "mode": "combined",
-     "modeLabel": "Combined",
-     "pooled": true,
-     "slate": "WAIO",
-     "slateLabel": "WAIO",
-     "slateVapShare": 0.4588409607434803,
-     "seats": 11,
-     "plans": 27436.0
-    },
-    {
-     "system": "Combined",
-     "systemLabel": "Combined (15 seats)",
-     "numDistricts": 0,
-     "winners": 15,
-     "mode": "combined",
-     "modeLabel": "Combined",
-     "pooled": true,
-     "slate": "WAIO",
-     "slateLabel": "WAIO",
-     "slateVapShare": 0.4588409607434803,
-     "seats": 12,
-     "plans": 12873.0
-    },
-    {
-     "system": "Combined",
-     "systemLabel": "Combined (15 seats)",
-     "numDistricts": 0,
-     "winners": 15,
-     "mode": "combined",
-     "modeLabel": "Combined",
-     "pooled": true,
-     "slate": "WAIO",
-     "slateLabel": "WAIO",
-     "slateVapShare": 0.4588409607434803,
-     "seats": 13,
-     "plans": 1843.0
-    },
-    {
-     "system": "Combined",
-     "systemLabel": "Combined (15 seats)",
-     "numDistricts": 0,
-     "winners": 15,
-     "mode": "combined",
-     "modeLabel": "Combined",
-     "pooled": true,
-     "slate": "WAIO",
-     "slateLabel": "WAIO",
-     "slateVapShare": 0.4588409607434803,
-     "seats": 14,
-     "plans": 63.0
-    },
-    {
-     "system": "Combined",
-     "systemLabel": "Combined (15 seats)",
-     "numDistricts": 0,
-     "winners": 15,
-     "mode": "slate_bt",
-     "modeLabel": "Deliberative",
-     "pooled": false,
-     "slate": "WAIO",
-     "slateLabel": "WAIO",
-     "slateVapShare": 0.4588409607434803,
-     "seats": 9,
-     "plans": 373.0,
-     "share": 0.005968
-    },
-    {
-     "system": "Combined",
-     "systemLabel": "Combined (15 seats)",
-     "numDistricts": 0,
-     "winners": 15,
-     "mode": "slate_bt",
-     "modeLabel": "Deliberative",
-     "pooled": false,
-     "slate": "WAIO",
-     "slateLabel": "WAIO",
-     "slateVapShare": 0.4588409607434803,
-     "seats": 10,
-     "plans": 8070.0,
-     "share": 0.12912
-    },
-    {
-     "system": "Combined",
-     "systemLabel": "Combined (15 seats)",
-     "numDistricts": 0,
-     "winners": 15,
-     "mode": "slate_bt",
-     "modeLabel": "Deliberative",
-     "pooled": false,
-     "slate": "WAIO",
-     "slateLabel": "WAIO",
-     "slateVapShare": 0.4588409607434803,
-     "seats": 11,
-     "plans": 35089.0,
-     "share": 0.561424
-    },
-    {
-     "system": "Combined",
-     "systemLabel": "Combined (15 seats)",
-     "numDistricts": 0,
-     "winners": 15,
-     "mode": "slate_bt",
-     "modeLabel": "Deliberative",
-     "pooled": false,
-     "slate": "WAIO",
-     "slateLabel": "WAIO",
-     "slateVapShare": 0.4588409607434803,
-     "seats": 12,
-     "plans": 17070.0,
-     "share": 0.27312
-    },
-    {
-     "system": "Combined",
-     "systemLabel": "Combined (15 seats)",
-     "numDistricts": 0,
-     "winners": 15,
-     "mode": "slate_bt",
-     "modeLabel": "Deliberative",
-     "pooled": false,
-     "slate": "WAIO",
-     "slateLabel": "WAIO",
-     "slateVapShare": 0.4588409607434803,
-     "seats": 13,
-     "plans": 1898.0,
-     "share": 0.030368
-    },
-    {
-     "system": "Combined",
-     "systemLabel": "Combined (15 seats)",
-     "numDistricts": 0,
-     "winners": 15,
-     "mode": "slate_pl",
-     "modeLabel": "Impulsive",
-     "pooled": false,
-     "slate": "WAIO",
-     "slateLabel": "WAIO",
-     "slateVapShare": 0.4588409607434803,
      "seats": 5,
      "plans": 1.0,
-     "share": 1.6e-05
+     "share": 0.0008
+    },
+    {
+     "system": "Combined",
+     "systemLabel": "Combined (15 seats)",
+     "numDistricts": 0,
+     "winners": 15,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "slate": "WAIO",
+     "slateLabel": "WAIO",
+     "slateVapShare": 0.4588409607434803,
+     "seats": 6,
+     "plans": 1.0
+    },
+    {
+     "system": "Combined",
+     "systemLabel": "Combined (15 seats)",
+     "numDistricts": 0,
+     "winners": 15,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "slate": "WAIO",
+     "slateLabel": "WAIO",
+     "slateVapShare": 0.4588409607434803,
+     "seats": 7,
+     "plans": 4.5
+    },
+    {
+     "system": "Combined",
+     "systemLabel": "Combined (15 seats)",
+     "numDistricts": 0,
+     "winners": 15,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "slate": "WAIO",
+     "slateLabel": "WAIO",
+     "slateVapShare": 0.4588409607434803,
+     "seats": 8,
+     "plans": 28.5
+    },
+    {
+     "system": "Combined",
+     "systemLabel": "Combined (15 seats)",
+     "numDistricts": 0,
+     "winners": 15,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "slate": "WAIO",
+     "slateLabel": "WAIO",
+     "slateVapShare": 0.4588409607434803,
+     "seats": 9,
+     "plans": 97.0
+    },
+    {
+     "system": "Combined",
+     "systemLabel": "Combined (15 seats)",
+     "numDistricts": 0,
+     "winners": 15,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "slate": "WAIO",
+     "slateLabel": "WAIO",
+     "slateVapShare": 0.4588409607434803,
+     "seats": 10,
+     "plans": 271.0
+    },
+    {
+     "system": "Combined",
+     "systemLabel": "Combined (15 seats)",
+     "numDistricts": 0,
+     "winners": 15,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "slate": "WAIO",
+     "slateLabel": "WAIO",
+     "slateVapShare": 0.4588409607434803,
+     "seats": 11,
+     "plans": 561.0
+    },
+    {
+     "system": "Combined",
+     "systemLabel": "Combined (15 seats)",
+     "numDistricts": 0,
+     "winners": 15,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "slate": "WAIO",
+     "slateLabel": "WAIO",
+     "slateVapShare": 0.4588409607434803,
+     "seats": 12,
+     "plans": 219.5
+    },
+    {
+     "system": "Combined",
+     "systemLabel": "Combined (15 seats)",
+     "numDistricts": 0,
+     "winners": 15,
+     "mode": "combined",
+     "modeLabel": "Combined",
+     "pooled": true,
+     "slate": "WAIO",
+     "slateLabel": "WAIO",
+     "slateVapShare": 0.4588409607434803,
+     "seats": 13,
+     "plans": 67.5
+    },
+    {
+     "system": "Combined",
+     "systemLabel": "Combined (15 seats)",
+     "numDistricts": 0,
+     "winners": 15,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "slate": "WAIO",
+     "slateLabel": "WAIO",
+     "slateVapShare": 0.4588409607434803,
+     "seats": 9,
+     "plans": 14.0,
+     "share": 0.0112
+    },
+    {
+     "system": "Combined",
+     "systemLabel": "Combined (15 seats)",
+     "numDistricts": 0,
+     "winners": 15,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "slate": "WAIO",
+     "slateLabel": "WAIO",
+     "slateVapShare": 0.4588409607434803,
+     "seats": 10,
+     "plans": 152.0,
+     "share": 0.1216
+    },
+    {
+     "system": "Combined",
+     "systemLabel": "Combined (15 seats)",
+     "numDistricts": 0,
+     "winners": 15,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "slate": "WAIO",
+     "slateLabel": "WAIO",
+     "slateVapShare": 0.4588409607434803,
+     "seats": 11,
+     "plans": 737.0,
+     "share": 0.5896
+    },
+    {
+     "system": "Combined",
+     "systemLabel": "Combined (15 seats)",
+     "numDistricts": 0,
+     "winners": 15,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "slate": "WAIO",
+     "slateLabel": "WAIO",
+     "slateVapShare": 0.4588409607434803,
+     "seats": 12,
+     "plans": 273.0,
+     "share": 0.2184
+    },
+    {
+     "system": "Combined",
+     "systemLabel": "Combined (15 seats)",
+     "numDistricts": 0,
+     "winners": 15,
+     "mode": "slate_bt",
+     "modeLabel": "Deliberative",
+     "pooled": false,
+     "slate": "WAIO",
+     "slateLabel": "WAIO",
+     "slateVapShare": 0.4588409607434803,
+     "seats": 13,
+     "plans": 74.0,
+     "share": 0.0592
     },
     {
      "system": "Combined",
@@ -20986,8 +21386,8 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 6,
-     "plans": 55.0,
-     "share": 0.00088
+     "plans": 2.0,
+     "share": 0.0016
     },
     {
      "system": "Combined",
@@ -21001,8 +21401,8 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 7,
-     "plans": 493.0,
-     "share": 0.007888
+     "plans": 9.0,
+     "share": 0.0072
     },
     {
      "system": "Combined",
@@ -21016,8 +21416,8 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 8,
-     "plans": 2245.0,
-     "share": 0.03592
+     "plans": 57.0,
+     "share": 0.0456
     },
     {
      "system": "Combined",
@@ -21031,8 +21431,8 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 9,
-     "plans": 8259.0,
-     "share": 0.132144
+     "plans": 180.0,
+     "share": 0.144
     },
     {
      "system": "Combined",
@@ -21046,8 +21446,8 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 10,
-     "plans": 21074.0,
-     "share": 0.337184
+     "plans": 390.0,
+     "share": 0.312
     },
     {
      "system": "Combined",
@@ -21061,8 +21461,8 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 11,
-     "plans": 19783.0,
-     "share": 0.316528
+     "plans": 385.0,
+     "share": 0.308
     },
     {
      "system": "Combined",
@@ -21076,8 +21476,8 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 12,
-     "plans": 8676.0,
-     "share": 0.138816
+     "plans": 166.0,
+     "share": 0.1328
     },
     {
      "system": "Combined",
@@ -21091,23 +21491,8 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 13,
-     "plans": 1788.0,
-     "share": 0.028608
-    },
-    {
-     "system": "Combined",
-     "systemLabel": "Combined (15 seats)",
-     "numDistricts": 0,
-     "winners": 15,
-     "mode": "slate_pl",
-     "modeLabel": "Impulsive",
-     "pooled": false,
-     "slate": "WAIO",
-     "slateLabel": "WAIO",
-     "slateVapShare": 0.4588409607434803,
-     "seats": 14,
-     "plans": 126.0,
-     "share": 0.002016
+     "plans": 61.0,
+     "share": 0.0488
     }
    ],
    "blocModel": "four"
@@ -36445,7 +36830,7 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 0,
-     "plans": 126.66666666666667
+     "plans": 190.0
     },
     {
      "system": "FASTSTV",
@@ -36459,7 +36844,7 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 1,
-     "plans": 237.66666666666666
+     "plans": 356.5
     },
     {
      "system": "FASTSTV",
@@ -36473,7 +36858,7 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 2,
-     "plans": 247.66666666666666
+     "plans": 371.5
     },
     {
      "system": "FASTSTV",
@@ -36487,7 +36872,7 @@
      "slateLabel": "AAPI",
      "slateVapShare": 0.20432553215884638,
      "seats": 3,
-     "plans": 54.666666666666664
+     "plans": 82.0
     },
     {
      "system": "FASTSTV",
@@ -36621,7 +37006,7 @@
      "slateLabel": "BLK",
      "slateVapShare": 0.07109494643525345,
      "seats": 0,
-     "plans": 590.3333333333334
+     "plans": 885.5
     },
     {
      "system": "FASTSTV",
@@ -36635,7 +37020,7 @@
      "slateLabel": "BLK",
      "slateVapShare": 0.07109494643525345,
      "seats": 1,
-     "plans": 76.33333333333333
+     "plans": 114.5
     },
     {
      "system": "FASTSTV",
@@ -36709,7 +37094,7 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 0,
-     "plans": 6.666666666666667
+     "plans": 10.0
     },
     {
      "system": "FASTSTV",
@@ -36723,7 +37108,7 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 1,
-     "plans": 194.66666666666666
+     "plans": 292.0
     },
     {
      "system": "FASTSTV",
@@ -36737,7 +37122,7 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 2,
-     "plans": 343.0
+     "plans": 514.5
     },
     {
      "system": "FASTSTV",
@@ -36751,7 +37136,7 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 3,
-     "plans": 102.33333333333333
+     "plans": 153.5
     },
     {
      "system": "FASTSTV",
@@ -36765,7 +37150,7 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 4,
-     "plans": 13.333333333333334
+     "plans": 20.0
     },
     {
      "system": "FASTSTV",
@@ -36779,7 +37164,7 @@
      "slateLabel": "HIS",
      "slateVapShare": 0.2657385606624199,
      "seats": 5,
-     "plans": 6.666666666666667
+     "plans": 10.0
     },
     {
      "system": "FASTSTV",
@@ -36973,7 +37358,7 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 3,
-     "plans": 7.0
+     "plans": 10.5
     },
     {
      "system": "FASTSTV",
@@ -36987,7 +37372,7 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 4,
-     "plans": 71.66666666666667
+     "plans": 107.5
     },
     {
      "system": "FASTSTV",
@@ -37001,7 +37386,7 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 5,
-     "plans": 222.33333333333334
+     "plans": 333.5
     },
     {
      "system": "FASTSTV",
@@ -37015,7 +37400,7 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 6,
-     "plans": 260.0
+     "plans": 390.0
     },
     {
      "system": "FASTSTV",
@@ -37029,7 +37414,7 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 7,
-     "plans": 79.0
+     "plans": 118.5
     },
     {
      "system": "FASTSTV",
@@ -37043,7 +37428,7 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 8,
-     "plans": 20.0
+     "plans": 30.0
     },
     {
      "system": "FASTSTV",
@@ -37057,7 +37442,7 @@
      "slateLabel": "WAIO",
      "slateVapShare": 0.4588409607434803,
      "seats": 9,
-     "plans": 6.666666666666667
+     "plans": 10.0
     },
     {
      "system": "FASTSTV",
@@ -37368,7 +37753,7 @@
      "slateLabel": "POC",
      "slateVapShare": 0.5619805401715601,
      "seats": 3,
-     "plans": 11.75
+     "plans": 15.666666666666666
     },
     {
      "system": "FASTSTV",
@@ -37382,7 +37767,7 @@
      "slateLabel": "POC",
      "slateVapShare": 0.5619805401715601,
      "seats": 4,
-     "plans": 191.25
+     "plans": 255.0
     },
     {
      "system": "FASTSTV",
@@ -37396,7 +37781,7 @@
      "slateLabel": "POC",
      "slateVapShare": 0.5619805401715601,
      "seats": 5,
-     "plans": 311.25
+     "plans": 415.0
     },
     {
      "system": "FASTSTV",
@@ -37410,7 +37795,7 @@
      "slateLabel": "POC",
      "slateVapShare": 0.5619805401715601,
      "seats": 6,
-     "plans": 115.75
+     "plans": 154.33333333333334
     },
     {
      "system": "FASTSTV",
@@ -37424,7 +37809,7 @@
      "slateLabel": "POC",
      "slateVapShare": 0.5619805401715601,
      "seats": 7,
-     "plans": 120.0
+     "plans": 160.0
     },
     {
      "system": "FASTSTV",
@@ -37663,7 +38048,7 @@
      "slateLabel": "WHI",
      "slateVapShare": 0.4380194598284399,
      "seats": 2,
-     "plans": 120.0
+     "plans": 160.0
     },
     {
      "system": "FASTSTV",
@@ -37677,7 +38062,7 @@
      "slateLabel": "WHI",
      "slateVapShare": 0.4380194598284399,
      "seats": 3,
-     "plans": 115.75
+     "plans": 154.33333333333334
     },
     {
      "system": "FASTSTV",
@@ -37691,7 +38076,7 @@
      "slateLabel": "WHI",
      "slateVapShare": 0.4380194598284399,
      "seats": 4,
-     "plans": 311.25
+     "plans": 415.0
     },
     {
      "system": "FASTSTV",
@@ -37705,7 +38090,7 @@
      "slateLabel": "WHI",
      "slateVapShare": 0.4380194598284399,
      "seats": 5,
-     "plans": 191.25
+     "plans": 255.0
     },
     {
      "system": "FASTSTV",
@@ -37719,7 +38104,7 @@
      "slateLabel": "WHI",
      "slateVapShare": 0.4380194598284399,
      "seats": 6,
-     "plans": 11.75
+     "plans": 15.666666666666666
     },
     {
      "system": "FASTSTV",
@@ -38037,15 +38422,12 @@
    "shape": "1 \u00d7 9",
    "totalSeats": 9,
    "rules": [
-    "STV",
-    "Limited",
-    "Cumulative"
+    "STV"
    ],
    "voterModels": [
     "Impulsive",
     "Deliberative",
-    "Cambridge",
-    "Name Cumulative"
+    "Cambridge"
    ],
    "turnout": {
     "POC": 0.7,
@@ -38748,14 +39130,11 @@
    "shape": "1 \u00d7 9",
    "totalSeats": 9,
    "rules": [
-    "STV",
-    "Limited",
-    "Cumulative"
+    "STV"
    ],
    "voterModels": [
     "Impulsive",
-    "Deliberative",
-    "Name Cumulative"
+    "Deliberative"
    ],
    "turnout": {
     "AAPI": 0.7,
@@ -39054,14 +39433,11 @@
    "shape": "3 \u00d7 3",
    "totalSeats": 9,
    "rules": [
-    "STV",
-    "Limited",
-    "Cumulative"
+    "STV"
    ],
    "voterModels": [
     "Impulsive",
-    "Deliberative",
-    "Name Cumulative"
+    "Deliberative"
    ],
    "turnout": {
     "AAPI": 0.75,
@@ -39205,14 +39581,11 @@
    "shape": "3 \u00d7 3",
    "totalSeats": 9,
    "rules": [
-    "STV",
-    "Limited",
-    "Cumulative"
+    "STV"
    ],
    "voterModels": [
     "Impulsive",
-    "Deliberative",
-    "Name Cumulative"
+    "Deliberative"
    ],
    "turnout": {
     "AAPI": 0.75,

@@ -385,7 +385,7 @@ def _rebase_relative_srcs(html: str, source_dir: Path, docs_dir: Path) -> str:
     Rewrite relative image paths from prose-relative to index.html-relative.
 
     A prose file links its images the way an editor's preview needs them --
-    ../assets/x.png from docs/prose/, ../../assets/x.png from docs/prose/runs/.
+    ../assets/x.png from docs/prose/, ../../assets/x.png from docs/prose/scenarios/.
     index.html sits at the root of docs/, so those same paths would climb out of
     docs/ entirely and 404. Each one is resolved against the file it was written
     in and re-expressed relative to docs/, which keeps the markdown previewable
@@ -429,9 +429,9 @@ def _render_markdown(path: Path, docs_dir: Path = DOCS_DIR) -> str:
     return _rebase_relative_srcs(html, path.parent, docs_dir)
 
 
-def _section_prose_name(slug: str, entries: Dict[str, Dict[str, Any]]) -> str:
+def _scenario_prose_name(slug: str, entries: Dict[str, Dict[str, Any]]) -> str:
     """
-    The prose file a section reads, without its extension.
+    The prose file a scenario reads, without its extension.
 
     A section's description belongs to the section, not to whichever run
     supplies its numbers. They coincide by default -- most sections are one run
@@ -445,24 +445,24 @@ def _section_prose_name(slug: str, entries: Dict[str, Dict[str, Any]]) -> str:
     return name[:-3] if name.endswith(".md") else name
 
 
-def _run_prose_path(docs_dir: Path, name: str) -> Path:
-    """Where a section's hand-written description lives, if it has one."""
-    return docs_dir / "prose" / "runs" / f"{name}.md"
+def _scenario_prose_path(docs_dir: Path, name: str) -> Path:
+    """Where a scenario's hand-written description lives, if it has one."""
+    return docs_dir / "prose" / "scenarios" / f"{name}.md"
 
 
-def _ensure_run_prose_stubs(docs_dir: Path, names: List[str]) -> None:
+def _ensure_scenario_prose_stubs(docs_dir: Path, names: List[str]) -> None:
     """
-    Touch an empty prose file for any section that doesn't have one yet.
+    Touch an empty prose file for any scenario that doesn't have one yet.
 
     The top-level prose files (abstract.md, background.md, ...) are
     discoverable because they already exist, blank, ready to open and edit --
     this gives each section's description the same discoverability instead of a
     filename convention that's only written down.
     """
-    prose_dir = docs_dir / "prose" / "runs"
+    prose_dir = docs_dir / "prose" / "scenarios"
     prose_dir.mkdir(parents=True, exist_ok=True)
     for name in names:
-        path = _run_prose_path(docs_dir, name)
+        path = _scenario_prose_path(docs_dir, name)
         if not path.exists():
             path.touch()
 
@@ -864,10 +864,14 @@ def generate_report(docs_dir: Path = DOCS_DIR, config_dir: Optional[Path] = None
     # so two sections may share one description, and renaming a run does not
     # orphan the writing about it.
     entries = _scenario_entries(outline["scenarios"])
-    prose_names = {meta["slug"]: _section_prose_name(meta["slug"], entries) for meta in page_runs}
-    _ensure_run_prose_stubs(docs_dir, sorted(set(prose_names.values())))
+    prose_names = {meta["slug"]: _scenario_prose_name(meta["slug"], entries) for meta in page_runs}
+    # Carried onto the entry so the template's "write this file" placeholder can
+    # name the file the scenario actually reads, rather than guessing at its slug.
+    for meta in page_runs:
+        meta["prose"] = prose_names[meta["slug"]]
+    _ensure_scenario_prose_stubs(docs_dir, sorted(set(prose_names.values())))
     run_prose = {
-        slug: _render_markdown(_run_prose_path(docs_dir, name), docs_dir)
+        slug: _render_markdown(_scenario_prose_path(docs_dir, name), docs_dir)
         for slug, name in prose_names.items()
     }
 

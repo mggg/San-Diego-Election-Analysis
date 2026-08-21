@@ -14,22 +14,12 @@
     "FastSTV": {
       "n_seats": 9,
       "tiebreak": "random"
-    },
-    "Limited": {
-      "n_seats": 9,
-      "budget": 3,
-      "tiebreak": "random"
-    },
-    "Cumulative": {
-      "n_seats": 9,
-      "tiebreak": "random"
     }
   },
   "voter_models": [
     "slate_pl",
     "slate_bt",
-    "cambridge",
-    "name_cumulative"
+    "cambridge"
   ],
   "blocs": {
     "POC": [
