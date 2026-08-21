@@ -6,7 +6,7 @@ voters whose first choice was the historical majority slate vs. the historical
 minority slate -- how many candidates each ballot went on to rank. VoteKit's own
 Cambridge generator (`cambridge_profiles_by_bloc_generator`) only works with
 exactly two slates whose names match two blocs, so it can't run directly against
-a config whose slates are not literally named majority/minority (e.g. San Diego's WAIO/POC).
+a config whose slates are not literally named majority/minority (e.g. San Diego's WHI/POC).
 
 This module reuses votekit's own shape-reduction logic (`_reduce_ballot_pmfs`)
 against a stand-in config that pools an arbitrary number of real slates into two
@@ -42,10 +42,12 @@ _MINORITY_BALLOT_PATH = (
 
 # Cambridge's historical data splits ballots by whether the voter's first
 # choice was the White-majority slate or not. A run states its own mapping via
-# "cambridge_truncation.majority_slates"/"minority_slates" in its config; WAIO --
-# consistently San Diego's largest single slate -- is only a fallback for a run
-# that leaves that mapping unset.
-DEFAULT_MAJORITY_SLATE = "WAIO"
+# "cambridge_truncation.majority_slates"/"minority_slates" in its config; WHI --
+# the two-bloc model's White-alone slate -- is only a fallback for a run that
+# leaves that mapping unset. Every four-bloc config states its own mapping
+# (its majority slate is WAIO, not WHI), so this default never has to serve
+# both models at once.
+DEFAULT_MAJORITY_SLATE = "WHI"
 
 
 def _default_majority_minority_slates(slate_to_candidates: dict) -> tuple[list, list]:

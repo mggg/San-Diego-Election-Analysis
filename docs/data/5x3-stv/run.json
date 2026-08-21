@@ -1,13 +1,13 @@
 {
  "runName": "5x3 STV",
  "slug": "5x3-stv",
- "focalGroup": "AAPI",
- "focalGroupLabel": "AAPI",
+ "focalGroup": "BLK",
+ "focalGroupLabel": "BLK",
  "totalSeats": 15,
- "focalVapShare": 0.20432553215884638,
- "proportionalSeats": 3.064882982382696,
- "proportionalLabel": "AAPI share of VAP: 20.4% (3.1 seats)",
- "seatMax": 10,
+ "focalVapShare": 0.07109494643525345,
+ "proportionalSeats": 1.0664241965288017,
+ "proportionalLabel": "BLK share of VAP: 7.1% (1.1 seats)",
+ "seatMax": 6,
  "seatTicks": [
   0,
   1,
@@ -15,11 +15,7 @@
   3,
   4,
   5,
-  6,
-  7,
-  8,
-  9,
-  10
+  6
  ],
  "districtConfigs": [
   {
@@ -34,11 +30,7 @@
    "candidatePoolMax": 10,
    "candidatePoolMean": 7,
    "plans": 100,
-   "electionsPerSystem": 10000,
-   "electionsByMode": {
-    "slate_bt": 5000,
-    "slate_pl": 5000
-   }
+   "electionsPerSystem": 10000
   }
  ],
  "voterModels": [

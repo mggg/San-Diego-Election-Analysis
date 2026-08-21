@@ -8,8 +8,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 0,
-  "plans": 575.0,
-  "share": 0.575
+  "plans": 936.5,
+  "share": 0.9365
  },
  {
   "system": "IRV",
@@ -20,8 +20,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 1,
-  "plans": 342.5,
-  "share": 0.3425
+  "plans": 61.0,
+  "share": 0.061
  },
  {
   "system": "IRV",
@@ -32,20 +32,8 @@
   "modeLabel": "Combined",
   "pooled": true,
   "seats": 2,
-  "plans": 74.5,
-  "share": 0.0745
- },
- {
-  "system": "IRV",
-  "systemLabel": "12 X 1 IRV",
-  "numDistricts": 12,
-  "winners": 1,
-  "mode": "combined",
-  "modeLabel": "Combined",
-  "pooled": true,
-  "seats": 3,
-  "plans": 8.0,
-  "share": 0.008
+  "plans": 2.5,
+  "share": 0.0025
  },
  {
   "system": "IRV",
@@ -56,8 +44,8 @@
   "modeLabel": "Deliberative",
   "pooled": false,
   "seats": 0,
-  "plans": 761.0,
-  "share": 0.761
+  "plans": 990.0,
+  "share": 0.99
  },
  {
   "system": "IRV",
@@ -68,20 +56,8 @@
   "modeLabel": "Deliberative",
   "pooled": false,
   "seats": 1,
-  "plans": 221.0,
-  "share": 0.221
- },
- {
-  "system": "IRV",
-  "systemLabel": "12 X 1 IRV",
-  "numDistricts": 12,
-  "winners": 1,
-  "mode": "slate_bt",
-  "modeLabel": "Deliberative",
-  "pooled": false,
-  "seats": 2,
-  "plans": 18.0,
-  "share": 0.018
+  "plans": 10.0,
+  "share": 0.01
  },
  {
   "system": "IRV",
@@ -92,8 +68,8 @@
   "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 0,
-  "plans": 389.0,
-  "share": 0.389
+  "plans": 883.0,
+  "share": 0.883
  },
  {
   "system": "IRV",
@@ -104,8 +80,8 @@
   "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 1,
-  "plans": 464.0,
-  "share": 0.464
+  "plans": 112.0,
+  "share": 0.112
  },
  {
   "system": "IRV",
@@ -116,19 +92,7 @@
   "modeLabel": "Impulsive",
   "pooled": false,
   "seats": 2,
-  "plans": 131.0,
-  "share": 0.131
- },
- {
-  "system": "IRV",
-  "systemLabel": "12 X 1 IRV",
-  "numDistricts": 12,
-  "winners": 1,
-  "mode": "slate_pl",
-  "modeLabel": "Impulsive",
-  "pooled": false,
-  "seats": 3,
-  "plans": 16.0,
-  "share": 0.016
+  "plans": 5.0,
+  "share": 0.005
  }
 ]
