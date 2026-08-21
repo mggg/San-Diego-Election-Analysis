@@ -1,13 +1,13 @@
 {
- "runName": "Testing - 3 X 3 (2 Blocs) Ballot Truncation",
- "slug": "testing-3-x-3-2-blocs-ballot-truncation",
+ "runName": "Basic - 3 X 3 (2 Blocs) - WAIO Low Polarization",
+ "slug": "basic-3-x-3-2-blocs-waio-low-polarization",
  "focalGroup": "WHI",
  "focalGroupLabel": "WHI",
  "totalSeats": 9,
- "focalVapShare": 0.4588409607434803,
- "proportionalSeats": 4.129568646691323,
- "proportionalLabel": "WHI share of VAP: 45.9% (4.1 seats)",
- "seatMax": 8,
+ "focalVapShare": 0.4380194598284399,
+ "proportionalSeats": 3.9421751384559593,
+ "proportionalLabel": "WHI share of VAP: 43.8% (3.9 seats)",
+ "seatMax": 9,
  "seatTicks": [
   0,
   1,
@@ -17,7 +17,8 @@
   5,
   6,
   7,
-  8
+  8,
+  9
  ],
  "districtConfigs": [
   {
@@ -31,8 +32,13 @@
    ],
    "candidatePoolMax": 10,
    "candidatePoolMean": 7,
-   "plans": 2,
-   "electionsPerSystem": 180
+   "plans": 100,
+   "electionsPerSystem": 9000,
+   "electionsByMode": {
+    "cambridge": 3000,
+    "slate_bt": 3000,
+    "slate_pl": 3000
+   }
   }
  ],
  "voterModels": [
@@ -59,21 +65,21 @@
  ],
  "slates": [
   {
-   "id": "WHI",
-   "label": "WHI",
-   "vapShare": 0.4588409607434803
-  },
-  {
    "id": "POC",
    "label": "POC",
-   "vapShare": 0.5411590392565198
+   "vapShare": 0.5619805401715601
+  },
+  {
+   "id": "WHI",
+   "label": "WHI",
+   "vapShare": 0.4380194598284399
   }
  ],
  "turnout": {
-  "WHI": 1,
-  "POC": 0.7
+  "POC": 0.7,
+  "WHI": 1
  },
  "primaryTurnout": null,
  "replicates": 10,
- "subsamples": 2
+ "subsamples": 100
 }

@@ -1089,10 +1089,20 @@ async function mountRun(section, manifest, cache) {
 
     // The boxplot's own control: it changes what fills the boxes, and it changes
     // which boxes, so it belongs with that figure rather than the shared bar.
-    // Present only while the selected system has availability data behind it.
+    // Present only while the selected system's own shape has availability data
+    // behind it -- not just whether the run has any at all. A hybrid run's
+    // Combined view has none: candidate pools are a property of a real
+    // district, and the pooled citywide total (numDistricts 0) isn't one, so
+    // checking the whole run would offer a toggle whose chart can only ever
+    // come up empty for that one selection.
     const source = selected && selected.source;
-    const hasAvailability = source
-      ? Boolean(bundles.get(source.run).availability) : Boolean(bundle.availability);
+    const active = source ? sourceBundle(bundles, source) : bundle;
+    const shapeBoxes = source
+      ? (active.availability?.boxes || [])
+      : (active.availability?.boxes || []).filter(
+        (b) => b.numDistricts === selected.numDistricts && b.winners === selected.winners,
+      );
+    const hasAvailability = shapeBoxes.length > 0;
     metrics.selectAll('button')
       .data(hasAvailability
         ? [{ id: 'winRate', label: 'Win rate' },

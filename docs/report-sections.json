@@ -213,10 +213,10 @@
     {
       "_note": "Basic - 3 X 3 with the majority bloc's own cohesion lowered, both bloc models.",
       "slug": "basic-3-x-3-waio-low-polarization",
-      "title": "Basic - 3 X 3, High Polarization",
+      "title": "Basic - 3 X 3, Low Polarization",
       "systems": [
         {
-          "run": "basic-3-x-3-2-blocs-high-whi-polarization",
+          "run": "basic-3-x-3-2-blocs-waio-low-polarization",
           "system": "FASTSTV",
           "blocModel": "two"
         },
@@ -229,41 +229,41 @@
     },
     {
       "_note": "The hybrid charter-amendment run with the majority bloc's own cohesion lowered, both bloc models: the combined citywide total, or either component contest on its own.",
-      "slug": "city-charter-amendment-proposal-high-whi-polarization",
-      "title": "City Charter Amendment Proposal, High Polarization",
+      "slug": "city-charter-amendment-proposal-waio-low-polarization",
+      "title": "City Charter Amendment Proposal, Low Polarization",
       "systems": [
         {
-          "run": "city-charter-amendment-proposal-high-whi-polarization-2-blocs",
+          "run": "city-charter-amendment-proposal-waio-low-polarization-2-blocs",
           "system": "Combined",
           "blocModel": "two",
           "label": "Combined (15 seats)"
         },
         {
-          "run": "city-charter-amendment-proposal-high-whi-polarization-2-blocs",
+          "run": "city-charter-amendment-proposal-waio-low-polarization-2-blocs",
           "system": "IRV",
           "blocModel": "two",
           "label": "9 X 1 IRV"
         },
         {
-          "run": "city-charter-amendment-proposal-high-whi-polarization-2-blocs",
+          "run": "city-charter-amendment-proposal-waio-low-polarization-2-blocs",
           "system": "FASTSTV",
           "blocModel": "two",
           "label": "1 X 6 STV"
         },
         {
-          "run": "city-charter-amendment-proposal-high-whi-polarization",
+          "run": "city-charter-amendment-proposal-waio-low-polarization",
           "system": "Combined",
           "blocModel": "four",
           "label": "Combined (15 seats)"
         },
         {
-          "run": "city-charter-amendment-proposal-high-whi-polarization",
+          "run": "city-charter-amendment-proposal-waio-low-polarization",
           "system": "IRV",
           "blocModel": "four",
           "label": "9 X 1 IRV"
         },
         {
-          "run": "city-charter-amendment-proposal-high-whi-polarization",
+          "run": "city-charter-amendment-proposal-waio-low-polarization",
           "system": "FASTSTV",
           "blocModel": "four",
           "label": "1 X 6 STV"
