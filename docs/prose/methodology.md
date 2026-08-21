@@ -132,21 +132,22 @@ This matrix is used by the Basic scenarios and their variations — Basic 3 × 3
 
 ## 3.5 Cambridge Ballot Truncation
 
-The ballots generated in Section 3.4 are, by default, full rankings—every voter ranks every candidate on the slate. However, we introduce a new scenario where voters don't all behave the same way, allowing for incomplete and bullet ballots.
-Cambridge has run ranked-choice elections continuously since 1941, and a subset of those elections from 2009–2017 shows real dispersion in ballot length. Moreover, this distribution differs between the historical majority and minority slates.
+The ballots generated in Section 3.4 are, by default, full rankings—every voter ranks every candidate on the slate. However, we introduce a new scenario where voters don't all behave the same way, allowing for incomplete and bullet ballots. We are interested in ballot truncation to measure its impact on minority and majority representation.
 
-To capture this behavior, we introduce a truncation process calibrated to real ranked-choice ballots from Cambridge, MA's 2009–2017 municipal elections. Using the same structure as VoteKit, we work with two empirical distributions over ballot length: one for ballots that started with a candidate from the historical majority (White) slate, and one for ballots that started with a candidate from the historical minority (Black, Asian, or Hispanic) slate.
+It is worth noting that Cambridge has run ranked-choice elections continuously since 1941. Analyzing elections from 2009–2017, we identified a small dispersion in ballot length that varies by community: voters whose first choice was a minority-slate candidate bullet-voted (ranked only one candidate) at a rate of 8.44%, compared to 8.59% for voters whose first choice was a majority-slate candidate. Average ballot length follows a different pattern (5.84 for majority-first ballots versus 6.24 for minority-first ballots). Although these differences are modest, we chose to model the two groups with separate distributions rather than pooling them.
 
-Finally, the PL and BT preference profiles are truncated to a ballot length uniformly sampled from the historical distribution, with the corresponding majority or minority group.
+To capture this behavior, we introduce a truncation process calibrated to real ranked-choice ballots from Cambridge, MA's 2009–2017 municipal elections. Using the same structure as VoteKit, we work with two empirical distributions over ballot length: one for ballots that started with a candidate from the historical majority (White) slate, and one for ballots that started with a candidate from the historical minority (Black, Asian, or Hispanic) slate. Finally, the PL and BT preference profiles are truncated to a ballot length uniformly sampled from these empirical distributions.
+
+This process was applied to all scenarios including the Charter Amendment proposal at four and bloc configuration.
 
 ## 3.6 Bounded Ballot Truncation
 
-Additionally, this report explores a scenario where voters are not allowed to rank all candidates, but only within a fixed range. We are interested in ballot truncation to measure its impact on minority and majority representation in RCV.
+Additionally, this report explores a scenario where voters are not allowed to rank all candidates, but only within a fixed range. To simulate it, we added a variant to the truncation methodology named "Bounded". This methodology subsets the historical Cambridge distribution using a defined lower and upper bound. Using the subset distribution, we sample uniformly to truncates the ballots.
 
-For that reason, we added a variant to the truncation methodology named "Bounded." This methodology subsets the historical Cambridge distribution using a defined lower and upper bound. After this truncation, we sample uniformly from that subset to truncate the ballots.
+This process was applied to the Charter Amendment proposal, specifically to the 1×9 STV elections and the 3×3 STV elections, to understand its impact on the electoral results. For the 3×3 STV, we defined the range as k to 2k, where k is the number of winners. For the 1×9 STV elections, since the k-to-2k rule does not apply to a single 9-winner district, we instead tested two manually chosen ranges: a bounded range of 6 to 10, and a fixed ballot length of exactly 6.
 
-This process was applied to the Charter Amendment proposal, specifically to the 1×9 STV elections and the 3×3 STV elections, to understand its impact on minority groups. For the 3×3 STV, we defined the range as k to 2k, where k is the number of winners. For the 1×9 STV elections, we defined a range of 6 to 7 for ballot length.
- 
+Additional details of Truncation methodology can be found in the Appendix.
+
 ## 3.7 Voting Rules
 
 Elections for each district are simulated using VoteKit's Elections module. We use the following voting rules with the corresponding district configurations:
