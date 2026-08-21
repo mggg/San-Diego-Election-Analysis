@@ -1,5 +1,5 @@
 {
-  "run_name": "City Charter Amendment Proposal - Truncation",
+  "run_name": "City Charter Amendment Proposal - Truncation 6",
   "num_subsamples": 50,
   "candidate_geometric_p": 0.1,
   "hybrid_election": true,
@@ -130,7 +130,7 @@
       "1": {
         "method": "bounded",
         "min_length": 6,
-        "max_length": 10
+        "max_length": 6
       }
     }
   }
