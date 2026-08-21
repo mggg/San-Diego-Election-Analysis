@@ -31,6 +31,7 @@
           <li class="nav-item"><a class="nav-link" href="#conclusion">Conclusion</a></li>
           <li class="nav-item"><a class="nav-link" href="#results">Electoral Scenarios and Results</a></li>
           <li class="nav-item"><a class="nav-link" href="#comparison">Cross-Run Comparison</a></li>
+          <li class="nav-item"><a class="nav-link" href="#appendix">Appendix</a></li>
           <li class="nav-item"><a class="nav-link" href="https://github.com/mggg/San-Diego-Election-Analysis" target="_blank" rel="noopener">GitHub ↗</a></li>
         </ul>
       </div>
@@ -60,6 +61,7 @@
             <a class="nav-link" href="#run-basic-3-x-3-truncation">Basic - 3 X 3 + Truncation</a>
           </nav>
           <a class="nav-link" href="#comparison">Cross-Run Comparison</a>
+          <a class="nav-link" href="#appendix">Appendix</a>
         </nav>
       </div>
 
@@ -589,6 +591,19 @@ $$</div>
           <h2>Cross-Run Comparison</h2>
           <div class="run-controls" data-controls="crossrun"></div>
           <div class="chart" data-chart="crossrun"></div>
+        </section>
+
+        <section id="appendix" class="prose mb-5">
+          <h2>Appendix</h2>
+<h2>Appendix A. Bounded Ballot Truncation</h2>
+<p>Section 3.5 describes the truncation applied by default to every scenario's PL and BT profiles: each ballot's ranked length is drawn from one of two empirical Cambridge distributions, chosen by whether the ballot's first choice belongs to the historical majority or minority slate. The <strong>Truncation</strong> scenario (3 × 3, both bloc models) goes one step further, restricting those same distributions to a fixed length window before sampling from them. This appendix documents that restriction and validates it against the scenario's own generated ballots.</p>
+<h3>A.1 Restricting the Historical Distributions</h3>
+<p>The historical distributions place non-trivial probability mass across the full range Cambridge's ballots have ever taken, including ballots as short as one candidate and as long as the slate pool itself. The Truncation scenario instead clips each of the two historical distributions to an inclusive length window and renormalizes what remains, so the result is still a valid probability distribution — just one confined to a narrower range than Cambridge's raw history. Its configs, <code>configs/basic-truncation.json</code> for the four-bloc model and <code>configs/2b-basic-truncation.json</code> for the two-bloc model, set that window to <code>[3, 6]</code>: no simulated voter in either version of the scenario ranks fewer than three or more than six candidates, however long their unrestricted ballot would otherwise have run.</p>
+<p>Bounding the distribution this way models a ballot design constraint rather than a behavioral one — a jurisdiction that caps how many candidates a voter may rank, as opposed to a voter who simply stops ranking early on their own. It asks a different question from the unbounded truncation applied everywhere else: not &quot;how does ballot length vary when voters behave like Cambridge's electorate,&quot; but &quot;how do outcomes change when every voter's ballot is confined to the same length window.&quot;</p>
+<h3>A.2 Validation</h3>
+<p>To confirm the bound is respected, we compare each truncated ballot against the length it would have had without truncation — the full slate ranking the PL/BT generators produced before Cambridge truncation was applied. The figure below plots both distributions for the Truncation scenario's 3 × 3 configuration: once under the four-bloc model, where WAIO, HIS, AAPI, and BLK are modeled as four separate blocs, and once under the two-bloc model, where WAIO is set against a single pooled POC bloc.</p>
+<p><img src="assets/ballot_length_truncation_comparison.png" alt="Truncated vs. full ballot length, Basic 3 × 3 Truncation scenario" /></p>
+<p>Under both bloc models, the truncated (actual) ballots fall entirely within the configured <code>[3, 6]</code> window, while the full, untruncated ballots those same voters would otherwise have cast extend out to ten — this holds regardless of how finely the electorate is split into blocs, since the truncation lengths are drawn independently of bloc identity once a ballot's majority/minority group is fixed. Over the lengths the two distributions share, five and six, they track each other closely, which is expected: the bounded distribution is the historical one restricted and renormalized, not a distribution drawn from a different model.</p>
         </section>
       </main>
     </div>

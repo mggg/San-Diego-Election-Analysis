@@ -21,6 +21,11 @@
       "id": "conclusion",
       "file": "conclusion.md",
       "title": "Conclusion"
+    },
+    {
+      "id": "appendix",
+      "file": "appendix.md",
+      "title": "Appendix"
     }
   ],
   "_scenarios_comment": "Scenario sections, in page order, by slug (the 'slug' in a run's outputs/<run>/summaries/report/run.json). This is an allow-list: a run with complete artifacts that is not listed here does not appear on the page. To park a scenario without losing the entry, replace the string with { \"slug\": \"...\", \"enabled\": false }. A hidden scenario keeps its data in manifest.json and docs/data/, and stays in the cross-run comparison.",
