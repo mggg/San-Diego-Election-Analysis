@@ -1,12 +1,12 @@
 {
  "runName": "City Charter Amendment Proposal (2 Blocs)",
  "slug": "city-charter-amendment-proposal-2-blocs",
- "focalGroup": "WAIO",
- "focalGroupLabel": "WAIO",
+ "focalGroup": "POC",
+ "focalGroupLabel": "POC",
  "totalSeats": 15,
- "focalVapShare": 0.4588409607434803,
- "proportionalSeats": 6.882614411152204,
- "proportionalLabel": "WAIO share of VAP: 45.9% (6.9 seats)",
+ "focalVapShare": 0.5411590392565198,
+ "proportionalSeats": 8.117385588847796,
+ "proportionalLabel": "POC share of VAP: 54.1% (8.1 seats)",
  "seatMax": 15,
  "seatTicks": [
   0,
@@ -31,7 +31,8 @@
    "candidatePoolMax": null,
    "candidatePoolMean": null,
    "plans": 50,
-   "electionsPerSystem": 17212
+   "electionsPerSystem": 17212,
+   "electionsByMode": {}
   },
   {
    "numDistricts": 1,
@@ -45,7 +46,12 @@
    "candidatePoolMax": 15,
    "candidatePoolMean": 12,
    "plans": 50,
-   "electionsPerSystem": 17212
+   "electionsPerSystem": 17212,
+   "electionsByMode": {
+    "cambridge": 1250,
+    "slate_bt": 1250,
+    "slate_pl": 1250
+   }
   },
   {
    "numDistricts": 9,
@@ -59,7 +65,12 @@
    "candidatePoolMax": 10,
    "candidatePoolMean": 7,
    "plans": 50,
-   "electionsPerSystem": 17212
+   "electionsPerSystem": 17212,
+   "electionsByMode": {
+    "cambridge": 8175,
+    "slate_bt": 11250,
+    "slate_pl": 11250
+   }
   }
  ],
  "voterModels": [

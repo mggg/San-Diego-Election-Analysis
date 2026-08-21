@@ -50,7 +50,9 @@ OPTIONAL_ARTIFACT_FILES = ("availability.json",)
 # Runs kept out of the published report even though their artifacts are
 # complete. Excluded by slug rather than deleted from outputs/, so the
 # scenario stays reproducible if it's ever brought back.
-EXCLUDED_RUN_SLUGS = {"basic-3-x-3-truncation"}
+# Nothing is excluded at present. The four-bloc truncation run was held out
+# here while its results were incomplete; it is published again now.
+EXCLUDED_RUN_SLUGS: set = set()
 
 # The hand-edited page outline: which prose sections and which scenarios the
 # report renders, and in what order. It is read, never written -- generate_report
@@ -279,6 +281,7 @@ def resolve_composition(
             # offer a toggle with nothing behind it on the ones that never used it.
             "voterModels": _models_of_contest(meta, dc, system, records_cache),
             "plans": dc.get("plans"),
+            "electionsByMode": dc.get("electionsByMode") or {},
             "replicates": meta.get("replicates"),
             "turnout": meta.get("turnout"),
             "primaryTurnout": meta.get("primaryTurnout"),
@@ -656,6 +659,52 @@ def build_manifest(runs: List[Dict[str, Any]]) -> Dict[str, Any]:
     }
 
 
+def restrict_cross_run(manifest: Dict[str, Any], page_runs: List[Dict[str, Any]],
+                       scenarios: Optional[List[Any]]) -> None:
+    """
+    Narrow the comparison figure to the contests the page actually publishes,
+    and tag each with the bloc model it was simulated under.
+
+    The figure was built from every run with artifacts, which over time meant
+    offering rows for scenarios that no section shows -- superseded runs, runs
+    whose config is gone, both bloc models of everything -- so its picker listed
+    far more systems than the report discusses. Restricting it to what the
+    outline names keeps the comparison and the sections talking about one set of
+    simulations.
+
+    The bloc-model tag comes from the outline's own `blocModel` keys, the same
+    source the per-section toggle uses, so a row and the section it came from
+    can never disagree about which model it belongs to.
+    """
+    entries = _scenario_entries(scenarios)
+    allowed: Dict[tuple, Optional[str]] = {}
+
+    for run in page_runs:
+        composition = run.get("composition")
+        if composition:
+            for source in composition:
+                allowed[(source["run"], source["system"])] = source.get("blocModel")
+            continue
+        # A plain section publishes every contest its own run holds.
+        model = (entries.get(run["slug"]) or {}).get("blocModel")
+        for dc in run.get("districtConfigs", []):
+            for system in dc["systems"]:
+                allowed[(run["slug"], system["id"])] = model
+
+    kept = []
+    for series in manifest.get("crossRun", []):
+        key = (series["runSlug"], series["system"])
+        if key in allowed:
+            series["blocModel"] = allowed[key]
+            kept.append(series)
+
+    dropped = len(manifest.get("crossRun", [])) - len(kept)
+    manifest["crossRun"] = kept
+    if dropped:
+        print(f"[report_generator] Cross-run comparison: kept {len(kept)} series, "
+              f"dropped {dropped} not published by any section.")
+
+
 def _config_reference(config_dir: Optional[Path] = None) -> List[Dict[str, Any]]:
     """
     The configuration table, read from configs/ rather than hand-maintained --
@@ -791,6 +840,8 @@ def generate_report(docs_dir: Path = DOCS_DIR, config_dir: Optional[Path] = None
     # Sections that collect systems from several runs, resolved once here so the
     # page never has to work out which bundle a dropdown entry belongs to.
     attach_compositions(manifest, runs, outline["scenarios"])
+    page_runs_for_cross = select_page_runs(manifest["runs"], outline["scenarios"])
+    restrict_cross_run(manifest, page_runs_for_cross, outline["scenarios"])
     data_dir = docs_dir / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
     with open(data_dir / "manifest.json", "w", encoding="utf-8") as f:

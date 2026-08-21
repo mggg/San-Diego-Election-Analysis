@@ -746,10 +746,17 @@ def aggregate_hybrid_totals(df_plan: pd.DataFrame, district_configs: List[Distri
     match_hybrid_contests), so this is a plain join-and-sum -- no method
     cross-product to resolve.
 
-    A contest with a single sampled "plan" (an at-large entry, num_districts
-    == 1, whose district assignment is trivial) is broadcast across every
-    sampled district plan sharing its (mode, rep): the same at-large outcome
-    paired with each district-plan draw for that replicate.
+    Contests are paired plan for plan when both sampled the same plans, which
+    is the usual case: district_generator subsamples the chain the same way for
+    every entry, writing the trivial assignment for each subsample of an
+    at-large entry rather than a single plan. Joining on (mode, rep) alone there
+    would pair every plan of one contest with every plan of the other, inflating
+    the combined distribution by the plan count -- 50x for a 50-plan run -- and
+    counting each plan's citywide total 50 times over.
+
+    A contest that genuinely has one sampled plan is still broadcast across
+    every plan sharing its (mode, rep): the same outcome paired with each
+    district-plan draw for that replicate.
 
     Args:
         df_plan: Plan-level summary from aggregate_to_plan_level, covering
@@ -782,10 +789,15 @@ def aggregate_hybrid_totals(df_plan: pd.DataFrame, district_configs: List[Distri
 
     for dc in ordered[1:]:
         rows = _entry_rows(dc)
-        addend = rows[join_cols + seat_cols + ["election_method"]].rename(
+        # Pair plan for plan when both sides sampled more than one; broadcast
+        # only when one of them truly has a single plan to spread.
+        keys = list(join_cols)
+        if rows["plan"].nunique() > 1 and combined["plan"].nunique() > 1:
+            keys.append("plan")
+        addend = rows[keys + seat_cols + ["election_method"]].rename(
             columns={c: f"{c}__add" for c in seat_cols}
         )
-        combined = combined.merge(addend, on=join_cols, how="inner")
+        combined = combined.merge(addend, on=keys, how="inner")
         for c in seat_cols:
             combined[c] = combined[c] + combined[f"{c}__add"]
         combined = combined.drop(columns=[f"{c}__add" for c in seat_cols])
@@ -793,6 +805,34 @@ def aggregate_hybrid_totals(df_plan: pd.DataFrame, district_configs: List[Distri
             lambda m, dc=dc: f"; {dc.num_districts}x{dc.winners}:{m}"
         )
         combined = combined.drop(columns=["election_method"])
+
+    # Only plans that filled the whole body.
+    #
+    # A voter model can be missing districts: the Cambridge generator skips a
+    # district whose candidate pool drew from only one slate (see
+    # profile_generator._is_cambridge_eligible), so that model has no ballots
+    # there and the district never goes to an election. Summing whatever
+    # contests did run would report a 15-seat council filled with 10 seats, and
+    # every share computed from it would be against a denominator that varies
+    # row to row. Such rows are dropped rather than scaled up: a partial council
+    # is not a smaller council, and which districts are missing is not random --
+    # they are the ones where one slate fielded nobody.
+    # "seats_per_district" shares the prefix but is the contest's magnitude,
+    # not a slate's seats; including it would inflate every total.
+    slate_cols = [c for c in seat_cols
+                  if c.startswith("seats_") and c != "seats_per_district"]
+    expected_seats = sum(dc.num_districts * dc.winners for dc in district_configs)
+    if slate_cols and expected_seats:
+        filled = combined[slate_cols].sum(axis=1)
+        incomplete = int((filled != expected_seats).sum())
+        if incomplete:
+            by_mode = (
+                combined.loc[filled != expected_seats, "mode"].value_counts().to_dict()
+                if "mode" in combined.columns else {}
+            )
+            print(f"[summarize_results] Combined view: dropped {incomplete} incomplete "
+                  f"plan(s) short of {expected_seats} seats {by_mode}")
+        combined = combined[filled == expected_seats]
 
     return combined
 
@@ -1533,6 +1573,18 @@ def _run_metadata(df: pd.DataFrame, df_plan: pd.DataFrame, config, iprop: float,
             "candidatePoolMean": source.get("candidate_pool_mean"),
             "plans": int(group["plan"].nunique()),
             "electionsPerSystem": int(len(df) / max(df["election_method"].nunique(), 1)),
+            # District elections actually simulated, per voter model. Not a
+            # constant across models: the Cambridge generator skips districts
+            # whose candidate pool drew from only one slate, so its count runs
+            # below the ranked models' and the difference is worth seeing rather
+            # than inferring from a gap in a chart.
+            "electionsByMode": {
+                str(mode): int(rows.groupby(["plan", "district_id", "rep"]).ngroups)
+                for mode, rows in df[
+                    (df["num_districts"] == num_dist)
+                    & (df["seats_per_district"] == winners)
+                ].groupby("mode")
+            },
         })
 
     # The pooled row is added by _occurrence_counts, so it is not in df_plan's

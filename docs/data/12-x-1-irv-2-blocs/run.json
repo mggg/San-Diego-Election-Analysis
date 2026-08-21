@@ -1,12 +1,12 @@
 {
  "runName": "12 X 1 IRV (2 Blocs)",
  "slug": "12-x-1-irv-2-blocs",
- "focalGroup": "WAIO",
- "focalGroupLabel": "WAIO",
+ "focalGroup": "POC",
+ "focalGroupLabel": "POC",
  "totalSeats": 12,
- "focalVapShare": 0.4588409607434803,
- "proportionalSeats": 5.506091528921764,
- "proportionalLabel": "WAIO share of VAP: 45.9% (5.5 seats)",
+ "focalVapShare": 0.5411590392565198,
+ "proportionalSeats": 6.493908471078237,
+ "proportionalLabel": "POC share of VAP: 54.1% (6.5 seats)",
  "seatMax": 12,
  "seatTicks": [
   0,
@@ -30,7 +30,12 @@
    "candidatePoolMax": 7,
    "candidatePoolMean": 5,
    "plans": 100,
-   "electionsPerSystem": 31840
+   "electionsPerSystem": 31840,
+   "electionsByMode": {
+    "cambridge": 7840,
+    "slate_bt": 12000,
+    "slate_pl": 12000
+   }
   }
  ],
  "voterModels": [

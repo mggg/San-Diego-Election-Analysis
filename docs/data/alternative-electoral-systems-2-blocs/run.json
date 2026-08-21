@@ -1,13 +1,13 @@
 {
  "runName": "Alternative Electoral Systems (2 Blocs)",
  "slug": "alternative-electoral-systems-2-blocs",
- "focalGroup": "WAIO",
- "focalGroupLabel": "WAIO",
+ "focalGroup": "POC",
+ "focalGroupLabel": "POC",
  "totalSeats": 15,
- "focalVapShare": 0.4588409607434803,
- "proportionalSeats": 6.882614411152204,
- "proportionalLabel": "WAIO share of VAP: 45.9% (6.9 seats)",
- "seatMax": 14,
+ "focalVapShare": 0.5411590392565198,
+ "proportionalSeats": 8.117385588847796,
+ "proportionalLabel": "POC share of VAP: 54.1% (8.1 seats)",
+ "seatMax": 15,
  "seatTicks": [
   0,
   2,
@@ -39,7 +39,12 @@
    "candidatePoolMax": 5,
    "candidatePoolMean": 3,
    "plans": 100,
-   "electionsPerSystem": 37270
+   "electionsPerSystem": 37270,
+   "electionsByMode": {
+    "cambridge": 7270,
+    "slate_bt": 15000,
+    "slate_pl": 15000
+   }
   }
  ],
  "voterModels": [

@@ -38,19 +38,19 @@ Note that while we attempt to maintain consistency in modeling decisions between
 
 The voting bloc variables were constructed using Decennial Census variables from 2020 following the [bloc classification methodology](https://data-democracy.org/VAP-CVAP) of MGGG.
 
-The six census categories below partition San Diego's voting-age population of 1,125,087. Every category is assigned to exactly one bloc, so the blocs sum to the whole electorate and no resident is counted twice or left out. Both models carry American Indian and other-race voters with White voters in the WAIO bloc; they differ only in whether the remaining groups vote as one bloc or three.
+The six census categories below partition San Diego's voting-age population of 1,125,087. Every category is assigned to exactly one bloc, so the blocs sum to the whole electorate and no resident is counted twice or left out. The two models place American Indian and other-race voters differently: the two-bloc model counts them with POC, so POC is every voter of colour; the four-bloc model carries them with White voters in WAIO, since they cannot join BLK, HIS or AAPI without picking one arbitrarily.
 
 | Demographic group |           VAP |       Share | Four-bloc | Two-bloc |
 | ----------------- | ------------: | ----------: | --------- | -------- |
-| White             |       492,810 |      43.80% | WAIO      | WAIO     |
+| White             |       492,810 |      43.80% | WAIO      | WHI      |
 | Hispanic          |       298,979 |      26.57% | HIS       | POC      |
 | Asian / NHPI      |       229,884 |      20.43% | AAPI      | POC      |
 | Black             |        79,988 |       7.11% | BLK       | POC      |
-| Other race        |        14,593 |       1.30% | WAIO      | WAIO     |
-| American Indian   |         8,833 |       0.79% | WAIO      | WAIO     |
+| Other race        |        14,593 |       1.30% | WAIO      | POC      |
+| American Indian   |         8,833 |       0.79% | WAIO      | POC      |
 | **Total**         | **1,125,087** | **100.00%** |           |          |
 
-Two groupings are used across the study. The **four-bloc model** gives Hispanic, Asian, and Black voters a bloc each alongside WAIO, producing bloc shares of 45.88% WAIO, 26.57% HIS, 20.43% AAPI, and 7.11% BLK. The **two-bloc model** keeps WAIO exactly as it is and combines the other three into a single POC bloc: 45.88% WAIO against 54.12% POC.
+Two groupings are used across the study. The **four-bloc model** gives Hispanic, Asian, and Black voters a bloc each alongside WAIO, producing bloc shares of 45.88% WAIO, 26.57% HIS, 20.43% AAPI, and 7.11% BLK. The **two-bloc model** sets White voters alone against everyone else: 43.80% WHI against 56.20% POC. The two models name their White bloc differently on purpose — WHI is White alone, WAIO is White with American Indian and other-race voters folded in — so a label always denotes one population.
 
 The difference is not only one of labels. The four-bloc model needs a cohesion matrix asserting how each minority bloc behaves toward the other two; the two-bloc model asks instead whether a coalition of minority voters can elect candidates of its choice, which is the question these simulations are built around.
 
@@ -58,7 +58,7 @@ The difference is not only one of labels. The four-bloc model needs a cohesion m
 
 The decision to simulate candidate availability per-district for each voting bloc relies on evidence found from previous San Diego City council elections. For instance, the last three San Diego City Council Elections had a pattern where candidates representing the Asian and Black community run only in the districts where their own community makes up a larger share of voters across districts ([2020](https://en.wikipedia.org/wiki/2020_San_Diego_elections), [2022](https://en.wikipedia.org/wiki/2022_San_Diego_City_Council_election), [2024](https://en.wikipedia.org/wiki/2024_San_Diego_elections)). Analyzing the bloc distribution of San Diego 9-district plan, District 4 and 6 have the highest shares of Black and Asian communities, respectively, and candidates running in those district are predominantly from those same communitities. Likewise, it is not common to find candidates from Asian and Black running on districts with a low share of their own communities. 
 
-Similarly, evidence suggest that the number of candidate or pool size that runs for each district is not homogenous. Last 20 years of elections, the distribution of candidates running per district is diverse. On primaries, the average number of candidate is 3.5, where there has been districts bellow the mean with only 1 candidate running and districts above with 9 candidates.
+Similarly, evidence suggest that the number of candidate or pool size that runs for each district is not homogenous. Last 14 years of elections, the distribution of candidates running per district is diverse. On primaries, the average number of candidate is 3.89, where there has been districts bellow the mean with only 1 candidate running and districts above, with 9 candidates.
 
 ![Histogram](../assets/candidate_count_histogram.png)
 
@@ -108,12 +108,12 @@ Rows are voter blocs, columns are candidate slates; each row sums to 1. A cell i
 
 **Two-bloc simulations.**
 
-| bloc ↓ / slate → | WAIO | POC |
+| bloc ↓ / slate → | WHI | POC |
 |---|---|---|
-| **WAIO** (White, American Indian, other race) | 0.80 | 0.20 |
-| **POC** (Black, Hispanic, Asian/NHPI) | 0.11 | 0.89 |
+| **WHI** (White) | 0.80 | 0.20 |
+| **POC** (Black, Hispanic, Asian/NHPI, American Indian, other race) | 0.11 | 0.89 |
 
-The POC bloc is modelled as slightly more cohesive than WAIO — 0.89 against 0.80 — which is what lets it win a share of seats above its share of the modelled electorate in several scenarios, despite lower turnout.
+The POC bloc is modelled as slightly more cohesive than WHI — 0.89 against 0.80 — which is what lets it win a share of seats above its share of the modelled electorate in several scenarios, despite lower turnout.
 
 **Four-bloc simulations.**
 
