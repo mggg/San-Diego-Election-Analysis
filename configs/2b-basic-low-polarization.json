@@ -1,29 +1,19 @@
 {
-  "run_name": "City Charter Amendment Proposal - High WHI Polarization (2 Blocs)",
-  "num_subsamples": 50,
-  "hybrid_election": true,
-  "total_seats": 15,
+  "run_name": "Basic - 3 X 3 (2 Blocs) - WAIO Low Polarization",
+  "num_subsamples": 100,
+  "total_seats": 9,
   "district_configs": [
     {
-      "num_districts": 9,
-      "winners": 1,
+      "num_districts": 3,
+      "winners": 3,
       "candidate_pool_max": 10,
       "candidate_pool_mean": 7
-    },
-    {
-      "num_districts": 1,
-      "winners": 6,
-      "candidate_pool_max": 15,
-      "candidate_pool_mean": 12
     }
   ],
   "voting_configs": {
-    "IRV": {
-      "tiebreak": "random"
-    },
     "FastSTV": {
-      "tiebreak": "random",
-      "n_seats": 6
+      "n_seats": 3,
+      "tiebreak": "random"
     }
   },
   "voter_models": [
@@ -65,7 +55,7 @@
       "WHI": 1
     }
   },
-  "num_reps": 25,
+  "num_reps": 10,
   "cambridge_truncation": {
     "enabled": true,
     "majority_slates": [
