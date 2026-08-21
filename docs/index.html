@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+"
         crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="fonts/fonts.css">
-  <link rel="stylesheet" href="css/report.css?v=ee737f4e0e">
+  <link rel="stylesheet" href="css/report.css?v=501b927811">
 </head>
 
 <body data-bs-spy="scroll" data-bs-target="#toc-nav" data-bs-offset="90" tabindex="0">
@@ -59,7 +59,8 @@
             <a class="nav-link" href="#run-city-charter-amendment-proposal">City Charter Amendment Proposal</a>
             <a class="nav-link" href="#run-alternative-electoral-systems">Alternative Electoral Systems</a>
             <a class="nav-link" href="#run-basic-3-x-3-truncation">Basic - 3 X 3 + Truncation</a>
-            <a class="nav-link" href="#run-basic-3-x-3-waio-low-polarization">Basic - 3 X 3, High Polarization</a>
+            <a class="nav-link" href="#run-basic-3-x-3-waio-low-polarization">Basic - 3 X 3, Low Polarization</a>
+            <a class="nav-link" href="#run-city-charter-amendment-proposal-waio-low-polarization">City Charter Amendment Proposal, Low Polarization</a>
             <a class="nav-link" href="#run-city-charter-amendment-proposal-truncation">City Charter Amendment Proposal, Truncation</a>
           </nav>
           <a class="nav-link" href="#comparison">Cross-Run Comparison</a>
@@ -593,7 +594,7 @@ Cambridge has run ranked-choice elections continuously since 1941, and a subset 
           </section>
           <section id="run-basic-3-x-3-waio-low-polarization" class="run mb-5" data-run="basic-3-x-3-waio-low-polarization">
             <div class="run-main">
-            <h3 class="h4 mt-4">Basic - 3 X 3, High Polarization</h3>
+            <h3 class="h4 mt-4">Basic - 3 X 3, Low Polarization</h3>
             <p class="todo">[Description to be written — edit
                <code>docs/prose/runs/basic-3-x-3-waio-low-polarization.md</code>.]</p>
 
@@ -635,6 +636,51 @@ Cambridge has run ranked-choice elections continuously since 1941, and a subset 
             </div>
             </div>
             <aside class="run-params" data-params="basic-3-x-3-waio-low-polarization"></aside>
+          </section>
+          <section id="run-city-charter-amendment-proposal-waio-low-polarization" class="run mb-5" data-run="city-charter-amendment-proposal-waio-low-polarization">
+            <div class="run-main">
+            <h3 class="h4 mt-4">City Charter Amendment Proposal, Low Polarization</h3>
+            <p class="todo">[Description to be written — edit
+               <code>docs/prose/runs/city-charter-amendment-proposal-waio-low-polarization.md</code>.]</p>
+
+            <div class="run-controls" data-controls="city-charter-amendment-proposal-waio-low-polarization"></div>
+
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="tab"
+                        data-bs-target="#city-charter-amendment-proposal-waio-low-polarization-focal" type="button" role="tab">
+                  Seat outcomes
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab"
+                        data-bs-target="#city-charter-amendment-proposal-waio-low-polarization-availability" type="button" role="tab">
+                  Districts by VAP rank
+                </button>
+              </li>
+            </ul>
+            <div class="tab-content pt-3">
+              <div class="tab-pane fade show active" id="city-charter-amendment-proposal-waio-low-polarization-focal" role="tabpanel">
+                <div class="metric-toggles" data-view="city-charter-amendment-proposal-waio-low-polarization"></div>
+                <div class="row g-4 figure-pair" data-one-group="city-charter-amendment-proposal-waio-low-polarization">
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="bubble" data-run="city-charter-amendment-proposal-waio-low-polarization"></div>
+                  </div>
+                  <div class="col-12 col-xl-6">
+                    <div class="chart" data-chart="histogram" data-run="city-charter-amendment-proposal-waio-low-polarization"></div>
+                  </div>
+                </div>
+                <div data-all-groups="city-charter-amendment-proposal-waio-low-polarization" hidden>
+                  <div class="chart" data-chart="slate" data-run="city-charter-amendment-proposal-waio-low-polarization"></div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="city-charter-amendment-proposal-waio-low-polarization-availability" role="tabpanel">
+                <div class="metric-toggles" data-metric="city-charter-amendment-proposal-waio-low-polarization"></div>
+                <div class="chart" data-chart="availability" data-run="city-charter-amendment-proposal-waio-low-polarization"></div>
+              </div>
+            </div>
+            </div>
+            <aside class="run-params" data-params="city-charter-amendment-proposal-waio-low-polarization"></aside>
           </section>
           <section id="run-city-charter-amendment-proposal-truncation" class="run mb-5" data-run="city-charter-amendment-proposal-truncation">
             <div class="run-main">
@@ -718,7 +764,7 @@ Cambridge has run ranked-choice elections continuously since 1941, and a subset 
     <div class="container-xl text-center">
       <p class="mb-1">Metric Geometry &amp; Gerrymandering Group — San Diego City Council Election Analysis</p>
       <p class="mb-1"><a href="https://github.com/mggg/San-Diego-Election-Analysis" target="_blank" rel="noopener">View the repository on GitHub</a></p>
-      <p class="generated mb-0">Generated 2026-08-21T17:43:37+00:00</p>
+      <p class="generated mb-0">Generated 2026-08-21T17:57:44+00:00</p>
     </div>
   </footer>
 
@@ -751,15 +797,15 @@ Cambridge has run ranked-choice elections continuously since 1941, and a subset 
 
   <script type="importmap">{
  "imports": {
-  "./js/charts/availability.js": "./js/charts/availability.js?v=ee737f4e0e",
-  "./js/charts/axes.js": "./js/charts/axes.js?v=ee737f4e0e",
-  "./js/charts/bubble.js": "./js/charts/bubble.js?v=ee737f4e0e",
-  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=ee737f4e0e",
-  "./js/charts/histogram.js": "./js/charts/histogram.js?v=ee737f4e0e",
-  "./js/charts/slate.js": "./js/charts/slate.js?v=ee737f4e0e",
-  "./js/report.js": "./js/report.js?v=ee737f4e0e"
+  "./js/charts/availability.js": "./js/charts/availability.js?v=501b927811",
+  "./js/charts/axes.js": "./js/charts/axes.js?v=501b927811",
+  "./js/charts/bubble.js": "./js/charts/bubble.js?v=501b927811",
+  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=501b927811",
+  "./js/charts/histogram.js": "./js/charts/histogram.js?v=501b927811",
+  "./js/charts/slate.js": "./js/charts/slate.js?v=501b927811",
+  "./js/report.js": "./js/report.js?v=501b927811"
  }
 }</script>
-  <script type="module" src="js/report.js?v=ee737f4e0e"></script>
+  <script type="module" src="js/report.js?v=501b927811"></script>
 </body>
 </html>
