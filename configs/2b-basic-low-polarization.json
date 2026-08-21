@@ -1,5 +1,5 @@
 {
-  "run_name": "Basic - 3 X 3 (2 Blocs) - High WHI Polarization",
+  "run_name": "Basic - 3 X 3 (2 Blocs) - WAIO Low Polarization",
   "num_subsamples": 100,
   "total_seats": 9,
   "district_configs": [
