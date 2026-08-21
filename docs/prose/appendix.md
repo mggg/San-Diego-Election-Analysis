@@ -1,11 +1,21 @@
-## Appendix A. Bounded Ballot Truncation
+## A. Ballot Truncation Methodology
 
-Section 3.5 describes the truncation applied by default to every scenario's PL and BT profiles: each ballot's ranked length is drawn from one of two empirical Cambridge distributions, chosen by whether the ballot's first choice belongs to the historical majority or minority slate. The **Truncation**
+Both truncation methods described below act as a second pass over an already-generated PL or BT profile (Section 3.4): they never change which candidates a voter prefers or in what order, only how far down that ranking the ballot is cut off. Both also classify a ballot by its *first-ranked candidate's* slate rather than by the voter's bloc — a minority-bloc voter whose cohesion draw happened to put a majority candidate first is truncated using the majority distribution, matching how the underlying Cambridge data itself was split. A run's config pools every candidate slate into two groups, `majority_slates` and `minority_slates` (San Diego's default is WAIO vs. HIS/AAPI/BLK), and each ballot's truncation length is then drawn independently for every voter who cast it — a ballot cast by 40 identical voters produces 40 independent length draws, not one length applied to all 40.
 
-### A.1 Restricting the Historical Distributions
+### A.1 Cambridge Historical Truncation
 
+This is the default method (`cambridge_truncation.method = "historical"`), used for the Section 3.5 scenarios.
 
-### A.2 Validation
+1. **Reduce the historical shapes to this district.** Cambridge's 2009–2017 municipal elections recorded, as Cast Vote Records, the full *shape* of each ballot — not just its length, but which slate occupied each position — separately for ballots that started with the historical majority ("W") slate and ballots that started with the historical minority ("C") slate. VoteKit ships these two shape distributions and a reduction routine (`_reduce_ballot_pmfs`) that rescales a shape distribution to a target candidate count. We call that routine against a stand-in two-slate config whose "majority" and "minority" slates are this district's actual pooled candidate lists, so the reduced distribution reflects how many candidates each side really has here rather than Cambridge's original slate sizes.
+2. **Collapse to a length marginal.** Truncation only needs to know how many candidates a ballot ranks, not which slate occupied which position, so each reduced shape distribution is collapsed to `{length: probability}` by summing the probability of every shape of a given length. This yields two distributions, one for majority-first ballots and one for minority-first ballots.
+3. **Sample a length per voter.** For each already-generated ballot, its first choice determines whether it draws from the majority or minority distribution. Every voter who cast that exact ranking (the ballot's weight) draws an independent length from that distribution, and the ranking is cut to that length — or left at its full length if the sampled length is longer than the ballot already is. The truncated ballots are then re-grouped into a new profile with the same candidate set.
 
-To confirm the bound is respected, we compare each truncated ballot against the length it would have had without truncation. The figure below plots both distributions for the Truncation scenario's 3 × 3 configuration: once under the four-bloc model, where WAIO, HIS, AAPI, and BLK are modeled as four separate blocs, and once under the two-bloc model, where WAIO is set against a single pooled POC bloc.
-Under both bloc models, the truncated (actual) ballots fall entirely within the configured `[k, 2k]` window, while the full, untruncated ballots those same voters would otherwise have cast extend out to ten
+### A.2 Bounded Truncation
+
+This method (`cambridge_truncation.method = "bounded"`) is used for the Truncation scenarios, where we additionally want no ballot shorter or longer than a chosen range — for example, the Basic 3 × 3 Truncation scenario sets `min_length = k` and `max_length = 2k`, where *k* is the number of winners per district (3 and 6 for a 3-seat district), so every ballot ranks at least as many candidates as there are seats to fill and never more than twice that.
+
+1. **Start from the same two historical length distributions built in A.1** — this method does not change how those distributions are derived, only how they're used.
+2. **Restrict and renormalize.** For each of the majority and minority distributions independently, every length outside `[min_length, max_length]` is dropped outright — not folded into the nearest surviving bound — and the remaining probabilities are rescaled so they sum back to 1, preserving their relative proportions. If a distribution has no length left inside the window, this step raises rather than silently truncating every ballot to zero.
+3. **Sample and truncate exactly as in A.1**, drawing each voter's length from their ballot's bounded, renormalized distribution instead of the raw historical one.
+
+Because both methods share steps 1 and 3, a run can switch between "historical" and "bounded" by changing only `min_length`/`max_length` in its config — the classification logic and the per-voter sampling never differ between the two.
