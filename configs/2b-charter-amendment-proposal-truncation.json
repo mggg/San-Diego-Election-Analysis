@@ -77,7 +77,7 @@
     "tier_overrides": {
       "1": {
         "method": "bounded",
-        "min_length": 6,
+        "min_length": 7,
         "max_length": 10
       }
     }
