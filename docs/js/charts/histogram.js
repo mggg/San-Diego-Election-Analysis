@@ -15,7 +15,7 @@
  */
 
 import {
-  PANEL, FOCAL_MARGIN, seatScale, drawSeatAxis, drawCountAxis, drawGridlines, drawReferenceLine,
+  PANEL, FOCAL_MARGIN, seatScale, seatTicks, drawSeatAxis, drawCountAxis, drawGridlines, drawReferenceLine,
   drawLegend, drawPanelTitle, makeTooltip, emptyState, clearEmptyState,
   ensure, ensureSvg, motion, barGeometry,
 } from './axes.js';
@@ -56,7 +56,7 @@ export function renderHistogram(container, bundle, manifest, view) {
   const seatMax = view.seatMax;
   const x = seatScale(seatMax, innerWidth);
   const y = d3.scaleLinear().domain([0, maxPlans * 1.1]).range([innerHeight, 0]).nice();
-  const seats = d3.range(0, seatMax + 1);
+  const seats = seatTicks(seatMax);
 
   const geom = barGeometry(x, models.length);
   const order = new Map(models.map((m, i) => [m.id, i]));

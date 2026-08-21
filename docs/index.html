@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+"
         crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="fonts/fonts.css">
-  <link rel="stylesheet" href="css/report.css?v=cedffd37d8">
+  <link rel="stylesheet" href="css/report.css?v=ee737f4e0e">
 </head>
 
 <body data-bs-spy="scroll" data-bs-target="#toc-nav" data-bs-offset="90" tabindex="0">
@@ -60,7 +60,6 @@
             <a class="nav-link" href="#run-alternative-electoral-systems">Alternative Electoral Systems</a>
             <a class="nav-link" href="#run-basic-3-x-3-truncation">Basic - 3 X 3 + Truncation</a>
             <a class="nav-link" href="#run-basic-3-x-3-waio-low-polarization">Basic - 3 X 3, High Polarization</a>
-            <a class="nav-link" href="#run-city-charter-amendment-proposal-high-whi-polarization">City Charter Amendment Proposal, High Polarization</a>
             <a class="nav-link" href="#run-city-charter-amendment-proposal-truncation">City Charter Amendment Proposal, Truncation</a>
           </nav>
           <a class="nav-link" href="#comparison">Cross-Run Comparison</a>
@@ -360,11 +359,15 @@ $$</div>
 </tbody>
 </table>
 <h2>3.5 Cambridge Ballot Truncation</h2>
-<p>The ballots generated in Section 3.4 are, by default, full rankings — every voter ranks every candidate on the slate. However, we introduce a new scenario where voters don't all behave the same way, allowing for the existence of incomplete and bullet ballots.</p>
-<p>Cambridge has run ranked-choice elections continuously since 1941, and a subset of those elections from 2009–2017 shows real dispersion in ballot length. Moreover, this distribution differs between two groups: the historical minority and majority slates.</p>
-<p>To capture this behavior, we introduce a truncation process calibrated to real ranked-choice ballots from Cambridge, MA's 2009–2017 municipal elections. Using the same structure as VoteKit, we work with two empirical distributions over ballot length: one for ballots that started with a candidate from the historical majority (white) slate, and one for ballots that started with a candidate from the historical minority (Black, Asian, or Hispanic) slate.</p>
-<p>Finally, the PL and BT preference profiles are truncated to a ballot length sampled from the historical distribution corresponding to each ballot's minority or majority group.</p>
-<h2>3.6 Voting Rules</h2>
+<p>The ballots generated in Section 3.4 are, by default, full rankings—every voter ranks every candidate on the slate. However, we introduce a new scenario where voters don't all behave the same way, allowing for incomplete and bullet ballots.
+Cambridge has run ranked-choice elections continuously since 1941, and a subset of those elections from 2009–2017 shows real dispersion in ballot length. Moreover, this distribution differs between the historical majority and minority slates.</p>
+<p>To capture this behavior, we introduce a truncation process calibrated to real ranked-choice ballots from Cambridge, MA's 2009–2017 municipal elections. Using the same structure as VoteKit, we work with two empirical distributions over ballot length: one for ballots that started with a candidate from the historical majority (White) slate, and one for ballots that started with a candidate from the historical minority (Black, Asian, or Hispanic) slate.</p>
+<p>Finally, the PL and BT preference profiles are truncated to a ballot length uniformly sampled from the historical distribution, with the corresponding majority or minority group.</p>
+<h2>3.6 Bounded Ballot Truncation</h2>
+<p>Additionally, this report explores a scenario where voters are not allowed to rank all candidates, but only within a fixed range. We are interested in ballot truncation to measure its impact on minority and majority representation in RCV.</p>
+<p>For that reason, we added a variant to the truncation methodology named &quot;Bounded.&quot; This methodology subsets the historical Cambridge distribution using a defined lower and upper bound. After this truncation, we sample uniformly from that subset to truncate the ballots.</p>
+<p>This process was applied to the Charter Amendment proposal, specifically to the 1×9 STV elections and the 3×3 STV elections, to understand its impact on minority groups. For the 3×3 STV, we defined the range as k to 2k, where k is the number of winners. For the 1×9 STV elections, we defined a range of 6 to 7 for ballot length.</p>
+<h2>3.7 Voting Rules</h2>
 <p>Elections for each district are simulated using VoteKit's Elections module. We use the following voting rules with the corresponding district configurations:</p>
 <table>
 <thead>
@@ -633,51 +636,6 @@ $$</div>
             </div>
             <aside class="run-params" data-params="basic-3-x-3-waio-low-polarization"></aside>
           </section>
-          <section id="run-city-charter-amendment-proposal-high-whi-polarization" class="run mb-5" data-run="city-charter-amendment-proposal-high-whi-polarization">
-            <div class="run-main">
-            <h3 class="h4 mt-4">City Charter Amendment Proposal, High Polarization</h3>
-            <p class="todo">[Description to be written — edit
-               <code>docs/prose/runs/city-charter-amendment-proposal-high-whi-polarization.md</code>.]</p>
-
-            <div class="run-controls" data-controls="city-charter-amendment-proposal-high-whi-polarization"></div>
-
-            <ul class="nav nav-tabs" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" data-bs-toggle="tab"
-                        data-bs-target="#city-charter-amendment-proposal-high-whi-polarization-focal" type="button" role="tab">
-                  Seat outcomes
-                </button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" data-bs-toggle="tab"
-                        data-bs-target="#city-charter-amendment-proposal-high-whi-polarization-availability" type="button" role="tab">
-                  Districts by VAP rank
-                </button>
-              </li>
-            </ul>
-            <div class="tab-content pt-3">
-              <div class="tab-pane fade show active" id="city-charter-amendment-proposal-high-whi-polarization-focal" role="tabpanel">
-                <div class="metric-toggles" data-view="city-charter-amendment-proposal-high-whi-polarization"></div>
-                <div class="row g-4 figure-pair" data-one-group="city-charter-amendment-proposal-high-whi-polarization">
-                  <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="bubble" data-run="city-charter-amendment-proposal-high-whi-polarization"></div>
-                  </div>
-                  <div class="col-12 col-xl-6">
-                    <div class="chart" data-chart="histogram" data-run="city-charter-amendment-proposal-high-whi-polarization"></div>
-                  </div>
-                </div>
-                <div data-all-groups="city-charter-amendment-proposal-high-whi-polarization" hidden>
-                  <div class="chart" data-chart="slate" data-run="city-charter-amendment-proposal-high-whi-polarization"></div>
-                </div>
-              </div>
-              <div class="tab-pane fade" id="city-charter-amendment-proposal-high-whi-polarization-availability" role="tabpanel">
-                <div class="metric-toggles" data-metric="city-charter-amendment-proposal-high-whi-polarization"></div>
-                <div class="chart" data-chart="availability" data-run="city-charter-amendment-proposal-high-whi-polarization"></div>
-              </div>
-            </div>
-            </div>
-            <aside class="run-params" data-params="city-charter-amendment-proposal-high-whi-polarization"></aside>
-          </section>
           <section id="run-city-charter-amendment-proposal-truncation" class="run mb-5" data-run="city-charter-amendment-proposal-truncation">
             <div class="run-main">
             <h3 class="h4 mt-4">City Charter Amendment Proposal, Truncation</h3>
@@ -733,12 +691,23 @@ $$</div>
 
         <section id="appendix" class="prose mb-5">
           <h2>Appendix</h2>
-          <h2>Appendix A. Bounded Ballot Truncation</h2>
-<p>Section 3.5 describes the truncation applied by default to every scenario's PL and BT profiles: each ballot's ranked length is drawn from one of two empirical Cambridge distributions, chosen by whether the ballot's first choice belongs to the historical majority or minority slate. The <strong>Truncation</strong></p>
-<h3>A.1 Restricting the Historical Distributions</h3>
-<h3>A.2 Validation</h3>
-<p>To confirm the bound is respected, we compare each truncated ballot against the length it would have had without truncation. The figure below plots both distributions for the Truncation scenario's 3 × 3 configuration: once under the four-bloc model, where WAIO, HIS, AAPI, and BLK are modeled as four separate blocs, and once under the two-bloc model, where WAIO is set against a single pooled POC bloc.
-Under both bloc models, the truncated (actual) ballots fall entirely within the configured <code>[k, 2k]</code> window, while the full, untruncated ballots those same voters would otherwise have cast extend out to ten</p>
+          <h2>A. Ballot Truncation Methodology</h2>
+<p>Both truncation methods described below act as a second pass over an already-generated PL or BT profile (Section 3.4): they never change which candidates a voter prefers or in what order, only how far down that ranking the ballot is cut off. Both also classify a ballot by its <em>first-ranked candidate's</em> slate rather than by the voter's bloc — a minority-bloc voter whose cohesion draw happened to put a majority candidate first is truncated using the majority distribution, matching how the underlying Cambridge data itself was split. A run's config pools every candidate slate into two groups, <code>majority_slates</code> and <code>minority_slates</code> (San Diego's default is WAIO vs. HIS/AAPI/BLK), and each ballot's truncation length is then drawn independently for every voter who cast it — a ballot cast by 40 identical voters produces 40 independent length draws, not one length applied to all 40.</p>
+<h3>A.1 Cambridge Historical Truncation</h3>
+<p>This is the default method (<code>cambridge_truncation.method = &quot;historical&quot;</code>), used for the Section 3.5 scenarios.</p>
+<ol>
+<li><strong>Reduce the historical shapes to this district.</strong> Cambridge's 2009–2017 municipal elections recorded, as Cast Vote Records, the full <em>shape</em> of each ballot — not just its length, but which slate occupied each position — separately for ballots that started with the historical majority (&quot;W&quot;) slate and ballots that started with the historical minority (&quot;C&quot;) slate. VoteKit ships these two shape distributions and a reduction routine (<code>_reduce_ballot_pmfs</code>) that rescales a shape distribution to a target candidate count. We call that routine against a stand-in two-slate config whose &quot;majority&quot; and &quot;minority&quot; slates are this district's actual pooled candidate lists, so the reduced distribution reflects how many candidates each side really has here rather than Cambridge's original slate sizes.</li>
+<li><strong>Collapse to a length marginal.</strong> Truncation only needs to know how many candidates a ballot ranks, not which slate occupied which position, so each reduced shape distribution is collapsed to <code>{length: probability}</code> by summing the probability of every shape of a given length. This yields two distributions, one for majority-first ballots and one for minority-first ballots.</li>
+<li><strong>Sample a length per voter.</strong> For each already-generated ballot, its first choice determines whether it draws from the majority or minority distribution. Every voter who cast that exact ranking (the ballot's weight) draws an independent length from that distribution, and the ranking is cut to that length — or left at its full length if the sampled length is longer than the ballot already is. The truncated ballots are then re-grouped into a new profile with the same candidate set.</li>
+</ol>
+<h3>A.2 Bounded Truncation</h3>
+<p>This method (<code>cambridge_truncation.method = &quot;bounded&quot;</code>) is used for the Truncation scenarios, where we additionally want no ballot shorter or longer than a chosen range — for example, the Basic 3 × 3 Truncation scenario sets <code>min_length = k</code> and <code>max_length = 2k</code>, where <em>k</em> is the number of winners per district (3 and 6 for a 3-seat district), so every ballot ranks at least as many candidates as there are seats to fill and never more than twice that.</p>
+<ol>
+<li><strong>Start from the same two historical length distributions built in A.1</strong> — this method does not change how those distributions are derived, only how they're used.</li>
+<li><strong>Restrict and renormalize.</strong> For each of the majority and minority distributions independently, every length outside <code>[min_length, max_length]</code> is dropped outright — not folded into the nearest surviving bound — and the remaining probabilities are rescaled so they sum back to 1, preserving their relative proportions. If a distribution has no length left inside the window, this step raises rather than silently truncating every ballot to zero.</li>
+<li><strong>Sample and truncate exactly as in A.1</strong>, drawing each voter's length from their ballot's bounded, renormalized distribution instead of the raw historical one.</li>
+</ol>
+<p>Because both methods share steps 1 and 3, a run can switch between &quot;historical&quot; and &quot;bounded&quot; by changing only <code>min_length</code>/<code>max_length</code> in its config — the classification logic and the per-voter sampling never differ between the two.</p>
 
         </section>
       </main>
@@ -749,7 +718,7 @@ Under both bloc models, the truncated (actual) ballots fall entirely within the 
     <div class="container-xl text-center">
       <p class="mb-1">Metric Geometry &amp; Gerrymandering Group — San Diego City Council Election Analysis</p>
       <p class="mb-1"><a href="https://github.com/mggg/San-Diego-Election-Analysis" target="_blank" rel="noopener">View the repository on GitHub</a></p>
-      <p class="generated mb-0">Generated 2026-08-21T15:16:51+00:00</p>
+      <p class="generated mb-0">Generated 2026-08-21T17:43:37+00:00</p>
     </div>
   </footer>
 
@@ -782,15 +751,15 @@ Under both bloc models, the truncated (actual) ballots fall entirely within the 
 
   <script type="importmap">{
  "imports": {
-  "./js/charts/availability.js": "./js/charts/availability.js?v=cedffd37d8",
-  "./js/charts/axes.js": "./js/charts/axes.js?v=cedffd37d8",
-  "./js/charts/bubble.js": "./js/charts/bubble.js?v=cedffd37d8",
-  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=cedffd37d8",
-  "./js/charts/histogram.js": "./js/charts/histogram.js?v=cedffd37d8",
-  "./js/charts/slate.js": "./js/charts/slate.js?v=cedffd37d8",
-  "./js/report.js": "./js/report.js?v=cedffd37d8"
+  "./js/charts/availability.js": "./js/charts/availability.js?v=ee737f4e0e",
+  "./js/charts/axes.js": "./js/charts/axes.js?v=ee737f4e0e",
+  "./js/charts/bubble.js": "./js/charts/bubble.js?v=ee737f4e0e",
+  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=ee737f4e0e",
+  "./js/charts/histogram.js": "./js/charts/histogram.js?v=ee737f4e0e",
+  "./js/charts/slate.js": "./js/charts/slate.js?v=ee737f4e0e",
+  "./js/report.js": "./js/report.js?v=ee737f4e0e"
  }
 }</script>
-  <script type="module" src="js/report.js?v=cedffd37d8"></script>
+  <script type="module" src="js/report.js?v=ee737f4e0e"></script>
 </body>
 </html>

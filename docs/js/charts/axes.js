@@ -27,6 +27,41 @@ export const PANEL = { width: 300, height: 190, margin: { top: 26, right: 14, bo
  */
 export const FOCAL_MARGIN = { top: 26, right: 14, bottom: 38, left: 78 };
 
+/*
+ * Seat-axis tick spacing, coarse enough that labels never crowd.
+ *
+ * The mirror of summarize_results._tick_step, so a web chart and its PNG
+ * counterpart label the same seats. A step of 1 is right on a small axis -- a
+ * 3- or 9-seat body reads straight off it -- and stops being right as the axis
+ * grows: sixteen labels across a 300px panel start touching. A wider axis gets
+ * a wider step, so the axis still spans every seat while labelling fewer.
+ */
+export function seatTickStep(seatMax) {
+  if (seatMax <= 10) return 1;
+  if (seatMax <= 20) return 2;
+  if (seatMax <= 50) return 5;
+  return 10;
+}
+
+/**
+ * Tick values across 0..seatMax at the step that keeps labels legible, always
+ * including the last seat.
+ *
+ * A step that does not divide the body would otherwise stop short -- fifteen
+ * seats at a step of two labels up to fourteen -- and leave the axis looking
+ * like it ends one seat before it does, which is the thing the full-width axis
+ * is meant to show. The final regular tick is replaced rather than joined, so
+ * the end never carries two labels a single seat apart.
+ */
+export function seatTicks(seatMax) {
+  const step = seatTickStep(seatMax);
+  const ticks = d3.range(0, seatMax + 1, step);
+  if (ticks.length && ticks[ticks.length - 1] !== seatMax) {
+    ticks[ticks.length - 1] = seatMax;
+  }
+  return ticks;
+}
+
 /** Integer seat scale spanning 0..seatMax, padded by half a step at each end. */
 export function seatScale(seatMax, innerWidth) {
   return d3.scaleLinear().domain([-0.6, seatMax + 0.6]).range([0, innerWidth]);

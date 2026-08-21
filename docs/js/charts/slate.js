@@ -16,7 +16,7 @@
  */
 
 import {
-  PANEL, seatScale, drawSeatAxis, drawCountAxis, drawGridlines, drawReferenceLine,
+  PANEL, seatScale, seatTicks, drawSeatAxis, drawCountAxis, drawGridlines, drawReferenceLine,
   drawLegend, drawPanelTitle, makeTooltip, emptyState, clearEmptyState,
   ensure, ensureSvg, motion, barGeometry,
 } from './axes.js';
@@ -49,11 +49,13 @@ export function renderSlate(container, bundle, manifest, view) {
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
 
-  // Off the full table, not the selection, so the seat axis does not jump when
-  // the system changes.
-  const seatMax = d3.max(slateSeats, (r) => r.seats);
+  // The whole body, as in the focal figures: the panel per slate is read
+  // against the seats there were to win, not against the largest any slate
+  // happened to take. Falls back to the table's own max if the view has no
+  // seat count to offer.
+  const seatMax = Math.max(view.seatMax || 0, d3.max(slateSeats, (r) => r.seats) || 0);
   const x = seatScale(seatMax, innerWidth);
-  const seats = d3.range(0, seatMax + 1);
+  const seats = seatTicks(seatMax);
 
   const geom = barGeometry(x, models.length);
   const order = new Map(models.map((m, i) => [m.id, i]));

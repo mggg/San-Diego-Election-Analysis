@@ -954,9 +954,18 @@ async function mountRun(section, manifest, cache) {
     const shown = active.slateSeats.filter(
       (r) => r.system === systemId && r.slate === view.slate.id,
     );
-    view.seatMax = Math.max(
-      source ? source.seatMax : runMeta.seatMax, d3.max(shown, (r) => r.seats) || 0,
-    );
+    /*
+     * The axis spans the whole body, not the outcomes observed in it.
+     *
+     * Stopping at the largest result made every chart a different width in
+     * seats and hid what was at stake: a bloc winning 6 of 15 looked like it
+     * had nearly swept the axis, and two systems filling different numbers of
+     * seats could not be read against each other. Running 0..seats says how
+     * many there were to win, and leaves the empty stretch visible as the part
+     * the focal group never reached. The observed max still raises it, so a
+     * result past the nominal count is never clipped.
+     */
+    view.seatMax = Math.max(winners || 0, d3.max(shown, (r) => r.seats) || 0);
 
     // Redrawn with the figures: on a composed section the parameters describe
     // the selected system, and they change under it. Switching the card's own

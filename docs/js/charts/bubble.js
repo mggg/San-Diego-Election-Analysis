@@ -17,7 +17,7 @@
  */
 
 import {
-  PANEL, FOCAL_MARGIN, seatScale, drawSeatAxis, drawReferenceLine, drawPanelTitle,
+  PANEL, FOCAL_MARGIN, seatScale, seatTicks, drawSeatAxis, drawReferenceLine, drawPanelTitle,
   makeTooltip, emptyState, clearEmptyState, drawLegend,
   ensure, ensureSvg, motion,
 } from './axes.js';
@@ -105,7 +105,7 @@ export function renderBubble(container, bundle, manifest, view) {
 
   const area = d3.scaleLinear().domain([0, perModelMax]).range([minArea, maxArea]).clamp(true);
   const radius = (plans) => Math.sqrt(area(plans) / Math.PI);
-  const seats = d3.range(0, seatMax + 1);
+  const seats = seatTicks(seatMax);
 
   const svg = ensureSvg(container, 'bubbles', width, height,
     `${slate.label} seat outcome frequencies for ${runMeta.runName}`);
