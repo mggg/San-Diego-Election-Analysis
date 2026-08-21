@@ -34,7 +34,7 @@ import numpy as np
 from votekit import RankProfile
 from votekit.ballot_generator import BlocSlateConfig
 
-from pipeline.profile_generator import profile_class_for_mode
+from pipeline.profile_generator import _truncation_cfg_for_district, profile_class_for_mode
 from pipeline.simulate_elections import _load_profile_from_bytes
 from pipeline.utils.cambridge_truncation import (
     build_length_distributions_for_method,
@@ -116,12 +116,14 @@ def truncate_archive(
     explicit, standalone action, so it truncates because it was invoked, not
     because the run's own "cambridge_truncation.enabled" flag happens to be
     set. Majority/minority slates, and which length distribution to sample
-    from ("cambridge_truncation.method"/"min_length"/"max_length" -- see
-    build_length_distributions_for_method), come from the run's own
-    "cambridge_truncation" config when present, falling back to the
-    DEFAULT_MAJORITY_SLATE convention and the "historical" method otherwise --
-    the same source generation-time truncation reads, so the two never
-    disagree about which ballots count as which or how they get truncated.
+    from ("cambridge_truncation.method"/"min_length"/"max_length", per tier
+    via "cambridge_truncation.tier_overrides" -- see
+    _truncation_cfg_for_district and build_length_distributions_for_method),
+    come from the run's own "cambridge_truncation" config when present,
+    falling back to the DEFAULT_MAJORITY_SLATE convention and the "historical"
+    method otherwise -- the same source generation-time truncation reads, so
+    the two never disagree about which ballots count as which or how they get
+    truncated.
 
     Args:
         config: Parsed run config, for the run name and the settings files.
@@ -146,21 +148,14 @@ def truncate_archive(
     tally = {"truncated": 0, "copied": 0, "skipped": 0}
 
     cambridge_truncation_cfg = config.get("cambridge_truncation")
-    if isinstance(cambridge_truncation_cfg, dict):
-        configured_majority_slates = cambridge_truncation_cfg.get("majority_slates")
-        configured_minority_slates = cambridge_truncation_cfg.get("minority_slates")
-        truncation_method = cambridge_truncation_cfg.get("method", "historical")
-        truncation_min_length = cambridge_truncation_cfg.get("min_length")
-        truncation_max_length = cambridge_truncation_cfg.get("max_length")
-    else:
-        configured_majority_slates = None
-        configured_minority_slates = None
-        truncation_method = "historical"
-        truncation_min_length = None
-        truncation_max_length = None
+    if not isinstance(cambridge_truncation_cfg, dict):
+        cambridge_truncation_cfg = {}
+    configured_majority_slates = cambridge_truncation_cfg.get("majority_slates")
+    configured_minority_slates = cambridge_truncation_cfg.get("minority_slates")
 
     # One config and one set of length distributions per district settings file:
-    # the distributions depend only on that district's candidate counts, and
+    # the distributions depend only on that district's candidate counts (and,
+    # via tier_overrides, on which tier the settings file belongs to), and
     # rebuilding them per profile is the bulk of the work in a large archive.
     config_cache: Dict[Path, Tuple[BlocSlateConfig, List[str], List[str], dict]] = {}
 
@@ -202,13 +197,16 @@ def truncate_archive(
                     majority_slates, minority_slates = _default_majority_minority_slates(
                         district_config.slate_to_candidates.to_dict()
                     )
+                tier_cfg = _truncation_cfg_for_district(cambridge_truncation_cfg, district_num)
                 config_cache[settings_path] = (
                     district_config,
                     majority_slates,
                     minority_slates,
                     build_length_distributions_for_method(
                         district_config, majority_slates, minority_slates,
-                        truncation_method, truncation_min_length, truncation_max_length,
+                        tier_cfg.get("method", "historical"),
+                        tier_cfg.get("min_length"),
+                        tier_cfg.get("max_length"),
                     ),
                 )
             district_config, majority_slates, minority_slates, distributions = config_cache[settings_path]

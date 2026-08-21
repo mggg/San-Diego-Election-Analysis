@@ -353,6 +353,44 @@ def process_settings_file(
     return filename, csv_text, matrix_json
 
 
+def _truncation_cfg_for_district(cambridge_truncation_cfg, district_num):
+    """
+    The cambridge_truncation settings that apply to one tier of a run.
+
+    A run's "cambridge_truncation" block applies to every tier by default --
+    the 9 x 1 and 1 x 6 tiers of a hybrid election normally share one method
+    and one majority/minority mapping. "tier_overrides", keyed by that tier's
+    num_districts (as a string, since JSON object keys are strings), lets one
+    tier override that shared method/min_length/max_length -- e.g. the 1 x 6
+    FastSTV tier of a hybrid config bounding its ballots to [6, 7] while the
+    9 x 1 IRV tier keeps the run's own default. An override replaces the base
+    method/min_length/max_length wholesale rather than merging field-by-field,
+    so a bounded override with no min_length of its own doesn't silently
+    inherit an unrelated tier's bound; majority_slates/minority_slates/enabled
+    always come from the base block, since every tier truncates the same
+    majority/minority split.
+
+    Args:
+        cambridge_truncation_cfg: The run's "cambridge_truncation" dict.
+        district_num: This tier's num_districts, the same key used for its
+            outputs/<run>/settings/<district_num>/ folder.
+
+    Returns:
+        The dict to pass as process_settings_file's truncation_cfg for this
+        tier.
+    """
+    overrides = cambridge_truncation_cfg.get("tier_overrides") or {}
+    tier_override = overrides.get(str(district_num))
+    if tier_override is None:
+        return cambridge_truncation_cfg
+    return {
+        **cambridge_truncation_cfg,
+        "method": tier_override.get("method", "historical"),
+        "min_length": tier_override.get("min_length"),
+        "max_length": tier_override.get("max_length"),
+    }
+
+
 def _generate_profile_archive(
     config,
     zip_path: Path,
@@ -390,7 +428,6 @@ def _generate_profile_archive(
         isinstance(cambridge_truncation_cfg, dict)
         and cambridge_truncation_cfg.get("enabled") is True
     )
-    truncation_cfg = cambridge_truncation_cfg if truncate_ballots else None
     cambridge_cfg = config.get("cambridge_blocs")
 
     if truncate_ballots:
@@ -467,6 +504,10 @@ def _generate_profile_archive(
                     ),
                     1,
                 )
+                tier_truncation_cfg = (
+                    _truncation_cfg_for_district(cambridge_truncation_cfg, district_num)
+                    if truncate_ballots else None
+                )
                 for mode in voter_models:
                     settings_folder = Path(f"outputs/{run_name}/settings/{district_num}")
                     all_settings_files = glob(f"{settings_folder}/*.json")
@@ -508,7 +549,7 @@ def _generate_profile_archive(
                             results = Parallel(n_jobs=-1, return_as="generator_unordered")(
                                 delayed(process_settings_file)(
                                     settings_file, mode, duplicate_indx, proportions_key, budget,
-                                    cambridge_cfg=cambridge_cfg, truncation_cfg=truncation_cfg,
+                                    cambridge_cfg=cambridge_cfg, truncation_cfg=tier_truncation_cfg,
                                 )
                                 for settings_file in pending_settings_files
                             )
