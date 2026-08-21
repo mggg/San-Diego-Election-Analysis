@@ -3,7 +3,7 @@
   {
    "slate": "POC",
    "slateLabel": "POC",
-   "slateVapShare": 0.5411590392565198,
+   "slateVapShare": 0.5619805401715601,
    "numDistricts": 1,
    "winners": 15,
    "restricted": false,
@@ -11,22 +11,22 @@
     {
      "rank": 1,
      "n": 100,
-     "q1": 54.1159,
-     "median": 54.1159,
-     "q3": 54.1159,
-     "low": 54.1159,
-     "high": 54.1159,
-     "mean": 54.1159,
+     "q1": 56.1981,
+     "median": 56.1981,
+     "q3": 56.1981,
+     "low": 56.1981,
+     "high": 56.1981,
+     "mean": 56.1981,
      "outliers": []
     }
    ],
-   "overallMean": 54.1159,
+   "overallMean": 56.1981,
    "plans": 100
   },
   {
    "slate": "POC",
    "slateLabel": "POC",
-   "slateVapShare": 0.5411590392565198,
+   "slateVapShare": 0.5619805401715601,
    "numDistricts": 1,
    "winners": 15,
    "restricted": true,
@@ -34,22 +34,22 @@
     {
      "rank": 1,
      "n": 100,
-     "q1": 54.1159,
-     "median": 54.1159,
-     "q3": 54.1159,
-     "low": 54.1159,
-     "high": 54.1159,
-     "mean": 54.1159,
+     "q1": 56.1981,
+     "median": 56.1981,
+     "q3": 56.1981,
+     "low": 56.1981,
+     "high": 56.1981,
+     "mean": 56.1981,
      "outliers": []
     }
    ],
-   "overallMean": 54.1159,
+   "overallMean": 56.1981,
    "plans": 100
   },
   {
-   "slate": "WAIO",
-   "slateLabel": "WAIO",
-   "slateVapShare": 0.4588409607434803,
+   "slate": "WHI",
+   "slateLabel": "WHI",
+   "slateVapShare": 0.4380194598284399,
    "numDistricts": 1,
    "winners": 15,
    "restricted": false,
@@ -57,22 +57,22 @@
     {
      "rank": 1,
      "n": 100,
-     "q1": 45.8841,
-     "median": 45.8841,
-     "q3": 45.8841,
-     "low": 45.8841,
-     "high": 45.8841,
-     "mean": 45.8841,
+     "q1": 43.8019,
+     "median": 43.8019,
+     "q3": 43.8019,
+     "low": 43.8019,
+     "high": 43.8019,
+     "mean": 43.8019,
      "outliers": []
     }
    ],
-   "overallMean": 45.8841,
+   "overallMean": 43.8019,
    "plans": 100
   },
   {
-   "slate": "WAIO",
-   "slateLabel": "WAIO",
-   "slateVapShare": 0.4588409607434803,
+   "slate": "WHI",
+   "slateLabel": "WHI",
+   "slateVapShare": 0.4380194598284399,
    "numDistricts": 1,
    "winners": 15,
    "restricted": true,
@@ -80,16 +80,16 @@
     {
      "rank": 1,
      "n": 100,
-     "q1": 45.8841,
-     "median": 45.8841,
-     "q3": 45.8841,
-     "low": 45.8841,
-     "high": 45.8841,
-     "mean": 45.8841,
+     "q1": 43.8019,
+     "median": 43.8019,
+     "q3": 43.8019,
+     "low": 43.8019,
+     "high": 43.8019,
+     "mean": 43.8019,
      "outliers": []
     }
    ],
-   "overallMean": 45.8841,
+   "overallMean": 43.8019,
    "plans": 100
   }
  ],
@@ -97,7 +97,7 @@
   {
    "slate": "POC",
    "slateLabel": "POC",
-   "slateVapShare": 0.5411590392565198,
+   "slateVapShare": 0.5619805401715601,
    "numDistricts": 1,
    "winners": 15,
    "metric": "availability",
@@ -108,8 +108,8 @@
    "values": [
     {
      "rank": 1,
-     "value": 12.73,
-     "candidates": 1273,
+     "value": 13.49,
+     "candidates": 1349,
      "districts": 100
     }
    ]
@@ -117,7 +117,7 @@
   {
    "slate": "POC",
    "slateLabel": "POC",
-   "slateVapShare": 0.5411590392565198,
+   "slateVapShare": 0.5619805401715601,
    "numDistricts": 1,
    "winners": 15,
    "metric": "winRate",
@@ -137,29 +137,29 @@
    ]
   },
   {
-   "slate": "WAIO",
-   "slateLabel": "WAIO",
-   "slateVapShare": 0.4588409607434803,
+   "slate": "WHI",
+   "slateLabel": "WHI",
+   "slateVapShare": 0.4380194598284399,
    "numDistricts": 1,
    "winners": 15,
    "metric": "availability",
-   "label": "Avg. WAIO candidates per district",
+   "label": "Avg. WHI candidates per district",
    "format": "count",
-   "zeroLabel": "No WAIO candidate at this rank",
+   "zeroLabel": "No WHI candidate at this rank",
    "restricted": false,
    "values": [
     {
      "rank": 1,
-     "value": 9.28,
-     "candidates": 928,
+     "value": 8.31,
+     "candidates": 831,
      "districts": 100
     }
    ]
   },
   {
-   "slate": "WAIO",
-   "slateLabel": "WAIO",
-   "slateVapShare": 0.4588409607434803,
+   "slate": "WHI",
+   "slateLabel": "WHI",
+   "slateVapShare": 0.4380194598284399,
    "numDistricts": 1,
    "winners": 15,
    "metric": "winRate",
@@ -167,7 +167,7 @@
    "systemLabel": "1 X 15 STV",
    "label": "Win rate",
    "format": "percent",
-   "zeroLabel": "No WAIO winner at this rank",
+   "zeroLabel": "No WHI winner at this rank",
    "restricted": true,
    "values": [
     {

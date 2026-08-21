@@ -4,9 +4,9 @@
  "focalGroup": "POC",
  "focalGroupLabel": "POC",
  "totalSeats": 9,
- "focalVapShare": 0.5411590392565198,
- "proportionalSeats": 4.870431353308678,
- "proportionalLabel": "POC share of VAP: 54.1% (4.9 seats)",
+ "focalVapShare": 0.5619805401715601,
+ "proportionalSeats": 5.057824861544041,
+ "proportionalLabel": "POC share of VAP: 56.2% (5.1 seats)",
  "seatMax": 9,
  "seatTicks": [
   0,
@@ -33,9 +33,9 @@
    "candidatePoolMax": 10,
    "candidatePoolMean": 7,
    "plans": 100,
-   "electionsPerSystem": 24580,
+   "electionsPerSystem": 27000,
    "electionsByMode": {
-    "cambridge": 6580,
+    "cambridge": 9000,
     "slate_bt": 9000,
     "slate_pl": 9000
    }
@@ -67,17 +67,17 @@
   {
    "id": "POC",
    "label": "POC",
-   "vapShare": 0.5411590392565198
+   "vapShare": 0.5619805401715601
   },
   {
-   "id": "WAIO",
-   "label": "WAIO",
-   "vapShare": 0.4588409607434803
+   "id": "WHI",
+   "label": "WHI",
+   "vapShare": 0.4380194598284399
   }
  ],
  "turnout": {
   "POC": 0.7,
-  "WAIO": 1
+  "WHI": 1
  },
  "primaryTurnout": null,
  "replicates": 10,

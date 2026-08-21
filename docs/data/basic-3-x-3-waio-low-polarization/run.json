@@ -1,0 +1,101 @@
+{
+ "runName": "Basic - 3 X 3 - WAIO Low Polarization",
+ "slug": "basic-3-x-3-waio-low-polarization",
+ "focalGroup": "BLK",
+ "focalGroupLabel": "BLK",
+ "totalSeats": 9,
+ "focalVapShare": 0.07109494643525345,
+ "proportionalSeats": 0.6398545179172811,
+ "proportionalLabel": "BLK share of VAP: 7.1% (0.6 seats)",
+ "seatMax": 5,
+ "seatTicks": [
+  0,
+  1,
+  2,
+  3,
+  4,
+  5
+ ],
+ "districtConfigs": [
+  {
+   "numDistricts": 3,
+   "winners": 3,
+   "systems": [
+    {
+     "id": "FASTSTV",
+     "label": "3 X 3 STV"
+    },
+    {
+     "id": "CUMULATIVE",
+     "label": "3 X 3 Cumulative"
+    },
+    {
+     "id": "LIMITED",
+     "label": "3 X 3 Limited"
+    }
+   ],
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7,
+   "plans": 100,
+   "electionsPerSystem": 4000,
+   "electionsByMode": {
+    "name_cumulative": 3000,
+    "slate_bt": 3000,
+    "slate_pl": 3000
+   }
+  }
+ ],
+ "voterModels": [
+  {
+   "id": "slate_pl",
+   "label": "Impulsive",
+   "pooled": false
+  },
+  {
+   "id": "slate_bt",
+   "label": "Deliberative",
+   "pooled": false
+  },
+  {
+   "id": "name_cumulative",
+   "label": "Name Cumulative",
+   "pooled": false
+  },
+  {
+   "id": "combined",
+   "label": "Combined",
+   "pooled": true
+  }
+ ],
+ "slates": [
+  {
+   "id": "HIS",
+   "label": "HIS",
+   "vapShare": 0.2657385606624199
+  },
+  {
+   "id": "AAPI",
+   "label": "AAPI",
+   "vapShare": 0.20432553215884638
+  },
+  {
+   "id": "WAIO",
+   "label": "WAIO",
+   "vapShare": 0.4588409607434803
+  },
+  {
+   "id": "BLK",
+   "label": "BLK",
+   "vapShare": 0.07109494643525345
+  }
+ ],
+ "turnout": {
+  "AAPI": 0.75,
+  "HIS": 0.75,
+  "WAIO": 1,
+  "BLK": 1
+ },
+ "primaryTurnout": null,
+ "replicates": 10,
+ "subsamples": 100
+}

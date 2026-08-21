@@ -209,6 +209,109 @@
           "blocModel": "four"
         }
       ]
+    },
+    {
+      "_note": "Basic - 3 X 3 with the majority bloc's own cohesion lowered, both bloc models.",
+      "slug": "basic-3-x-3-waio-low-polarization",
+      "title": "Basic - 3 X 3, High Polarization",
+      "systems": [
+        {
+          "run": "basic-3-x-3-2-blocs-high-whi-polarization",
+          "system": "FASTSTV",
+          "blocModel": "two"
+        },
+        {
+          "run": "basic-3-x-3-waio-low-polarization",
+          "system": "FASTSTV",
+          "blocModel": "four"
+        }
+      ]
+    },
+    {
+      "_note": "The hybrid charter-amendment run with the majority bloc's own cohesion lowered, both bloc models: the combined citywide total, or either component contest on its own.",
+      "slug": "city-charter-amendment-proposal-high-whi-polarization",
+      "title": "City Charter Amendment Proposal, High Polarization",
+      "systems": [
+        {
+          "run": "city-charter-amendment-proposal-high-whi-polarization-2-blocs",
+          "system": "Combined",
+          "blocModel": "two",
+          "label": "Combined (15 seats)"
+        },
+        {
+          "run": "city-charter-amendment-proposal-high-whi-polarization-2-blocs",
+          "system": "IRV",
+          "blocModel": "two",
+          "label": "9 X 1 IRV"
+        },
+        {
+          "run": "city-charter-amendment-proposal-high-whi-polarization-2-blocs",
+          "system": "FASTSTV",
+          "blocModel": "two",
+          "label": "1 X 6 STV"
+        },
+        {
+          "run": "city-charter-amendment-proposal-high-whi-polarization",
+          "system": "Combined",
+          "blocModel": "four",
+          "label": "Combined (15 seats)"
+        },
+        {
+          "run": "city-charter-amendment-proposal-high-whi-polarization",
+          "system": "IRV",
+          "blocModel": "four",
+          "label": "9 X 1 IRV"
+        },
+        {
+          "run": "city-charter-amendment-proposal-high-whi-polarization",
+          "system": "FASTSTV",
+          "blocModel": "four",
+          "label": "1 X 6 STV"
+        }
+      ]
+    },
+    {
+      "_note": "The hybrid charter-amendment run with Cambridge ballot truncation, both bloc models: the combined citywide total, or either component contest on its own.",
+      "slug": "city-charter-amendment-proposal-truncation",
+      "title": "City Charter Amendment Proposal, Truncation",
+      "systems": [
+        {
+          "run": "city-charter-amendment-proposal-2-blocs-truncation",
+          "system": "Combined",
+          "blocModel": "two",
+          "label": "Combined (15 seats)"
+        },
+        {
+          "run": "city-charter-amendment-proposal-2-blocs-truncation",
+          "system": "IRV",
+          "blocModel": "two",
+          "label": "9 X 1 IRV"
+        },
+        {
+          "run": "city-charter-amendment-proposal-2-blocs-truncation",
+          "system": "FASTSTV",
+          "blocModel": "two",
+          "label": "1 X 6 STV"
+        },
+        {
+          "run": "city-charter-amendment-proposal-truncation",
+          "system": "Combined",
+          "blocModel": "four",
+          "label": "Combined (15 seats)"
+        },
+        {
+          "run": "city-charter-amendment-proposal-truncation",
+          "system": "IRV",
+          "blocModel": "four",
+          "label": "9 X 1 IRV"
+        },
+        {
+          "run": "city-charter-amendment-proposal-truncation",
+          "system": "FASTSTV",
+          "blocModel": "four",
+          "label": "1 X 6 STV"
+        }
+      ]
     }
   ],
   "_prose_key_comment": "Each section reads docs/prose/runs/<slug>.md by default. Add a \"prose\" key to point a section at a different file — so a description survives its run being re-slugged, and two sections showing the same scenario under different bloc models can share one write-up."

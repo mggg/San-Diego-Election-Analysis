@@ -1,25 +1,20 @@
 {
  "runName": "City Charter Amendment Proposal",
  "slug": "city-charter-amendment-proposal",
- "focalGroup": "AAPI",
- "focalGroupLabel": "AAPI",
+ "focalGroup": "BLK",
+ "focalGroupLabel": "BLK",
  "totalSeats": 15,
- "focalVapShare": 0.20432553215884638,
- "proportionalSeats": 3.064882982382696,
- "proportionalLabel": "AAPI share of VAP: 20.4% (3.1 seats)",
- "seatMax": 10,
+ "focalVapShare": 0.07109494643525345,
+ "proportionalSeats": 1.0664241965288017,
+ "proportionalLabel": "BLK share of VAP: 7.1% (1.1 seats)",
+ "seatMax": 5,
  "seatTicks": [
   0,
   1,
   2,
   3,
   4,
-  5,
-  6,
-  7,
-  8,
-  9,
-  10
+  5
  ],
  "districtConfigs": [
   {
@@ -34,8 +29,7 @@
    "candidatePoolMax": null,
    "candidatePoolMean": null,
    "plans": 50,
-   "electionsPerSystem": 12500,
-   "electionsByMode": {}
+   "electionsPerSystem": 12500
   },
   {
    "numDistricts": 1,
@@ -49,11 +43,7 @@
    "candidatePoolMax": 15,
    "candidatePoolMean": 12,
    "plans": 50,
-   "electionsPerSystem": 12500,
-   "electionsByMode": {
-    "slate_bt": 1250,
-    "slate_pl": 1250
-   }
+   "electionsPerSystem": 12500
   },
   {
    "numDistricts": 9,
@@ -67,11 +57,7 @@
    "candidatePoolMax": 10,
    "candidatePoolMean": 7,
    "plans": 50,
-   "electionsPerSystem": 12500,
-   "electionsByMode": {
-    "slate_bt": 11250,
-    "slate_pl": 11250
-   }
+   "electionsPerSystem": 12500
   }
  ],
  "voterModels": [

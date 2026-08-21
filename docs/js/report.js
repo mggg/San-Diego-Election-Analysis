@@ -223,11 +223,11 @@ function renderRunParams(section, entry, runMeta, manifest, source, selected, ta
    * Both matrices are laid out in the run's own bloc order, not the order the
    * keys happen to sit in the config file.
    *
-   * Those disagree: alternative_electoral.json writes cohesion as
-   * WAIO then POC and the alpha *columns* in the other order, so
-   * iterating insertion order would print two matrices of the same blocs with
-   * their axes in different orders -- and the alpha matrix with its own rows and
-   * columns disagreeing. Values are keyed, so ordering is presentation only.
+   * A config's own key order isn't a stable thing to render from: cohesion and
+   * alphas are edited independently, so one config can easily state the same
+   * blocs in two different orders between them. Rendering off insertion order
+   * would then print two matrices of the same blocs with their axes
+   * disagreeing. Values are keyed, so ordering is presentation only.
    */
   drawMatrix(mount, 'Cohesion', cfg.cohesion, d3.format('.2f'), order);
   if (!uniform(cfg.alphas)) drawMatrix(mount, 'Dirichlet α', cfg.alphas, d3.format('.2g'), order);
@@ -497,7 +497,7 @@ function mountCrossRun(section, manifest) {
    * The comparison shows one bloc model at a time, as the sections do.
    *
    * Rows from different bloc models cannot share an axis honestly: their slates
-   * are different populations -- POC against WAIO in one, four groups in the
+   * are different populations -- POC against WHI in one, four groups in the
    * other -- so a focal group picked for one names nothing in the other, and
    * two rows stacked together would be answering different questions. The
    * toggle picks the model; everything below is derived from it.
@@ -816,7 +816,7 @@ async function mountRun(section, manifest, cache) {
    * The slates one system's own run defines.
    *
    * A composed section's systems can be simulated under different bloc
-   * models -- WAIO/POC in one run, WAIO/BLK/HIS/AAPI in another -- so Focal
+   * models -- WHI/POC in one run, WAIO/BLK/HIS/AAPI in another -- so Focal
    * Group has to be read off the selected system's own run rather than a
    * fixed list carried by the section. An ordinary run's systems all share one
    * run, so this returns the same list regardless of which is selected.

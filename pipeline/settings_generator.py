@@ -18,7 +18,7 @@ allows more than two blocs and coalitions of groups voting together.
   population_column, and the complement is the single non-focal group.
 * Coalition / multi-bloc model (config has a "blocs" entry): voter blocs and
   candidate slates are independent axes. "blocs" maps each voter bloc to the
-  demographic groups it aggregates (e.g. {"WAIO-POC": ["WAIO", "POC"]}), each
+  demographic groups it aggregates (e.g. {"WHI-POC": ["WHI", "POC"]}), each
   demographic group resolves to one or
   more VAP columns via "group_vap_columns" (or DEFAULT_GROUP_VAP_COLUMNS), and
   each bloc's proportion is its turnout-weighted summed VAP normalized across
