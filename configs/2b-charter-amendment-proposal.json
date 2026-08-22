@@ -1,0 +1,78 @@
+{
+  "run_name": "City Charter Amendment Proposal (2 Blocs)",
+  "num_subsamples": 50,
+  "hybrid_election": true,
+  "total_seats": 15,
+  "district_configs": [
+    {
+      "num_districts": 9,
+      "winners": 1,
+      "candidate_pool_max": 10,
+      "candidate_pool_mean": 7
+    },
+    {
+      "num_districts": 1,
+      "winners": 6,
+      "candidate_pool_max": 15,
+      "candidate_pool_mean": 12
+    }
+  ],
+  "voting_configs": {
+    "IRV": {
+      "tiebreak": "random"
+    },
+    "FastSTV": {
+      "tiebreak": "random",
+      "n_seats": 6
+    }
+  },
+  "voter_models": [
+    "slate_pl",
+    "slate_bt",
+    "cambridge"
+  ],
+  "blocs": {
+    "POC": [
+      "POC"
+    ],
+    "WHI": [
+      "WHI"
+    ]
+  },
+  "turnout": {
+    "POC": 0.7,
+    "WHI": 1
+  },
+  "num_voters": 10000,
+  "focal_group": "POC",
+  "cohesion_parameters": {
+    "POC": {
+      "POC": 0.89,
+      "WHI": 0.11
+    },
+    "WHI": {
+      "POC": 0.2,
+      "WHI": 0.8
+    }
+  },
+  "alphas": {
+    "POC": {
+      "POC": 1,
+      "WHI": 1
+    },
+    "WHI": {
+      "POC": 1,
+      "WHI": 1
+    }
+  },
+  "num_reps": 25,
+  "cambridge_truncation": {
+    "enabled": true,
+    "majority_slates": [
+      "WHI"
+    ],
+    "minority_slates": [
+      "POC"
+    ]
+  }
+}

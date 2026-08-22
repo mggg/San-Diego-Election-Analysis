@@ -1,0 +1,1890 @@
+{
+ "boxes": [
+  {
+   "slate": "HIS",
+   "slateLabel": "HIS",
+   "slateVapShare": 0.2657385606624199,
+   "numDistricts": 1,
+   "winners": 6,
+   "restricted": false,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 50,
+     "q1": 26.5739,
+     "median": 26.5739,
+     "q3": 26.5739,
+     "low": 26.5739,
+     "high": 26.5739,
+     "mean": 26.5739,
+     "outliers": []
+    }
+   ],
+   "overallMean": 26.5739,
+   "plans": 50
+  },
+  {
+   "slate": "HIS",
+   "slateLabel": "HIS",
+   "slateVapShare": 0.2657385606624199,
+   "numDistricts": 1,
+   "winners": 6,
+   "restricted": true,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 46,
+     "q1": 26.5739,
+     "median": 26.5739,
+     "q3": 26.5739,
+     "low": 26.5739,
+     "high": 26.5739,
+     "mean": 26.5739,
+     "outliers": []
+    }
+   ],
+   "overallMean": 26.5739,
+   "plans": 46
+  },
+  {
+   "slate": "AAPI",
+   "slateLabel": "AAPI",
+   "slateVapShare": 0.20432553215884638,
+   "numDistricts": 1,
+   "winners": 6,
+   "restricted": false,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 50,
+     "q1": 20.4326,
+     "median": 20.4326,
+     "q3": 20.4326,
+     "low": 20.4326,
+     "high": 20.4326,
+     "mean": 20.4326,
+     "outliers": []
+    }
+   ],
+   "overallMean": 20.4326,
+   "plans": 50
+  },
+  {
+   "slate": "AAPI",
+   "slateLabel": "AAPI",
+   "slateVapShare": 0.20432553215884638,
+   "numDistricts": 1,
+   "winners": 6,
+   "restricted": true,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 39,
+     "q1": 20.4326,
+     "median": 20.4326,
+     "q3": 20.4326,
+     "low": 20.4326,
+     "high": 20.4326,
+     "mean": 20.4326,
+     "outliers": []
+    }
+   ],
+   "overallMean": 20.4326,
+   "plans": 39
+  },
+  {
+   "slate": "WAIO",
+   "slateLabel": "WAIO",
+   "slateVapShare": 0.4588409607434803,
+   "numDistricts": 1,
+   "winners": 6,
+   "restricted": false,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 50,
+     "q1": 45.8841,
+     "median": 45.8841,
+     "q3": 45.8841,
+     "low": 45.8841,
+     "high": 45.8841,
+     "mean": 45.8841,
+     "outliers": []
+    }
+   ],
+   "overallMean": 45.8841,
+   "plans": 50
+  },
+  {
+   "slate": "WAIO",
+   "slateLabel": "WAIO",
+   "slateVapShare": 0.4588409607434803,
+   "numDistricts": 1,
+   "winners": 6,
+   "restricted": true,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 50,
+     "q1": 45.8841,
+     "median": 45.8841,
+     "q3": 45.8841,
+     "low": 45.8841,
+     "high": 45.8841,
+     "mean": 45.8841,
+     "outliers": []
+    }
+   ],
+   "overallMean": 45.8841,
+   "plans": 50
+  },
+  {
+   "slate": "BLK",
+   "slateLabel": "BLK",
+   "slateVapShare": 0.07109494643525345,
+   "numDistricts": 1,
+   "winners": 6,
+   "restricted": false,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 50,
+     "q1": 7.1095,
+     "median": 7.1095,
+     "q3": 7.1095,
+     "low": 7.1095,
+     "high": 7.1095,
+     "mean": 7.1095,
+     "outliers": []
+    }
+   ],
+   "overallMean": 7.1095,
+   "plans": 50
+  },
+  {
+   "slate": "BLK",
+   "slateLabel": "BLK",
+   "slateVapShare": 0.07109494643525345,
+   "numDistricts": 1,
+   "winners": 6,
+   "restricted": true,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 7,
+     "q1": 7.1095,
+     "median": 7.1095,
+     "q3": 7.1095,
+     "low": 7.1095,
+     "high": 7.1095,
+     "mean": 7.1095,
+     "outliers": []
+    }
+   ],
+   "overallMean": 7.1095,
+   "plans": 7
+  },
+  {
+   "slate": "HIS",
+   "slateLabel": "HIS",
+   "slateVapShare": 0.2657385606624199,
+   "numDistricts": 9,
+   "winners": 1,
+   "restricted": false,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 50,
+     "q1": 9.243,
+     "median": 9.5207,
+     "q3": 9.6247,
+     "low": 8.811,
+     "high": 9.8474,
+     "mean": 9.4585,
+     "outliers": [
+      10.2087
+     ]
+    },
+    {
+     "rank": 2,
+     "n": 50,
+     "q1": 10.2929,
+     "median": 11.1923,
+     "q3": 11.5135,
+     "low": 9.8943,
+     "high": 12.9503,
+     "mean": 11.0353,
+     "outliers": []
+    },
+    {
+     "rank": 3,
+     "n": 50,
+     "q1": 11.9134,
+     "median": 12.7357,
+     "q3": 13.3803,
+     "low": 11.181,
+     "high": 14.8988,
+     "mean": 12.8873,
+     "outliers": [
+      15.6497,
+      15.737,
+      16.2139
+     ]
+    },
+    {
+     "rank": 4,
+     "n": 50,
+     "q1": 16.83,
+     "median": 17.5687,
+     "q3": 18.2835,
+     "low": 14.6532,
+     "high": 20.255,
+     "mean": 17.4069,
+     "outliers": [
+      13.3201,
+      14.3862,
+      20.8332
+     ]
+    },
+    {
+     "rank": 5,
+     "n": 50,
+     "q1": 18.9976,
+     "median": 19.8141,
+     "q3": 20.5004,
+     "low": 17.2861,
+     "high": 21.483,
+     "mean": 19.8288,
+     "outliers": [
+      22.776,
+      23.4292,
+      23.8213
+     ]
+    },
+    {
+     "rank": 6,
+     "n": 50,
+     "q1": 21.3317,
+     "median": 23.8231,
+     "q3": 26.9167,
+     "low": 19.2444,
+     "high": 32.1434,
+     "mean": 24.3214,
+     "outliers": []
+    },
+    {
+     "rank": 7,
+     "n": 50,
+     "q1": 35.4569,
+     "median": 36.1933,
+     "q3": 38.2655,
+     "low": 31.8317,
+     "high": 41.8724,
+     "mean": 36.3858,
+     "outliers": [
+      27.8314,
+      27.8396,
+      29.1504,
+      29.4133,
+      42.9858,
+      43.4353
+     ]
+    },
+    {
+     "rank": 8,
+     "n": 50,
+     "q1": 46.2332,
+     "median": 48.3382,
+     "q3": 49.0057,
+     "low": 42.4831,
+     "high": 52.5169,
+     "mean": 47.3515,
+     "outliers": [
+      39.6624,
+      40.8675,
+      41.2959,
+      41.646
+     ]
+    },
+    {
+     "rank": 9,
+     "n": 50,
+     "q1": 57.3188,
+     "median": 65.9732,
+     "q3": 68.7138,
+     "low": 52.7595,
+     "high": 72.5649,
+     "mean": 63.6646,
+     "outliers": []
+    }
+   ],
+   "overallMean": 26.9267,
+   "plans": 50
+  },
+  {
+   "slate": "HIS",
+   "slateLabel": "HIS",
+   "slateVapShare": 0.2657385606624199,
+   "numDistricts": 9,
+   "winners": 1,
+   "restricted": true,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 5,
+     "q1": 9.2233,
+     "median": 9.228,
+     "q3": 9.5583,
+     "low": 8.811,
+     "high": 9.5583,
+     "mean": 9.4059,
+     "outliers": [
+      10.2087
+     ]
+    },
+    {
+     "rank": 2,
+     "n": 9,
+     "q1": 10.2666,
+     "median": 11.3147,
+     "q3": 11.7271,
+     "low": 9.8943,
+     "high": 12.8113,
+     "mean": 11.2079,
+     "outliers": []
+    },
+    {
+     "rank": 3,
+     "n": 17,
+     "q1": 11.8554,
+     "median": 12.6319,
+     "q3": 13.534,
+     "low": 11.181,
+     "high": 14.7837,
+     "mean": 12.8381,
+     "outliers": [
+      16.2139
+     ]
+    },
+    {
+     "rank": 4,
+     "n": 19,
+     "q1": 16.4716,
+     "median": 17.0246,
+     "q3": 18.5868,
+     "low": 14.3862,
+     "high": 19.8046,
+     "mean": 17.307,
+     "outliers": []
+    },
+    {
+     "rank": 5,
+     "n": 27,
+     "q1": 19.351,
+     "median": 20.1217,
+     "q3": 20.4924,
+     "low": 18.3522,
+     "high": 21.2007,
+     "mean": 20.204,
+     "outliers": [
+      23.4292,
+      23.8213
+     ]
+    },
+    {
+     "rank": 6,
+     "n": 32,
+     "q1": 21.7274,
+     "median": 25.2848,
+     "q3": 27.7304,
+     "low": 19.2444,
+     "high": 32.1434,
+     "mean": 25.3097,
+     "outliers": []
+    },
+    {
+     "rank": 7,
+     "n": 47,
+     "q1": 35.4904,
+     "median": 36.1854,
+     "q3": 38.101,
+     "low": 31.8317,
+     "high": 41.8724,
+     "mean": 36.4446,
+     "outliers": [
+      27.8314,
+      29.1504,
+      29.4133,
+      42.9858,
+      43.4353
+     ]
+    },
+    {
+     "rank": 8,
+     "n": 50,
+     "q1": 46.2332,
+     "median": 48.3382,
+     "q3": 49.0057,
+     "low": 42.4831,
+     "high": 52.5169,
+     "mean": 47.3515,
+     "outliers": [
+      39.6624,
+      40.8675,
+      41.2959,
+      41.646
+     ]
+    },
+    {
+     "rank": 9,
+     "n": 50,
+     "q1": 57.3188,
+     "median": 65.9732,
+     "q3": 68.7138,
+     "low": 52.7595,
+     "high": 72.5649,
+     "mean": 63.6646,
+     "outliers": []
+    }
+   ],
+   "overallMean": 36.3832,
+   "plans": 50
+  },
+  {
+   "slate": "AAPI",
+   "slateLabel": "AAPI",
+   "slateVapShare": 0.20432553215884638,
+   "numDistricts": 9,
+   "winners": 1,
+   "restricted": false,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 50,
+     "q1": 8.2415,
+     "median": 8.4279,
+     "q3": 8.8726,
+     "low": 7.5041,
+     "high": 9.5259,
+     "mean": 8.5856,
+     "outliers": [
+      9.8259,
+      9.9415,
+      11.162
+     ]
+    },
+    {
+     "rank": 2,
+     "n": 50,
+     "q1": 9.9065,
+     "median": 10.1018,
+     "q3": 10.4455,
+     "low": 9.1226,
+     "high": 11.2341,
+     "mean": 10.1684,
+     "outliers": [
+      8.3855,
+      8.6311,
+      11.334,
+      11.5864,
+      12.3297
+     ]
+    },
+    {
+     "rank": 3,
+     "n": 50,
+     "q1": 11.8557,
+     "median": 12.9091,
+     "q3": 13.6843,
+     "low": 9.8558,
+     "high": 15.4299,
+     "mean": 12.7386,
+     "outliers": []
+    },
+    {
+     "rank": 4,
+     "n": 50,
+     "q1": 14.8523,
+     "median": 15.4645,
+     "q3": 16.3573,
+     "low": 13.3492,
+     "high": 18.4923,
+     "mean": 15.6733,
+     "outliers": []
+    },
+    {
+     "rank": 5,
+     "n": 50,
+     "q1": 17.0251,
+     "median": 17.7866,
+     "q3": 18.5872,
+     "low": 14.8253,
+     "high": 20.546,
+     "mean": 17.8359,
+     "outliers": [
+      21.0845
+     ]
+    },
+    {
+     "rank": 6,
+     "n": 50,
+     "q1": 20.2542,
+     "median": 21.0449,
+     "q3": 22.4986,
+     "low": 18.6526,
+     "high": 24.7852,
+     "mean": 21.4091,
+     "outliers": [
+      26.191
+     ]
+    },
+    {
+     "rank": 7,
+     "n": 50,
+     "q1": 23.4992,
+     "median": 23.8525,
+     "q3": 25.2801,
+     "low": 22.0934,
+     "high": 27.7922,
+     "mean": 24.4195,
+     "outliers": [
+      31.4243
+     ]
+    },
+    {
+     "rank": 8,
+     "n": 50,
+     "q1": 31.2783,
+     "median": 31.5978,
+     "q3": 32.4303,
+     "low": 29.9032,
+     "high": 33.9464,
+     "mean": 32.0275,
+     "outliers": [
+      29.2586,
+      34.37,
+      35.524,
+      36.853,
+      37.1086
+     ]
+    },
+    {
+     "rank": 9,
+     "n": 50,
+     "q1": 42.0351,
+     "median": 43.3416,
+     "q3": 43.9582,
+     "low": 39.4233,
+     "high": 46.6469,
+     "mean": 42.9141,
+     "outliers": [
+      35.9961,
+      37.6355,
+      38.5135
+     ]
+    }
+   ],
+   "overallMean": 20.6413,
+   "plans": 50
+  },
+  {
+   "slate": "AAPI",
+   "slateLabel": "AAPI",
+   "slateVapShare": 0.20432553215884638,
+   "numDistricts": 9,
+   "winners": 1,
+   "restricted": true,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 9,
+     "q1": 8.4958,
+     "median": 8.7044,
+     "q3": 8.9828,
+     "low": 8.1257,
+     "high": 9.5024,
+     "mean": 8.7532,
+     "outliers": []
+    },
+    {
+     "rank": 2,
+     "n": 8,
+     "q1": 9.851,
+     "median": 10.0078,
+     "q3": 10.2687,
+     "low": 9.6064,
+     "high": 10.4455,
+     "mean": 10.1938,
+     "outliers": [
+      11.5864
+     ]
+    },
+    {
+     "rank": 3,
+     "n": 13,
+     "q1": 12.414,
+     "median": 13.502,
+     "q3": 13.919,
+     "low": 10.4381,
+     "high": 15.1763,
+     "mean": 13.0155,
+     "outliers": [
+      10.1556
+     ]
+    },
+    {
+     "rank": 4,
+     "n": 23,
+     "q1": 14.9152,
+     "median": 15.7709,
+     "q3": 16.7886,
+     "low": 14.2704,
+     "high": 18.1479,
+     "mean": 15.9235,
+     "outliers": []
+    },
+    {
+     "rank": 5,
+     "n": 20,
+     "q1": 17.641,
+     "median": 17.8342,
+     "q3": 19.1538,
+     "low": 16.0826,
+     "high": 21.0845,
+     "mean": 18.106,
+     "outliers": [
+      14.8319,
+      15.2667
+     ]
+    },
+    {
+     "rank": 6,
+     "n": 29,
+     "q1": 20.4504,
+     "median": 21.5008,
+     "q3": 22.9924,
+     "low": 19.4407,
+     "high": 24.7852,
+     "mean": 21.718,
+     "outliers": []
+    },
+    {
+     "rank": 7,
+     "n": 32,
+     "q1": 23.3942,
+     "median": 23.8589,
+     "q3": 25.2232,
+     "low": 22.2086,
+     "high": 27.7922,
+     "mean": 24.2688,
+     "outliers": []
+    },
+    {
+     "rank": 8,
+     "n": 41,
+     "q1": 31.3109,
+     "median": 31.6402,
+     "q3": 32.4877,
+     "low": 29.9032,
+     "high": 33.9464,
+     "mean": 32.0976,
+     "outliers": [
+      29.2586,
+      34.37,
+      35.524,
+      36.853,
+      37.1086
+     ]
+    },
+    {
+     "rank": 9,
+     "n": 50,
+     "q1": 42.0351,
+     "median": 43.3416,
+     "q3": 43.9582,
+     "low": 39.4233,
+     "high": 46.6469,
+     "mean": 42.9141,
+     "outliers": [
+      35.9961,
+      37.6355,
+      38.5135
+     ]
+    }
+   ],
+   "overallMean": 26.3379,
+   "plans": 50
+  },
+  {
+   "slate": "WAIO",
+   "slateLabel": "WAIO",
+   "slateVapShare": 0.4588409607434803,
+   "numDistricts": 9,
+   "winners": 1,
+   "restricted": false,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 50,
+     "q1": 10.725,
+     "median": 11.1738,
+     "q3": 11.6201,
+     "low": 9.5127,
+     "high": 12.7895,
+     "mean": 11.3653,
+     "outliers": [
+      13.8974,
+      15.0898,
+      15.2241
+     ]
+    },
+    {
+     "rank": 2,
+     "n": 50,
+     "q1": 15.3987,
+     "median": 17.6402,
+     "q3": 25.0897,
+     "low": 11.4011,
+     "high": 31.2809,
+     "mean": 20.0226,
+     "outliers": []
+    },
+    {
+     "rank": 3,
+     "n": 50,
+     "q1": 33.5279,
+     "median": 35.0329,
+     "q3": 40.0716,
+     "low": 28.7477,
+     "high": 44.4598,
+     "mean": 36.2584,
+     "outliers": []
+    },
+    {
+     "rank": 4,
+     "n": 50,
+     "q1": 40.5169,
+     "median": 41.3437,
+     "q3": 44.2574,
+     "low": 37.5132,
+     "high": 47.5789,
+     "mean": 42.4641,
+     "outliers": [
+      50.9825
+     ]
+    },
+    {
+     "rank": 5,
+     "n": 50,
+     "q1": 51.7112,
+     "median": 53.4661,
+     "q3": 55.0318,
+     "low": 47.71,
+     "high": 57.9174,
+     "mean": 53.0857,
+     "outliers": [
+      45.6478,
+      46.6449
+     ]
+    },
+    {
+     "rank": 6,
+     "n": 50,
+     "q1": 54.4463,
+     "median": 55.6257,
+     "q3": 56.7438,
+     "low": 52.1484,
+     "high": 58.8903,
+     "mean": 55.4901,
+     "outliers": [
+      48.7326
+     ]
+    },
+    {
+     "rank": 7,
+     "n": 50,
+     "q1": 55.9372,
+     "median": 56.8845,
+     "q3": 58.6128,
+     "low": 52.5933,
+     "high": 61.9856,
+     "mean": 57.251,
+     "outliers": []
+    },
+    {
+     "rank": 8,
+     "n": 50,
+     "q1": 60.764,
+     "median": 62.9753,
+     "q3": 64.7336,
+     "low": 56.9442,
+     "high": 67.8247,
+     "mean": 62.8207,
+     "outliers": []
+    },
+    {
+     "rank": 9,
+     "n": 50,
+     "q1": 65.9216,
+     "median": 67.9975,
+     "q3": 70.5861,
+     "low": 61.4687,
+     "high": 76.5856,
+     "mean": 68.3012,
+     "outliers": []
+    }
+   ],
+   "overallMean": 45.2288,
+   "plans": 50
+  },
+  {
+   "slate": "WAIO",
+   "slateLabel": "WAIO",
+   "slateVapShare": 0.4588409607434803,
+   "numDistricts": 9,
+   "winners": 1,
+   "restricted": true,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 20,
+     "q1": 10.5123,
+     "median": 11.1135,
+     "q3": 11.6822,
+     "low": 9.5127,
+     "high": 12.7895,
+     "mean": 11.2327,
+     "outliers": [
+      13.8974
+     ]
+    },
+    {
+     "rank": 2,
+     "n": 26,
+     "q1": 16.001,
+     "median": 21.2282,
+     "q3": 25.6137,
+     "low": 13.2161,
+     "high": 31.2809,
+     "mean": 21.2057,
+     "outliers": []
+    },
+    {
+     "rank": 3,
+     "n": 48,
+     "q1": 33.6048,
+     "median": 35.0653,
+     "q3": 40.2767,
+     "low": 28.7477,
+     "high": 44.4598,
+     "mean": 36.4071,
+     "outliers": []
+    },
+    {
+     "rank": 4,
+     "n": 49,
+     "q1": 40.5095,
+     "median": 41.4689,
+     "q3": 44.3876,
+     "low": 37.5132,
+     "high": 47.5789,
+     "mean": 42.4954,
+     "outliers": [
+      50.9825
+     ]
+    },
+    {
+     "rank": 5,
+     "n": 50,
+     "q1": 51.7112,
+     "median": 53.4661,
+     "q3": 55.0318,
+     "low": 47.71,
+     "high": 57.9174,
+     "mean": 53.0857,
+     "outliers": [
+      45.6478,
+      46.6449
+     ]
+    },
+    {
+     "rank": 6,
+     "n": 50,
+     "q1": 54.4463,
+     "median": 55.6257,
+     "q3": 56.7438,
+     "low": 52.1484,
+     "high": 58.8903,
+     "mean": 55.4901,
+     "outliers": [
+      48.7326
+     ]
+    },
+    {
+     "rank": 7,
+     "n": 50,
+     "q1": 55.9372,
+     "median": 56.8845,
+     "q3": 58.6128,
+     "low": 52.5933,
+     "high": 61.9856,
+     "mean": 57.251,
+     "outliers": []
+    },
+    {
+     "rank": 8,
+     "n": 50,
+     "q1": 60.764,
+     "median": 62.9753,
+     "q3": 64.7336,
+     "low": 56.9442,
+     "high": 67.8247,
+     "mean": 62.8207,
+     "outliers": []
+    },
+    {
+     "rank": 9,
+     "n": 50,
+     "q1": 65.9216,
+     "median": 67.9975,
+     "q3": 70.5861,
+     "low": 61.4687,
+     "high": 76.5856,
+     "mean": 68.3012,
+     "outliers": []
+    }
+   ],
+   "overallMean": 49.4994,
+   "plans": 50
+  },
+  {
+   "slate": "BLK",
+   "slateLabel": "BLK",
+   "slateVapShare": 0.07109494643525345,
+   "numDistricts": 9,
+   "winners": 1,
+   "restricted": false,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 50,
+     "q1": 2.6206,
+     "median": 2.7009,
+     "q3": 2.9215,
+     "low": 2.387,
+     "high": 3.2411,
+     "mean": 2.7814,
+     "outliers": []
+    },
+    {
+     "rank": 2,
+     "n": 50,
+     "q1": 2.9559,
+     "median": 3.1867,
+     "q3": 3.2347,
+     "low": 2.6256,
+     "high": 3.5537,
+     "mean": 3.1613,
+     "outliers": [
+      4.0341,
+      4.1639
+     ]
+    },
+    {
+     "rank": 3,
+     "n": 50,
+     "q1": 3.6613,
+     "median": 3.9506,
+     "q3": 4.2353,
+     "low": 3.2058,
+     "high": 5.0022,
+     "mean": 3.9579,
+     "outliers": []
+    },
+    {
+     "rank": 4,
+     "n": 50,
+     "q1": 4.6161,
+     "median": 5.2568,
+     "q3": 5.6668,
+     "low": 3.7101,
+     "high": 6.3867,
+     "mean": 5.1618,
+     "outliers": []
+    },
+    {
+     "rank": 5,
+     "n": 50,
+     "q1": 6.0134,
+     "median": 6.3081,
+     "q3": 6.524,
+     "low": 5.3111,
+     "high": 7.0359,
+     "mean": 6.2242,
+     "outliers": [
+      4.8739,
+      5.1713
+     ]
+    },
+    {
+     "rank": 6,
+     "n": 50,
+     "q1": 6.6986,
+     "median": 6.9657,
+     "q3": 7.2125,
+     "low": 5.9474,
+     "high": 7.9495,
+     "mean": 6.9813,
+     "outliers": [
+      8.4783
+     ]
+    },
+    {
+     "rank": 7,
+     "n": 50,
+     "q1": 7.7572,
+     "median": 8.1817,
+     "q3": 8.7078,
+     "low": 7.325,
+     "high": 9.8515,
+     "mean": 8.2884,
+     "outliers": []
+    },
+    {
+     "rank": 8,
+     "n": 50,
+     "q1": 10.4658,
+     "median": 11.5743,
+     "q3": 12.5654,
+     "low": 8.9358,
+     "high": 14.4021,
+     "mean": 11.5056,
+     "outliers": []
+    },
+    {
+     "rank": 9,
+     "n": 50,
+     "q1": 16.5877,
+     "median": 16.753,
+     "q3": 17.2522,
+     "low": 15.9825,
+     "high": 18.0694,
+     "mean": 16.7668,
+     "outliers": [
+      13.3984,
+      14.9485,
+      15.1218,
+      15.4322
+     ]
+    }
+   ],
+   "overallMean": 7.2032,
+   "plans": 50
+  },
+  {
+   "slate": "BLK",
+   "slateLabel": "BLK",
+   "slateVapShare": 0.07109494643525345,
+   "numDistricts": 9,
+   "winners": 1,
+   "restricted": true,
+   "ranks": [
+    {
+     "rank": 2,
+     "n": 1,
+     "q1": 3.1018,
+     "median": 3.1018,
+     "q3": 3.1018,
+     "low": 3.1018,
+     "high": 3.1018,
+     "mean": 3.1018,
+     "outliers": []
+    },
+    {
+     "rank": 4,
+     "n": 1,
+     "q1": 4.7809,
+     "median": 4.7809,
+     "q3": 4.7809,
+     "low": 4.7809,
+     "high": 4.7809,
+     "mean": 4.7809,
+     "outliers": []
+    },
+    {
+     "rank": 5,
+     "n": 2,
+     "q1": 6.3069,
+     "median": 6.3232,
+     "q3": 6.3394,
+     "low": 6.2907,
+     "high": 6.3556,
+     "mean": 6.3232,
+     "outliers": []
+    },
+    {
+     "rank": 6,
+     "n": 6,
+     "q1": 6.937,
+     "median": 7.2514,
+     "q3": 7.402,
+     "low": 6.86,
+     "high": 7.4095,
+     "mean": 7.3543,
+     "outliers": [
+      8.4783
+     ]
+    },
+    {
+     "rank": 7,
+     "n": 9,
+     "q1": 8.233,
+     "median": 8.5116,
+     "q3": 8.649,
+     "low": 7.637,
+     "high": 8.8457,
+     "mean": 8.4628,
+     "outliers": [
+      9.5923
+     ]
+    },
+    {
+     "rank": 8,
+     "n": 10,
+     "q1": 10.6324,
+     "median": 11.1389,
+     "q3": 11.8586,
+     "low": 8.9358,
+     "high": 12.5704,
+     "mean": 11.078,
+     "outliers": []
+    },
+    {
+     "rank": 9,
+     "n": 23,
+     "q1": 16.5118,
+     "median": 16.8234,
+     "q3": 17.2881,
+     "low": 15.9825,
+     "high": 17.966,
+     "mean": 16.855,
+     "outliers": [
+      15.1218
+     ]
+    }
+   ],
+   "overallMean": 12.2935,
+   "plans": 37
+  }
+ ],
+ "colors": [
+  {
+   "slate": "HIS",
+   "slateLabel": "HIS",
+   "slateVapShare": 0.2657385606624199,
+   "numDistricts": 1,
+   "winners": 6,
+   "metric": "availability",
+   "label": "Avg. HIS candidates per district",
+   "format": "count",
+   "zeroLabel": "No HIS candidate at this rank",
+   "restricted": false,
+   "values": [
+    {
+     "rank": 1,
+     "value": 2.44,
+     "candidates": 122,
+     "districts": 50
+    }
+   ]
+  },
+  {
+   "slate": "HIS",
+   "slateLabel": "HIS",
+   "slateVapShare": 0.2657385606624199,
+   "numDistricts": 1,
+   "winners": 6,
+   "metric": "winRate",
+   "system": "FASTSTV",
+   "systemLabel": "1 X 6 STV",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No HIS winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 1,
+     "value": 100.0,
+     "won": 2300,
+     "contests": 2300
+    }
+   ]
+  },
+  {
+   "slate": "AAPI",
+   "slateLabel": "AAPI",
+   "slateVapShare": 0.20432553215884638,
+   "numDistricts": 1,
+   "winners": 6,
+   "metric": "availability",
+   "label": "Avg. AAPI candidates per district",
+   "format": "count",
+   "zeroLabel": "No AAPI candidate at this rank",
+   "restricted": false,
+   "values": [
+    {
+     "rank": 1,
+     "value": 1.56,
+     "candidates": 78,
+     "districts": 50
+    }
+   ]
+  },
+  {
+   "slate": "AAPI",
+   "slateLabel": "AAPI",
+   "slateVapShare": 0.20432553215884638,
+   "numDistricts": 1,
+   "winners": 6,
+   "metric": "winRate",
+   "system": "FASTSTV",
+   "systemLabel": "1 X 6 STV",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No AAPI winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 1,
+     "value": 100.0,
+     "won": 1950,
+     "contests": 1950
+    }
+   ]
+  },
+  {
+   "slate": "WAIO",
+   "slateLabel": "WAIO",
+   "slateVapShare": 0.4588409607434803,
+   "numDistricts": 1,
+   "winners": 6,
+   "metric": "availability",
+   "label": "Avg. WAIO candidates per district",
+   "format": "count",
+   "zeroLabel": "No WAIO candidate at this rank",
+   "restricted": false,
+   "values": [
+    {
+     "rank": 1,
+     "value": 7.9,
+     "candidates": 395,
+     "districts": 50
+    }
+   ]
+  },
+  {
+   "slate": "WAIO",
+   "slateLabel": "WAIO",
+   "slateVapShare": 0.4588409607434803,
+   "numDistricts": 1,
+   "winners": 6,
+   "metric": "winRate",
+   "system": "FASTSTV",
+   "systemLabel": "1 X 6 STV",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No WAIO winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 1,
+     "value": 100.0,
+     "won": 2500,
+     "contests": 2500
+    }
+   ]
+  },
+  {
+   "slate": "BLK",
+   "slateLabel": "BLK",
+   "slateVapShare": 0.07109494643525345,
+   "numDistricts": 1,
+   "winners": 6,
+   "metric": "availability",
+   "label": "Avg. BLK candidates per district",
+   "format": "count",
+   "zeroLabel": "No BLK candidate at this rank",
+   "restricted": false,
+   "values": [
+    {
+     "rank": 1,
+     "value": 0.14,
+     "candidates": 7,
+     "districts": 50
+    }
+   ]
+  },
+  {
+   "slate": "BLK",
+   "slateLabel": "BLK",
+   "slateVapShare": 0.07109494643525345,
+   "numDistricts": 1,
+   "winners": 6,
+   "metric": "winRate",
+   "system": "FASTSTV",
+   "systemLabel": "1 X 6 STV",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No BLK winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 1,
+     "value": 60.5714,
+     "won": 212,
+     "contests": 350
+    }
+   ]
+  },
+  {
+   "slate": "HIS",
+   "slateLabel": "HIS",
+   "slateVapShare": 0.2657385606624199,
+   "numDistricts": 9,
+   "winners": 1,
+   "metric": "availability",
+   "label": "Avg. HIS candidates per district",
+   "format": "count",
+   "zeroLabel": "No HIS candidate at this rank",
+   "restricted": false,
+   "values": [
+    {
+     "rank": 1,
+     "value": 0.1,
+     "candidates": 5,
+     "districts": 50
+    },
+    {
+     "rank": 2,
+     "value": 0.18,
+     "candidates": 9,
+     "districts": 50
+    },
+    {
+     "rank": 3,
+     "value": 0.38,
+     "candidates": 19,
+     "districts": 50
+    },
+    {
+     "rank": 4,
+     "value": 0.52,
+     "candidates": 26,
+     "districts": 50
+    },
+    {
+     "rank": 5,
+     "value": 0.72,
+     "candidates": 36,
+     "districts": 50
+    },
+    {
+     "rank": 6,
+     "value": 1.12,
+     "candidates": 56,
+     "districts": 50
+    },
+    {
+     "rank": 7,
+     "value": 3.14,
+     "candidates": 157,
+     "districts": 50
+    },
+    {
+     "rank": 8,
+     "value": 4.48,
+     "candidates": 224,
+     "districts": 50
+    },
+    {
+     "rank": 9,
+     "value": 6.28,
+     "candidates": 314,
+     "districts": 50
+    }
+   ]
+  },
+  {
+   "slate": "HIS",
+   "slateLabel": "HIS",
+   "slateVapShare": 0.2657385606624199,
+   "numDistricts": 9,
+   "winners": 1,
+   "metric": "winRate",
+   "system": "IRV",
+   "systemLabel": "9 X 1 IRV",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No HIS winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 1,
+     "value": 0.0,
+     "won": 0,
+     "contests": 250
+    },
+    {
+     "rank": 2,
+     "value": 0.0,
+     "won": 0,
+     "contests": 450
+    },
+    {
+     "rank": 3,
+     "value": 0.8235,
+     "won": 7,
+     "contests": 850
+    },
+    {
+     "rank": 4,
+     "value": 0.0,
+     "won": 0,
+     "contests": 950
+    },
+    {
+     "rank": 5,
+     "value": 0.0,
+     "won": 0,
+     "contests": 1350
+    },
+    {
+     "rank": 6,
+     "value": 0.0,
+     "won": 0,
+     "contests": 1600
+    },
+    {
+     "rank": 7,
+     "value": 3.8723,
+     "won": 91,
+     "contests": 2350
+    },
+    {
+     "rank": 8,
+     "value": 60.68,
+     "won": 1517,
+     "contests": 2500
+    },
+    {
+     "rank": 9,
+     "value": 79.6,
+     "won": 1990,
+     "contests": 2500
+    }
+   ]
+  },
+  {
+   "slate": "AAPI",
+   "slateLabel": "AAPI",
+   "slateVapShare": 0.20432553215884638,
+   "numDistricts": 9,
+   "winners": 1,
+   "metric": "availability",
+   "label": "Avg. AAPI candidates per district",
+   "format": "count",
+   "zeroLabel": "No AAPI candidate at this rank",
+   "restricted": false,
+   "values": [
+    {
+     "rank": 1,
+     "value": 0.22,
+     "candidates": 11,
+     "districts": 50
+    },
+    {
+     "rank": 2,
+     "value": 0.16,
+     "candidates": 8,
+     "districts": 50
+    },
+    {
+     "rank": 3,
+     "value": 0.38,
+     "candidates": 19,
+     "districts": 50
+    },
+    {
+     "rank": 4,
+     "value": 0.56,
+     "candidates": 28,
+     "districts": 50
+    },
+    {
+     "rank": 5,
+     "value": 0.58,
+     "candidates": 29,
+     "districts": 50
+    },
+    {
+     "rank": 6,
+     "value": 0.8,
+     "candidates": 40,
+     "districts": 50
+    },
+    {
+     "rank": 7,
+     "value": 1.18,
+     "candidates": 59,
+     "districts": 50
+    },
+    {
+     "rank": 8,
+     "value": 1.52,
+     "candidates": 76,
+     "districts": 50
+    },
+    {
+     "rank": 9,
+     "value": 3.22,
+     "candidates": 161,
+     "districts": 50
+    }
+   ]
+  },
+  {
+   "slate": "AAPI",
+   "slateLabel": "AAPI",
+   "slateVapShare": 0.20432553215884638,
+   "numDistricts": 9,
+   "winners": 1,
+   "metric": "winRate",
+   "system": "IRV",
+   "systemLabel": "9 X 1 IRV",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No AAPI winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 1,
+     "value": 0.2222,
+     "won": 1,
+     "contests": 450
+    },
+    {
+     "rank": 2,
+     "value": 16.0,
+     "won": 64,
+     "contests": 400
+    },
+    {
+     "rank": 3,
+     "value": 0.9231,
+     "won": 6,
+     "contests": 650
+    },
+    {
+     "rank": 4,
+     "value": 3.3043,
+     "won": 38,
+     "contests": 1150
+    },
+    {
+     "rank": 5,
+     "value": 12.3,
+     "won": 123,
+     "contests": 1000
+    },
+    {
+     "rank": 6,
+     "value": 5.5862,
+     "won": 81,
+     "contests": 1450
+    },
+    {
+     "rank": 7,
+     "value": 30.8125,
+     "won": 493,
+     "contests": 1600
+    },
+    {
+     "rank": 8,
+     "value": 5.7073,
+     "won": 117,
+     "contests": 2050
+    },
+    {
+     "rank": 9,
+     "value": 12.36,
+     "won": 309,
+     "contests": 2500
+    }
+   ]
+  },
+  {
+   "slate": "WAIO",
+   "slateLabel": "WAIO",
+   "slateVapShare": 0.4588409607434803,
+   "numDistricts": 9,
+   "winners": 1,
+   "metric": "availability",
+   "label": "Avg. WAIO candidates per district",
+   "format": "count",
+   "zeroLabel": "No WAIO candidate at this rank",
+   "restricted": false,
+   "values": [
+    {
+     "rank": 1,
+     "value": 0.4,
+     "candidates": 20,
+     "districts": 50
+    },
+    {
+     "rank": 2,
+     "value": 0.7,
+     "candidates": 35,
+     "districts": 50
+    },
+    {
+     "rank": 3,
+     "value": 2.74,
+     "candidates": 137,
+     "districts": 50
+    },
+    {
+     "rank": 4,
+     "value": 3.72,
+     "candidates": 186,
+     "districts": 50
+    },
+    {
+     "rank": 5,
+     "value": 5.28,
+     "candidates": 264,
+     "districts": 50
+    },
+    {
+     "rank": 6,
+     "value": 5.66,
+     "candidates": 283,
+     "districts": 50
+    },
+    {
+     "rank": 7,
+     "value": 5.64,
+     "candidates": 282,
+     "districts": 50
+    },
+    {
+     "rank": 8,
+     "value": 5.78,
+     "candidates": 289,
+     "districts": 50
+    },
+    {
+     "rank": 9,
+     "value": 6.34,
+     "candidates": 317,
+     "districts": 50
+    }
+   ]
+  },
+  {
+   "slate": "WAIO",
+   "slateLabel": "WAIO",
+   "slateVapShare": 0.4588409607434803,
+   "numDistricts": 9,
+   "winners": 1,
+   "metric": "winRate",
+   "system": "IRV",
+   "systemLabel": "9 X 1 IRV",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No WAIO winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 1,
+     "value": 13.6,
+     "won": 136,
+     "contests": 1000
+    },
+    {
+     "rank": 2,
+     "value": 44.3846,
+     "won": 577,
+     "contests": 1300
+    },
+    {
+     "rank": 3,
+     "value": 96.0833,
+     "won": 2306,
+     "contests": 2400
+    },
+    {
+     "rank": 4,
+     "value": 89.8776,
+     "won": 2202,
+     "contests": 2450
+    },
+    {
+     "rank": 5,
+     "value": 94.72,
+     "won": 2368,
+     "contests": 2500
+    },
+    {
+     "rank": 6,
+     "value": 97.2,
+     "won": 2430,
+     "contests": 2500
+    },
+    {
+     "rank": 7,
+     "value": 97.84,
+     "won": 2446,
+     "contests": 2500
+    },
+    {
+     "rank": 8,
+     "value": 99.96,
+     "won": 2499,
+     "contests": 2500
+    },
+    {
+     "rank": 9,
+     "value": 99.88,
+     "won": 2497,
+     "contests": 2500
+    }
+   ]
+  },
+  {
+   "slate": "BLK",
+   "slateLabel": "BLK",
+   "slateVapShare": 0.07109494643525345,
+   "numDistricts": 9,
+   "winners": 1,
+   "metric": "availability",
+   "label": "Avg. BLK candidates per district",
+   "format": "count",
+   "zeroLabel": "No BLK candidate at this rank",
+   "restricted": false,
+   "values": [
+    {
+     "rank": 1,
+     "value": 0.0,
+     "candidates": 0,
+     "districts": 50
+    },
+    {
+     "rank": 2,
+     "value": 0.02,
+     "candidates": 1,
+     "districts": 50
+    },
+    {
+     "rank": 3,
+     "value": 0.0,
+     "candidates": 0,
+     "districts": 50
+    },
+    {
+     "rank": 4,
+     "value": 0.02,
+     "candidates": 1,
+     "districts": 50
+    },
+    {
+     "rank": 5,
+     "value": 0.04,
+     "candidates": 2,
+     "districts": 50
+    },
+    {
+     "rank": 6,
+     "value": 0.16,
+     "candidates": 8,
+     "districts": 50
+    },
+    {
+     "rank": 7,
+     "value": 0.22,
+     "candidates": 11,
+     "districts": 50
+    },
+    {
+     "rank": 8,
+     "value": 0.24,
+     "candidates": 12,
+     "districts": 50
+    },
+    {
+     "rank": 9,
+     "value": 0.66,
+     "candidates": 33,
+     "districts": 50
+    }
+   ]
+  },
+  {
+   "slate": "BLK",
+   "slateLabel": "BLK",
+   "slateVapShare": 0.07109494643525345,
+   "numDistricts": 9,
+   "winners": 1,
+   "metric": "winRate",
+   "system": "IRV",
+   "systemLabel": "9 X 1 IRV",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No BLK winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 2,
+     "value": 0.0,
+     "won": 0,
+     "contests": 50
+    },
+    {
+     "rank": 4,
+     "value": 0.0,
+     "won": 0,
+     "contests": 50
+    },
+    {
+     "rank": 5,
+     "value": 0.0,
+     "won": 0,
+     "contests": 100
+    },
+    {
+     "rank": 6,
+     "value": 0.0,
+     "won": 0,
+     "contests": 300
+    },
+    {
+     "rank": 7,
+     "value": 0.0,
+     "won": 0,
+     "contests": 450
+    },
+    {
+     "rank": 8,
+     "value": 0.4,
+     "won": 2,
+     "contests": 500
+    },
+    {
+     "rank": 9,
+     "value": 17.3913,
+     "won": 200,
+     "contests": 1150
+    }
+   ]
+  }
+ ]
+}

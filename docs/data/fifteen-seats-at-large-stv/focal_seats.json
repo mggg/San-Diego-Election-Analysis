@@ -1,0 +1,110 @@
+[
+ {
+  "system": "FASTSTV",
+  "systemLabel": "1 X 15 STV",
+  "numDistricts": 1,
+  "winners": 15,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "seats": 0,
+  "plans": 787.5,
+  "share": 0.7875
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "1 X 15 STV",
+  "numDistricts": 1,
+  "winners": 15,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "seats": 1,
+  "plans": 196.0,
+  "share": 0.196
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "1 X 15 STV",
+  "numDistricts": 1,
+  "winners": 15,
+  "mode": "combined",
+  "modeLabel": "Combined",
+  "pooled": true,
+  "seats": 2,
+  "plans": 16.5,
+  "share": 0.0165
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "1 X 15 STV",
+  "numDistricts": 1,
+  "winners": 15,
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
+  "pooled": false,
+  "seats": 0,
+  "plans": 855.0,
+  "share": 0.855
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "1 X 15 STV",
+  "numDistricts": 1,
+  "winners": 15,
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
+  "pooled": false,
+  "seats": 1,
+  "plans": 140.0,
+  "share": 0.14
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "1 X 15 STV",
+  "numDistricts": 1,
+  "winners": 15,
+  "mode": "slate_bt",
+  "modeLabel": "Deliberative",
+  "pooled": false,
+  "seats": 2,
+  "plans": 5.0,
+  "share": 0.005
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "1 X 15 STV",
+  "numDistricts": 1,
+  "winners": 15,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "seats": 0,
+  "plans": 720.0,
+  "share": 0.72
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "1 X 15 STV",
+  "numDistricts": 1,
+  "winners": 15,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "seats": 1,
+  "plans": 252.0,
+  "share": 0.252
+ },
+ {
+  "system": "FASTSTV",
+  "systemLabel": "1 X 15 STV",
+  "numDistricts": 1,
+  "winners": 15,
+  "mode": "slate_pl",
+  "modeLabel": "Impulsive",
+  "pooled": false,
+  "seats": 2,
+  "plans": 28.0,
+  "share": 0.028
+ }
+]

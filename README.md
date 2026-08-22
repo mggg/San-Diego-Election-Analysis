@@ -265,6 +265,76 @@ same simulation, each reading the ballots it can accept. Changing any budget
 changes the profile signature and regenerates the score profiles, leaving the
 ranked ones alone.
 
+### Cambridge ballot truncation
+
+`slate_pl` and `slate_bt` ballots normally rank every candidate. A run can
+instead truncate them to lengths drawn from Cambridge, MA's historical
+2009-2017 RCV data — split by whether a ballot's first choice was the
+historical majority or minority slate — via a top-level `cambridge_truncation`
+block:
+
+```json
+"cambridge_truncation": {
+  "enabled": true,
+  "method": "bounded",
+  "majority_slates": ["WAIO"],
+  "minority_slates": ["HIS", "AAPI", "BLK"],
+  "min_length": 3,
+  "max_length": 6
+}
+```
+
+| Key | Meaning |
+| --- | --- |
+| `enabled` | Must be `true` (not just present) to turn truncation on. |
+| `majority_slates`, `minority_slates` | Every slate on the ballot must be pooled into exactly one group. `majority_slates` maps to Cambridge's historical White-majority ballots, `minority_slates` to its minority ballots. Omitting both falls back to putting `WHI` alone in `majority` and everything else in `minority`, which only suits the two-bloc model — a four-bloc config (e.g. WAIO/HIS/AAPI/BLK) must set both explicitly. |
+| `method` | `"historical"` (default) samples straight from Cambridge's raw length distribution. `"bounded"` restricts it to `[min_length, max_length]` and renormalizes, dropping any historical lengths outside that range. |
+| `min_length`, `max_length` | Required when `method` is `"bounded"`; ignored otherwise. |
+
+Each ballot is classified by its own first choice, not by its voter's bloc, matching how the historical data itself is split. A grouped ballot (many voters sharing one ranking) has each voter draw its own truncation length independently rather than truncating the whole group to one length.
+
+For a hybrid run (multiple `district_configs` tiers), `tier_overrides` lets one
+tier use a different `method`/`min_length`/`max_length` than the rest, keyed by
+that tier's `num_districts` (as a string):
+
+```json
+"cambridge_truncation": {
+  "enabled": true,
+  "majority_slates": ["WAIO"],
+  "minority_slates": ["HIS", "AAPI", "BLK"],
+  "tier_overrides": {
+    "1": { "method": "bounded", "min_length": 6, "max_length": 10 }
+  }
+}
+```
+
+An override replaces `method`/`min_length`/`max_length` wholesale rather than
+merging field by field — a bounded override with no `min_length` of its own
+does not inherit an unrelated tier's bound. `majority_slates`/`minority_slates`/
+`enabled` always come from the top-level block; every tier truncates the same
+majority/minority split. A tier with no entry in `tier_overrides` uses the
+top-level `method`/`min_length`/`max_length`.
+
+`cambridge_truncation` is part of the profile signature, so changing any of
+these keys regenerates profiles.
+
+**Truncating an existing run without regenerating profiles.** Rebuilding
+profiles is the most expensive stage to repeat, so
+`pipeline/truncate_profiles.py` applies the same truncation as a second pass
+over an already-generated `profiles.zip` (or `general_profiles.zip` /
+`primary_profiles.zip`), reading the run's own `cambridge_truncation` config:
+
+```
+uv run python -m pipeline.truncate_profiles configs/basic-truncation.json
+uv run python -m pipeline.truncate_profiles configs/basic-truncation.json --in-place
+uv run python -m pipeline.truncate_profiles configs/basic-truncation.json --all-archives --seed 0
+```
+
+By default it writes `<archive>_truncated.zip` beside the original; `--in-place`
+replaces it (via a temp file, so an interrupted run leaves the original
+intact). Score profiles (`name_cumulative`) are always copied through
+untouched, since they have no ranking to shorten.
+
 ### Two-round elections: the primary and the general
 
 A `voting_configs` entry that names a `general_class` is a **two-round rule**. The
@@ -311,7 +381,9 @@ Add an optional top-level `primary_turnout` block to model a narrowing round wit
 lower participation, as a primary typically has:
 
 ```json
-"turnout":         { "AAPI": 0.75, "HIS": 0.75, "WHI": 1, "BAIO": 1 },
+"turnout":         { "WAIO": 1, "POC": 0.7 },
+"primary_turnout": { "POC": 0.4 }
+"turnout":         { "AAPI": 0.75, "HIS": 0.75, "WAIO": 1, "BLK": 1 },
 "primary_turnout": { "AAPI": 0.4,  "HIS": 0.4 }
 ```
 

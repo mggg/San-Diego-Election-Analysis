@@ -79,7 +79,7 @@ TIGER = "https://www2.census.gov/geo/tiger/TIGER2020"
 # Census vintages
 # --------------------------------------------------------------------------- #
 DECENNIAL_YEAR = 2020
-ACS_YEAR = 2020
+ACS_YEAR = 2024
 
 # --------------------------------------------------------------------------- #
 # PL 94-171 variable inventory
@@ -156,8 +156,6 @@ DISCOUNT_MAP = {
 }
 
 VAP_FLOOR = 20
-
-
 
 # --------------------------------------------------------------------------- #
 # Small helpers
@@ -268,6 +266,13 @@ def load_districtr_plan(geo):
             "https://districtr.org/.netlify/functions/planRead",
             params={"id": plan_id}, timeout=60,
         )
+        if response.status_code == 404:
+            # Older plans (like this one) live on the legacy site, not the
+            # current one.
+            response = requests.get(
+                "https://legacy.districtr.org/.netlify/functions/planRead",
+                params={"id": plan_id}, timeout=60,
+            )
         response.raise_for_status()
         payload = response.json()
         if plan_path:
@@ -585,7 +590,10 @@ def download_acs_citizenship(state_fips, client, cache_dir):
     acs_state = {}
 
     for suffix, category in ACS_RATE_TABLES.items():
-        cache_file = cache_dir / f"acs_{state_fips}_{category}_tracts.parquet"
+        # Keyed by ACS_YEAR too: without it, bumping ACS_YEAR to a newer vintage
+        # would silently keep serving whichever year's rates happened to be
+        # cached first instead of fetching the new vintage.
+        cache_file = cache_dir / f"acs_{state_fips}_{ACS_YEAR}_{category}_tracts.parquet"
 
         if cache_file.exists():
             print(f"Loading {category} tract data from cache …")

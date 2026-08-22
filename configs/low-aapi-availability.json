@@ -1,12 +1,11 @@
 {
   "run_name": "Low AAPI Availability",
   "num_subsamples": 100,
-  "candidate_geometric_p": 0.2,
   "availability_exps": {
-    "WHI": 2,
-    "BAIO": 2,
     "HIS": 2,
-    "AAPI": 3
+    "AAPI": 3,
+    "WAIO": 2,
+    "BLK": 2
   },
   "total_seats": 9,
   "district_configs": [
@@ -28,37 +27,37 @@
     "slate_bt"
   ],
   "blocs": {
-    "WHI": [
-      "WHI"
-    ],
-    "BAIO": [
-      "BAIO"
-    ],
     "HIS": [
       "HIS"
     ],
     "AAPI": [
       "AAPI"
+    ],
+    "WAIO": [
+      "WAIO"
+    ],
+    "BLK": [
+      "BLK"
     ]
+  },
+  "group_vap_columns": {
+    "HIS": "hvap_20",
+    "AAPI": "asian_nhpi_vap_20",
+    "WAIO": [
+      "white_vap_20",
+      "amin_vap_20",
+      "other_vap_20"
+    ],
+    "BLK": "bvap_20"
   },
   "turnout": {
     "AAPI": 0.75,
-    "BAIO": 1,
     "HIS": 0.75,
-    "WHI": 1
+    "WAIO": 1,
+    "BLK": 1
   },
   "num_voters": 10000,
   "slate_to_candidates": {
-    "WHI": [
-      "WHI1",
-      "WHI2",
-      "WHI3",
-      "WHI4"
-    ],
-    "BAIO": [
-      "BAIO1",
-      "BAIO2"
-    ],
     "HIS": [
       "HIS1",
       "HIS2",
@@ -67,60 +66,81 @@
     "AAPI": [
       "AAPI1",
       "AAPI2"
+    ],
+    "WAIO": [
+      "WAIO1",
+      "WAIO2",
+      "WAIO3",
+      "WAIO4"
+    ],
+    "BLK": [
+      "BLK1",
+      "BLK2"
     ]
   },
   "focal_group": "AAPI",
   "cohesion_parameters": {
-    "WHI": {
-      "WHI": 0.8,
-      "HIS": 0.05,
-      "AAPI": 0.1,
-      "BAIO": 0.05
-    },
     "HIS": {
-      "WHI": 0.1,
       "HIS": 0.8,
       "AAPI": 0.05,
-      "BAIO": 0.05
+      "WAIO": 0.1,
+      "BLK": 0.05
     },
     "AAPI": {
-      "WHI": 0.15,
       "HIS": 0.03,
       "AAPI": 0.8,
-      "BAIO": 0.02
+      "WAIO": 0.15,
+      "BLK": 0.02
     },
-    "BAIO": {
-      "WHI": 0.05,
+    "WAIO": {
+      "HIS": 0.05,
+      "AAPI": 0.1,
+      "WAIO": 0.8,
+      "BLK": 0.05
+    },
+    "BLK": {
       "HIS": 0.1,
       "AAPI": 0.05,
-      "BAIO": 0.8
+      "WAIO": 0.05,
+      "BLK": 0.8
     }
   },
   "alphas": {
-    "WHI": {
-      "WHI": 1,
-      "BAIO": 1,
-      "HIS": 1,
-      "AAPI": 1
-    },
     "HIS": {
-      "WHI": 1,
-      "BAIO": 1,
       "HIS": 1,
-      "AAPI": 1
+      "AAPI": 1,
+      "WAIO": 1,
+      "BLK": 1
     },
     "AAPI": {
-      "WHI": 1,
-      "BAIO": 1,
       "HIS": 1,
-      "AAPI": 1
+      "AAPI": 1,
+      "WAIO": 1,
+      "BLK": 1
     },
-    "BAIO": {
-      "WHI": 1,
-      "BAIO": 1,
+    "WAIO": {
       "HIS": 1,
-      "AAPI": 1
+      "AAPI": 1,
+      "WAIO": 1,
+      "BLK": 1
+    },
+    "BLK": {
+      "HIS": 1,
+      "AAPI": 1,
+      "WAIO": 1,
+      "BLK": 1
     }
   },
-  "num_reps": 10
+  "num_reps": 10,
+  "cambridge_truncation": {
+    "enabled": true,
+    "majority_slates": [
+      "WAIO"
+    ],
+    "minority_slates": [
+      "HIS",
+      "AAPI",
+      "BLK"
+    ]
+  }
 }

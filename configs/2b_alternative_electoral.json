@@ -1,0 +1,83 @@
+{
+  "run_name": "Alternative Electoral Systems (2 Blocs)",
+  "num_subsamples": 100,
+  "total_seats": 15,
+  "district_configs": [
+    {
+      "num_districts": 15,
+      "winners": 1,
+      "candidate_pool_max": 5,
+      "candidate_pool_mean": 3
+    }
+  ],
+  "voting_configs": {
+    "IRV": {
+      "tiebreak": "random"
+    },
+    "Plurality": {
+      "tiebreak": "random"
+    },
+    "TopTwo": {
+      "m_1": 2,
+      "tiebreak": "random",
+      "general_class": "Plurality",
+      "general_kwargs": {
+        "n_seats": 1,
+        "tiebreak": "random"
+      }
+    }
+  },
+  "voter_models": [
+    "slate_pl",
+    "slate_bt",
+    "cambridge"
+  ],
+  "blocs": {
+    "POC": [
+      "POC"
+    ],
+    "WHI": [
+      "WHI"
+    ]
+  },
+  "turnout": {
+    "POC": 0.7,
+    "WHI": 1
+  },
+  "primary_turnout": {
+    "POC": 0.7,
+    "WHI": 1
+  },
+  "num_voters": 10000,
+  "focal_group": "POC",
+  "cohesion_parameters": {
+    "POC": {
+      "POC": 0.89,
+      "WHI": 0.11
+    },
+    "WHI": {
+      "POC": 0.2,
+      "WHI": 0.8
+    }
+  },
+  "alphas": {
+    "POC": {
+      "POC": 1,
+      "WHI": 1
+    },
+    "WHI": {
+      "POC": 1,
+      "WHI": 1
+    }
+  },
+  "num_reps": 10,
+  "cambridge_truncation": {
+    "enabled": true,
+    "majority_slates": [
+      "WHI"
+    ],
+    "minority_slates": [
+      "POC"
+    ]
+  }
+}

@@ -17,13 +17,16 @@
  */
 
 import {
-  PANEL, FOCAL_MARGIN, seatScale, drawSeatAxis, drawReferenceLine, drawPanelTitle,
+  PANEL, FOCAL_MARGIN, seatScale, seatTicks, drawSeatAxis, drawReferenceLine, drawPanelTitle,
   makeTooltip, emptyState, clearEmptyState, drawLegend,
   ensure, ensureSvg, motion,
 } from './axes.js';
 
 const MAX_AREA = 260;
 const MIN_AREA = 12;
+// Clear space left between two touching bubbles, in px. Without it the largest
+// pair in adjacent columns meet exactly and read as one shape.
+const BUBBLE_GAP = 1.5;
 
 export function renderBubble(container, bundle, manifest, view) {
   const { runMeta, slateSeats } = bundle;
@@ -71,14 +74,38 @@ export function renderBubble(container, bundle, manifest, view) {
     (r) => r.system === system.id && r.slate === slate.id && !r.pooled,
   );
   const perModelMax = d3.max(scaleBasis, (r) => r.plans) || 1;
-  const area = d3.scaleLinear().domain([0, perModelMax]).range([MIN_AREA, MAX_AREA]).clamp(true);
-  const radius = (plans) => Math.sqrt(area(plans) / Math.PI);
 
   // Shared with the histogram beside it, so the two always line up.
   const seatMax = view.seatMax;
   const x = seatScale(seatMax, innerWidth);
   const y = d3.scalePoint().domain(models.map((m) => m.id)).range([0, innerHeight]).padding(0.6);
-  const seats = d3.range(0, seatMax + 1);
+
+  /*
+   * The largest bubble is capped to the space a cell actually has.
+   *
+   * MAX_AREA alone is a fixed size on a panel whose columns get narrower as the
+   * seat axis gets longer: at 7 seats a column is ~25px and a 9px-radius bubble
+   * clears its neighbour, but at 15 seats the column is ~13px and the same
+   * bubble overlaps the one beside it, so two counts read as one blob. The cap
+   * is half the tighter of the column and row spacing, less a hairline gap.
+   *
+   * Both ends of the range are scaled by the same factor rather than clamping
+   * the top alone: shrinking the maximum toward an unchanged minimum would
+   * flatten the difference between a rare outcome and a common one, which is
+   * the thing the area encodes. Scaling both keeps every ratio intact and
+   * simply draws the whole family smaller.
+   */
+  const columnStep = x(1) - x(0);
+  const rowStep = models.length > 1
+    ? Math.abs(y(models[1].id) - y(models[0].id))
+    : innerHeight;
+  const fitRadius = Math.max(2, Math.min(columnStep, rowStep) / 2 - BUBBLE_GAP);
+  const maxArea = Math.min(MAX_AREA, Math.PI * fitRadius * fitRadius);
+  const minArea = MIN_AREA * (maxArea / MAX_AREA);
+
+  const area = d3.scaleLinear().domain([0, perModelMax]).range([minArea, maxArea]).clamp(true);
+  const radius = (plans) => Math.sqrt(area(plans) / Math.PI);
+  const seats = seatTicks(seatMax);
 
   const svg = ensureSvg(container, 'bubbles', width, height,
     `${slate.label} seat outcome frequencies for ${runMeta.runName}`);

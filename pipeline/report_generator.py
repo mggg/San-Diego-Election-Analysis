@@ -37,6 +37,7 @@ from pipeline.summarize_results import (
     _prop_line_label,
     _rule_display_name,
 )
+from pipeline.settings_generator import minimum_candidates
 from pipeline.utils.helpers import PROJECT_DIR, load_json
 
 DOCS_DIR = PROJECT_DIR / "docs"
@@ -49,12 +50,26 @@ OPTIONAL_ARTIFACT_FILES = ("availability.json",)
 # Runs kept out of the published report even though their artifacts are
 # complete. Excluded by slug rather than deleted from outputs/, so the
 # scenario stays reproducible if it's ever brought back.
-EXCLUDED_RUN_SLUGS = {"basic-3-x-3-truncation"}
+# Nothing is excluded at present. The four-bloc truncation run was held out
+# here while its results were incomplete; it is published again now.
+EXCLUDED_RUN_SLUGS: set = set()
 
-# Prose sections, in the order they appear on the page. Each is a file in
-# docs/prose/; a missing or empty one renders as a placeholder rather than
-# breaking the build, so the site is publishable before the writing is done.
-PROSE_SECTIONS = [
+# The hand-edited page outline: which prose sections and which scenarios the
+# report renders, and in what order. It is read, never written -- generate_report
+# does not reconcile it against what it found, so a scenario leaves the page
+# exactly when someone takes it out of this file.
+#
+# It sits in docs/ beside the prose it orders, which also means it is served with
+# the site: the outline that decided what the page shows is fetchable next to the
+# page, rather than living in a repo the reader may not have.
+SECTIONS_FILE = "report-sections.json"
+SECTIONS_PATH = DOCS_DIR / SECTIONS_FILE
+
+# Used when SECTIONS_PATH is absent, which is the pre-outline behavior: these
+# four prose sections, and every run whose artifacts are complete. Each is a
+# file in docs/prose/; a missing or empty one renders as a placeholder rather
+# than breaking the build, so the site is publishable before the writing is done.
+DEFAULT_PROSE_SECTIONS = [
     {"id": "abstract", "file": "abstract.md", "title": "Abstract"},
     {"id": "background", "file": "background.md", "title": "Background"},
     {"id": "methodology", "file": "methodology.md", "title": "Methodology"},
@@ -62,12 +77,366 @@ PROSE_SECTIONS = [
 ]
 
 
+def load_page_outline(path: Optional[Path] = None) -> Dict[str, Any]:
+    """
+    The page outline from report-sections.json: prose sections and the scenario
+    allow-list, both in the order they should appear.
+
+    Args:
+        path: Outline file to read. Defaults to SECTIONS_PATH.
+
+    Returns:
+        {"prose_sections": [...], "scenarios": [...] or None}. `scenarios` is
+        None when no outline governs the page -- the file is missing, or it
+        omits the key -- and select_page_runs reads that as "every run".
+    """
+    path = path or SECTIONS_PATH
+    if not path.is_file():
+        print(f"[report_generator] No {path.name}; publishing every run with complete artifacts.")
+        return {"prose_sections": list(DEFAULT_PROSE_SECTIONS), "scenarios": None}
+
+    outline = load_json(path)
+    return {
+        "prose_sections": outline.get("prose_sections") or list(DEFAULT_PROSE_SECTIONS),
+        "scenarios": outline.get("scenarios"),
+    }
+
+
+def _listed_slugs(scenarios: List[Any]) -> List[str]:
+    """
+    The slugs an outline's `scenarios` list asks for, in order.
+
+    An entry is either a bare slug or an object carrying one, so a scenario can
+    be parked with {"slug": ..., "enabled": false} instead of being deleted and
+    later retyped from memory.
+    """
+    slugs = []
+    for entry in scenarios:
+        if isinstance(entry, str):
+            slugs.append(entry)
+        elif entry.get("enabled", True):
+            slugs.append(entry["slug"])
+    return slugs
+
+
+def select_page_runs(runs: List[Dict[str, Any]], scenarios: Optional[List[Any]]) -> List[Dict[str, Any]]:
+    """
+    The runs the page renders, in outline order.
+
+    An allow-list, not a filter: a run the outline does not name stays out of
+    index.html however complete its artifacts are. It keeps its entry in
+    manifest.json, its folder in docs/data/, and its place in the cross-run
+    comparison -- hiding a scenario is a decision about the page, and making it
+    also drop the data would mean the two charts disagreed about what was run.
+
+    Args:
+        runs: Manifest run entries, as built by build_manifest.
+        scenarios: The outline's `scenarios` list, or None to render them all.
+
+    Returns:
+        The subset of `runs` the outline names, ordered as it names them.
+    """
+    if scenarios is None:
+        return runs
+
+    by_slug = {run["slug"]: run for run in runs}
+    selected, unknown = [], []
+    for slug in _listed_slugs(scenarios):
+        if slug in by_slug:
+            selected.append(by_slug[slug])
+        else:
+            unknown.append(slug)
+
+    if unknown:
+        print(f"[report_generator] {SECTIONS_FILE} lists slug(s) with no artifacts, skipped: "
+              f"{', '.join(unknown)}")
+    hidden = [run["slug"] for run in runs if run["slug"] not in {s["slug"] for s in selected}]
+    if hidden:
+        print(f"[report_generator] Not in {SECTIONS_FILE}, kept off the page: {', '.join(hidden)}")
+    return selected
+
+
+def _scenario_entries(scenarios: Optional[List[Any]]) -> Dict[str, Dict[str, Any]]:
+    """The outline's scenario entries in object form, keyed by slug."""
+    entries = {}
+    for entry in scenarios or []:
+        if isinstance(entry, str):
+            entries[entry] = {"slug": entry}
+        else:
+            entries[entry["slug"]] = entry
+    return entries
+
+
+def _artifact_paths(slug: str, source: Path) -> Dict[str, str]:
+    """Where the page fetches one run's bundle from, relative to index.html."""
+    paths = {
+        "run": f"data/{slug}/run.json",
+        "focalSeats": f"data/{slug}/focal_seats.json",
+        "slateSeats": f"data/{slug}/slate_seats.json",
+    }
+    if (source / "availability.json").is_file():
+        paths["availability"] = f"data/{slug}/availability.json"
+    return paths
+
+
+def resolve_composition(
+    systems: List[Dict[str, Any]],
+    runs: List[Dict[str, Any]],
+    config_reference: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """
+    Resolve a section's configured `systems` into the sources the page selects between.
+
+    A composed section is not a run: it collects one contest at a time out of
+    however many runs, so 9 X 1 IRV and 3 X 5 STV can sit in one dropdown though
+    they were simulated separately and live in different bundles. Each source
+    carries everything the page needs to redraw for it -- where to fetch that
+    run's records, which contest inside them is the one, and the parameters that
+    produced it -- so switching systems never means reasoning about which run a
+    number came from.
+
+    Args:
+        systems: The outline's `systems` list. Each entry names a `run` (slug)
+            and a `system` (id), optionally `districts`/`seats` to disambiguate a
+            run that uses one rule in more than one contest, optionally a
+            `label` to override the name shown in the dropdown, optionally a
+            `blocModel` tag the page uses to build its Two Bloc / Four Bloc
+            toggle, and optionally a `variant` tag it uses to build a second
+            toggle across otherwise-identical contests.
+        runs: Run metadata from discover_runs.
+        config_reference: Rows from _config_reference, for the parameters card.
+
+    Returns:
+        One resolved source per entry that matched, in configured order. Entries
+        naming a run or system that isn't there are reported and dropped, so a
+        typo costs one option rather than the section.
+    """
+    by_slug = {meta["slug"]: meta for meta in runs}
+    records_cache: Dict[str, List[Dict[str, Any]]] = {}
+    resolved = []
+
+    for spec in systems:
+        run_slug = spec.get("run")
+        meta = by_slug.get(run_slug)
+        if meta is None:
+            print(f"[report_generator] {SECTIONS_FILE}: no run '{run_slug}', skipping that system.")
+            continue
+
+        matches = [
+            (dc, system)
+            for dc in meta["districtConfigs"]
+            for system in dc["systems"]
+            if system["id"] == spec.get("system")
+            and spec.get("districts") in (None, dc["numDistricts"])
+            and spec.get("seats") in (None, dc["winners"])
+        ]
+        if not matches:
+            print(f"[report_generator] {SECTIONS_FILE}: run '{run_slug}' has no system "
+                  f"'{spec.get('system')}'{_shape_suffix(spec)}, skipping it.")
+            continue
+        if len(matches) > 1:
+            print(f"[report_generator] {SECTIONS_FILE}: '{spec.get('system')}' is ambiguous in "
+                  f"'{run_slug}'; add \"districts\"/\"seats\". Using the first.")
+        dc, system = matches[0]
+
+        # The combined view of a hybrid run is tagged numDistricts=0 with the
+        # citywide total already in winners (see _tag_hybrid_combined); every
+        # real contest multiplies out.
+        seats = dc["winners"] if dc["numDistricts"] == 0 else dc["numDistricts"] * dc["winners"]
+        shape = f"{dc['numDistricts']} × {dc['winners']}"
+        # Prefer the row for this exact contest, so a run with two of them gets
+        # its own pool and matrices rather than its first. Falling back to the
+        # run's other row matters when a config has moved on from the results on
+        # disk -- alternative_electoral.json asks for 15 districts while its
+        # published results are 9 X 1 -- where the cohesion and alpha matrices
+        # are still the ones that produced them, and dropping the row would take
+        # the matrices off a card that had them before.
+        by_run = [row for row in config_reference if row["run"] == meta["runName"]]
+        cfg = next((row for row in by_run if row["shape"] == shape), None) \
+            or (by_run[0] if by_run else {})
+
+        resolved.append({
+            # Stable across builds so a selection survives a rebuild, and unique
+            # even when one run contributes two contests under the same rule.
+            "id": f"{meta['slug']}::{system['id']}::{dc['numDistricts']}x{dc['winners']}",
+            "label": spec.get("label") or system["label"],
+            # Which bloc model this source was simulated under ("two"/"four"), or
+            # None for a section that doesn't distinguish. Purely a pass-through
+            # of the outline's own tag -- resolve_composition doesn't infer it
+            # from the run, since a run's own bloc count isn't otherwise recorded
+            # anywhere the page can read it.
+            "blocModel": spec.get("blocModel"),
+            # Which variant of the same contest this source is -- the outline's
+            # own tag, like blocModel above. Two sources that share a label and
+            # bloc model but differ here are the same election simulated under
+            # different settings (a ballot-length cap, say), which the page
+            # offers as a toggle rather than as two dropdown entries.
+            "variant": spec.get("variant"),
+            "run": meta["slug"],
+            "runName": meta["runName"],
+            "system": system["id"],
+            "systemLabel": system["label"],
+            "numDistricts": dc["numDistricts"],
+            "winners": dc["winners"],
+            # What the proportional-representation line is a share of.
+            "seats": seats,
+            "shape": shape,
+            "seatMax": meta["seatMax"],
+            "seatTicks": meta.get("seatTicks"),
+            # This contest's models, not the run's: a run that scores some of its
+            # contests under name_cumulative and ranks the rest would otherwise
+            # offer a toggle with nothing behind it on the ones that never used it.
+            "voterModels": _models_of_contest(meta, dc, system, records_cache),
+            "plans": dc.get("plans"),
+            "electionsByMode": dc.get("electionsByMode") or {},
+            "replicates": meta.get("replicates"),
+            "turnout": meta.get("turnout"),
+            "primaryTurnout": meta.get("primaryTurnout"),
+            "candidatePoolMin": cfg.get("candidatePoolMin"),
+            "candidatePoolMax": dc.get("candidatePoolMax"),
+            "candidatePoolMean": dc.get("candidatePoolMean"),
+            # The bloc VAP shares as this run measured them, so a composed
+            # section reports the electorate its selected system was run
+            # against rather than the section's first run's.
+            "slates": meta["slates"],
+            "cohesion": cfg.get("cohesion") or {},
+            "alphas": cfg.get("alphas") or {},
+            # Carried per source rather than looked up in manifest.runs: a
+            # composed section may draw on a run that is itself kept off the page.
+            "data": _artifact_paths(meta["slug"], meta["_source"]),
+        })
+
+    return resolved
+
+
+def _models_of_contest(
+    meta: Dict[str, Any],
+    dc: Dict[str, Any],
+    system: Dict[str, Any],
+    cache: Dict[str, List[Dict[str, Any]]],
+) -> List[Dict[str, Any]]:
+    """
+    The voter models one contest actually has records for, in the run's order.
+
+    A run's `voterModels` covers everything it simulated across all of its
+    contests, which is not the same list per contest: Basic - 3 X 3 scores its
+    Cumulative and Limited ballots under name_cumulative and ranks its STV
+    ballots under the other two, so offering the run's list against its STV
+    contest would put a toggle on screen that can only ever draw nothing.
+
+    Falls back to the run's full list if the records can't be read -- a toggle
+    too many is a better failure than a section with no models at all.
+    """
+    slug = meta["slug"]
+    if slug not in cache:
+        try:
+            cache[slug] = load_json(meta["_source"] / "focal_seats.json")
+        except (OSError, ValueError):
+            cache[slug] = []
+    records = cache[slug]
+    if not records:
+        return meta["voterModels"]
+
+    present = {
+        r["mode"] for r in records
+        if r.get("system") == system["id"]
+        and r.get("numDistricts", dc["numDistricts"]) == dc["numDistricts"]
+        and r.get("winners", dc["winners"]) == dc["winners"]
+    }
+    models = [m for m in meta["voterModels"] if m["id"] in present]
+    return models or meta["voterModels"]
+
+
+def _shape_suffix(spec: Dict[str, Any]) -> str:
+    """' at 3 × 5' for a spec that pinned a contest, '' for one that didn't."""
+    if spec.get("districts") is None and spec.get("seats") is None:
+        return ""
+    return f" at {spec.get('districts', '*')} × {spec.get('seats', '*')}"
+
+
+def _variant_vocabulary(
+    entry: Dict[str, Any],
+    composition: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """
+    The variants a composed section actually resolved to, in configured order.
+
+    A section declares `variants` as [{"id", "label"}, ...] and tags each of its
+    `systems` with one. Only the ids that survived resolution are returned, so a
+    variant whose runs haven't been simulated yet costs a toggle button rather
+    than putting a dead one on the page -- which is what lets the outline name a
+    run before its results exist. Ids used by the systems but missing from
+    `variants` are appended under their own id, so the tag alone is enough to
+    get a working toggle.
+
+    Returns an empty list where fewer than two variants resolved: one variant is
+    not a choice, and a toggle with a single button is noise.
+    """
+    present = [s.get("variant") for s in composition if s.get("variant")]
+    if len(set(present)) < 2:
+        return []
+
+    declared = entry.get("variants") or []
+    ordered = [
+        {"id": v["id"], "label": v.get("label") or v["id"]}
+        for v in declared
+        if isinstance(v, dict) and v.get("id") in set(present)
+    ]
+    known = {v["id"] for v in ordered}
+    for vid in present:
+        if vid not in known:
+            ordered.append({"id": vid, "label": vid})
+            known.add(vid)
+    return ordered
+
+
+def attach_compositions(
+    manifest: Dict[str, Any],
+    runs: List[Dict[str, Any]],
+    scenarios: Optional[List[Any]],
+) -> None:
+    """
+    Give every composed section its resolved sources, in place on the manifest.
+
+    Only sections the outline configures a `systems` list for are touched; every
+    other run entry keeps describing exactly the run it came from.
+    """
+    for slug, entry in _scenario_entries(scenarios).items():
+        if not entry.get("systems"):
+            continue
+        target = next((run for run in manifest["runs"] if run["slug"] == slug), None)
+        if target is None:
+            print(f"[report_generator] {SECTIONS_FILE}: '{slug}' configures systems but has no "
+                  "artifacts; nothing to compose.")
+            continue
+        composition = resolve_composition(
+            entry["systems"], runs, manifest.get("configReference") or [],
+        )
+        if not composition:
+            print(f"[report_generator] {SECTIONS_FILE}: '{slug}' resolved to no systems; "
+                  "leaving it as its own run.")
+            continue
+        target["composition"] = composition
+        # The variant toggle's vocabulary: what to call the control, and the
+        # order and display name of each variant. Order comes from the outline
+        # rather than from first appearance in `systems`, so the buttons read
+        # left to right the way the section means them to.
+        variants = _variant_vocabulary(entry, composition)
+        if variants:
+            target["variants"] = variants
+            target["variantLabel"] = entry.get("variant_label") or "Variant"
+        if entry.get("title"):
+            target["name"] = entry["title"]
+        print(f"[report_generator] {slug}: composed from {len(composition)} system(s) -> "
+              f"{', '.join(s['label'] for s in composition)}")
+
+
 def _rebase_relative_srcs(html: str, source_dir: Path, docs_dir: Path) -> str:
     """
     Rewrite relative image paths from prose-relative to index.html-relative.
 
     A prose file links its images the way an editor's preview needs them --
-    ../assets/x.png from docs/prose/, ../../assets/x.png from docs/prose/runs/.
+    ../assets/x.png from docs/prose/, ../../assets/x.png from docs/prose/scenarios/.
     index.html sits at the root of docs/, so those same paths would climb out of
     docs/ entirely and 404. Each one is resolved against the file it was written
     in and re-expressed relative to docs/, which keeps the markdown previewable
@@ -111,24 +480,40 @@ def _render_markdown(path: Path, docs_dir: Path = DOCS_DIR) -> str:
     return _rebase_relative_srcs(html, path.parent, docs_dir)
 
 
-def _run_prose_path(docs_dir: Path, slug: str) -> Path:
-    """Where a run's own hand-written description lives, if it has one."""
-    return docs_dir / "prose" / "runs" / f"{slug}.md"
-
-
-def _ensure_run_prose_stubs(docs_dir: Path, runs: List[Dict[str, Any]]) -> None:
+def _scenario_prose_name(slug: str, entries: Dict[str, Dict[str, Any]]) -> str:
     """
-    Touch an empty prose file for any run that doesn't have one yet.
+    The prose file a scenario reads, without its extension.
 
-    The top-level PROSE_SECTIONS files (abstract.md, background.md, ...) are
+    A section's description belongs to the section, not to whichever run
+    supplies its numbers. They coincide by default -- most sections are one run
+    and take its slug -- but the outline can point a section at a file of its
+    own with a "prose" key, which is what keeps the writing attached when the
+    runs beneath it are re-slugged, swapped for a different bloc model, or
+    collected into a composed section that no single run names.
+    """
+    entry = entries.get(slug) or {}
+    name = entry.get("prose") or slug
+    return name[:-3] if name.endswith(".md") else name
+
+
+def _scenario_prose_path(docs_dir: Path, name: str) -> Path:
+    """Where a scenario's hand-written description lives, if it has one."""
+    return docs_dir / "prose" / "scenarios" / f"{name}.md"
+
+
+def _ensure_scenario_prose_stubs(docs_dir: Path, names: List[str]) -> None:
+    """
+    Touch an empty prose file for any scenario that doesn't have one yet.
+
+    The top-level prose files (abstract.md, background.md, ...) are
     discoverable because they already exist, blank, ready to open and edit --
-    this gives each run's description the same discoverability instead of a
+    this gives each section's description the same discoverability instead of a
     filename convention that's only written down.
     """
-    prose_dir = docs_dir / "prose" / "runs"
+    prose_dir = docs_dir / "prose" / "scenarios"
     prose_dir.mkdir(parents=True, exist_ok=True)
-    for meta in runs:
-        path = _run_prose_path(docs_dir, meta["slug"])
+    for name in names:
+        path = _scenario_prose_path(docs_dir, name)
         if not path.exists():
             path.touch()
 
@@ -199,6 +584,27 @@ def _slate_records_with_pooled(records: List[Dict[str, Any]], n_models: int) -> 
                   key=lambda r: (r["system"], r["slate"], r["mode"], r["seats"]))
 
 
+def _system_total_seats(meta: Dict[str, Any], system: str) -> int:
+    """
+    The number of seats one voting system fills in a run.
+
+    A run's districtConfigs entry gives seats per district, so a real contest
+    fills numDistricts * winners; the synthetic combined entry of a hybrid run is
+    tagged numDistricts=0 with the citywide total already in winners
+    (_tag_hybrid_combined). A system appearing in more than one contest -- the
+    same rule run at two sizes -- sums them, since its row pools those records.
+
+    Falls back to the run's own total when the system isn't in districtConfigs at
+    all, which keeps a share computable rather than dividing by zero.
+    """
+    seats = sum(
+        dc["winners"] if dc["numDistricts"] == 0 else dc["numDistricts"] * dc["winners"]
+        for dc in meta["districtConfigs"]
+        if any(s["id"] == system for s in dc["systems"])
+    )
+    return seats or meta["totalSeats"]
+
+
 def _cross_run_series(runs: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """
     The comparison series: every run's focal-seat distribution, split per voting
@@ -225,6 +631,12 @@ def _cross_run_series(runs: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             rows = [r for r in records if r["system"] == system]
             label = rows[0]["systemLabel"] if rows else system
             series.append({
+                # How many seats this system actually fills, which is not the
+                # run's total when a run splits its seats across two contests:
+                # the comparison plots a share of seats, and a 1 X 6 contest
+                # measured against its run's citywide 15 would read as less than
+                # half the representation it is.
+                "totalSeats": _system_total_seats(meta, system),
                 # Stable across builds: the page keys its rows on this, so a
                 # selection survives a rebuild that adds or reorders runs.
                 "id": f"{meta['slug']}::{system}",
@@ -248,8 +660,9 @@ def build_manifest(runs: List[Dict[str, Any]]) -> Dict[str, Any]:
     The one file the page fetches first: palette, labels, the run list with
     artifact paths, and the cross-run series.
     """
+    # Straight from MODE_COLORS, the pooled row included: one definition of what
+    # colour a voter model is, shared by the figures and the page.
     palette = {mode: MODE_COLORS.get(mode, DEFAULT_MODE_COLOR) for mode in LEGEND_MAPPING}
-    palette[COMBINED_MODE] = "#898781"  # the pooled row reads as ink, not a model
 
     return {
         "generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -297,6 +710,52 @@ def build_manifest(runs: List[Dict[str, Any]]) -> Dict[str, Any]:
     }
 
 
+def restrict_cross_run(manifest: Dict[str, Any], page_runs: List[Dict[str, Any]],
+                       scenarios: Optional[List[Any]]) -> None:
+    """
+    Narrow the comparison figure to the contests the page actually publishes,
+    and tag each with the bloc model it was simulated under.
+
+    The figure was built from every run with artifacts, which over time meant
+    offering rows for scenarios that no section shows -- superseded runs, runs
+    whose config is gone, both bloc models of everything -- so its picker listed
+    far more systems than the report discusses. Restricting it to what the
+    outline names keeps the comparison and the sections talking about one set of
+    simulations.
+
+    The bloc-model tag comes from the outline's own `blocModel` keys, the same
+    source the per-section toggle uses, so a row and the section it came from
+    can never disagree about which model it belongs to.
+    """
+    entries = _scenario_entries(scenarios)
+    allowed: Dict[tuple, Optional[str]] = {}
+
+    for run in page_runs:
+        composition = run.get("composition")
+        if composition:
+            for source in composition:
+                allowed[(source["run"], source["system"])] = source.get("blocModel")
+            continue
+        # A plain section publishes every contest its own run holds.
+        model = (entries.get(run["slug"]) or {}).get("blocModel")
+        for dc in run.get("districtConfigs", []):
+            for system in dc["systems"]:
+                allowed[(run["slug"], system["id"])] = model
+
+    kept = []
+    for series in manifest.get("crossRun", []):
+        key = (series["runSlug"], series["system"])
+        if key in allowed:
+            series["blocModel"] = allowed[key]
+            kept.append(series)
+
+    dropped = len(manifest.get("crossRun", [])) - len(kept)
+    manifest["crossRun"] = kept
+    if dropped:
+        print(f"[report_generator] Cross-run comparison: kept {len(kept)} series, "
+              f"dropped {dropped} not published by any section.")
+
+
 def _config_reference(config_dir: Optional[Path] = None) -> List[Dict[str, Any]]:
     """
     The configuration table, read from configs/ rather than hand-maintained --
@@ -322,6 +781,12 @@ def _config_reference(config_dir: Optional[Path] = None) -> List[Dict[str, Any]]
                 ],
                 "turnout": cfg.get("turnout") or {},
                 "primaryTurnout": cfg.get("primary_turnout"),
+                # The floor of the pool draw, which is the smallest ballot every
+                # rule in the run can actually be run on rather than a number
+                # anyone chose -- see settings_generator.minimum_candidates. It
+                # completes the min/mean/max the card reports, and it is derived
+                # here because the run artifacts have never carried it.
+                "candidatePoolMin": minimum_candidates(cfg),
                 "candidatePoolMax": dc.get("candidate_pool_max"),
                 "candidatePoolMean": dc.get("candidate_pool_mean"),
                 # The configured matrices, not the per-district ones in the
@@ -413,6 +878,7 @@ def generate_report(docs_dir: Path = DOCS_DIR, config_dir: Optional[Path] = None
     """
     from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+    outline = load_page_outline(docs_dir / SECTIONS_FILE)
     runs = discover_runs()
     if not runs:
         print("[report_generator] No run artifacts found; run summarize_results first.")
@@ -422,23 +888,42 @@ def generate_report(docs_dir: Path = DOCS_DIR, config_dir: Optional[Path] = None
 
     manifest = build_manifest(runs)
     manifest["configReference"] = _config_reference(config_dir)
+    # Sections that collect systems from several runs, resolved once here so the
+    # page never has to work out which bundle a dropdown entry belongs to.
+    attach_compositions(manifest, runs, outline["scenarios"])
+    page_runs_for_cross = select_page_runs(manifest["runs"], outline["scenarios"])
+    restrict_cross_run(manifest, page_runs_for_cross, outline["scenarios"])
     data_dir = docs_dir / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
     with open(data_dir / "manifest.json", "w", encoding="utf-8") as f:
         json.dump(manifest, f, indent=1)
+
+    # What the page shows is the outline's call, not the pipeline's: the
+    # manifest and docs/data written above stay complete either way.
+    prose_sections = outline["prose_sections"]
+    page_runs = select_page_runs(manifest["runs"], outline["scenarios"])
 
     prose = {
         section["id"]: {
             **section,
             "html": _render_markdown(docs_dir / "prose" / section["file"], docs_dir),
         }
-        for section in PROSE_SECTIONS
+        for section in prose_sections
     }
 
-    _ensure_run_prose_stubs(docs_dir, runs)
+    # Keyed by section slug, but read from whichever file the outline assigns --
+    # so two sections may share one description, and renaming a run does not
+    # orphan the writing about it.
+    entries = _scenario_entries(outline["scenarios"])
+    prose_names = {meta["slug"]: _scenario_prose_name(meta["slug"], entries) for meta in page_runs}
+    # Carried onto the entry so the template's "write this file" placeholder can
+    # name the file the scenario actually reads, rather than guessing at its slug.
+    for meta in page_runs:
+        meta["prose"] = prose_names[meta["slug"]]
+    _ensure_scenario_prose_stubs(docs_dir, sorted(set(prose_names.values())))
     run_prose = {
-        meta["slug"]: _render_markdown(_run_prose_path(docs_dir, meta["slug"]), docs_dir)
-        for meta in runs
+        slug: _render_markdown(_scenario_prose_path(docs_dir, name), docs_dir)
+        for slug, name in prose_names.items()
     }
 
     env = Environment(
@@ -450,9 +935,9 @@ def generate_report(docs_dir: Path = DOCS_DIR, config_dir: Optional[Path] = None
     version = _asset_version(docs_dir)
     html = env.get_template("index.html.j2").render(
         prose=prose,
-        prose_order=[s["id"] for s in PROSE_SECTIONS],
+        prose_order=[s["id"] for s in prose_sections],
         run_prose=run_prose,
-        runs=manifest["runs"],
+        runs=page_runs,
         generated=manifest["generated"],
         repo_url="https://github.com/mggg/San-Diego-Election-Analysis",
         asset_version=version,
@@ -464,7 +949,7 @@ def generate_report(docs_dir: Path = DOCS_DIR, config_dir: Optional[Path] = None
     index_path.write_text(html, encoding="utf-8")
 
     print(
-        f"[report_generator] {len(runs)} run(s) -> {index_path} "
+        f"[report_generator] {len(page_runs)} of {len(runs)} run(s) -> {index_path} "
         f"({len(manifest['crossRun'])} cross-run series)"
     )
     return index_path

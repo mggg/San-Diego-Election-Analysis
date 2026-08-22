@@ -1,0 +1,68 @@
+{
+  "run_name": "Basic - 3 X 5 (2 Blocs)",
+  "num_subsamples": 100,
+  "total_seats": 15,
+  "district_configs": [
+    {
+      "num_districts": 3,
+      "winners": 5,
+      "candidate_pool_max": 10,
+      "candidate_pool_mean": 7
+    }
+  ],
+  "voting_configs": {
+    "FastSTV": {
+      "n_seats": 5,
+      "tiebreak": "random"
+    }
+  },
+  "voter_models": [
+    "slate_pl",
+    "slate_bt",
+    "cambridge"
+  ],
+  "blocs": {
+    "POC": [
+      "POC"
+    ],
+    "WHI": [
+      "WHI"
+    ]
+  },
+  "turnout": {
+    "POC": 0.7,
+    "WHI": 1
+  },
+  "num_voters": 10000,
+  "focal_group": "POC",
+  "cohesion_parameters": {
+    "POC": {
+      "POC": 0.89,
+      "WHI": 0.11
+    },
+    "WHI": {
+      "POC": 0.2,
+      "WHI": 0.8
+    }
+  },
+  "alphas": {
+    "POC": {
+      "POC": 1,
+      "WHI": 1
+    },
+    "WHI": {
+      "POC": 1,
+      "WHI": 1
+    }
+  },
+  "num_reps": 10,
+  "cambridge_truncation": {
+    "enabled": true,
+    "majority_slates": [
+      "WHI"
+    ],
+    "minority_slates": [
+      "POC"
+    ]
+  }
+}

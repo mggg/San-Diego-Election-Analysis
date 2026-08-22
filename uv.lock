@@ -482,7 +482,7 @@ requires-dist = [
     { name = "pyarrow", specifier = ">=25.0.0" },
     { name = "requests", specifier = ">=2.32.0" },
     { name = "tqdm", specifier = ">=4.67.1" },
-    { name = "votekit", specifier = ">=3.4.0" },
+    { name = "votekit", git = "https://github.com/mggg/VoteKit.git?rev=383636ece2872bd42fed8dcd801ba1645c7f8943" },
 ]
 
 [[package]]
@@ -2277,8 +2277,8 @@ wheels = [
 
 [[package]]
 name = "votekit"
-version = "3.4.0"
-source = { registry = "https://pypi.org/simple" }
+version = "3.5.0"
+source = { git = "https://github.com/mggg/VoteKit.git?rev=383636ece2872bd42fed8dcd801ba1645c7f8943#383636ece2872bd42fed8dcd801ba1645c7f8943" }
 dependencies = [
     { name = "apportionment" },
     { name = "jinja2" },
@@ -2295,10 +2295,6 @@ dependencies = [
     { name = "types-networkx" },
     { name = "types-psutil" },
     { name = "types-seaborn" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/7c/ef/16cbce198158253884d6bc3bc5fb76fdc5e4863aa2336d80cb5895c94032/votekit-3.4.0.tar.gz", hash = "sha256:836ab829fe0752be80424b60ad0b0a7fdfa27791fbbea9ebcd28a8763e88d478", size = 32788122, upload-time = "2026-04-09T01:43:58.143Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/b7/4c/5aa49ddf3f75795d0973e50ff2569a780f1e136afe79dfc5f84b0208c29f/votekit-3.4.0-py3-none-any.whl", hash = "sha256:8a6ad2c9614adbfbe4cbeec7d4b3bb7be44a06d4bc6bd39f955e3207e4a8b5e2", size = 263745, upload-time = "2026-04-09T01:43:51.22Z" },
 ]
 
 [[package]]

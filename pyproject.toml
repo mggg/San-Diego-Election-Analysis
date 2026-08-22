@@ -26,3 +26,6 @@ dependencies = [
     "tqdm>=4.67.1",
     "votekit>=3.4.0",
 ]
+
+[tool.uv.sources]
+votekit = { git = "https://github.com/mggg/VoteKit.git", rev = "383636ece2872bd42fed8dcd801ba1645c7f8943" }
