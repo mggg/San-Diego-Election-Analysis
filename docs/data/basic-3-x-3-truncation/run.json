@@ -32,8 +32,8 @@
    "plans": 100,
    "electionsPerSystem": 6000,
    "electionsByMode": {
-    "slate_bt": 1000,
-    "slate_pl": 1000
+    "slate_bt": 3000,
+    "slate_pl": 3000
    }
   }
  ],

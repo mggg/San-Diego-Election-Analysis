@@ -1,0 +1,182 @@
+{
+ "boxes": [
+  {
+   "slate": "POC",
+   "slateLabel": "POC",
+   "slateVapShare": 0.5619805401715601,
+   "numDistricts": 1,
+   "winners": 15,
+   "restricted": false,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 100,
+     "q1": 56.1981,
+     "median": 56.1981,
+     "q3": 56.1981,
+     "low": 56.1981,
+     "high": 56.1981,
+     "mean": 56.1981,
+     "outliers": []
+    }
+   ],
+   "overallMean": 56.1981,
+   "plans": 100
+  },
+  {
+   "slate": "POC",
+   "slateLabel": "POC",
+   "slateVapShare": 0.5619805401715601,
+   "numDistricts": 1,
+   "winners": 15,
+   "restricted": true,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 100,
+     "q1": 56.1981,
+     "median": 56.1981,
+     "q3": 56.1981,
+     "low": 56.1981,
+     "high": 56.1981,
+     "mean": 56.1981,
+     "outliers": []
+    }
+   ],
+   "overallMean": 56.1981,
+   "plans": 100
+  },
+  {
+   "slate": "WHI",
+   "slateLabel": "WHI",
+   "slateVapShare": 0.4380194598284399,
+   "numDistricts": 1,
+   "winners": 15,
+   "restricted": false,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 100,
+     "q1": 43.8019,
+     "median": 43.8019,
+     "q3": 43.8019,
+     "low": 43.8019,
+     "high": 43.8019,
+     "mean": 43.8019,
+     "outliers": []
+    }
+   ],
+   "overallMean": 43.8019,
+   "plans": 100
+  },
+  {
+   "slate": "WHI",
+   "slateLabel": "WHI",
+   "slateVapShare": 0.4380194598284399,
+   "numDistricts": 1,
+   "winners": 15,
+   "restricted": true,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 100,
+     "q1": 43.8019,
+     "median": 43.8019,
+     "q3": 43.8019,
+     "low": 43.8019,
+     "high": 43.8019,
+     "mean": 43.8019,
+     "outliers": []
+    }
+   ],
+   "overallMean": 43.8019,
+   "plans": 100
+  }
+ ],
+ "colors": [
+  {
+   "slate": "POC",
+   "slateLabel": "POC",
+   "slateVapShare": 0.5619805401715601,
+   "numDistricts": 1,
+   "winners": 15,
+   "metric": "availability",
+   "label": "Avg. POC candidates per district",
+   "format": "count",
+   "zeroLabel": "No POC candidate at this rank",
+   "restricted": false,
+   "values": [
+    {
+     "rank": 1,
+     "value": 13.49,
+     "candidates": 1349,
+     "districts": 100
+    }
+   ]
+  },
+  {
+   "slate": "POC",
+   "slateLabel": "POC",
+   "slateVapShare": 0.5619805401715601,
+   "numDistricts": 1,
+   "winners": 15,
+   "metric": "winRate",
+   "system": "FASTSTV",
+   "systemLabel": "1 X 15 STV",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No POC winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 1,
+     "value": 100.0,
+     "won": 3000,
+     "contests": 3000
+    }
+   ]
+  },
+  {
+   "slate": "WHI",
+   "slateLabel": "WHI",
+   "slateVapShare": 0.4380194598284399,
+   "numDistricts": 1,
+   "winners": 15,
+   "metric": "availability",
+   "label": "Avg. WHI candidates per district",
+   "format": "count",
+   "zeroLabel": "No WHI candidate at this rank",
+   "restricted": false,
+   "values": [
+    {
+     "rank": 1,
+     "value": 8.31,
+     "candidates": 831,
+     "districts": 100
+    }
+   ]
+  },
+  {
+   "slate": "WHI",
+   "slateLabel": "WHI",
+   "slateVapShare": 0.4380194598284399,
+   "numDistricts": 1,
+   "winners": 15,
+   "metric": "winRate",
+   "system": "FASTSTV",
+   "systemLabel": "1 X 15 STV",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No WHI winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 1,
+     "value": 100.0,
+     "won": 3000,
+     "contests": 3000
+    }
+   ]
+  }
+ ]
+}
