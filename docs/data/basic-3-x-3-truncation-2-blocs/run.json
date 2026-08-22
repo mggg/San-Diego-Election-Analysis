@@ -35,9 +35,9 @@
    "plans": 100,
    "electionsPerSystem": 9000,
    "electionsByMode": {
-    "cambridge": 1000,
-    "slate_bt": 1000,
-    "slate_pl": 1000
+    "cambridge": 3000,
+    "slate_bt": 3000,
+    "slate_pl": 3000
    }
   }
  ],

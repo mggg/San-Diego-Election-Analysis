@@ -1,0 +1,342 @@
+{
+ "boxes": [
+  {
+   "slate": "POC",
+   "slateLabel": "POC",
+   "slateVapShare": 0.5619805401715601,
+   "numDistricts": 3,
+   "winners": 3,
+   "restricted": false,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 100,
+     "q1": 44.0065,
+     "median": 47.8426,
+     "q3": 49.2602,
+     "low": 36.9519,
+     "high": 52.338,
+     "mean": 46.8162,
+     "outliers": []
+    },
+    {
+     "rank": 2,
+     "n": 100,
+     "q1": 50.0758,
+     "median": 51.8385,
+     "q3": 53.53,
+     "low": 47.0252,
+     "high": 58.5984,
+     "mean": 52.1058,
+     "outliers": [
+      58.9785,
+      58.9909,
+      59.8372,
+      60.1221,
+      60.8527
+     ]
+    },
+    {
+     "rank": 3,
+     "n": 100,
+     "q1": 66.3548,
+     "median": 68.5866,
+     "q3": 76.0255,
+     "low": 60.1984,
+     "high": 82.2188,
+     "mean": 70.227,
+     "outliers": []
+    }
+   ],
+   "overallMean": 56.383,
+   "plans": 100
+  },
+  {
+   "slate": "POC",
+   "slateLabel": "POC",
+   "slateVapShare": 0.5619805401715601,
+   "numDistricts": 3,
+   "winners": 3,
+   "restricted": true,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 100,
+     "q1": 44.0065,
+     "median": 47.8426,
+     "q3": 49.2602,
+     "low": 36.9519,
+     "high": 52.338,
+     "mean": 46.8162,
+     "outliers": []
+    },
+    {
+     "rank": 2,
+     "n": 100,
+     "q1": 50.0758,
+     "median": 51.8385,
+     "q3": 53.53,
+     "low": 47.0252,
+     "high": 58.5984,
+     "mean": 52.1058,
+     "outliers": [
+      58.9785,
+      58.9909,
+      59.8372,
+      60.1221,
+      60.8527
+     ]
+    },
+    {
+     "rank": 3,
+     "n": 100,
+     "q1": 66.3548,
+     "median": 68.5866,
+     "q3": 76.0255,
+     "low": 60.1984,
+     "high": 82.2188,
+     "mean": 70.227,
+     "outliers": []
+    }
+   ],
+   "overallMean": 56.383,
+   "plans": 100
+  },
+  {
+   "slate": "WHI",
+   "slateLabel": "WHI",
+   "slateVapShare": 0.4380194598284399,
+   "numDistricts": 3,
+   "winners": 3,
+   "restricted": false,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 100,
+     "q1": 23.9745,
+     "median": 31.4134,
+     "q3": 33.6452,
+     "low": 17.7812,
+     "high": 39.8016,
+     "mean": 29.773,
+     "outliers": []
+    },
+    {
+     "rank": 2,
+     "n": 100,
+     "q1": 46.47,
+     "median": 48.1615,
+     "q3": 49.9242,
+     "low": 41.4016,
+     "high": 52.9748,
+     "mean": 47.8942,
+     "outliers": [
+      39.1473,
+      39.8779,
+      40.1628,
+      41.0091,
+      41.0215
+     ]
+    },
+    {
+     "rank": 3,
+     "n": 100,
+     "q1": 50.7398,
+     "median": 52.1574,
+     "q3": 55.9935,
+     "low": 47.662,
+     "high": 63.0481,
+     "mean": 53.1838,
+     "outliers": []
+    }
+   ],
+   "overallMean": 43.617,
+   "plans": 100
+  },
+  {
+   "slate": "WHI",
+   "slateLabel": "WHI",
+   "slateVapShare": 0.4380194598284399,
+   "numDistricts": 3,
+   "winners": 3,
+   "restricted": true,
+   "ranks": [
+    {
+     "rank": 1,
+     "n": 100,
+     "q1": 23.9745,
+     "median": 31.4134,
+     "q3": 33.6452,
+     "low": 17.7812,
+     "high": 39.8016,
+     "mean": 29.773,
+     "outliers": []
+    },
+    {
+     "rank": 2,
+     "n": 100,
+     "q1": 46.47,
+     "median": 48.1615,
+     "q3": 49.9242,
+     "low": 41.4016,
+     "high": 52.9748,
+     "mean": 47.8942,
+     "outliers": [
+      39.1473,
+      39.8779,
+      40.1628,
+      41.0091,
+      41.0215
+     ]
+    },
+    {
+     "rank": 3,
+     "n": 100,
+     "q1": 50.7398,
+     "median": 52.1574,
+     "q3": 55.9935,
+     "low": 47.662,
+     "high": 63.0481,
+     "mean": 53.1838,
+     "outliers": []
+    }
+   ],
+   "overallMean": 43.617,
+   "plans": 100
+  }
+ ],
+ "colors": [
+  {
+   "slate": "POC",
+   "slateLabel": "POC",
+   "slateVapShare": 0.5619805401715601,
+   "numDistricts": 3,
+   "winners": 3,
+   "metric": "availability",
+   "label": "Avg. POC candidates per district",
+   "format": "count",
+   "zeroLabel": "No POC candidate at this rank",
+   "restricted": false,
+   "values": [
+    {
+     "rank": 1,
+     "value": 3.26,
+     "candidates": 326,
+     "districts": 100
+    },
+    {
+     "rank": 2,
+     "value": 3.78,
+     "candidates": 378,
+     "districts": 100
+    },
+    {
+     "rank": 3,
+     "value": 5.65,
+     "candidates": 565,
+     "districts": 100
+    }
+   ]
+  },
+  {
+   "slate": "POC",
+   "slateLabel": "POC",
+   "slateVapShare": 0.5619805401715601,
+   "numDistricts": 3,
+   "winners": 3,
+   "metric": "winRate",
+   "system": "FASTSTV",
+   "systemLabel": "3 X 3 STV",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No POC winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 1,
+     "value": 100.0,
+     "won": 3000,
+     "contests": 3000
+    },
+    {
+     "rank": 2,
+     "value": 100.0,
+     "won": 3000,
+     "contests": 3000
+    },
+    {
+     "rank": 3,
+     "value": 100.0,
+     "won": 3000,
+     "contests": 3000
+    }
+   ]
+  },
+  {
+   "slate": "WHI",
+   "slateLabel": "WHI",
+   "slateVapShare": 0.4380194598284399,
+   "numDistricts": 3,
+   "winners": 3,
+   "metric": "availability",
+   "label": "Avg. WHI candidates per district",
+   "format": "count",
+   "zeroLabel": "No WHI candidate at this rank",
+   "restricted": false,
+   "values": [
+    {
+     "rank": 1,
+     "value": 1.47,
+     "candidates": 147,
+     "districts": 100
+    },
+    {
+     "rank": 2,
+     "value": 3.4,
+     "candidates": 340,
+     "districts": 100
+    },
+    {
+     "rank": 3,
+     "value": 3.63,
+     "candidates": 363,
+     "districts": 100
+    }
+   ]
+  },
+  {
+   "slate": "WHI",
+   "slateLabel": "WHI",
+   "slateVapShare": 0.4380194598284399,
+   "numDistricts": 3,
+   "winners": 3,
+   "metric": "winRate",
+   "system": "FASTSTV",
+   "systemLabel": "3 X 3 STV",
+   "label": "Win rate",
+   "format": "percent",
+   "zeroLabel": "No WHI winner at this rank",
+   "restricted": true,
+   "values": [
+    {
+     "rank": 1,
+     "value": 98.2667,
+     "won": 2948,
+     "contests": 3000
+    },
+    {
+     "rank": 2,
+     "value": 100.0,
+     "won": 3000,
+     "contests": 3000
+    },
+    {
+     "rank": 3,
+     "value": 100.0,
+     "won": 3000,
+     "contests": 3000
+    }
+   ]
+  }
+ ]
+}

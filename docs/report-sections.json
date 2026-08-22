@@ -239,7 +239,7 @@
       "_note": "Basic - 3 X 3 with the majority bloc's own cohesion lowered, both bloc models.",
       "slug": "basic-3-x-3-waio-low-polarization",
       "prose": "basic-low-polarization.md",
-      "title": "3 X 3 STV, Low Polarization",
+      "title": "3 X 3 STV, More White Crossover",
       "systems": [
         {
           "run": "basic-3-x-3-2-blocs-waio-low-polarization",
@@ -257,7 +257,7 @@
       "_note": "The hybrid charter-amendment run with the majority bloc's own cohesion lowered, both bloc models: the combined citywide total, or either component contest on its own.",
       "slug": "city-charter-amendment-proposal-waio-low-polarization",
       "prose": "city-charter-low-polarization.md",
-      "title": "City Charter Amendment Proposal, Low Polarization",
+      "title": "City Charter Amendment Proposal, More White Crossover",
       "systems": [
         {
           "run": "city-charter-amendment-proposal-waio-low-polarization-2-blocs",
