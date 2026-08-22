@@ -1,13 +1,13 @@
 {
- "runName": "City Charter Amendment Proposal",
- "slug": "city-charter-amendment-proposal",
- "focalGroup": "AAPI",
- "focalGroupLabel": "AAPI",
+ "runName": "Hybrid System - 3x4 STV + 1x3 Plurality",
+ "slug": "hybrid-system-3x4-stv-1x3-plurality",
+ "focalGroup": "BAIO",
+ "focalGroupLabel": "BAIO",
  "totalSeats": 15,
  "focalVapShare": 0.20432553215884638,
  "proportionalSeats": 3.064882982382696,
- "proportionalLabel": "AAPI share of VAP: 20.4% (3.1 seats)",
- "seatMax": 10,
+ "proportionalLabel": "BAIO share of VAP: 20.4% (3.1 seats)",
+ "seatMax": 6,
  "seatTicks": [
   0,
   1,
@@ -15,11 +15,7 @@
   3,
   4,
   5,
-  6,
-  7,
-  8,
-  9,
-  10
+  6
  ],
  "districtConfigs": [
   {
@@ -33,45 +29,36 @@
    ],
    "candidatePoolMax": null,
    "candidatePoolMean": null,
-   "plans": 50,
-   "electionsPerSystem": 12500,
-   "electionsByMode": {}
+   "plans": 100,
+   "electionsPerSystem": 4000
   },
   {
    "numDistricts": 1,
-   "winners": 6,
+   "winners": 3,
    "systems": [
     {
-     "id": "FASTSTV",
-     "label": "1 X 6 STV"
+     "id": "PLURALITY",
+     "label": "1 X 3 Plurality"
     }
    ],
    "candidatePoolMax": 15,
-   "candidatePoolMean": 12,
-   "plans": 50,
-   "electionsPerSystem": 12500,
-   "electionsByMode": {
-    "slate_bt": 1250,
-    "slate_pl": 1250
-   }
+   "candidatePoolMean": 10,
+   "plans": 100,
+   "electionsPerSystem": 4000
   },
   {
-   "numDistricts": 9,
-   "winners": 1,
+   "numDistricts": 3,
+   "winners": 4,
    "systems": [
     {
-     "id": "IRV",
-     "label": "9 X 1 IRV"
+     "id": "FASTSTV",
+     "label": "3 X 4 STV"
     }
    ],
    "candidatePoolMax": 10,
    "candidatePoolMean": 7,
-   "plans": 50,
-   "electionsPerSystem": 12500,
-   "electionsByMode": {
-    "slate_bt": 1250,
-    "slate_pl": 1250
-   }
+   "plans": 100,
+   "electionsPerSystem": 4000
   }
  ],
  "voterModels": [
@@ -93,6 +80,16 @@
  ],
  "slates": [
   {
+   "id": "WHI",
+   "label": "WHI",
+   "vapShare": 0.4380194598284399
+  },
+  {
+   "id": "BAIO",
+   "label": "BAIO",
+   "vapShare": 0.0919164473502938
+  },
+  {
    "id": "HIS",
    "label": "HIS",
    "vapShare": 0.2657385606624199
@@ -101,25 +98,15 @@
    "id": "AAPI",
    "label": "AAPI",
    "vapShare": 0.20432553215884638
-  },
-  {
-   "id": "WAIO",
-   "label": "WAIO",
-   "vapShare": 0.4588409607434803
-  },
-  {
-   "id": "BLK",
-   "label": "BLK",
-   "vapShare": 0.07109494643525345
   }
  ],
  "turnout": {
   "AAPI": 0.7,
+  "BAIO": 0.9,
   "HIS": 0.6,
-  "WAIO": 1,
-  "BLK": 0.9
+  "WHI": 1
  },
  "primaryTurnout": null,
- "replicates": 25,
- "subsamples": 50
+ "replicates": 10,
+ "subsamples": 100
 }

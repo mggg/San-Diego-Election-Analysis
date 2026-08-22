@@ -1,0 +1,80 @@
+{
+ "runName": "Low POC Turnout (2 Blocs)",
+ "slug": "low-poc-turnout-2-blocs",
+ "focalGroup": "WHI",
+ "focalGroupLabel": "WHI",
+ "totalSeats": 9,
+ "focalVapShare": 0.4588409607434803,
+ "proportionalSeats": 4.129568646691323,
+ "proportionalLabel": "WHI share of VAP: 45.9% (4.1 seats)",
+ "seatMax": 9,
+ "seatTicks": [
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9
+ ],
+ "districtConfigs": [
+  {
+   "numDistricts": 3,
+   "winners": 3,
+   "systems": [
+    {
+     "id": "FASTSTV",
+     "label": "3 X 3 STV"
+    }
+   ],
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7,
+   "plans": 100,
+   "electionsPerSystem": 8570
+  }
+ ],
+ "voterModels": [
+  {
+   "id": "slate_pl",
+   "label": "Impulsive",
+   "pooled": false
+  },
+  {
+   "id": "slate_bt",
+   "label": "Deliberative",
+   "pooled": false
+  },
+  {
+   "id": "cambridge",
+   "label": "Cambridge",
+   "pooled": false
+  },
+  {
+   "id": "combined",
+   "label": "Combined",
+   "pooled": true
+  }
+ ],
+ "slates": [
+  {
+   "id": "WHI",
+   "label": "WHI",
+   "vapShare": 0.4588409607434803
+  },
+  {
+   "id": "POC",
+   "label": "POC",
+   "vapShare": 0.5411590392565198
+  }
+ ],
+ "turnout": {
+  "WHI": 1,
+  "POC": 0.5
+ },
+ "primaryTurnout": null,
+ "replicates": 10,
+ "subsamples": 100
+}
