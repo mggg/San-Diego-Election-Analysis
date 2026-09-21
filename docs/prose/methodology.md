@@ -26,7 +26,7 @@ The two hybrid scenarios — the City Charter Amendment Proposal and the Hybrid 
 
 ## 3.2 Voter Blocs and Candidate Slates
 
-Mirroring past reports, we consider the largest communities of interest when identifying blocs of voters with shared preferences and slates of candidates with similar policies and positions. In San Diego, much of the attention in redistricting and electoral reform has been focused on communities and voters of color - particularly the Black, AAPI, and Latino communities. We carry that spirit into this report by choosing to focus on these three groups as distinct voting blocs in addition to the "WAIO (White/American Indian/Other Race)" bloc. The decision to merge White, American Indian, and Other Race voters into a single bloc is in keeping with methodological norms of MGGG electoral analysis.
+Mirroring past reports, we consider the largest communities of interest when identifying blocs of voters with shared preferences and slates of candidates with similar policies and positions. In San Diego, much of the attention in redistricting and electoral reform has been focused on communities and voters of color - particularly the Black, AAPI, and Latino communities. We carry that spirit into this report by choosing to focus on these three groups as distinct voting blocs in addition to the "WAIO (White/American Indian/Other Race)" bloc. The decision to merge White, American Indian, and Other Race voters into a single bloc is in keeping with methodological norms of DDRI electoral analysis.
 
 ### 3.2.1 Two Bloc vs. Four Bloc Models
 
@@ -36,7 +36,7 @@ Note that while we attempt to maintain consistency in modeling decisions between
 
 ### 3.2.2 Demographic Table
 
-The voting bloc variables were constructed using Decennial Census variables from 2020 following the [bloc classification methodology](https://data-democracy.org/VAP-CVAP) of MGGG.
+The voting bloc variables were constructed using Decennial Census variables from 2020 following the [bloc classification methodology](https://data-democracy.org/VAP-CVAP) of DDRI.
 
 The six census categories below partition San Diego's voting-age population of 1,125,087. Every category is assigned to exactly one bloc, so the blocs sum to the whole electorate and no resident is counted twice or left out. The two models place American Indian and other-race voters differently: the two-bloc model counts them with POC, so POC is every voter of color; the four-bloc model carries them with White voters in WAIO, since they cannot join BLK, HIS or AAPI without picking one arbitrarily.
 
