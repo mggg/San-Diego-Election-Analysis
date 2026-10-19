@@ -66,14 +66,13 @@ SECTIONS_FILE = "report-sections.json"
 SECTIONS_PATH = DOCS_DIR / SECTIONS_FILE
 
 # Used when SECTIONS_PATH is absent, which is the pre-outline behavior: these
-# four prose sections, and every run whose artifacts are complete. Each is a
+# three prose sections, and every run whose artifacts are complete. Each is a
 # file in docs/prose/; a missing or empty one renders as a placeholder rather
 # than breaking the build, so the site is publishable before the writing is done.
 DEFAULT_PROSE_SECTIONS = [
     {"id": "abstract", "file": "abstract.md", "title": "Abstract"},
     {"id": "background", "file": "background.md", "title": "Background"},
     {"id": "methodology", "file": "methodology.md", "title": "Methodology"},
-    {"id": "conclusion", "file": "conclusion.md", "title": "Conclusion"},
 ]
 
 
