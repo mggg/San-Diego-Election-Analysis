@@ -193,7 +193,7 @@
       ]
     },
     {
-      "_note": "Warmup 3 X 3 STV with Cambridge ballot truncation, both bloc models and both ballot-length caps. The cap is a toggle rather than a dropdown entry: each pair is the same contest under a different simulation, not a different contest.",
+      "_note": "Warmup 3 X 3 STV with Cambridge ballot truncation (6-choice cap), both bloc models.",
       "slug": "basic-3-x-3-truncation",
       "title": "3 X 3 STV, Truncation",
       "prose": "basic-truncation.md",
@@ -201,37 +201,12 @@
         {
           "run": "basic-3-x-3-truncation-2-blocs",
           "system": "FASTSTV",
-          "blocModel": "two",
-          "variant": "max6"
+          "blocModel": "two"
         },
         {
           "run": "basic-3-x-3-truncation",
           "system": "FASTSTV",
-          "blocModel": "four",
-          "variant": "max6"
-        },
-        {
-          "run": "basic-3-x-3-truncation-10-2-blocs",
-          "system": "FASTSTV",
-          "blocModel": "two",
-          "variant": "max10"
-        },
-        {
-          "run": "basic-3-x-3-truncation-10",
-          "system": "FASTSTV",
-          "blocModel": "four",
-          "variant": "max10"
-        }
-      ],
-      "variant_label": "Max ballot length",
-      "variants": [
-        {
-          "id": "max6",
-          "label": "6"
-        },
-        {
-          "id": "max10",
-          "label": "10"
+          "blocModel": "four"
         }
       ]
     },
