@@ -61,6 +61,7 @@ from pipeline.simulate_elections import _load_profile_from_bytes
 from pipeline.truncate_profiles import _is_ranked, _parse_arcname
 from pipeline.utils.ballot_length_cap import truncate_profile as cap_profile
 from pipeline.utils.helpers import (
+    OBSERVED_MIN_CANDIDATES_PATH,
     election_results_signature,
     load_json,
     load_run_config,
@@ -93,7 +94,31 @@ def _new_stats() -> Dict[str, float]:
         "voters_shortened": 0.0,
         "ranked_positions_before": 0.0,
         "ranked_positions_after": 0.0,
+        # Fewest candidates on any capped profile's ballot, which is a minimum
+        # rather than a sum: the parent folds it with min(), not +=.
+        "min_candidates": float("inf"),
     }
+
+
+def _record_observed_min(entries: Dict[str, int], path: Path = OBSERVED_MIN_CANDIDATES_PATH) -> None:
+    """
+    Merge run name -> fewest candidates on a ballot into the file the report reads
+    for its Parameters card, keeping entries for other runs.
+
+    The report cannot measure this itself without opening every profiles.zip, and
+    the config's own floor (settings_generator.minimum_candidates) does not move
+    with a cap, so the run that cuts the ballots records it.
+    """
+    try:
+        existing = load_json(path)
+    except (OSError, ValueError):
+        existing = {}
+    if not isinstance(existing, dict):
+        existing = {}
+    existing.update(entries)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(dict(sorted(existing.items())), f, indent=2, ensure_ascii=False)
 
 
 def _accumulate(stats: Dict[str, float], before: RankProfile, after: RankProfile, cap: int) -> None:
@@ -102,6 +127,9 @@ def _accumulate(stats: Dict[str, float], before: RankProfile, after: RankProfile
     stats["voters_shortened"] += sum(b.weight for b in before.ballots if len(b.ranking) > cap)
     stats["ranked_positions_before"] += sum(len(b.ranking) * b.weight for b in before.ballots)
     stats["ranked_positions_after"] += sum(len(b.ranking) * b.weight for b in after.ballots)
+    # max_ranking_length is the longest ballot the profile allows: the number of
+    # candidates for full ballots, and min(cap, candidates) once they are cut.
+    stats["min_candidates"] = min(stats["min_candidates"], after.max_ranking_length)
 
 
 def _cap_one(arcname: str, data: bytes, caps: List[int]):
@@ -114,7 +142,8 @@ def _cap_one(arcname: str, data: bytes, caps: List[int]):
     back for the parent to write.
 
     Returns:
-        (arcname, {cap: capped csv text}, {cap: stats delta}).
+        (arcname, {cap: capped csv text}, {cap: stats delta}, candidates on the
+        full-ballot profile).
     """
     profile = _load_profile_from_bytes(data, profile_class_for_mode(_parse_arcname(arcname)[0]))
     texts: Dict[int, str] = {}
@@ -125,7 +154,7 @@ def _cap_one(arcname: str, data: bytes, caps: List[int]):
         _accumulate(delta, profile, capped_profile, cap)
         texts[cap] = capped_profile.to_csv()
         deltas[cap] = delta
-    return arcname, texts, deltas
+    return arcname, texts, deltas, profile.max_ranking_length
 
 
 def _reuse_untouched_results(base_dir: Path, base_name: str, derived: Dict[int, dict], tier: int) -> int:
@@ -171,6 +200,9 @@ def _finish_stats(stats: Dict[str, float], tier: int, cap: int) -> dict:
         "share_of_voters_shortened": stats["voters_shortened"] / voters if voters else 0.0,
         "mean_ballot_length_before": stats["ranked_positions_before"] / voters if voters else 0.0,
         "mean_ballot_length_after": stats["ranked_positions_after"] / voters if voters else 0.0,
+        "min_candidates_on_ballot": (
+            int(stats["min_candidates"]) if stats["min_candidates"] != float("inf") else None
+        ),
     }
 
 
@@ -267,6 +299,7 @@ def build_cap_runs(
         d["zip"] = zipfile.ZipFile(d["dir"] / "profiles.zip", "w", compression=zipfile.ZIP_DEFLATED)
 
     untouched = capped = 0
+    base_min = float("inf")
     try:
         with zipfile.ZipFile(base_zip) as source:
             targets = []
@@ -287,11 +320,15 @@ def build_cap_runs(
             # profiles' worth of csv text is ever in memory at once.
             jobs = (delayed(_cap_one)(name, source.read(name), caps) for name in targets)
             results = Parallel(n_jobs=-1, return_as="generator", batch_size=1)(jobs)
-            for arcname, texts, deltas in results:
+            for arcname, texts, deltas, full_candidates in results:
+                base_min = min(base_min, full_candidates)
                 for cap, d in derived.items():
                     d["zip"].writestr(arcname, texts[cap])
                     for key, value in deltas[cap].items():
-                        d["stats"][key] += value
+                        if key == "min_candidates":
+                            d["stats"][key] = min(d["stats"][key], value)
+                        else:
+                            d["stats"][key] += value
                 capped += 1
                 if capped % 100 == 0:
                     print(f"[cap_ballot_length] {capped}/{len(targets)} profiles capped", flush=True)
@@ -315,6 +352,11 @@ def build_cap_runs(
         with open(d["dir"] / "cap_stats.json", "w", encoding="utf-8") as f:
             json.dump(d["summary"], f, indent=2)
         written.append(config_out)
+
+    observed = {d["name"]: d["summary"]["min_candidates_on_ballot"] for d in derived.values()}
+    if base_min != float("inf"):
+        observed[run_name] = int(base_min)
+    _record_observed_min({k: v for k, v in observed.items() if v is not None})
 
     reused = _reuse_untouched_results(base_dir, run_name, derived, tier)
     if reused:

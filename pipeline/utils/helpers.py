@@ -66,6 +66,12 @@ def load_json(path: Path) -> Dict[str, Any]:
 PROJECT_DIR = Path(__file__).resolve().parents[2]
 PROJECT_CONFIG_PATH = PROJECT_DIR / "project-settings.json"
 
+# Fewest candidates seen on a ballot, per run name, for the ballot-cap runs and
+# the full-ballot run they are cut from. Written by pipeline.cap_ballot_length,
+# read by pipeline.report_generator (the Parameters card); it lives in docs/ so
+# the report's inputs stay in one place.
+OBSERVED_MIN_CANDIDATES_PATH = PROJECT_DIR / "docs" / "observed-min-candidates.json"
+
 PROJECT_KEYS = [
     "geodata_path",
     "geometry_data",

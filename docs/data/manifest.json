@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-17T15:53:13+00:00",
+ "generated": "2026-11-19T21:07:10+00:00",
  "palette": {
   "slate_pl": "#FFCC00",
   "slate_bt": "#AA0000",
@@ -6608,7 +6608,7 @@
       "WHI": 1
      },
      "primaryTurnout": null,
-     "candidatePoolMin": 7,
+     "candidatePoolMin": 10,
      "candidatePoolMax": 15,
      "candidatePoolMean": 12,
      "slates": [
@@ -6980,7 +6980,7 @@
       "BLK": 0.9
      },
      "primaryTurnout": null,
-     "candidatePoolMin": 7,
+     "candidatePoolMin": 9,
      "candidatePoolMax": 15,
      "candidatePoolMean": 12,
      "slates": [
@@ -7118,7 +7118,7 @@
       "WHI": 1
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": null,
      "candidatePoolMean": null,
      "slates": [
@@ -7133,8 +7133,26 @@
        "vapShare": 0.4380194598284399
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "POC": {
+       "POC": 0.89,
+       "WHI": 0.11
+      },
+      "WHI": {
+       "POC": 0.2,
+       "WHI": 0.8
+      }
+     },
+     "alphas": {
+      "POC": {
+       "POC": 1,
+       "WHI": 1
+      },
+      "WHI": {
+       "POC": 1,
+       "WHI": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-10/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-10/focal_seats.json",
@@ -7200,7 +7218,7 @@
       "WHI": 1
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": 10,
      "candidatePoolMean": 7,
      "slates": [
@@ -7215,8 +7233,26 @@
        "vapShare": 0.4380194598284399
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "POC": {
+       "POC": 0.89,
+       "WHI": 0.11
+      },
+      "WHI": {
+       "POC": 0.2,
+       "WHI": 0.8
+      }
+     },
+     "alphas": {
+      "POC": {
+       "POC": 1,
+       "WHI": 1
+      },
+      "WHI": {
+       "POC": 1,
+       "WHI": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-10/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-10/focal_seats.json",
@@ -7282,7 +7318,7 @@
       "WHI": 1
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 10,
      "candidatePoolMax": 15,
      "candidatePoolMean": 12,
      "slates": [
@@ -7297,8 +7333,26 @@
        "vapShare": 0.4380194598284399
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "POC": {
+       "POC": 0.89,
+       "WHI": 0.11
+      },
+      "WHI": {
+       "POC": 0.2,
+       "WHI": 0.8
+      }
+     },
+     "alphas": {
+      "POC": {
+       "POC": 1,
+       "WHI": 1
+      },
+      "WHI": {
+       "POC": 1,
+       "WHI": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-10/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-10/focal_seats.json",
@@ -7358,7 +7412,7 @@
       "BLK": 0.9
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": null,
      "candidatePoolMean": null,
      "slates": [
@@ -7383,8 +7437,58 @@
        "vapShare": 0.07109494643525345
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "HIS": {
+       "HIS": 0.8,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.1
+      },
+      "AAPI": {
+       "HIS": 0.03,
+       "AAPI": 0.8,
+       "WAIO": 0.15,
+       "BLK": 0.02
+      },
+      "WAIO": {
+       "HIS": 0.05,
+       "AAPI": 0.1,
+       "WAIO": 0.8,
+       "BLK": 0.05
+      },
+      "BLK": {
+       "HIS": 0.1,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.8
+      }
+     },
+     "alphas": {
+      "HIS": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "AAPI": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "WAIO": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "BLK": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-ballot-cap-10/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-ballot-cap-10/focal_seats.json",
@@ -7447,7 +7551,7 @@
       "BLK": 0.9
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": 10,
      "candidatePoolMean": 7,
      "slates": [
@@ -7472,8 +7576,58 @@
        "vapShare": 0.07109494643525345
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "HIS": {
+       "HIS": 0.8,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.1
+      },
+      "AAPI": {
+       "HIS": 0.03,
+       "AAPI": 0.8,
+       "WAIO": 0.15,
+       "BLK": 0.02
+      },
+      "WAIO": {
+       "HIS": 0.05,
+       "AAPI": 0.1,
+       "WAIO": 0.8,
+       "BLK": 0.05
+      },
+      "BLK": {
+       "HIS": 0.1,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.8
+      }
+     },
+     "alphas": {
+      "HIS": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "AAPI": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "WAIO": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "BLK": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-ballot-cap-10/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-ballot-cap-10/focal_seats.json",
@@ -7536,7 +7690,7 @@
       "BLK": 0.9
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 9,
      "candidatePoolMax": 15,
      "candidatePoolMean": 12,
      "slates": [
@@ -7561,8 +7715,58 @@
        "vapShare": 0.07109494643525345
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "HIS": {
+       "HIS": 0.8,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.1
+      },
+      "AAPI": {
+       "HIS": 0.03,
+       "AAPI": 0.8,
+       "WAIO": 0.15,
+       "BLK": 0.02
+      },
+      "WAIO": {
+       "HIS": 0.05,
+       "AAPI": 0.1,
+       "WAIO": 0.8,
+       "BLK": 0.05
+      },
+      "BLK": {
+       "HIS": 0.1,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.8
+      }
+     },
+     "alphas": {
+      "HIS": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "AAPI": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "WAIO": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "BLK": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-ballot-cap-10/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-ballot-cap-10/focal_seats.json",
@@ -7624,7 +7828,7 @@
       "WHI": 1
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": null,
      "candidatePoolMean": null,
      "slates": [
@@ -7639,8 +7843,26 @@
        "vapShare": 0.4380194598284399
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "POC": {
+       "POC": 0.89,
+       "WHI": 0.11
+      },
+      "WHI": {
+       "POC": 0.2,
+       "WHI": 0.8
+      }
+     },
+     "alphas": {
+      "POC": {
+       "POC": 1,
+       "WHI": 1
+      },
+      "WHI": {
+       "POC": 1,
+       "WHI": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-9/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-9/focal_seats.json",
@@ -7706,7 +7928,7 @@
       "WHI": 1
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": 10,
      "candidatePoolMean": 7,
      "slates": [
@@ -7721,8 +7943,26 @@
        "vapShare": 0.4380194598284399
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "POC": {
+       "POC": 0.89,
+       "WHI": 0.11
+      },
+      "WHI": {
+       "POC": 0.2,
+       "WHI": 0.8
+      }
+     },
+     "alphas": {
+      "POC": {
+       "POC": 1,
+       "WHI": 1
+      },
+      "WHI": {
+       "POC": 1,
+       "WHI": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-9/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-9/focal_seats.json",
@@ -7788,7 +8028,7 @@
       "WHI": 1
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 9,
      "candidatePoolMax": 15,
      "candidatePoolMean": 12,
      "slates": [
@@ -7803,8 +8043,26 @@
        "vapShare": 0.4380194598284399
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "POC": {
+       "POC": 0.89,
+       "WHI": 0.11
+      },
+      "WHI": {
+       "POC": 0.2,
+       "WHI": 0.8
+      }
+     },
+     "alphas": {
+      "POC": {
+       "POC": 1,
+       "WHI": 1
+      },
+      "WHI": {
+       "POC": 1,
+       "WHI": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-9/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-9/focal_seats.json",
@@ -7864,7 +8122,7 @@
       "BLK": 0.9
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": null,
      "candidatePoolMean": null,
      "slates": [
@@ -7889,8 +8147,58 @@
        "vapShare": 0.07109494643525345
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "HIS": {
+       "HIS": 0.8,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.1
+      },
+      "AAPI": {
+       "HIS": 0.03,
+       "AAPI": 0.8,
+       "WAIO": 0.15,
+       "BLK": 0.02
+      },
+      "WAIO": {
+       "HIS": 0.05,
+       "AAPI": 0.1,
+       "WAIO": 0.8,
+       "BLK": 0.05
+      },
+      "BLK": {
+       "HIS": 0.1,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.8
+      }
+     },
+     "alphas": {
+      "HIS": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "AAPI": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "WAIO": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "BLK": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-ballot-cap-9/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-ballot-cap-9/focal_seats.json",
@@ -7953,7 +8261,7 @@
       "BLK": 0.9
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": 10,
      "candidatePoolMean": 7,
      "slates": [
@@ -7978,8 +8286,58 @@
        "vapShare": 0.07109494643525345
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "HIS": {
+       "HIS": 0.8,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.1
+      },
+      "AAPI": {
+       "HIS": 0.03,
+       "AAPI": 0.8,
+       "WAIO": 0.15,
+       "BLK": 0.02
+      },
+      "WAIO": {
+       "HIS": 0.05,
+       "AAPI": 0.1,
+       "WAIO": 0.8,
+       "BLK": 0.05
+      },
+      "BLK": {
+       "HIS": 0.1,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.8
+      }
+     },
+     "alphas": {
+      "HIS": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "AAPI": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "WAIO": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "BLK": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-ballot-cap-9/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-ballot-cap-9/focal_seats.json",
@@ -8042,7 +8400,7 @@
       "BLK": 0.9
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 9,
      "candidatePoolMax": 15,
      "candidatePoolMean": 12,
      "slates": [
@@ -8067,8 +8425,58 @@
        "vapShare": 0.07109494643525345
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "HIS": {
+       "HIS": 0.8,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.1
+      },
+      "AAPI": {
+       "HIS": 0.03,
+       "AAPI": 0.8,
+       "WAIO": 0.15,
+       "BLK": 0.02
+      },
+      "WAIO": {
+       "HIS": 0.05,
+       "AAPI": 0.1,
+       "WAIO": 0.8,
+       "BLK": 0.05
+      },
+      "BLK": {
+       "HIS": 0.1,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.8
+      }
+     },
+     "alphas": {
+      "HIS": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "AAPI": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "WAIO": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "BLK": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-ballot-cap-9/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-ballot-cap-9/focal_seats.json",
@@ -8130,7 +8538,7 @@
       "WHI": 1
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": null,
      "candidatePoolMean": null,
      "slates": [
@@ -8145,8 +8553,26 @@
        "vapShare": 0.4380194598284399
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "POC": {
+       "POC": 0.89,
+       "WHI": 0.11
+      },
+      "WHI": {
+       "POC": 0.2,
+       "WHI": 0.8
+      }
+     },
+     "alphas": {
+      "POC": {
+       "POC": 1,
+       "WHI": 1
+      },
+      "WHI": {
+       "POC": 1,
+       "WHI": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-8/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-8/focal_seats.json",
@@ -8212,7 +8638,7 @@
       "WHI": 1
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": 10,
      "candidatePoolMean": 7,
      "slates": [
@@ -8227,8 +8653,26 @@
        "vapShare": 0.4380194598284399
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "POC": {
+       "POC": 0.89,
+       "WHI": 0.11
+      },
+      "WHI": {
+       "POC": 0.2,
+       "WHI": 0.8
+      }
+     },
+     "alphas": {
+      "POC": {
+       "POC": 1,
+       "WHI": 1
+      },
+      "WHI": {
+       "POC": 1,
+       "WHI": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-8/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-8/focal_seats.json",
@@ -8294,7 +8738,7 @@
       "WHI": 1
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 8,
      "candidatePoolMax": 15,
      "candidatePoolMean": 12,
      "slates": [
@@ -8309,8 +8753,26 @@
        "vapShare": 0.4380194598284399
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "POC": {
+       "POC": 0.89,
+       "WHI": 0.11
+      },
+      "WHI": {
+       "POC": 0.2,
+       "WHI": 0.8
+      }
+     },
+     "alphas": {
+      "POC": {
+       "POC": 1,
+       "WHI": 1
+      },
+      "WHI": {
+       "POC": 1,
+       "WHI": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-8/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-8/focal_seats.json",
@@ -8370,7 +8832,7 @@
       "BLK": 0.9
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": null,
      "candidatePoolMean": null,
      "slates": [
@@ -8395,8 +8857,58 @@
        "vapShare": 0.07109494643525345
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "HIS": {
+       "HIS": 0.8,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.1
+      },
+      "AAPI": {
+       "HIS": 0.03,
+       "AAPI": 0.8,
+       "WAIO": 0.15,
+       "BLK": 0.02
+      },
+      "WAIO": {
+       "HIS": 0.05,
+       "AAPI": 0.1,
+       "WAIO": 0.8,
+       "BLK": 0.05
+      },
+      "BLK": {
+       "HIS": 0.1,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.8
+      }
+     },
+     "alphas": {
+      "HIS": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "AAPI": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "WAIO": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "BLK": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-ballot-cap-8/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-ballot-cap-8/focal_seats.json",
@@ -8459,7 +8971,7 @@
       "BLK": 0.9
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": 10,
      "candidatePoolMean": 7,
      "slates": [
@@ -8484,8 +8996,58 @@
        "vapShare": 0.07109494643525345
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "HIS": {
+       "HIS": 0.8,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.1
+      },
+      "AAPI": {
+       "HIS": 0.03,
+       "AAPI": 0.8,
+       "WAIO": 0.15,
+       "BLK": 0.02
+      },
+      "WAIO": {
+       "HIS": 0.05,
+       "AAPI": 0.1,
+       "WAIO": 0.8,
+       "BLK": 0.05
+      },
+      "BLK": {
+       "HIS": 0.1,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.8
+      }
+     },
+     "alphas": {
+      "HIS": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "AAPI": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "WAIO": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "BLK": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-ballot-cap-8/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-ballot-cap-8/focal_seats.json",
@@ -8548,7 +9110,7 @@
       "BLK": 0.9
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 8,
      "candidatePoolMax": 15,
      "candidatePoolMean": 12,
      "slates": [
@@ -8573,8 +9135,58 @@
        "vapShare": 0.07109494643525345
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "HIS": {
+       "HIS": 0.8,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.1
+      },
+      "AAPI": {
+       "HIS": 0.03,
+       "AAPI": 0.8,
+       "WAIO": 0.15,
+       "BLK": 0.02
+      },
+      "WAIO": {
+       "HIS": 0.05,
+       "AAPI": 0.1,
+       "WAIO": 0.8,
+       "BLK": 0.05
+      },
+      "BLK": {
+       "HIS": 0.1,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.8
+      }
+     },
+     "alphas": {
+      "HIS": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "AAPI": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "WAIO": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "BLK": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-ballot-cap-8/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-ballot-cap-8/focal_seats.json",
@@ -8636,7 +9248,7 @@
       "WHI": 1
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": null,
      "candidatePoolMean": null,
      "slates": [
@@ -8651,8 +9263,26 @@
        "vapShare": 0.4380194598284399
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "POC": {
+       "POC": 0.89,
+       "WHI": 0.11
+      },
+      "WHI": {
+       "POC": 0.2,
+       "WHI": 0.8
+      }
+     },
+     "alphas": {
+      "POC": {
+       "POC": 1,
+       "WHI": 1
+      },
+      "WHI": {
+       "POC": 1,
+       "WHI": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-7/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-7/focal_seats.json",
@@ -8718,7 +9348,7 @@
       "WHI": 1
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": 10,
      "candidatePoolMean": 7,
      "slates": [
@@ -8733,8 +9363,26 @@
        "vapShare": 0.4380194598284399
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "POC": {
+       "POC": 0.89,
+       "WHI": 0.11
+      },
+      "WHI": {
+       "POC": 0.2,
+       "WHI": 0.8
+      }
+     },
+     "alphas": {
+      "POC": {
+       "POC": 1,
+       "WHI": 1
+      },
+      "WHI": {
+       "POC": 1,
+       "WHI": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-7/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-7/focal_seats.json",
@@ -8800,7 +9448,7 @@
       "WHI": 1
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": 15,
      "candidatePoolMean": 12,
      "slates": [
@@ -8815,8 +9463,26 @@
        "vapShare": 0.4380194598284399
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "POC": {
+       "POC": 0.89,
+       "WHI": 0.11
+      },
+      "WHI": {
+       "POC": 0.2,
+       "WHI": 0.8
+      }
+     },
+     "alphas": {
+      "POC": {
+       "POC": 1,
+       "WHI": 1
+      },
+      "WHI": {
+       "POC": 1,
+       "WHI": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-7/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-7/focal_seats.json",
@@ -8876,7 +9542,7 @@
       "BLK": 0.9
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": null,
      "candidatePoolMean": null,
      "slates": [
@@ -8901,8 +9567,58 @@
        "vapShare": 0.07109494643525345
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "HIS": {
+       "HIS": 0.8,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.1
+      },
+      "AAPI": {
+       "HIS": 0.03,
+       "AAPI": 0.8,
+       "WAIO": 0.15,
+       "BLK": 0.02
+      },
+      "WAIO": {
+       "HIS": 0.05,
+       "AAPI": 0.1,
+       "WAIO": 0.8,
+       "BLK": 0.05
+      },
+      "BLK": {
+       "HIS": 0.1,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.8
+      }
+     },
+     "alphas": {
+      "HIS": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "AAPI": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "WAIO": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "BLK": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-ballot-cap-7/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-ballot-cap-7/focal_seats.json",
@@ -8965,7 +9681,7 @@
       "BLK": 0.9
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": 10,
      "candidatePoolMean": 7,
      "slates": [
@@ -8990,8 +9706,58 @@
        "vapShare": 0.07109494643525345
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "HIS": {
+       "HIS": 0.8,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.1
+      },
+      "AAPI": {
+       "HIS": 0.03,
+       "AAPI": 0.8,
+       "WAIO": 0.15,
+       "BLK": 0.02
+      },
+      "WAIO": {
+       "HIS": 0.05,
+       "AAPI": 0.1,
+       "WAIO": 0.8,
+       "BLK": 0.05
+      },
+      "BLK": {
+       "HIS": 0.1,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.8
+      }
+     },
+     "alphas": {
+      "HIS": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "AAPI": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "WAIO": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "BLK": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-ballot-cap-7/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-ballot-cap-7/focal_seats.json",
@@ -9054,7 +9820,7 @@
       "BLK": 0.9
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": 15,
      "candidatePoolMean": 12,
      "slates": [
@@ -9079,8 +9845,58 @@
        "vapShare": 0.07109494643525345
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "HIS": {
+       "HIS": 0.8,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.1
+      },
+      "AAPI": {
+       "HIS": 0.03,
+       "AAPI": 0.8,
+       "WAIO": 0.15,
+       "BLK": 0.02
+      },
+      "WAIO": {
+       "HIS": 0.05,
+       "AAPI": 0.1,
+       "WAIO": 0.8,
+       "BLK": 0.05
+      },
+      "BLK": {
+       "HIS": 0.1,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.8
+      }
+     },
+     "alphas": {
+      "HIS": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "AAPI": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "WAIO": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "BLK": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-ballot-cap-7/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-ballot-cap-7/focal_seats.json",
@@ -9142,7 +9958,7 @@
       "WHI": 1
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": null,
      "candidatePoolMean": null,
      "slates": [
@@ -9157,8 +9973,26 @@
        "vapShare": 0.4380194598284399
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "POC": {
+       "POC": 0.89,
+       "WHI": 0.11
+      },
+      "WHI": {
+       "POC": 0.2,
+       "WHI": 0.8
+      }
+     },
+     "alphas": {
+      "POC": {
+       "POC": 1,
+       "WHI": 1
+      },
+      "WHI": {
+       "POC": 1,
+       "WHI": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-6/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-6/focal_seats.json",
@@ -9224,7 +10058,7 @@
       "WHI": 1
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": 10,
      "candidatePoolMean": 7,
      "slates": [
@@ -9239,8 +10073,26 @@
        "vapShare": 0.4380194598284399
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "POC": {
+       "POC": 0.89,
+       "WHI": 0.11
+      },
+      "WHI": {
+       "POC": 0.2,
+       "WHI": 0.8
+      }
+     },
+     "alphas": {
+      "POC": {
+       "POC": 1,
+       "WHI": 1
+      },
+      "WHI": {
+       "POC": 1,
+       "WHI": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-6/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-6/focal_seats.json",
@@ -9306,7 +10158,7 @@
       "WHI": 1
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 6,
      "candidatePoolMax": 15,
      "candidatePoolMean": 12,
      "slates": [
@@ -9321,8 +10173,26 @@
        "vapShare": 0.4380194598284399
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "POC": {
+       "POC": 0.89,
+       "WHI": 0.11
+      },
+      "WHI": {
+       "POC": 0.2,
+       "WHI": 0.8
+      }
+     },
+     "alphas": {
+      "POC": {
+       "POC": 1,
+       "WHI": 1
+      },
+      "WHI": {
+       "POC": 1,
+       "WHI": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-6/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-6/focal_seats.json",
@@ -9382,7 +10252,7 @@
       "BLK": 0.9
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": null,
      "candidatePoolMean": null,
      "slates": [
@@ -9407,8 +10277,58 @@
        "vapShare": 0.07109494643525345
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "HIS": {
+       "HIS": 0.8,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.1
+      },
+      "AAPI": {
+       "HIS": 0.03,
+       "AAPI": 0.8,
+       "WAIO": 0.15,
+       "BLK": 0.02
+      },
+      "WAIO": {
+       "HIS": 0.05,
+       "AAPI": 0.1,
+       "WAIO": 0.8,
+       "BLK": 0.05
+      },
+      "BLK": {
+       "HIS": 0.1,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.8
+      }
+     },
+     "alphas": {
+      "HIS": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "AAPI": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "WAIO": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "BLK": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-ballot-cap-6/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-ballot-cap-6/focal_seats.json",
@@ -9471,7 +10391,7 @@
       "BLK": 0.9
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": 10,
      "candidatePoolMean": 7,
      "slates": [
@@ -9496,8 +10416,58 @@
        "vapShare": 0.07109494643525345
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "HIS": {
+       "HIS": 0.8,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.1
+      },
+      "AAPI": {
+       "HIS": 0.03,
+       "AAPI": 0.8,
+       "WAIO": 0.15,
+       "BLK": 0.02
+      },
+      "WAIO": {
+       "HIS": 0.05,
+       "AAPI": 0.1,
+       "WAIO": 0.8,
+       "BLK": 0.05
+      },
+      "BLK": {
+       "HIS": 0.1,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.8
+      }
+     },
+     "alphas": {
+      "HIS": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "AAPI": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "WAIO": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "BLK": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-ballot-cap-6/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-ballot-cap-6/focal_seats.json",
@@ -9560,7 +10530,7 @@
       "BLK": 0.9
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 6,
      "candidatePoolMax": 15,
      "candidatePoolMean": 12,
      "slates": [
@@ -9585,8 +10555,58 @@
        "vapShare": 0.07109494643525345
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "HIS": {
+       "HIS": 0.8,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.1
+      },
+      "AAPI": {
+       "HIS": 0.03,
+       "AAPI": 0.8,
+       "WAIO": 0.15,
+       "BLK": 0.02
+      },
+      "WAIO": {
+       "HIS": 0.05,
+       "AAPI": 0.1,
+       "WAIO": 0.8,
+       "BLK": 0.05
+      },
+      "BLK": {
+       "HIS": 0.1,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.8
+      }
+     },
+     "alphas": {
+      "HIS": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "AAPI": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "WAIO": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "BLK": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-ballot-cap-6/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-ballot-cap-6/focal_seats.json",
@@ -9648,7 +10668,7 @@
       "WHI": 1
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": null,
      "candidatePoolMean": null,
      "slates": [
@@ -9663,8 +10683,26 @@
        "vapShare": 0.4380194598284399
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "POC": {
+       "POC": 0.89,
+       "WHI": 0.11
+      },
+      "WHI": {
+       "POC": 0.2,
+       "WHI": 0.8
+      }
+     },
+     "alphas": {
+      "POC": {
+       "POC": 1,
+       "WHI": 1
+      },
+      "WHI": {
+       "POC": 1,
+       "WHI": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-5/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-5/focal_seats.json",
@@ -9730,7 +10768,7 @@
       "WHI": 1
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": 10,
      "candidatePoolMean": 7,
      "slates": [
@@ -9745,8 +10783,26 @@
        "vapShare": 0.4380194598284399
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "POC": {
+       "POC": 0.89,
+       "WHI": 0.11
+      },
+      "WHI": {
+       "POC": 0.2,
+       "WHI": 0.8
+      }
+     },
+     "alphas": {
+      "POC": {
+       "POC": 1,
+       "WHI": 1
+      },
+      "WHI": {
+       "POC": 1,
+       "WHI": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-5/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-5/focal_seats.json",
@@ -9812,7 +10868,7 @@
       "WHI": 1
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 5,
      "candidatePoolMax": 15,
      "candidatePoolMean": 12,
      "slates": [
@@ -9827,8 +10883,26 @@
        "vapShare": 0.4380194598284399
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "POC": {
+       "POC": 0.89,
+       "WHI": 0.11
+      },
+      "WHI": {
+       "POC": 0.2,
+       "WHI": 0.8
+      }
+     },
+     "alphas": {
+      "POC": {
+       "POC": 1,
+       "WHI": 1
+      },
+      "WHI": {
+       "POC": 1,
+       "WHI": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-5/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-5/focal_seats.json",
@@ -9888,7 +10962,7 @@
       "BLK": 0.9
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": null,
      "candidatePoolMean": null,
      "slates": [
@@ -9913,8 +10987,58 @@
        "vapShare": 0.07109494643525345
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "HIS": {
+       "HIS": 0.8,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.1
+      },
+      "AAPI": {
+       "HIS": 0.03,
+       "AAPI": 0.8,
+       "WAIO": 0.15,
+       "BLK": 0.02
+      },
+      "WAIO": {
+       "HIS": 0.05,
+       "AAPI": 0.1,
+       "WAIO": 0.8,
+       "BLK": 0.05
+      },
+      "BLK": {
+       "HIS": 0.1,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.8
+      }
+     },
+     "alphas": {
+      "HIS": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "AAPI": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "WAIO": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "BLK": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-ballot-cap-5/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-ballot-cap-5/focal_seats.json",
@@ -9977,7 +11101,7 @@
       "BLK": 0.9
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": 10,
      "candidatePoolMean": 7,
      "slates": [
@@ -10002,8 +11126,58 @@
        "vapShare": 0.07109494643525345
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "HIS": {
+       "HIS": 0.8,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.1
+      },
+      "AAPI": {
+       "HIS": 0.03,
+       "AAPI": 0.8,
+       "WAIO": 0.15,
+       "BLK": 0.02
+      },
+      "WAIO": {
+       "HIS": 0.05,
+       "AAPI": 0.1,
+       "WAIO": 0.8,
+       "BLK": 0.05
+      },
+      "BLK": {
+       "HIS": 0.1,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.8
+      }
+     },
+     "alphas": {
+      "HIS": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "AAPI": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "WAIO": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "BLK": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-ballot-cap-5/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-ballot-cap-5/focal_seats.json",
@@ -10066,7 +11240,7 @@
       "BLK": 0.9
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 5,
      "candidatePoolMax": 15,
      "candidatePoolMean": 12,
      "slates": [
@@ -10091,8 +11265,58 @@
        "vapShare": 0.07109494643525345
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "HIS": {
+       "HIS": 0.8,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.1
+      },
+      "AAPI": {
+       "HIS": 0.03,
+       "AAPI": 0.8,
+       "WAIO": 0.15,
+       "BLK": 0.02
+      },
+      "WAIO": {
+       "HIS": 0.05,
+       "AAPI": 0.1,
+       "WAIO": 0.8,
+       "BLK": 0.05
+      },
+      "BLK": {
+       "HIS": 0.1,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.8
+      }
+     },
+     "alphas": {
+      "HIS": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "AAPI": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "WAIO": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "BLK": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-ballot-cap-5/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-ballot-cap-5/focal_seats.json",
@@ -10154,7 +11378,7 @@
       "WHI": 1
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": null,
      "candidatePoolMean": null,
      "slates": [
@@ -10169,8 +11393,26 @@
        "vapShare": 0.4380194598284399
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "POC": {
+       "POC": 0.89,
+       "WHI": 0.11
+      },
+      "WHI": {
+       "POC": 0.2,
+       "WHI": 0.8
+      }
+     },
+     "alphas": {
+      "POC": {
+       "POC": 1,
+       "WHI": 1
+      },
+      "WHI": {
+       "POC": 1,
+       "WHI": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-4/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-4/focal_seats.json",
@@ -10236,7 +11478,7 @@
       "WHI": 1
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": 10,
      "candidatePoolMean": 7,
      "slates": [
@@ -10251,8 +11493,26 @@
        "vapShare": 0.4380194598284399
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "POC": {
+       "POC": 0.89,
+       "WHI": 0.11
+      },
+      "WHI": {
+       "POC": 0.2,
+       "WHI": 0.8
+      }
+     },
+     "alphas": {
+      "POC": {
+       "POC": 1,
+       "WHI": 1
+      },
+      "WHI": {
+       "POC": 1,
+       "WHI": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-4/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-4/focal_seats.json",
@@ -10318,7 +11578,7 @@
       "WHI": 1
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 4,
      "candidatePoolMax": 15,
      "candidatePoolMean": 12,
      "slates": [
@@ -10333,8 +11593,26 @@
        "vapShare": 0.4380194598284399
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "POC": {
+       "POC": 0.89,
+       "WHI": 0.11
+      },
+      "WHI": {
+       "POC": 0.2,
+       "WHI": 0.8
+      }
+     },
+     "alphas": {
+      "POC": {
+       "POC": 1,
+       "WHI": 1
+      },
+      "WHI": {
+       "POC": 1,
+       "WHI": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-4/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-2-blocs-ballot-cap-4/focal_seats.json",
@@ -10394,7 +11672,7 @@
       "BLK": 0.9
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": null,
      "candidatePoolMean": null,
      "slates": [
@@ -10419,8 +11697,58 @@
        "vapShare": 0.07109494643525345
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "HIS": {
+       "HIS": 0.8,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.1
+      },
+      "AAPI": {
+       "HIS": 0.03,
+       "AAPI": 0.8,
+       "WAIO": 0.15,
+       "BLK": 0.02
+      },
+      "WAIO": {
+       "HIS": 0.05,
+       "AAPI": 0.1,
+       "WAIO": 0.8,
+       "BLK": 0.05
+      },
+      "BLK": {
+       "HIS": 0.1,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.8
+      }
+     },
+     "alphas": {
+      "HIS": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "AAPI": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "WAIO": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "BLK": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-ballot-cap-4/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-ballot-cap-4/focal_seats.json",
@@ -10483,7 +11811,7 @@
       "BLK": 0.9
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 7,
      "candidatePoolMax": 10,
      "candidatePoolMean": 7,
      "slates": [
@@ -10508,8 +11836,58 @@
        "vapShare": 0.07109494643525345
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "HIS": {
+       "HIS": 0.8,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.1
+      },
+      "AAPI": {
+       "HIS": 0.03,
+       "AAPI": 0.8,
+       "WAIO": 0.15,
+       "BLK": 0.02
+      },
+      "WAIO": {
+       "HIS": 0.05,
+       "AAPI": 0.1,
+       "WAIO": 0.8,
+       "BLK": 0.05
+      },
+      "BLK": {
+       "HIS": 0.1,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.8
+      }
+     },
+     "alphas": {
+      "HIS": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "AAPI": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "WAIO": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "BLK": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-ballot-cap-4/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-ballot-cap-4/focal_seats.json",
@@ -10572,7 +11950,7 @@
       "BLK": 0.9
      },
      "primaryTurnout": null,
-     "candidatePoolMin": null,
+     "candidatePoolMin": 4,
      "candidatePoolMax": 15,
      "candidatePoolMean": 12,
      "slates": [
@@ -10597,8 +11975,58 @@
        "vapShare": 0.07109494643525345
       }
      ],
-     "cohesion": {},
-     "alphas": {},
+     "cohesion": {
+      "HIS": {
+       "HIS": 0.8,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.1
+      },
+      "AAPI": {
+       "HIS": 0.03,
+       "AAPI": 0.8,
+       "WAIO": 0.15,
+       "BLK": 0.02
+      },
+      "WAIO": {
+       "HIS": 0.05,
+       "AAPI": 0.1,
+       "WAIO": 0.8,
+       "BLK": 0.05
+      },
+      "BLK": {
+       "HIS": 0.1,
+       "AAPI": 0.05,
+       "WAIO": 0.05,
+       "BLK": 0.8
+      }
+     },
+     "alphas": {
+      "HIS": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "AAPI": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "WAIO": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      },
+      "BLK": {
+       "HIS": 1,
+       "AAPI": 1,
+       "WAIO": 1,
+       "BLK": 1
+      }
+     },
      "data": {
       "run": "data/city-charter-amendment-proposal-ballot-cap-4/run.json",
       "focalSeats": "data/city-charter-amendment-proposal-ballot-cap-4/focal_seats.json",
@@ -73806,7 +75234,7 @@
     "WHI": 1
    },
    "primaryTurnout": null,
-   "candidatePoolMin": 7,
+   "candidatePoolMin": 10,
    "candidatePoolMax": 15,
    "candidatePoolMean": 12,
    "cohesion": {
@@ -74721,6 +76149,1644 @@
    }
   },
   {
+   "run": "City Charter Amendment Proposal (2 Blocs) - Ballot Cap 10",
+   "shape": "9 \u00d7 1",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative",
+    "Cambridge"
+   ],
+   "turnout": {
+    "POC": 0.7,
+    "WHI": 1
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 7,
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7,
+   "cohesion": {
+    "POC": {
+     "POC": 0.89,
+     "WHI": 0.11
+    },
+    "WHI": {
+     "POC": 0.2,
+     "WHI": 0.8
+    }
+   },
+   "alphas": {
+    "POC": {
+     "POC": 1,
+     "WHI": 1
+    },
+    "WHI": {
+     "POC": 1,
+     "WHI": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal (2 Blocs) - Ballot Cap 10",
+   "shape": "1 \u00d7 6",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative",
+    "Cambridge"
+   ],
+   "turnout": {
+    "POC": 0.7,
+    "WHI": 1
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 10,
+   "candidatePoolMax": 15,
+   "candidatePoolMean": 12,
+   "cohesion": {
+    "POC": {
+     "POC": 0.89,
+     "WHI": 0.11
+    },
+    "WHI": {
+     "POC": 0.2,
+     "WHI": 0.8
+    }
+   },
+   "alphas": {
+    "POC": {
+     "POC": 1,
+     "WHI": 1
+    },
+    "WHI": {
+     "POC": 1,
+     "WHI": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal (2 Blocs) - Ballot Cap 4",
+   "shape": "9 \u00d7 1",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative",
+    "Cambridge"
+   ],
+   "turnout": {
+    "POC": 0.7,
+    "WHI": 1
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 7,
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7,
+   "cohesion": {
+    "POC": {
+     "POC": 0.89,
+     "WHI": 0.11
+    },
+    "WHI": {
+     "POC": 0.2,
+     "WHI": 0.8
+    }
+   },
+   "alphas": {
+    "POC": {
+     "POC": 1,
+     "WHI": 1
+    },
+    "WHI": {
+     "POC": 1,
+     "WHI": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal (2 Blocs) - Ballot Cap 4",
+   "shape": "1 \u00d7 6",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative",
+    "Cambridge"
+   ],
+   "turnout": {
+    "POC": 0.7,
+    "WHI": 1
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 4,
+   "candidatePoolMax": 15,
+   "candidatePoolMean": 12,
+   "cohesion": {
+    "POC": {
+     "POC": 0.89,
+     "WHI": 0.11
+    },
+    "WHI": {
+     "POC": 0.2,
+     "WHI": 0.8
+    }
+   },
+   "alphas": {
+    "POC": {
+     "POC": 1,
+     "WHI": 1
+    },
+    "WHI": {
+     "POC": 1,
+     "WHI": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal (2 Blocs) - Ballot Cap 5",
+   "shape": "9 \u00d7 1",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative",
+    "Cambridge"
+   ],
+   "turnout": {
+    "POC": 0.7,
+    "WHI": 1
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 7,
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7,
+   "cohesion": {
+    "POC": {
+     "POC": 0.89,
+     "WHI": 0.11
+    },
+    "WHI": {
+     "POC": 0.2,
+     "WHI": 0.8
+    }
+   },
+   "alphas": {
+    "POC": {
+     "POC": 1,
+     "WHI": 1
+    },
+    "WHI": {
+     "POC": 1,
+     "WHI": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal (2 Blocs) - Ballot Cap 5",
+   "shape": "1 \u00d7 6",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative",
+    "Cambridge"
+   ],
+   "turnout": {
+    "POC": 0.7,
+    "WHI": 1
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 5,
+   "candidatePoolMax": 15,
+   "candidatePoolMean": 12,
+   "cohesion": {
+    "POC": {
+     "POC": 0.89,
+     "WHI": 0.11
+    },
+    "WHI": {
+     "POC": 0.2,
+     "WHI": 0.8
+    }
+   },
+   "alphas": {
+    "POC": {
+     "POC": 1,
+     "WHI": 1
+    },
+    "WHI": {
+     "POC": 1,
+     "WHI": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal (2 Blocs) - Ballot Cap 6",
+   "shape": "9 \u00d7 1",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative",
+    "Cambridge"
+   ],
+   "turnout": {
+    "POC": 0.7,
+    "WHI": 1
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 7,
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7,
+   "cohesion": {
+    "POC": {
+     "POC": 0.89,
+     "WHI": 0.11
+    },
+    "WHI": {
+     "POC": 0.2,
+     "WHI": 0.8
+    }
+   },
+   "alphas": {
+    "POC": {
+     "POC": 1,
+     "WHI": 1
+    },
+    "WHI": {
+     "POC": 1,
+     "WHI": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal (2 Blocs) - Ballot Cap 6",
+   "shape": "1 \u00d7 6",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative",
+    "Cambridge"
+   ],
+   "turnout": {
+    "POC": 0.7,
+    "WHI": 1
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 6,
+   "candidatePoolMax": 15,
+   "candidatePoolMean": 12,
+   "cohesion": {
+    "POC": {
+     "POC": 0.89,
+     "WHI": 0.11
+    },
+    "WHI": {
+     "POC": 0.2,
+     "WHI": 0.8
+    }
+   },
+   "alphas": {
+    "POC": {
+     "POC": 1,
+     "WHI": 1
+    },
+    "WHI": {
+     "POC": 1,
+     "WHI": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal (2 Blocs) - Ballot Cap 7",
+   "shape": "9 \u00d7 1",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative",
+    "Cambridge"
+   ],
+   "turnout": {
+    "POC": 0.7,
+    "WHI": 1
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 7,
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7,
+   "cohesion": {
+    "POC": {
+     "POC": 0.89,
+     "WHI": 0.11
+    },
+    "WHI": {
+     "POC": 0.2,
+     "WHI": 0.8
+    }
+   },
+   "alphas": {
+    "POC": {
+     "POC": 1,
+     "WHI": 1
+    },
+    "WHI": {
+     "POC": 1,
+     "WHI": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal (2 Blocs) - Ballot Cap 7",
+   "shape": "1 \u00d7 6",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative",
+    "Cambridge"
+   ],
+   "turnout": {
+    "POC": 0.7,
+    "WHI": 1
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 7,
+   "candidatePoolMax": 15,
+   "candidatePoolMean": 12,
+   "cohesion": {
+    "POC": {
+     "POC": 0.89,
+     "WHI": 0.11
+    },
+    "WHI": {
+     "POC": 0.2,
+     "WHI": 0.8
+    }
+   },
+   "alphas": {
+    "POC": {
+     "POC": 1,
+     "WHI": 1
+    },
+    "WHI": {
+     "POC": 1,
+     "WHI": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal (2 Blocs) - Ballot Cap 8",
+   "shape": "9 \u00d7 1",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative",
+    "Cambridge"
+   ],
+   "turnout": {
+    "POC": 0.7,
+    "WHI": 1
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 7,
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7,
+   "cohesion": {
+    "POC": {
+     "POC": 0.89,
+     "WHI": 0.11
+    },
+    "WHI": {
+     "POC": 0.2,
+     "WHI": 0.8
+    }
+   },
+   "alphas": {
+    "POC": {
+     "POC": 1,
+     "WHI": 1
+    },
+    "WHI": {
+     "POC": 1,
+     "WHI": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal (2 Blocs) - Ballot Cap 8",
+   "shape": "1 \u00d7 6",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative",
+    "Cambridge"
+   ],
+   "turnout": {
+    "POC": 0.7,
+    "WHI": 1
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 8,
+   "candidatePoolMax": 15,
+   "candidatePoolMean": 12,
+   "cohesion": {
+    "POC": {
+     "POC": 0.89,
+     "WHI": 0.11
+    },
+    "WHI": {
+     "POC": 0.2,
+     "WHI": 0.8
+    }
+   },
+   "alphas": {
+    "POC": {
+     "POC": 1,
+     "WHI": 1
+    },
+    "WHI": {
+     "POC": 1,
+     "WHI": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal (2 Blocs) - Ballot Cap 9",
+   "shape": "9 \u00d7 1",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative",
+    "Cambridge"
+   ],
+   "turnout": {
+    "POC": 0.7,
+    "WHI": 1
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 7,
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7,
+   "cohesion": {
+    "POC": {
+     "POC": 0.89,
+     "WHI": 0.11
+    },
+    "WHI": {
+     "POC": 0.2,
+     "WHI": 0.8
+    }
+   },
+   "alphas": {
+    "POC": {
+     "POC": 1,
+     "WHI": 1
+    },
+    "WHI": {
+     "POC": 1,
+     "WHI": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal (2 Blocs) - Ballot Cap 9",
+   "shape": "1 \u00d7 6",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative",
+    "Cambridge"
+   ],
+   "turnout": {
+    "POC": 0.7,
+    "WHI": 1
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 9,
+   "candidatePoolMax": 15,
+   "candidatePoolMean": 12,
+   "cohesion": {
+    "POC": {
+     "POC": 0.89,
+     "WHI": 0.11
+    },
+    "WHI": {
+     "POC": 0.2,
+     "WHI": 0.8
+    }
+   },
+   "alphas": {
+    "POC": {
+     "POC": 1,
+     "WHI": 1
+    },
+    "WHI": {
+     "POC": 1,
+     "WHI": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal - Ballot Cap 10",
+   "shape": "9 \u00d7 1",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative"
+   ],
+   "turnout": {
+    "AAPI": 0.7,
+    "HIS": 0.6,
+    "WAIO": 1,
+    "BLK": 0.9
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 7,
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7,
+   "cohesion": {
+    "HIS": {
+     "HIS": 0.8,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.1
+    },
+    "AAPI": {
+     "HIS": 0.03,
+     "AAPI": 0.8,
+     "WAIO": 0.15,
+     "BLK": 0.02
+    },
+    "WAIO": {
+     "HIS": 0.05,
+     "AAPI": 0.1,
+     "WAIO": 0.8,
+     "BLK": 0.05
+    },
+    "BLK": {
+     "HIS": 0.1,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.8
+    }
+   },
+   "alphas": {
+    "HIS": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "AAPI": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "WAIO": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "BLK": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal - Ballot Cap 10",
+   "shape": "1 \u00d7 6",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative"
+   ],
+   "turnout": {
+    "AAPI": 0.7,
+    "HIS": 0.6,
+    "WAIO": 1,
+    "BLK": 0.9
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 9,
+   "candidatePoolMax": 15,
+   "candidatePoolMean": 12,
+   "cohesion": {
+    "HIS": {
+     "HIS": 0.8,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.1
+    },
+    "AAPI": {
+     "HIS": 0.03,
+     "AAPI": 0.8,
+     "WAIO": 0.15,
+     "BLK": 0.02
+    },
+    "WAIO": {
+     "HIS": 0.05,
+     "AAPI": 0.1,
+     "WAIO": 0.8,
+     "BLK": 0.05
+    },
+    "BLK": {
+     "HIS": 0.1,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.8
+    }
+   },
+   "alphas": {
+    "HIS": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "AAPI": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "WAIO": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "BLK": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal - Ballot Cap 4",
+   "shape": "9 \u00d7 1",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative"
+   ],
+   "turnout": {
+    "AAPI": 0.7,
+    "HIS": 0.6,
+    "WAIO": 1,
+    "BLK": 0.9
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 7,
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7,
+   "cohesion": {
+    "HIS": {
+     "HIS": 0.8,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.1
+    },
+    "AAPI": {
+     "HIS": 0.03,
+     "AAPI": 0.8,
+     "WAIO": 0.15,
+     "BLK": 0.02
+    },
+    "WAIO": {
+     "HIS": 0.05,
+     "AAPI": 0.1,
+     "WAIO": 0.8,
+     "BLK": 0.05
+    },
+    "BLK": {
+     "HIS": 0.1,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.8
+    }
+   },
+   "alphas": {
+    "HIS": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "AAPI": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "WAIO": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "BLK": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal - Ballot Cap 4",
+   "shape": "1 \u00d7 6",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative"
+   ],
+   "turnout": {
+    "AAPI": 0.7,
+    "HIS": 0.6,
+    "WAIO": 1,
+    "BLK": 0.9
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 4,
+   "candidatePoolMax": 15,
+   "candidatePoolMean": 12,
+   "cohesion": {
+    "HIS": {
+     "HIS": 0.8,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.1
+    },
+    "AAPI": {
+     "HIS": 0.03,
+     "AAPI": 0.8,
+     "WAIO": 0.15,
+     "BLK": 0.02
+    },
+    "WAIO": {
+     "HIS": 0.05,
+     "AAPI": 0.1,
+     "WAIO": 0.8,
+     "BLK": 0.05
+    },
+    "BLK": {
+     "HIS": 0.1,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.8
+    }
+   },
+   "alphas": {
+    "HIS": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "AAPI": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "WAIO": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "BLK": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal - Ballot Cap 5",
+   "shape": "9 \u00d7 1",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative"
+   ],
+   "turnout": {
+    "AAPI": 0.7,
+    "HIS": 0.6,
+    "WAIO": 1,
+    "BLK": 0.9
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 7,
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7,
+   "cohesion": {
+    "HIS": {
+     "HIS": 0.8,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.1
+    },
+    "AAPI": {
+     "HIS": 0.03,
+     "AAPI": 0.8,
+     "WAIO": 0.15,
+     "BLK": 0.02
+    },
+    "WAIO": {
+     "HIS": 0.05,
+     "AAPI": 0.1,
+     "WAIO": 0.8,
+     "BLK": 0.05
+    },
+    "BLK": {
+     "HIS": 0.1,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.8
+    }
+   },
+   "alphas": {
+    "HIS": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "AAPI": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "WAIO": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "BLK": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal - Ballot Cap 5",
+   "shape": "1 \u00d7 6",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative"
+   ],
+   "turnout": {
+    "AAPI": 0.7,
+    "HIS": 0.6,
+    "WAIO": 1,
+    "BLK": 0.9
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 5,
+   "candidatePoolMax": 15,
+   "candidatePoolMean": 12,
+   "cohesion": {
+    "HIS": {
+     "HIS": 0.8,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.1
+    },
+    "AAPI": {
+     "HIS": 0.03,
+     "AAPI": 0.8,
+     "WAIO": 0.15,
+     "BLK": 0.02
+    },
+    "WAIO": {
+     "HIS": 0.05,
+     "AAPI": 0.1,
+     "WAIO": 0.8,
+     "BLK": 0.05
+    },
+    "BLK": {
+     "HIS": 0.1,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.8
+    }
+   },
+   "alphas": {
+    "HIS": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "AAPI": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "WAIO": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "BLK": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal - Ballot Cap 6",
+   "shape": "9 \u00d7 1",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative"
+   ],
+   "turnout": {
+    "AAPI": 0.7,
+    "HIS": 0.6,
+    "WAIO": 1,
+    "BLK": 0.9
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 7,
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7,
+   "cohesion": {
+    "HIS": {
+     "HIS": 0.8,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.1
+    },
+    "AAPI": {
+     "HIS": 0.03,
+     "AAPI": 0.8,
+     "WAIO": 0.15,
+     "BLK": 0.02
+    },
+    "WAIO": {
+     "HIS": 0.05,
+     "AAPI": 0.1,
+     "WAIO": 0.8,
+     "BLK": 0.05
+    },
+    "BLK": {
+     "HIS": 0.1,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.8
+    }
+   },
+   "alphas": {
+    "HIS": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "AAPI": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "WAIO": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "BLK": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal - Ballot Cap 6",
+   "shape": "1 \u00d7 6",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative"
+   ],
+   "turnout": {
+    "AAPI": 0.7,
+    "HIS": 0.6,
+    "WAIO": 1,
+    "BLK": 0.9
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 6,
+   "candidatePoolMax": 15,
+   "candidatePoolMean": 12,
+   "cohesion": {
+    "HIS": {
+     "HIS": 0.8,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.1
+    },
+    "AAPI": {
+     "HIS": 0.03,
+     "AAPI": 0.8,
+     "WAIO": 0.15,
+     "BLK": 0.02
+    },
+    "WAIO": {
+     "HIS": 0.05,
+     "AAPI": 0.1,
+     "WAIO": 0.8,
+     "BLK": 0.05
+    },
+    "BLK": {
+     "HIS": 0.1,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.8
+    }
+   },
+   "alphas": {
+    "HIS": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "AAPI": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "WAIO": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "BLK": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal - Ballot Cap 7",
+   "shape": "9 \u00d7 1",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative"
+   ],
+   "turnout": {
+    "AAPI": 0.7,
+    "HIS": 0.6,
+    "WAIO": 1,
+    "BLK": 0.9
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 7,
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7,
+   "cohesion": {
+    "HIS": {
+     "HIS": 0.8,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.1
+    },
+    "AAPI": {
+     "HIS": 0.03,
+     "AAPI": 0.8,
+     "WAIO": 0.15,
+     "BLK": 0.02
+    },
+    "WAIO": {
+     "HIS": 0.05,
+     "AAPI": 0.1,
+     "WAIO": 0.8,
+     "BLK": 0.05
+    },
+    "BLK": {
+     "HIS": 0.1,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.8
+    }
+   },
+   "alphas": {
+    "HIS": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "AAPI": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "WAIO": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "BLK": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal - Ballot Cap 7",
+   "shape": "1 \u00d7 6",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative"
+   ],
+   "turnout": {
+    "AAPI": 0.7,
+    "HIS": 0.6,
+    "WAIO": 1,
+    "BLK": 0.9
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 7,
+   "candidatePoolMax": 15,
+   "candidatePoolMean": 12,
+   "cohesion": {
+    "HIS": {
+     "HIS": 0.8,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.1
+    },
+    "AAPI": {
+     "HIS": 0.03,
+     "AAPI": 0.8,
+     "WAIO": 0.15,
+     "BLK": 0.02
+    },
+    "WAIO": {
+     "HIS": 0.05,
+     "AAPI": 0.1,
+     "WAIO": 0.8,
+     "BLK": 0.05
+    },
+    "BLK": {
+     "HIS": 0.1,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.8
+    }
+   },
+   "alphas": {
+    "HIS": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "AAPI": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "WAIO": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "BLK": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal - Ballot Cap 8",
+   "shape": "9 \u00d7 1",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative"
+   ],
+   "turnout": {
+    "AAPI": 0.7,
+    "HIS": 0.6,
+    "WAIO": 1,
+    "BLK": 0.9
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 7,
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7,
+   "cohesion": {
+    "HIS": {
+     "HIS": 0.8,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.1
+    },
+    "AAPI": {
+     "HIS": 0.03,
+     "AAPI": 0.8,
+     "WAIO": 0.15,
+     "BLK": 0.02
+    },
+    "WAIO": {
+     "HIS": 0.05,
+     "AAPI": 0.1,
+     "WAIO": 0.8,
+     "BLK": 0.05
+    },
+    "BLK": {
+     "HIS": 0.1,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.8
+    }
+   },
+   "alphas": {
+    "HIS": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "AAPI": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "WAIO": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "BLK": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal - Ballot Cap 8",
+   "shape": "1 \u00d7 6",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative"
+   ],
+   "turnout": {
+    "AAPI": 0.7,
+    "HIS": 0.6,
+    "WAIO": 1,
+    "BLK": 0.9
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 8,
+   "candidatePoolMax": 15,
+   "candidatePoolMean": 12,
+   "cohesion": {
+    "HIS": {
+     "HIS": 0.8,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.1
+    },
+    "AAPI": {
+     "HIS": 0.03,
+     "AAPI": 0.8,
+     "WAIO": 0.15,
+     "BLK": 0.02
+    },
+    "WAIO": {
+     "HIS": 0.05,
+     "AAPI": 0.1,
+     "WAIO": 0.8,
+     "BLK": 0.05
+    },
+    "BLK": {
+     "HIS": 0.1,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.8
+    }
+   },
+   "alphas": {
+    "HIS": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "AAPI": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "WAIO": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "BLK": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal - Ballot Cap 9",
+   "shape": "9 \u00d7 1",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative"
+   ],
+   "turnout": {
+    "AAPI": 0.7,
+    "HIS": 0.6,
+    "WAIO": 1,
+    "BLK": 0.9
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 7,
+   "candidatePoolMax": 10,
+   "candidatePoolMean": 7,
+   "cohesion": {
+    "HIS": {
+     "HIS": 0.8,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.1
+    },
+    "AAPI": {
+     "HIS": 0.03,
+     "AAPI": 0.8,
+     "WAIO": 0.15,
+     "BLK": 0.02
+    },
+    "WAIO": {
+     "HIS": 0.05,
+     "AAPI": 0.1,
+     "WAIO": 0.8,
+     "BLK": 0.05
+    },
+    "BLK": {
+     "HIS": 0.1,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.8
+    }
+   },
+   "alphas": {
+    "HIS": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "AAPI": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "WAIO": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "BLK": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    }
+   }
+  },
+  {
+   "run": "City Charter Amendment Proposal - Ballot Cap 9",
+   "shape": "1 \u00d7 6",
+   "totalSeats": 15,
+   "rules": [
+    "IRV",
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative"
+   ],
+   "turnout": {
+    "AAPI": 0.7,
+    "HIS": 0.6,
+    "WAIO": 1,
+    "BLK": 0.9
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 9,
+   "candidatePoolMax": 15,
+   "candidatePoolMean": 12,
+   "cohesion": {
+    "HIS": {
+     "HIS": 0.8,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.1
+    },
+    "AAPI": {
+     "HIS": 0.03,
+     "AAPI": 0.8,
+     "WAIO": 0.15,
+     "BLK": 0.02
+    },
+    "WAIO": {
+     "HIS": 0.05,
+     "AAPI": 0.1,
+     "WAIO": 0.8,
+     "BLK": 0.05
+    },
+    "BLK": {
+     "HIS": 0.1,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.8
+    }
+   },
+   "alphas": {
+    "HIS": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "AAPI": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "WAIO": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "BLK": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    }
+   }
+  },
+  {
    "run": "Basic - 3 X 3 - WAIO Low Polarization",
    "shape": "3 \u00d7 3",
    "totalSeats": 9,
@@ -75258,7 +78324,7 @@
     "BLK": 0.9
    },
    "primaryTurnout": null,
-   "candidatePoolMin": 7,
+   "candidatePoolMin": 9,
    "candidatePoolMax": 15,
    "candidatePoolMean": 12,
    "cohesion": {
@@ -75867,6 +78933,80 @@
      "AAPI": 0.05,
      "WAIO": 0.05,
      "BLK": 0.1
+    },
+    "AAPI": {
+     "HIS": 0.03,
+     "AAPI": 0.8,
+     "WAIO": 0.15,
+     "BLK": 0.02
+    },
+    "WAIO": {
+     "HIS": 0.05,
+     "AAPI": 0.1,
+     "WAIO": 0.8,
+     "BLK": 0.05
+    },
+    "BLK": {
+     "HIS": 0.1,
+     "AAPI": 0.05,
+     "WAIO": 0.05,
+     "BLK": 0.8
+    }
+   },
+   "alphas": {
+    "HIS": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "AAPI": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "WAIO": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    },
+    "BLK": {
+     "HIS": 1,
+     "AAPI": 1,
+     "WAIO": 1,
+     "BLK": 1
+    }
+   }
+  },
+  {
+   "run": "Basic - 100 profiles per district",
+   "shape": "3 \u00d7 3",
+   "totalSeats": 9,
+   "rules": [
+    "STV"
+   ],
+   "voterModels": [
+    "Impulsive",
+    "Deliberative"
+   ],
+   "turnout": {
+    "AAPI": 0.75,
+    "HIS": 0.75,
+    "WAIO": 1,
+    "BLK": 1
+   },
+   "primaryTurnout": null,
+   "candidatePoolMin": 4,
+   "candidatePoolMax": null,
+   "candidatePoolMean": null,
+   "cohesion": {
+    "HIS": {
+     "HIS": 0.8,
+     "AAPI": 0.05,
+     "WAIO": 0.1,
+     "BLK": 0.05
     },
     "AAPI": {
      "HIS": 0.03,

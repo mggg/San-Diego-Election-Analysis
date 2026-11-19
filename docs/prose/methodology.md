@@ -1,6 +1,6 @@
 ## 3.1 Districting Plan Ensembles
 
-To generate a sufficient number of distinct districting plans, we use GerryChain to run a 10,000-step ReCom chain and subsample 100 plans that will be used in our election simulations. We do this for every set of elections that require a different number of districts.
+To generate a sufficient number of distinct districting plans, we use GerryChain to run a 10,000-step ReCom chain and subsample 50 and 100 plans that will be used in our election simulations. We do this for every set of elections that require a different number of districts.
 
 An ensemble depends only on how many districts a plan has, not on how many seats each district fills, so every configuration sharing a district count draws on the same set of maps — for example, the 3 × 3 and 3 × 5 configurations both use three-district plans and differ only in district magnitude.
 
