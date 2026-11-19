@@ -38,7 +38,7 @@ from pipeline.summarize_results import (
     _rule_display_name,
 )
 from pipeline.settings_generator import minimum_candidates
-from pipeline.utils.helpers import PROJECT_DIR, load_json
+from pipeline.utils.helpers import OBSERVED_MIN_CANDIDATES_PATH, PROJECT_DIR, load_json
 
 DOCS_DIR = PROJECT_DIR / "docs"
 ARTIFACT_FILES = ("run.json", "focal_seats.json", "slate_seats.json")
@@ -755,6 +755,27 @@ def restrict_cross_run(manifest: Dict[str, Any], page_runs: List[Dict[str, Any]]
               f"dropped {dropped} not published by any section.")
 
 
+# Smallest candidate list actually seen on a ballot, per run, for the truncation
+# runs. minimum_candidates() is a config floor, so it cannot move with a ballot
+# cap; the observed value can (min(cap, full-ballot minimum)). cap_ballot_length
+# measures it while it cuts the profiles and records it in a small file, so
+# building the report never opens profiles.zip and still works where the
+# archives are absent.
+# Path and writer: pipeline.cap_ballot_length (see helpers.OBSERVED_MIN_CANDIDATES_PATH).
+# The values were measured on the 1 X 6 STV contest (the tier the cap applies to),
+# so only that contest's row uses them; the 9 X 1 IRV row keeps the config floor.
+OBSERVED_MIN_TIER = 1
+
+
+def _observed_min_candidates(path: Optional[Path] = None) -> Dict[str, int]:
+    """Run name -> observed minimum; empty if the file is absent or unreadable."""
+    path = path or OBSERVED_MIN_CANDIDATES_PATH
+    try:
+        return {str(k): int(v) for k, v in load_json(path).items()}
+    except (OSError, ValueError, TypeError, AttributeError):
+        return {}
+
+
 def _config_reference(config_dir: Optional[Path] = None) -> List[Dict[str, Any]]:
     """
     The configuration table, read from configs/ rather than hand-maintained --
@@ -765,8 +786,11 @@ def _config_reference(config_dir: Optional[Path] = None) -> List[Dict[str, Any]]
     configs are written in.
     """
     config_dir = config_dir or (PROJECT_DIR / "configs")
+    observed_min = _observed_min_candidates()
     rows = []
-    for path in sorted(config_dir.glob("*.json")):
+    # Recursive: the ballot-cap runs live in configs/ballot_caps/, and a run whose
+    # config isn't found here has no row for the parameters card to read.
+    for path in sorted(config_dir.rglob("*.json")):
         cfg = load_json(path)
         for dc in cfg.get("district_configs", []):
             rows.append({
@@ -785,7 +809,10 @@ def _config_reference(config_dir: Optional[Path] = None) -> List[Dict[str, Any]]
                 # anyone chose -- see settings_generator.minimum_candidates. It
                 # completes the min/mean/max the card reports, and it is derived
                 # here because the run artifacts have never carried it.
-                "candidatePoolMin": minimum_candidates(cfg),
+                "candidatePoolMin": (
+                    observed_min.get(cfg.get("run_name"))
+                    if dc["num_districts"] == OBSERVED_MIN_TIER else None
+                ) or minimum_candidates(cfg),
                 "candidatePoolMax": dc.get("candidate_pool_max"),
                 "candidatePoolMean": dc.get("candidate_pool_mean"),
                 # The configured matrices, not the per-district ones in the

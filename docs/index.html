@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+"
         crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="fonts/fonts.css">
-  <link rel="stylesheet" href="css/report.css?v=bdb826f728">
+  <link rel="stylesheet" href="css/report.css?v=c08849570a">
 </head>
 
 <body data-bs-spy="scroll" data-bs-target="#toc-nav" data-bs-offset="90" tabindex="0">
@@ -71,20 +71,21 @@
           <h2>Abstract</h2>
           <p>We analyze geography, demographics, and voting patterns in San Diego, CA in order to compare
 the likely performance of various systems of electing members of the City Council.
-This report seeks to work with the most recent demographic data from the 2020 Census, new election systems, the introduction of score-based voting, and more refined techniques. We will additionally be examining the impacts of the included reform proposals on representation for Asian voters, a community that represents 20% of the voting age population in the city.</p>
+This report seeks to work with the most recent demographic data from the 2020 Census, new election systems, the introduction of score-based voting, and more refined techniques. We will additionally be examining the impacts of the included reform proposals on representation across four blocs of voters.</p>
 
         </section>
         <section id="background" class="prose mb-5">
           <h2>Background</h2>
-          <p>In 2011, San Diego City proposed for the first time a 9-district plan with single-member district representation (&quot;<a href="https://en.wikipedia.org/wiki/2012_San_Diego_elections">2012 San Diego elections</a>,&quot; <em>Wikipedia</em>; &quot;<a href="https://voiceofsandiego.org/2021/12/29/after-redistricting-advocates-argue-for-more-council-districts-or-none-at-all/">After Redistricting, Advocates Argue for More Districts. Or None At All.</a>,&quot; <em>Voice of San Diego</em>, Feb. 23, 2022). Since then the city has kept the 9 single-member council districts and has gone through a redistricting process in 2021 using the 2020 Census (&quot;<a href="https://www.sandiego.gov/redistricting-commission">Redistricting Commission</a>,&quot; City of San Diego; &quot;<a href="https://www.kpbs.org/news/midday-edition/2021/12/16/san-diego-finalizes-new-map-of-city-council-districts">San Diego finalizes new map of City Council districts</a>,&quot; <em>KPBS</em>, Dec. 17, 2021). On the other hand, San Diego has staggered elections with a 4-year cycle--even districts (2, 4, 6, 8) in one cycle, odd districts (1, 3, 5, 7, 9) in the next. Additionally, the city uses a two-round system with a primary held in June followed by a runoff in November between the top-two candidates in each district.</p>
-<p>It is valid to state that this redistricting process, like every one since the City Charter created the independent Redistricting Commission in 1992, was carried out by that independent commission rather than the city council (&quot;<a href="https://docs.sandiego.gov/citycharter/Article%20II.pdf">City Charter, Article II</a>,&quot; §§5-5.1; &quot;<a href="https://www.sandiego.gov/redistricting-commission">Redistricting Commission</a>,&quot; City of San Diego). Based on that, it is interesting to analyze how proportionality has been affected or improved for all communities.  While White and Hispanic voters seem to achieve at least proportional representation regularly, the Asian population seems to be growing, yet they are still consistently underrepresented within city government. Black voters see consistent representation from their preferred candidates over time - primarily within District 4.</p>
-<p>This report employs new and updated tools like GerryChain and VoteKit in order to simulate a variety of electoral systems and scenarios. Primarily, we look at simulations of multi-member districts elected by Single Transferable Vote (STV), low target-bloc turnouts, and Cambridge Ballot truncation.</p>
+          <p>In 2011, the City of San Diego implemented, for the first time, a nine-district plan with single-member district representation (<a href="https://en.wikipedia.org/wiki/2012_San_Diego_elections">2012 San Diego elections</a>). The city has kept this structure of nine districts and nine councilmembers. In 2021, it redrew its district boundaries using data from the <a href="https://www.kpbs.org/news/midday-edition/2021/12/16/san-diego-finalizes-new-map-of-city-council-districts">2020 Census</a>. Redistricting is carried out by the city's independent <a href="https://www.sandiego.gov/redistricting-commission">Redistricting Commission</a>, which was created by the <a href="https://docs.sandiego.gov/citycharter/Article%20II.pdf">City Charter</a> in 1992.</p>
+<p>San Diego also uses staggered elections on a four-year cycle: even-numbered districts (2, 4, 6, 8) and odd-numbered districts (1, 3, 5, 7, 9) are elected in alternating election years. The city uses a two-round system, with a primary in June followed by a November runoff between the top two candidates in each district.</p>
+<p>Given this system, it is worth analyzing how proportionality for minority communities could be improved. White and Hispanic voters appear to achieve at least proportional representation regularly. The Asian population appears to be growing, yet it remains consistently underrepresented in city government. Black voters have seen consistent representation of their preferred candidates over time with one candidate, primarily in District 4.</p>
+<p>This report uses new and updated tools, such as <a href="https://github.com/mggg/GerryChain">GerryChain</a> and <a href="https://github.com/mggg/VoteKit">VoteKit</a>, to simulate a variety of electoral systems and scenarios. Primarily, we examine simulations of multi-member districts elected by <a href="https://en.wikipedia.org/wiki/Single_transferable_vote">Single Transferable Vote (STV)</a>, low target-bloc turnout, and Cambridge ballot truncation.</p>
 
         </section>
         <section id="methodology" class="prose mb-5">
           <h2>Methodology</h2>
           <h2>3.1 Districting Plan Ensembles</h2>
-<p>To generate a sufficient number of distinct districting plans, we use GerryChain to run a 10,000-step ReCom chain and subsample 100 plans that will be used in our election simulations. We do this for every set of elections that require a different number of districts.</p>
+<p>To generate a sufficient number of distinct districting plans, we use GerryChain to run a 10,000-step ReCom chain and subsample 50 and 100 plans that will be used in our election simulations. We do this for every set of elections that require a different number of districts.</p>
 <p>An ensemble depends only on how many districts a plan has, not on how many seats each district fills, so every configuration sharing a district count draws on the same set of maps — for example, the 3 × 3 and 3 × 5 configurations both use three-district plans and differ only in district magnitude.</p>
 <p>Additionally, we run elections where San Diego city is represented as one single district. In these scenarios we don't need to run GerryChain, but we do still perform 100 subsamples. The reason for this is that for all subsampled maps we generate random candidate pools of variable size whose slate composition is roughly proportional to bloc VAP share.</p>
 <p>The table below lists every districting configuration used in this study, written as <em>districts × seats per district</em>, and the scenarios built on each.</p>
@@ -408,7 +409,7 @@ $$</div>
           <section id="run-basic-3-x-3" class="run mb-5" data-run="basic-3-x-3">
             <div class="run-main">
             <h3 class="h4 mt-4">Warmup - 3 X 3 STV</h3>
-            <div class="run-prose"><p>In this scenario, we explore the expected outcomes of a hypothetical electoral shift that redistricts San Diego into three districts with three elected members in each - running three different elections using Single Transferable Vote (STV), Cumlative, and Limited voting rules. STV uses the deliberative and impulsive models (representing 3000 elections each) while Cumulative and Limited use the &quot;Name Cumulative&quot; model that allows for voters to &quot;plump&quot; their votes on preferred candidates.</p>
+            <div class="run-prose"><p>In this scenario, we explore the expected outcomes of a hypothetical electoral shift that redistricts San Diego into three districts with three elected members in each - running three different sets of elections using the Impulsive, Deliberative, and Cambridge voter models in two-bloc simulations, and solely Impulsive and Deliberative in four-bloc configurations. Adjust the filters and toggles below to explore the results.</p>
 </div>
 
             <div class="run-controls" data-controls="basic-3-x-3"></div>
@@ -498,7 +499,7 @@ $$</div>
           <section id="run-alternative-electoral-systems" class="run mb-5" data-run="alternative-electoral-systems">
             <div class="run-main">
             <h3 class="h4 mt-4">Alternative Electoral Systems</h3>
-            <div class="run-prose"><p>Here, we take San Diego's current 9 X 1 district configuration and explore the expected outcomes of alternative election systems. San Diego's current electoral system is closest to Top Two, where the the top-two vote getters in a primary election advance to a runoff general election. We also look at Alaska, which is similar to Top Two but takes the top four winners in the primary and uses STV in the general election. Plurality is included due to its current popularity and status as the &quot;default&quot; for American elections, while IRV is included due to its rising popularity.</p>
+            <div class="run-prose"><p>Here we explore a variety of electoral systems and simulate election results using the methodology described in this report. Since these system configurations vary in district number and electable seats, we have opted to modify variables like candidate pool size to more realistically model district contests. When toggling between voting systems, you will see information about each within the Parameters and Scenario Stats card associated with this section. Note the changing values for Candidate Availability and Candidates per District.</p>
 </div>
 
             <div class="run-controls" data-controls="alternative-electoral-systems"></div>
@@ -542,9 +543,9 @@ $$</div>
           </section>
           <section id="run-basic-3-x-3-truncation" class="run mb-5" data-run="basic-3-x-3-truncation">
             <div class="run-main">
-            <h3 class="h4 mt-4">Basic - 3 X 3 + Truncation</h3>
-            <p class="todo">[Description to be written — edit
-               <code>docs/prose/runs/basic-3-x-3-truncation.md</code>.]</p>
+            <h3 class="h4 mt-4">3 X 3 STV, Truncation</h3>
+            <div class="run-prose"><p>Often times, elections using a form of RCV limit the number of candidates that voters can rank on their ballots - even for elections with large candidate pools. In this scenario, we ask how the electoral system modeled in the Basic scenario would be impacted if we set a minimum and maximum ballot length in each of the 3 X 3 STV district contests. We run two different simulations; one of them sets the maximum ballot length to six, and the other pins it to 10 ranked candidates. In each simulation, we enforce a minimum ballot length of three since each district has three seats available.</p>
+</div>
 
             <div class="run-controls" data-controls="basic-3-x-3-truncation"></div>
 
@@ -678,7 +679,7 @@ $$</div>
           <section id="run-city-charter-amendment-proposal-truncation" class="run mb-5" data-run="city-charter-amendment-proposal-truncation">
             <div class="run-main">
             <h3 class="h4 mt-4">City Charter Amendment Proposal, Truncation</h3>
-            <div class="run-prose"><p>Often times, elections using a form of RCV limit the number of candidates that voters can rank on their ballots - even for elections with large candidate pools. In this scenario, we ask how the electoral system modeled in the City Charter Amendment Proposal would be impacted if we set a minimum and maximum ballot length - specifically in the 1 X 6 STV component of the election. We run two different simulations; one of them sets the maximum ballot length to six, and the other pins it to 10 ranked candidates. In each simulation, we enforce a minimum ballot length of six since we have six at-large seats available.</p>
+            <div class="run-prose"><p>Elections that use ranked ballots often limit how many candidates a voter may rank, even when the candidate pool is large. In this scenario, we ask what such a limit would mean for the electoral system in the City Charter Amendment Proposal. We generate one set of ballots in which every voter ranks every candidate, shown here as Full, and then cut each ballot in the 1 X 6 STV component to its first N choices, for N from 10 down to 4. Because every option uses the same ballots, any difference between options comes from the ballot-length limit alone. The nine single-winner IRV districts are left untouched, so their results, and the candidate pools in every district, are the same under every option. Use the Ballot length toggle to move from Full to 4.</p>
 </div>
 
             <div class="run-controls" data-controls="city-charter-amendment-proposal-truncation"></div>
@@ -730,15 +731,29 @@ $$</div>
 
         <section id="appendix" class="prose mb-5">
           <h2>Appendix</h2>
-<h2>Appendix A. Bounded Ballot Truncation</h2>
-<p>Section 3.5 describes the truncation applied by default to every scenario's PL and BT profiles: each ballot's ranked length is drawn from one of two empirical Cambridge distributions, chosen by whether the ballot's first choice belongs to the historical majority or minority slate. The <strong>Truncation</strong> scenario (3 × 3, both bloc models) goes one step further, restricting those same distributions to a fixed length window before sampling from them. This appendix documents that restriction and validates it against the scenario's own generated ballots.</p>
-<h3>A.1 Restricting the Historical Distributions</h3>
-<p>The historical distributions place non-trivial probability mass across the full range Cambridge's ballots have ever taken, including ballots as short as one candidate and as long as the slate pool itself. The Truncation scenario instead clips each of the two historical distributions to an inclusive length window and renormalizes what remains, so the result is still a valid probability distribution — just one confined to a narrower range than Cambridge's raw history. Its configs, <code>configs/basic-truncation.json</code> for the four-bloc model and <code>configs/2b-basic-truncation.json</code> for the two-bloc model, set that window to <code>[3, 6]</code>: no simulated voter in either version of the scenario ranks fewer than three or more than six candidates, however long their unrestricted ballot would otherwise have run.</p>
-<p>Bounding the distribution this way models a ballot design constraint rather than a behavioral one — a jurisdiction that caps how many candidates a voter may rank, as opposed to a voter who simply stops ranking early on their own. It asks a different question from the unbounded truncation applied everywhere else: not &quot;how does ballot length vary when voters behave like Cambridge's electorate,&quot; but &quot;how do outcomes change when every voter's ballot is confined to the same length window.&quot;</p>
-<h3>A.2 Validation</h3>
-<p>To confirm the bound is respected, we compare each truncated ballot against the length it would have had without truncation — the full slate ranking the PL/BT generators produced before Cambridge truncation was applied. The figure below plots both distributions for the Truncation scenario's 3 × 3 configuration: once under the four-bloc model, where WAIO, HIS, AAPI, and BLK are modeled as four separate blocs, and once under the two-bloc model, where WAIO is set against a single pooled POC bloc.</p>
-<p><img src="assets/ballot_length_truncation_comparison.png" alt="Truncated vs. full ballot length, Basic 3 × 3 Truncation scenario" /></p>
-<p>Under both bloc models, the truncated (actual) ballots fall entirely within the configured <code>[3, 6]</code> window, while the full, untruncated ballots those same voters would otherwise have cast extend out to ten — this holds regardless of how finely the electorate is split into blocs, since the truncation lengths are drawn independently of bloc identity once a ballot's majority/minority group is fixed. Over the lengths the two distributions share, five and six, they track each other closely, which is expected: the bounded distribution is the historical one restricted and renormalized, not a distribution drawn from a different model.</p>
+          <h2>A. Ballot Truncation Methodology</h2>
+<p>Both truncation methods described below act as a second pass over an already-generated PL or BT profile (Section 3.4): they never change which candidates a voter prefers or in what order, only how far down that ranking the ballot is cut off. Both also classify a ballot by its <em>first-ranked candidate's</em> slate rather than by the voter's bloc — a minority-bloc voter whose cohesion draw happened to put a majority candidate first is truncated using the majority distribution, matching how the underlying Cambridge data itself was split. A run's config pools every candidate slate into two groups, <code>majority_slates</code> and <code>minority_slates</code>, and each ballot's truncation length is then drawn independently for every voter who cast it. For instance, a ballot cast by 40 identical voters produces 40 independent length draws, not one length applied to all 40.</p>
+<h3>A.1 Cambridge Historical Truncation</h3>
+<p>This is the default method (<code>cambridge_truncation.method = &quot;historical&quot;</code>), used for the Section 3.5 scenarios.</p>
+<ol>
+<li><p><strong>Reduce the historical shapes to this district.</strong> Cambridge's 2009–2017 municipal elections recorded, as Cast Vote Records, the full <em>shape</em> of each ballot — not just its length, but which slate occupied each position — separately for ballots that started with the historical majority (&quot;W&quot;) slate and ballots that started with the historical minority (&quot;C&quot;) slate. VoteKit ships these two shape distributions and a reduction routine (<code>_reduce_ballot_pmfs</code>) that rescales a shape distribution to a target candidate count. We call that routine against a stand-in two-slate config whose &quot;majority&quot; and &quot;minority&quot; slates are this district's actual pooled candidate lists.</p>
+</li>
+<li><p><strong>Collapse to a length marginal.</strong> Truncation only needs to know how many candidates a ballot ranks, so each reduced shape distribution is collapsed to <code>{length: probability}</code> by summing the probability of every shape of a given length. This generates two distributions, one for majority-first ballots and one for minority-first ballots, where we are going to sample.</p>
+</li>
+<li><p><strong>Sample a length per voter.</strong> For each already-generated ballot (PL and BT), its first choice determines whether it draws from the majority or minority distribution. Every voter who cast that exact ranking (the ballot's weight) draws an independent length from that distribution, and the ranking is cut to that length—or left at its full length if the sampled length is longer than the ballot already is. The truncated ballots are then re-grouped into a new profile with the same candidate set.</p>
+</li>
+</ol>
+<h3>A.2 Cap Truncation</h3>
+<p>This method models a ballot-design rule rather than voter behavior: a jurisdiction that lets each voter rank at most <em>N</em> candidates. Unlike A.1, it involves no random draw and does not sort ballots by their first-ranked candidate's slate — every ballot in the affected contest is cut at the same position, and a ballot that is already shorter than <em>N</em> is left as it is. It is used for the City Charter Truncation scenario, where the <strong>Ballot length</strong> toggle moves from Full ballots to caps of 10 through 4.</p>
+<ol>
+<li><p>The base run (<code>City Charter Amendment Proposal - Full Ballots</code>, and its two-bloc counterpart) uses the charter configuration, so every PL and BT voter ranks every candidate in the district. The two-bloc configuration also includes the Cambridge voter model, whose ballots are drawn from Cambridge data and vary in length. In the 1 X 6 STV contest the candidate pool averages 12.18 candidates in the four-bloc run (between 9 and 15) and 11.98 in the two-bloc run (between 10 and 15), so a full PL or BT ballot ranks about twelve candidates.</p>
+</li>
+<li><p>For each cap <em>N</em> = 10, 9, …, 4, every profile in the 1 X 6 STV contest keeps only the first <em>N</em> ranked candidates of each ballot, with the ballot's weight unchanged, and ballots that become identical once cut are merged into one. The nine 9 X 1 IRV districts are not modified. Every cap is applied to the same ballots — the same districts, candidates and repetitions — so a difference between caps comes from the cap alone and not from a new random draw. This step is implemented in <code>pipeline/cap_ballot_length.py</code>.</p>
+</li>
+<li><p>Each cap becomes its own run, named <code>… - Ballot Cap N</code>, simulated with the same voting rules and summarized like any other run. Because the 9 X 1 IRV profiles are identical to those in the full-ballot run, their election results are carried over from it and only the 1 X 6 STV elections are run again. The combined 15-seat view therefore changes only through its STV component.</p>
+</li>
+</ol>
+
         </section>
       </main>
     </div>
@@ -748,7 +763,7 @@ $$</div>
     <div class="container-xl text-center">
       <p class="mb-1">Data and Democracy Research Initiative — San Diego City Council Election Analysis</p>
       <p class="mb-1"><a href="https://github.com/mggg/San-Diego-Election-Analysis" target="_blank" rel="noopener">View the repository on GitHub</a></p>
-      <p class="generated mb-0">Generated 2026-08-22T01:34:35+00:00</p>
+      <p class="generated mb-0">Generated 2026-11-19T21:07:10+00:00</p>
     </div>
   </footer>
 
@@ -781,15 +796,15 @@ $$</div>
 
   <script type="importmap">{
  "imports": {
-  "./js/charts/availability.js": "./js/charts/availability.js?v=bdb826f728",
-  "./js/charts/axes.js": "./js/charts/axes.js?v=bdb826f728",
-  "./js/charts/bubble.js": "./js/charts/bubble.js?v=bdb826f728",
-  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=bdb826f728",
-  "./js/charts/histogram.js": "./js/charts/histogram.js?v=bdb826f728",
-  "./js/charts/slate.js": "./js/charts/slate.js?v=bdb826f728",
-  "./js/report.js": "./js/report.js?v=bdb826f728"
+  "./js/charts/availability.js": "./js/charts/availability.js?v=c08849570a",
+  "./js/charts/axes.js": "./js/charts/axes.js?v=c08849570a",
+  "./js/charts/bubble.js": "./js/charts/bubble.js?v=c08849570a",
+  "./js/charts/crossrun.js": "./js/charts/crossrun.js?v=c08849570a",
+  "./js/charts/histogram.js": "./js/charts/histogram.js?v=c08849570a",
+  "./js/charts/slate.js": "./js/charts/slate.js?v=c08849570a",
+  "./js/report.js": "./js/report.js?v=c08849570a"
  }
 }</script>
-  <script type="module" src="js/report.js?v=bdb826f728"></script>
+  <script type="module" src="js/report.js?v=c08849570a"></script>
 </body>
 </html>

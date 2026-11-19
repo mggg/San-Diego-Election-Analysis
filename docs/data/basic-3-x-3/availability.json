@@ -475,40 +475,6 @@
    "numDistricts": 3,
    "winners": 3,
    "metric": "winRate",
-   "system": "CUMULATIVE",
-   "systemLabel": "3 X 3 Cumulative",
-   "label": "Win rate",
-   "format": "percent",
-   "zeroLabel": "No HIS winner at this rank",
-   "restricted": true,
-   "values": [
-    {
-     "rank": 1,
-     "value": 58.2609,
-     "won": 134,
-     "contests": 230
-    },
-    {
-     "rank": 2,
-     "value": 94.2857,
-     "won": 660,
-     "contests": 700
-    },
-    {
-     "rank": 3,
-     "value": 95.9794,
-     "won": 931,
-     "contests": 970
-    }
-   ]
-  },
-  {
-   "slate": "HIS",
-   "slateLabel": "HIS",
-   "slateVapShare": 0.2657385606624199,
-   "numDistricts": 3,
-   "winners": 3,
-   "metric": "winRate",
    "system": "FASTSTV",
    "systemLabel": "3 X 3 STV",
    "label": "Win rate",
@@ -533,40 +499,6 @@
      "value": 100.0,
      "won": 1940,
      "contests": 1940
-    }
-   ]
-  },
-  {
-   "slate": "HIS",
-   "slateLabel": "HIS",
-   "slateVapShare": 0.2657385606624199,
-   "numDistricts": 3,
-   "winners": 3,
-   "metric": "winRate",
-   "system": "LIMITED",
-   "systemLabel": "3 X 3 Limited",
-   "label": "Win rate",
-   "format": "percent",
-   "zeroLabel": "No HIS winner at this rank",
-   "restricted": true,
-   "values": [
-    {
-     "rank": 1,
-     "value": 58.2609,
-     "won": 134,
-     "contests": 230
-    },
-    {
-     "rank": 2,
-     "value": 92.5714,
-     "won": 648,
-     "contests": 700
-    },
-    {
-     "rank": 3,
-     "value": 95.0515,
-     "won": 922,
-     "contests": 970
     }
    ]
   },
@@ -609,40 +541,6 @@
    "numDistricts": 3,
    "winners": 3,
    "metric": "winRate",
-   "system": "CUMULATIVE",
-   "systemLabel": "3 X 3 Cumulative",
-   "label": "Win rate",
-   "format": "percent",
-   "zeroLabel": "No AAPI winner at this rank",
-   "restricted": true,
-   "values": [
-    {
-     "rank": 1,
-     "value": 86.875,
-     "won": 278,
-     "contests": 320
-    },
-    {
-     "rank": 2,
-     "value": 88.0488,
-     "won": 361,
-     "contests": 410
-    },
-    {
-     "rank": 3,
-     "value": 95.6471,
-     "won": 813,
-     "contests": 850
-    }
-   ]
-  },
-  {
-   "slate": "AAPI",
-   "slateLabel": "AAPI",
-   "slateVapShare": 0.20432553215884638,
-   "numDistricts": 3,
-   "winners": 3,
-   "metric": "winRate",
    "system": "FASTSTV",
    "systemLabel": "3 X 3 STV",
    "label": "Win rate",
@@ -667,40 +565,6 @@
      "value": 97.1176,
      "won": 1651,
      "contests": 1700
-    }
-   ]
-  },
-  {
-   "slate": "AAPI",
-   "slateLabel": "AAPI",
-   "slateVapShare": 0.20432553215884638,
-   "numDistricts": 3,
-   "winners": 3,
-   "metric": "winRate",
-   "system": "LIMITED",
-   "systemLabel": "3 X 3 Limited",
-   "label": "Win rate",
-   "format": "percent",
-   "zeroLabel": "No AAPI winner at this rank",
-   "restricted": true,
-   "values": [
-    {
-     "rank": 1,
-     "value": 85.625,
-     "won": 274,
-     "contests": 320
-    },
-    {
-     "rank": 2,
-     "value": 88.2927,
-     "won": 362,
-     "contests": 410
-    },
-    {
-     "rank": 3,
-     "value": 95.2941,
-     "won": 810,
-     "contests": 850
     }
    ]
   },
@@ -743,40 +607,6 @@
    "numDistricts": 3,
    "winners": 3,
    "metric": "winRate",
-   "system": "CUMULATIVE",
-   "systemLabel": "3 X 3 Cumulative",
-   "label": "Win rate",
-   "format": "percent",
-   "zeroLabel": "No WAIO winner at this rank",
-   "restricted": true,
-   "values": [
-    {
-     "rank": 1,
-     "value": 99.1111,
-     "won": 892,
-     "contests": 900
-    },
-    {
-     "rank": 2,
-     "value": 100.0,
-     "won": 990,
-     "contests": 990
-    },
-    {
-     "rank": 3,
-     "value": 100.0,
-     "won": 1000,
-     "contests": 1000
-    }
-   ]
-  },
-  {
-   "slate": "WAIO",
-   "slateLabel": "WAIO",
-   "slateVapShare": 0.4588409607434803,
-   "numDistricts": 3,
-   "winners": 3,
-   "metric": "winRate",
    "system": "FASTSTV",
    "systemLabel": "3 X 3 STV",
    "label": "Win rate",
@@ -801,40 +631,6 @@
      "value": 100.0,
      "won": 2000,
      "contests": 2000
-    }
-   ]
-  },
-  {
-   "slate": "WAIO",
-   "slateLabel": "WAIO",
-   "slateVapShare": 0.4588409607434803,
-   "numDistricts": 3,
-   "winners": 3,
-   "metric": "winRate",
-   "system": "LIMITED",
-   "systemLabel": "3 X 3 Limited",
-   "label": "Win rate",
-   "format": "percent",
-   "zeroLabel": "No WAIO winner at this rank",
-   "restricted": true,
-   "values": [
-    {
-     "rank": 1,
-     "value": 98.4444,
-     "won": 886,
-     "contests": 900
-    },
-    {
-     "rank": 2,
-     "value": 100.0,
-     "won": 990,
-     "contests": 990
-    },
-    {
-     "rank": 3,
-     "value": 100.0,
-     "won": 1000,
-     "contests": 1000
     }
    ]
   },
@@ -877,40 +673,6 @@
    "numDistricts": 3,
    "winners": 3,
    "metric": "winRate",
-   "system": "CUMULATIVE",
-   "systemLabel": "3 X 3 Cumulative",
-   "label": "Win rate",
-   "format": "percent",
-   "zeroLabel": "No BLK winner at this rank",
-   "restricted": true,
-   "values": [
-    {
-     "rank": 1,
-     "value": 10.0,
-     "won": 2,
-     "contests": 20
-    },
-    {
-     "rank": 2,
-     "value": 37.1429,
-     "won": 26,
-     "contests": 70
-    },
-    {
-     "rank": 3,
-     "value": 63.5714,
-     "won": 178,
-     "contests": 280
-    }
-   ]
-  },
-  {
-   "slate": "BLK",
-   "slateLabel": "BLK",
-   "slateVapShare": 0.07109494643525345,
-   "numDistricts": 3,
-   "winners": 3,
-   "metric": "winRate",
    "system": "FASTSTV",
    "systemLabel": "3 X 3 STV",
    "label": "Win rate",
@@ -935,40 +697,6 @@
      "value": 19.2857,
      "won": 108,
      "contests": 560
-    }
-   ]
-  },
-  {
-   "slate": "BLK",
-   "slateLabel": "BLK",
-   "slateVapShare": 0.07109494643525345,
-   "numDistricts": 3,
-   "winners": 3,
-   "metric": "winRate",
-   "system": "LIMITED",
-   "systemLabel": "3 X 3 Limited",
-   "label": "Win rate",
-   "format": "percent",
-   "zeroLabel": "No BLK winner at this rank",
-   "restricted": true,
-   "values": [
-    {
-     "rank": 1,
-     "value": 20.0,
-     "won": 4,
-     "contests": 20
-    },
-    {
-     "rank": 2,
-     "value": 34.2857,
-     "won": 24,
-     "contests": 70
-    },
-    {
-     "rank": 3,
-     "value": 63.2143,
-     "won": 177,
-     "contests": 280
     }
    ]
   }

@@ -121,28 +121,6 @@
    "numDistricts": 1,
    "winners": 9,
    "metric": "winRate",
-   "system": "CUMULATIVE",
-   "systemLabel": "1 X 9 Cumulative",
-   "label": "Win rate",
-   "format": "percent",
-   "zeroLabel": "No POC winner at this rank",
-   "restricted": true,
-   "values": [
-    {
-     "rank": 1,
-     "value": 100.0,
-     "won": 1000,
-     "contests": 1000
-    }
-   ]
-  },
-  {
-   "slate": "POC",
-   "slateLabel": "POC",
-   "slateVapShare": 0.5619805401715601,
-   "numDistricts": 1,
-   "winners": 9,
-   "metric": "winRate",
    "system": "FASTSTV",
    "systemLabel": "1 X 9 STV",
    "label": "Win rate",
@@ -155,28 +133,6 @@
      "value": 100.0,
      "won": 3000,
      "contests": 3000
-    }
-   ]
-  },
-  {
-   "slate": "POC",
-   "slateLabel": "POC",
-   "slateVapShare": 0.5619805401715601,
-   "numDistricts": 1,
-   "winners": 9,
-   "metric": "winRate",
-   "system": "LIMITED",
-   "systemLabel": "1 X 9 Limited",
-   "label": "Win rate",
-   "format": "percent",
-   "zeroLabel": "No POC winner at this rank",
-   "restricted": true,
-   "values": [
-    {
-     "rank": 1,
-     "value": 100.0,
-     "won": 1000,
-     "contests": 1000
     }
    ]
   },
@@ -207,28 +163,6 @@
    "numDistricts": 1,
    "winners": 9,
    "metric": "winRate",
-   "system": "CUMULATIVE",
-   "systemLabel": "1 X 9 Cumulative",
-   "label": "Win rate",
-   "format": "percent",
-   "zeroLabel": "No WHI winner at this rank",
-   "restricted": true,
-   "values": [
-    {
-     "rank": 1,
-     "value": 100.0,
-     "won": 1000,
-     "contests": 1000
-    }
-   ]
-  },
-  {
-   "slate": "WHI",
-   "slateLabel": "WHI",
-   "slateVapShare": 0.4380194598284399,
-   "numDistricts": 1,
-   "winners": 9,
-   "metric": "winRate",
    "system": "FASTSTV",
    "systemLabel": "1 X 9 STV",
    "label": "Win rate",
@@ -241,28 +175,6 @@
      "value": 100.0,
      "won": 3000,
      "contests": 3000
-    }
-   ]
-  },
-  {
-   "slate": "WHI",
-   "slateLabel": "WHI",
-   "slateVapShare": 0.4380194598284399,
-   "numDistricts": 1,
-   "winners": 9,
-   "metric": "winRate",
-   "system": "LIMITED",
-   "systemLabel": "1 X 9 Limited",
-   "label": "Win rate",
-   "format": "percent",
-   "zeroLabel": "No WHI winner at this rank",
-   "restricted": true,
-   "values": [
-    {
-     "rank": 1,
-     "value": 100.0,
-     "won": 1000,
-     "contests": 1000
     }
    ]
   }
